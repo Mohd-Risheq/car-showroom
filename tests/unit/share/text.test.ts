@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { wrapLines } from "@/features/share/renderer/text";
+import { pick, randomBelow, seededRandom } from "../../support/random";
 
 // The renderer's line breaking (SRS §11.6, DESIGN §9.4). Shaping is the browser's job and is
 // checked in the browsers (spike T-04); here every character is 10 px wide.
@@ -46,14 +47,16 @@ describe("wrapLines", () => {
 
   it("never passes the width, for any text", () => {
     const words = ["سيارة", "RAV4", `84,000${NBSP}كم`, "(شاصي)", "a", "JTMBFREV5MD123456", "؟", "Amman."];
-    let seed = 7;
-    const next = () => (seed = (seed * 1103515245 + 12345) % 2 ** 31);
+    const random = seededRandom(7);
+    const used = new Set<string>();
     for (let round = 0; round < 300; round++) {
-      const text = Array.from({ length: 1 + (next() % 12) }, () => words[next() % words.length]).join(" ");
-      const width = 60 + (next() % 200);
-      for (const line of wrapLines(ctx, text, width, "ar", 1 + (next() % 4))) {
+      const picked = Array.from({ length: 1 + randomBelow(random, 12) }, () => pick(random, words));
+      for (const word of picked) used.add(word);
+      const width = 60 + randomBelow(random, 200);
+      for (const line of wrapLines(ctx, picked.join(" "), width, "ar", 1 + randomBelow(random, 4))) {
         expect(ctx.measureText(line).width).toBeLessThanOrEqual(width);
       }
     }
+    expect(used).toEqual(new Set(words));
   });
 });

@@ -15,9 +15,10 @@ import {
   projectRelease,
   releaseTarget,
   releaseVelocity,
+  sameSize,
   spreadOrder,
   wrapFrame,
-} from "@/features/spin/ring";
+} from "@/features/spin/domain/ring";
 
 // The spin viewer's maths (FR-16, BR-17, DESIGN §5.4). Frame rate and memory are measured in
 // the browsers (spike T-05).
@@ -130,6 +131,12 @@ describe("sizes and memory", () => {
     expect(fitInside({ width: 480, height: 720 }, { width: 480, height: 320 })).toEqual({ width: 213, height: 320 });
     expect(fitInside({ width: 480, height: 320 }, { width: 480, height: 320 })).toEqual({ width: 480, height: 320 });
     expect(fitInside({ width: 480, height: 320 }, { width: 1170, height: 780 })).toEqual({ width: 480, height: 320 });
+  });
+
+  it("compares sizes by width and height", () => {
+    expect(sameSize({ width: 480, height: 320 }, { width: 480, height: 320 })).toBe(true);
+    expect(sameSize({ width: 480, height: 320 }, { width: 320, height: 480 })).toBe(false);
+    expect(sameSize({ width: 480, height: 320 }, { width: 480, height: 321 })).toBe(false);
   });
 
   it("draws centred and letterboxed", () => {

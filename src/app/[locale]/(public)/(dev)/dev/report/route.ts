@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { isSameOriginRequest } from "@/lib/auth/same-origin";
-import { isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 import { readCapped } from "@/lib/storage/stream";
 
 // Spike pages send their results here during the owner's phone session (BUILD-PLAN §4), so the
@@ -29,6 +29,7 @@ export async function POST(request: Request): Promise<Response> {
   await mkdir(/*turbopackIgnore: true*/ FOLDER, { recursive: true });
   if ((await readdir(/*turbopackIgnore: true*/ FOLDER)).length >= MAX_FILES) return new Response(null, { status: 507 });
   const name = `${kind}-${new Date().toISOString().replace(/[:.]/g, "-")}-${randomBytes(3).toString("hex")}.json`;
-  await writeFile(/*turbopackIgnore: true*/ path.join(FOLDER, name), `${JSON.stringify(report, null, 2)}\n`);
+  // Stored as received, so a file is never larger than the capped request
+  await writeFile(/*turbopackIgnore: true*/ path.join(FOLDER, name), body);
   return Response.json({ saved: name }, { status: 201 });
 }

@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ZXING_WASM_SHA256 } from "barcode-detector/ponyfill";
 import { describe, expect, it } from "vitest";
-import { ZXING_WASM_PATH } from "@/features/vin/zxing";
+import { ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 
 // FR-36.2 and SRS §14: the scanner's .wasm is served from public/wasm, so a library update that
 // changes the build must update the copy too

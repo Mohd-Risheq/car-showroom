@@ -1,12 +1,14 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { LOCALES } from "./src/i18n/locales";
 import { BOTID_PATH, blobStoreHost, publicPolicy, securityHeaders } from "./src/lib/csp/policy";
 
 // Every path except /{locale}/dealer/** and BotID's path gets the public policy here. Dealer
 // paths get theirs, with a nonce, from proxy.ts, so each response carries exactly one policy
-// (SRS §12.5). Header sources must be literals, so the locales are spelled out.
-const PUBLIC_PATHS = `/((?!(?:ar|en)/dealer(?:/|$)|${BOTID_PATH.slice(1)}(?:/|$)).*)`;
-const DEALER_PATHS = "/:locale(ar|en)/dealer/:path*";
+// (SRS §12.5).
+const LOCALE = LOCALES.join("|");
+const PUBLIC_PATHS = `/((?!(?:${LOCALE})/dealer(?:/|$)|${BOTID_PATH.slice(1)}(?:/|$)).*)`;
+const DEALER_PATHS = `/:locale(${LOCALE})/dealer/:path*`;
 
 const nextConfig: NextConfig = {
   // Cache Components with Partial Prefetching (SRS §11.4, §11.5)

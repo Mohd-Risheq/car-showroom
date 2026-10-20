@@ -29,9 +29,10 @@ export function inspectMedia(bytes: Uint8Array, type: MediaType): InspectResult 
       case "application/pdf":
         return ascii(bytes, 0, 5) === "%PDF-" ? { ok: true } : malformed("pdf.magic");
     }
-  } catch {
-    // A read past the end of the file
-    return malformed("truncated");
+  } catch (error) {
+    // A read past the end of the file. Anything else is a bug, never a rejection.
+    if (error instanceof RangeError) return malformed("truncated");
+    throw error;
   }
 }
 
@@ -53,43 +54,69 @@ function ascii(b: Uint8Array, i: number, length: number): string {
   return text;
 }
 
+// JPEG marker codes, the byte after 0xFF (ITU-T T.81, table B.1)
+const MARKER_PREFIX = 0xff;
+const JPEG = {
+  STUFFED: 0x00, // a data byte 0xFF inside a scan, not a marker
+  TEM: 0x01,
+  SOF0: 0xc0, // baseline DCT
+  SOF1: 0xc1, // extended sequential DCT
+  SOF2: 0xc2, // progressive DCT
+  DHT: 0xc4,
+  RST0: 0xd0,
+  RST7: 0xd7,
+  SOI: 0xd8,
+  EOI: 0xd9,
+  SOS: 0xda,
+  DQT: 0xdb,
+  DRI: 0xdd,
+  APP0: 0xe0,
+  APP1: 0xe1, // Exif and XMP
+  APP2: 0xe2,
+  APP13: 0xed, // Photoshop IPTC
+  APP14: 0xee,
+  APP15: 0xef,
+  COM: 0xfe,
+} as const;
+
 // JPEG: every marker segment, skipping scan data, and nothing after EOI. A canvas encoder writes
 // JFIF (APP0, no thumbnail), an ICC profile (APP2) and Adobe (APP14) segments at most.
 function inspectJpeg(b: Uint8Array): InspectResult {
-  if (byteAt(b, 0) !== 0xff || byteAt(b, 1) !== 0xd8 || byteAt(b, 2) !== 0xff) return malformed("jpeg.magic");
+  if (byteAt(b, 0) !== MARKER_PREFIX || byteAt(b, 1) !== JPEG.SOI || byteAt(b, 2) !== MARKER_PREFIX) return malformed("jpeg.magic");
   let i = 2;
   let size: Size | undefined;
   let scanned = false;
   for (;;) {
-    if (byteAt(b, i) !== 0xff) return malformed("jpeg.marker");
-    while (byteAt(b, i) === 0xff) i++; // fill bytes before a marker
+    if (byteAt(b, i) !== MARKER_PREFIX) return malformed("jpeg.marker");
+    while (byteAt(b, i) === MARKER_PREFIX) i++; // fill bytes before a marker
     const marker = byteAt(b, i++);
-    if (marker === 0xd9) {
+    if (marker === JPEG.EOI) {
       if (!size || !scanned) return malformed("jpeg.no-image");
       return i === b.length ? { ok: true, ...size } : metadata("jpeg.trailing-data");
     }
-    if (marker === 0x00 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) return malformed("jpeg.marker");
+    // Markers without a length: none of them belongs here
+    if (marker === JPEG.STUFFED || marker === JPEG.TEM || (marker >= JPEG.RST0 && marker <= JPEG.SOI)) return malformed("jpeg.marker");
     const end = i + u16be(b, i);
     const data = i + 2;
     if (end < data || end > b.length) return malformed("jpeg.length");
-    if (marker === 0xe1) return metadata("jpeg.app1");
-    if (marker === 0xed) return metadata("jpeg.app13");
-    if (marker === 0xfe) return metadata("jpeg.com");
-    if (marker >= 0xe0 && marker <= 0xef) {
+    if (marker === JPEG.APP1) return metadata("jpeg.app1");
+    if (marker === JPEG.APP13) return metadata("jpeg.app13");
+    if (marker === JPEG.COM) return metadata("jpeg.com");
+    if (marker >= JPEG.APP0 && marker <= JPEG.APP15) {
       const reason = appSegmentProblem(b, marker, data, end);
       if (reason) return metadata(reason);
-    } else if (marker === 0xc0 || marker === 0xc1 || marker === 0xc2) {
+    } else if (marker === JPEG.SOF0 || marker === JPEG.SOF1 || marker === JPEG.SOF2) {
       // Baseline, extended or progressive DCT: precision, height, width, component count
       if (size) return malformed("jpeg.second-frame");
       if (end - data < 6) return malformed("jpeg.sof");
       size = { height: u16be(b, data + 1), width: u16be(b, data + 3) };
       if (!size.width || !size.height) return malformed("jpeg.size");
-    } else if (marker === 0xda) {
+    } else if (marker === JPEG.SOS) {
       if (!size) return malformed("jpeg.scan-before-frame");
       i = nextMarkerAfterScan(b, end);
       scanned = true;
       continue;
-    } else if (marker !== 0xc4 && marker !== 0xdb && marker !== 0xdd) {
+    } else if (marker !== JPEG.DHT && marker !== JPEG.DQT && marker !== JPEG.DRI) {
       // Only DHT, DQT and DRI remain allowed; lossless, arithmetic and hierarchical files are not
       return malformed("jpeg.segment");
     }
@@ -99,24 +126,24 @@ function inspectJpeg(b: Uint8Array): InspectResult {
 
 function appSegmentProblem(b: Uint8Array, marker: number, data: number, end: number): string | undefined {
   const length = end - data;
-  if (marker === 0xe0) {
+  if (marker === JPEG.APP0) {
     // JFIF with a 0×0 thumbnail; a JFXX extension or a thumbnail could hold the uncropped photo
     const plainJfif = length === 14 && ascii(b, data, 5) === "JFIF\0" && byteAt(b, data + 12) === 0 && byteAt(b, data + 13) === 0;
     return plainJfif ? undefined : "jpeg.app0";
   }
-  if (marker === 0xe2) return length >= 12 && ascii(b, data, 12) === "ICC_PROFILE\0" ? undefined : "jpeg.app2";
-  if (marker === 0xee) return length >= 5 && ascii(b, data, 5) === "Adobe" ? undefined : "jpeg.app14";
-  return `jpeg.app${marker - 0xe0}`;
+  if (marker === JPEG.APP2) return length >= 12 && ascii(b, data, 12) === "ICC_PROFILE\0" ? undefined : "jpeg.app2";
+  if (marker === JPEG.APP14) return length >= 5 && ascii(b, data, 5) === "Adobe" ? undefined : "jpeg.app14";
+  return `jpeg.app${marker - JPEG.APP0}`;
 }
 
 // Entropy-coded data runs to the first 0xFF that is neither a stuffed 0xFF00 nor a restart marker
 function nextMarkerAfterScan(b: Uint8Array, start: number): number {
   let i = start;
   for (;;) {
-    i = b.indexOf(0xff, i);
+    i = b.indexOf(MARKER_PREFIX, i);
     if (i < 0) throw new RangeError("unterminated scan");
     const next = byteAt(b, i + 1);
-    if (next !== 0x00 && (next < 0xd0 || next > 0xd7)) return i;
+    if (next !== JPEG.STUFFED && (next < JPEG.RST0 || next > JPEG.RST7)) return i;
     i += 2;
   }
 }
@@ -232,9 +259,11 @@ function inspectPng(b: Uint8Array): InspectResult {
   }
 }
 
-// WAV from the audio pipeline: a "fmt " chunk (PCM, mono, 22,050 Hz, 16-bit), then a "data"
-// chunk that ends the file, at most 30 s long (FR-39.2). Any other chunk may carry metadata.
-const WAV_BYTES_PER_SECOND = 22050 * 2;
+// WAV from the audio pipeline: a "fmt " chunk in BR-19's format, then a "data" chunk that ends
+// the file, at most 30 s long (FR-39.2). Any other chunk may carry metadata.
+const WAV_FORMAT = { pcm: 1, channels: 1, sampleRate: 22_050, bitsPerSample: 16 } as const;
+const WAV_BLOCK_ALIGN = WAV_FORMAT.channels * (WAV_FORMAT.bitsPerSample / 8);
+const WAV_BYTES_PER_SECOND = WAV_FORMAT.sampleRate * WAV_BLOCK_ALIGN;
 const WAV_MAX_SECONDS = 30;
 
 function inspectWav(b: Uint8Array): InspectResult {
@@ -247,13 +276,14 @@ function inspectWav(b: Uint8Array): InspectResult {
     const data = i + 8;
     if (id === "fmt ") {
       if (format || length !== 16) return malformed("wav.fmt");
-      const pcm = u16le(b, data) === 1 && u16le(b, data + 2) === 1 && u32le(b, data + 4) === 22050;
-      const layout = u32le(b, data + 8) === WAV_BYTES_PER_SECOND && u16le(b, data + 12) === 2 && u16le(b, data + 14) === 16;
+      const pcm = u16le(b, data) === WAV_FORMAT.pcm && u16le(b, data + 2) === WAV_FORMAT.channels && u32le(b, data + 4) === WAV_FORMAT.sampleRate;
+      const layout =
+        u32le(b, data + 8) === WAV_BYTES_PER_SECOND && u16le(b, data + 12) === WAV_BLOCK_ALIGN && u16le(b, data + 14) === WAV_FORMAT.bitsPerSample;
       if (!pcm || !layout) return malformed("wav.format");
       format = true;
     } else if (id === "data") {
       if (!format) return malformed("wav.order");
-      if (data + length !== b.length || length % 2 !== 0) return malformed("wav.data-size");
+      if (data + length !== b.length || length % WAV_BLOCK_ALIGN !== 0) return malformed("wav.data-size");
       if (length > WAV_MAX_SECONDS * WAV_BYTES_PER_SECOND) return malformed("wav.duration");
       return { ok: true, durationMs: Math.round((length / WAV_BYTES_PER_SECOND) * 1000) };
     } else {

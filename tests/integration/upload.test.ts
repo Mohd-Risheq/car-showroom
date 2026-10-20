@@ -3,7 +3,7 @@ import path from "node:path";
 import { BlobFileTooLargeError, type UploadProgressEvent } from "@vercel/blob";
 import { generateClientTokenFromReadWriteToken, getPayloadFromClientToken } from "@vercel/blob/client";
 import { inArray } from "drizzle-orm";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, onTestFinished, vi } from "vitest";
 import { POST as authPost } from "@/app/api/auth/[...all]/route";
 import { GET as getFile } from "@/app/api/storage-local/files/[...path]/route";
 import { PUT as putFile } from "@/app/api/storage-local/route";
@@ -35,6 +35,8 @@ const users: Record<"owner" | "staff", { id: string; cookie: string }> = {
   owner: { id: "", cookie: "" },
   staff: { id: "", cookie: "" },
 };
+// Created by the test that needs it, removed with the others
+const otherUserIds: string[] = [];
 
 async function signIn(email: string): Promise<string> {
   const response = await authPost(
@@ -74,7 +76,7 @@ afterAll(async () => {
   delete process.env.VERCEL_BLOB_API_URL;
   await server?.close();
   await rm(path.join(storeRoot, "cars", carId), { recursive: true, force: true });
-  const ids = Object.values(users).map(({ id }) => id).filter(Boolean);
+  const ids = [...Object.values(users).map(({ id }) => id), ...otherUserIds].filter(Boolean);
   if (ids.length) await db.delete(user).where(inArray(user.id, ids));
 });
 
@@ -151,40 +153,67 @@ describe("upload tokens (API-16)", () => {
     expect(claims).not.toHaveProperty("onUploadCompleted");
   });
 
-  it("refuses cross-site, signed-out and off-pathname requests", async () => {
-    const input = { clientUploadId: crypto.randomUUID(), variant: "480", ext: "jpg" } as const;
-    const payload = { carId, kind: "photo", clientUploadId: input.clientUploadId, variant: "480" };
-    const pathname = photoPath(input);
-    const owner = asOwner();
-    const cases: [string, Promise<Response>, number, string][] = [
-      ["signed out", tokenRequest(photoEvent(input), { origin: siteOrigin }), 401, "UNAUTHENTICATED"],
+  describe("refuses, and records nothing for", () => {
+    type Attempt = { input: Variant; payload: Record<string, string>; pathname: string };
+    // Each case asks inside its own test, once beforeAll has signed the owner in, and for an
+    // upload of its own, so one wrong answer fails that case only
+    it.each<[string, (attempt: Attempt) => Promise<Response>, number, string]>([
+      ["a signed-out request", ({ input }) => tokenRequest(photoEvent(input), { origin: siteOrigin }), 401, "UNAUTHENTICATED"],
       [
-        "cross-site",
-        tokenRequest(photoEvent(input), { cookie: owner.cookie, origin: "https://evil.example", fetchSite: "cross-site" }),
+        "a cross-site request",
+        ({ input }) => tokenRequest(photoEvent(input), { cookie: users.owner.cookie, origin: "https://evil.example", fetchSite: "cross-site" }),
         403,
         "FORBIDDEN",
       ],
-      ["no origin", tokenRequest(photoEvent(input), { cookie: owner.cookie }), 403, "FORBIDDEN"],
-      ["another pathname", tokenRequest(tokenEvent(`cars/${carId}/photo/any.jpg`, payload), owner), 400, "VALIDATION_ERROR"],
-      ["unknown kind", tokenRequest(tokenEvent(pathname, { ...payload, kind: "video" }), owner), 400, "VALIDATION_ERROR"],
-      ["unknown variant", tokenRequest(photoEvent({ ...input, variant: "720" }), owner), 400, "VALIDATION_ERROR"],
-      ["type outside the kind", tokenRequest(photoEvent({ ...input, ext: "png" }), owner), 400, "VALIDATION_ERROR"],
+      ["a request with no origin", ({ input }) => tokenRequest(photoEvent(input), { cookie: users.owner.cookie }), 403, "FORBIDDEN"],
+      ["another pathname", ({ payload }) => tokenRequest(tokenEvent(`cars/${carId}/photo/any.jpg`, payload), asOwner()), 400, "VALIDATION_ERROR"],
       [
-        "logo",
-        tokenRequest(tokenEvent(`cars/${carId}/logo/${input.clientUploadId}-src.png`, { ...payload, kind: "logo", variant: "src" }), owner),
+        "an unknown kind",
+        ({ payload, pathname }) => tokenRequest(tokenEvent(pathname, { ...payload, kind: "video" }), asOwner()),
         400,
         "VALIDATION_ERROR",
       ],
-      ["multipart", tokenRequest(tokenEvent(pathname, payload, true), owner), 400, "VALIDATION_ERROR"],
-      ["form post", tokenRequest("pathname=x", { ...owner, contentType: "application/x-www-form-urlencoded" }), 400, "VALIDATION_ERROR"],
-      ["upload callback", tokenRequest({ type: "blob.upload-completed", payload: {} }, owner), 400, "VALIDATION_ERROR"],
-    ];
-    for (const [name, pending, status, code] of cases) {
-      const response = await pending;
+      ["an unknown variant", ({ input }) => tokenRequest(photoEvent({ ...input, variant: "720" }), asOwner()), 400, "VALIDATION_ERROR"],
+      ["a type outside the kind", ({ input }) => tokenRequest(photoEvent({ ...input, ext: "png" }), asOwner()), 400, "VALIDATION_ERROR"],
+      [
+        "a logo",
+        ({ input, payload }) =>
+          tokenRequest(tokenEvent(`cars/${carId}/logo/${input.clientUploadId}-src.png`, { ...payload, kind: "logo", variant: "src" }), asOwner()),
+        400,
+        "VALIDATION_ERROR",
+      ],
+      ["a multipart upload", ({ payload, pathname }) => tokenRequest(tokenEvent(pathname, payload, true), asOwner()), 400, "VALIDATION_ERROR"],
+      ["a form post", () => tokenRequest("pathname=x", { ...asOwner(), contentType: "application/x-www-form-urlencoded" }), 400, "VALIDATION_ERROR"],
+      ["an upload callback", () => tokenRequest({ type: "blob.upload-completed", payload: {} }, asOwner()), 400, "VALIDATION_ERROR"],
+    ])("%s", async (_case, request, status, code) => {
+      const input = { clientUploadId: crypto.randomUUID(), variant: "480", ext: "jpg" } as const;
+      const payload = { carId, kind: "photo", clientUploadId: input.clientUploadId, variant: "480" };
+      const response = await request({ input, payload, pathname: photoPath(input) });
       const body = (await response.json()) as { error: { code: string } };
-      expect({ name, status: response.status, code: body.error.code }).toEqual({ name, status, code });
-    }
+      expect({ status: response.status, code: body.error.code }).toEqual({ status, code });
+      expect(await uploadRepository.find(input.clientUploadId)).toBeUndefined();
+    });
+  });
+
+  it("refuses a user who must still change their password (FR-29.6)", async () => {
+    const email = `t03-onboarding-${run}@example.test`;
+    const created = await createPasswordUser({ email, name: "T-03 onboarding", password, role: "staff", mustChangePassword: true });
+    otherUserIds.push(created.id);
+    const input = { clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" } as const;
+    const response = await tokenRequest(photoEvent(input), { cookie: await signIn(email), origin: siteOrigin });
+    expect(response.status).toBe(403);
+    expect(((await response.json()) as { error: { code: string } }).error.code).toBe("FORBIDDEN");
     expect(await uploadRepository.find(input.clientUploadId)).toBeUndefined();
+  });
+
+  it("reads at most 4 KB of a token request", async () => {
+    const json = JSON.stringify(photoEvent({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" }));
+    // Trailing spaces keep the JSON valid, so only the size decides
+    const padded = (bytes: number) => json + " ".repeat(bytes - Buffer.byteLength(json));
+    expect((await tokenRequest(padded(4096), asOwner())).status).toBe(200);
+    const response = await tokenRequest(padded(4097), asOwner());
+    expect(response.status).toBe(400);
+    expect(((await response.json()) as { error: { code: string } }).error.code).toBe("VALIDATION_ERROR");
   });
 
   it("answers with the error envelope: a code and a request ID, nothing else (SRS §8.1)", async () => {
@@ -246,69 +275,95 @@ describe("the local store (BUILD-PLAN §6.3)", () => {
     await expect(upload({ ...input, file })).rejects.toBeInstanceOf(BlobFileTooLargeError);
   });
 
-  it("enforces the client token on every PUT", async () => {
-    const pathname = photoPath({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" }, uncappedCarId);
-    const readWriteToken = process.env.BLOB_READ_WRITE_TOKEN ?? "";
-    const sign = (claims: Record<string, unknown> = {}) =>
-      generateClientTokenFromReadWriteToken({
-        token: readWriteToken,
-        pathname,
-        allowedContentTypes: ["image/webp"],
-        maximumSizeInBytes: 1_000,
-        addRandomSuffix: true,
-        validUntil: Date.now() + 60_000,
-        ...claims,
-      });
-    const put = (
-      token: string,
-      init: { query?: string; headers?: Record<string, string>; body?: Uint8Array<ArrayBuffer> } = {},
-    ) =>
-      putFile(
-        new Request(`${siteOrigin}/api/storage-local?${init.query ?? `/?pathname=${encodeURIComponent(pathname)}`}`, {
-          method: "PUT",
-          headers: {
-            authorization: `Bearer ${token}`,
-            "x-vercel-blob-access": "public",
-            "x-content-type": "image/webp",
-            ...init.headers,
-          },
-          body: init.body ?? new Uint8Array(10),
-        }),
-      );
+  describe("enforces the client token on every PUT", () => {
+    type Put = { query?: string; headers?: Record<string, string>; body?: Uint8Array<ArrayBuffer> };
+    // A car folder of its own for each case, so a file written by mistake fails that case only
+    type Attempt = {
+      pathname: string;
+      otherPathname: string;
+      sign: (claims?: Record<string, unknown>) => Promise<string>;
+      put: (token: string, init?: Put) => Promise<Response>;
+    };
 
-    const valid = await sign();
-    const tampered = valid.slice(0, -5) + (valid.at(-5) === "A" ? "B" : "A") + valid.slice(-4);
-    const otherPath = photoPath({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" }, uncappedCarId);
-    const cases: [string, Promise<Response>, number, string][] = [
-      ["tampered token", put(tampered), 403, "forbidden"],
-      ["expired token", put(await sign({ validUntil: Date.now() - 1 })), 403, "client_token_expired"],
-      ["another pathname", put(valid, { query: `/?pathname=${encodeURIComponent(otherPath)}` }), 403, "client_token_pathname_mismatch"],
-      ["another type", put(valid, { headers: { "x-content-type": "image/png" } }), 400, "content_type_not_allowed"],
-      ["over the cap", put(valid, { body: new Uint8Array(1_001) }), 413, "file_too_large"],
-      ["private access", put(valid, { headers: { "x-vercel-blob-access": "private" } }), 400, "bad_request"],
-      ["multipart", put(valid, { headers: { "x-mpu-action": "create" } }), 400, "bad_request"],
-      ["no pathname", put(valid, { query: "" }), 400, "bad_request"],
-      ["a second parameter", put(valid, { query: `/?pathname=${encodeURIComponent(pathname)}&x=1` }), 400, "bad_request"],
-    ];
-    for (const [name, pending, status, code] of cases) {
-      const response = await pending;
-      const body = (await response.json()) as { error: { code: string } };
-      expect({ name, status: response.status, code: body.error.code }).toEqual({ name, status, code });
+    // The local store's PUT query, as the storage library sends it
+    const query = (pathname: string) => `/?pathname=${encodeURIComponent(pathname)}`;
+
+    function attemptFor(car: string): Attempt {
+      const newPathname = () => photoPath({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" }, car);
+      const pathname = newPathname();
+      return {
+        pathname,
+        otherPathname: newPathname(),
+        sign: (claims = {}) =>
+          generateClientTokenFromReadWriteToken({
+            token: process.env.BLOB_READ_WRITE_TOKEN ?? "",
+            pathname,
+            allowedContentTypes: ["image/webp"],
+            maximumSizeInBytes: 1_000,
+            addRandomSuffix: true,
+            validUntil: Date.now() + 60_000,
+            ...claims,
+          }),
+        put: (token, init = {}) =>
+          putFile(
+            new Request(`${siteOrigin}/api/storage-local?${init.query ?? query(pathname)}`, {
+              method: "PUT",
+              headers: {
+                authorization: `Bearer ${token}`,
+                "x-vercel-blob-access": "public",
+                "x-content-type": "image/webp",
+                ...init.headers,
+              },
+              body: init.body ?? new Uint8Array(10),
+            }),
+          ),
+      };
     }
-    await expect(stat(path.join(storeRoot, "cars", uncappedCarId))).rejects.toMatchObject({ code: "ENOENT" });
+
+    // A token with one character changed
+    const tamper = (token: string) => token.slice(0, -5) + (token.at(-5) === "A" ? "B" : "A") + token.slice(-4);
+
+    it.each<[string, (attempt: Attempt) => Promise<Response>, number, string]>([
+      ["a tampered token", async ({ sign, put }) => put(tamper(await sign())), 403, "forbidden"],
+      ["an expired token", async ({ sign, put }) => put(await sign({ validUntil: Date.now() - 1 })), 403, "client_token_expired"],
+      [
+        "another pathname",
+        async ({ otherPathname, sign, put }) => put(await sign(), { query: query(otherPathname) }),
+        403,
+        "client_token_pathname_mismatch",
+      ],
+      ["another type", async ({ sign, put }) => put(await sign(), { headers: { "x-content-type": "image/png" } }), 400, "content_type_not_allowed"],
+      ["a file over the cap", async ({ sign, put }) => put(await sign(), { body: new Uint8Array(1_001) }), 413, "file_too_large"],
+      ["private access", async ({ sign, put }) => put(await sign(), { headers: { "x-vercel-blob-access": "private" } }), 400, "bad_request"],
+      ["a multipart upload", async ({ sign, put }) => put(await sign(), { headers: { "x-mpu-action": "create" } }), 400, "bad_request"],
+      ["no pathname", async ({ sign, put }) => put(await sign(), { query: "" }), 400, "bad_request"],
+      ["a second parameter", async ({ pathname, sign, put }) => put(await sign(), { query: `${query(pathname)}&x=1` }), 400, "bad_request"],
+    ])("refuses %s, and writes nothing", async (_case, request, status, code) => {
+      const car = crypto.randomUUID();
+      onTestFinished(() => rm(path.join(storeRoot, "cars", car), { recursive: true, force: true }));
+      const response = await request(attemptFor(car));
+      const body = (await response.json()) as { error: { code: string } };
+      expect({ status: response.status, code: body.error.code }).toEqual({ status, code });
+      await expect(stat(path.join(storeRoot, "cars", car))).rejects.toMatchObject({ code: "ENOENT" });
+    });
   });
 
-  it("is not found on deployments or without STORAGE_DRIVER=local", async () => {
-    for (const env of [{ VERCEL_ENV: "production" }, { VERCEL_ENV: "preview" }, { STORAGE_DRIVER: undefined }]) {
-      await withEnv(env, async () => {
-        const put = await putFile(new Request(`${siteOrigin}/api/storage-local?/?pathname=a.webp`, { method: "PUT", body: "x" }));
-        expect(put.status).toBe(404);
-        const get = await getFile(new Request(`${siteOrigin}/api/storage-local/files/a.webp`), {
-          params: Promise.resolve({ path: ["a.webp"] }),
-        });
-        expect(get.status).toBe(404);
+  it.each<[string, Record<string, string | undefined>]>([
+    ["on a production deployment", { VERCEL_ENV: "production" }],
+    ["on a preview deployment", { VERCEL_ENV: "preview" }],
+    ["without STORAGE_DRIVER=local", { STORAGE_DRIVER: undefined }],
+  ])("is not found %s", async (_case, env) => {
+    await withEnv(env, async () => {
+      const put = await putFile(new Request(`${siteOrigin}/api/storage-local?/?pathname=a.webp`, { method: "PUT", body: "x" }));
+      expect(put.status).toBe(404);
+      const get = await getFile(new Request(`${siteOrigin}/api/storage-local/files/a.webp`), {
+        params: Promise.resolve({ path: ["a.webp"] }),
       });
-    }
+      expect(get.status).toBe(404);
+    });
+  });
+
+  it("won't sign a token for the local store on a deployment (BUILD-PLAN §6.3)", async () => {
     const event = photoEvent({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "webp" });
     await withEnv({ VERCEL_ENV: "production" }, async () => {
       await expect(tokenRequest(event, asOwner())).rejects.toThrow("refuses to run on a deployment");
@@ -365,11 +420,15 @@ describe("registration (API-17)", () => {
     expect((await uploadRepository.find(clientUploadId))?.status).toBe("pending");
   });
 
-  it("rejects a WebP that still carries XMP, by its chunk", async () => {
+  // sharp sets the VP8X metadata flag with the chunk; inspect.test.ts covers the chunk alone
+  it("rejects a WebP that still carries XMP, by its VP8X metadata flag", async () => {
     const clientUploadId = crypto.randomUUID();
     const variants = await uploadPhoto(clientUploadId, { "480": await solid(480, 320).withXmp("<x:xmpmeta/>").webp().toBuffer() }, "webp");
     const input = { carId, kind: "photo", clientUploadId, variants, width: 480, height: 320 };
-    await expect(registerMedia(input, { userId: users.owner.id })).rejects.toMatchObject({ code: "METADATA_PRESENT" });
+    await expect(registerMedia(input, { userId: users.owner.id })).rejects.toMatchObject({
+      code: "METADATA_PRESENT",
+      message: "480 webp.vp8x-metadata",
+    });
   });
 
   it("accepts only the signed pathnames on this store, for their uploader, at the declared size", async () => {

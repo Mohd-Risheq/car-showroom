@@ -8,6 +8,9 @@ import { extensionOf, isStoredPathnameOf, MEDIA_TYPES, maxBytesFor, nominalWidth
 
 type StoredFile = { variant: string; signedPathname: string; storedPathname: string };
 
+// No image may be more than twice as tall as it is wide (DECISIONS.md D-023)
+const MAX_HEIGHT_TO_WIDTH = 2;
+
 // API-17 registerMedia, the storage checks (SEC-08, FR-32.2a):
 //  - each URL is on this store, at the pathname API-16 signed for that variant plus the suffix;
 //  - each file is read whole under its variant's cap, and its type and container are checked;
@@ -55,7 +58,7 @@ export async function registerMedia(input: unknown, actor: { userId: string }): 
     if (!result.ok) return reject(driver, files, result.code, `${file.variant} ${result.reason}`);
     if ("width" in result) {
       const nominal = nominalWidth(kind, file.variant) ?? 0;
-      if (result.width > nominal || result.height > 2 * result.width) {
+      if (result.width > nominal || result.height > MAX_HEIGHT_TO_WIDTH * result.width) {
         return reject(driver, files, "VALIDATION_ERROR", `${file.variant} dimensions`);
       }
       if (!largest || nominal > largest.nominal) largest = { nominal, width: result.width, height: result.height };
@@ -76,6 +79,18 @@ async function reject(
   code: "VALIDATION_ERROR" | "METADATA_PRESENT",
   reason: string,
 ): Promise<never> {
-  await Promise.allSettled(files.map((file) => driver.remove(file.storedPathname)));
+  await Promise.all(files.map((file) => removeOrLog(driver, file, code)));
   throw new StorageError(code, reason);
+}
+
+// A file that stays behind may still hold what the check refused, so its failure is logged with
+// the signed pathname, the prefix of the stored one. T-16's lib/log takes this line over.
+async function removeOrLog(driver: StorageDriver, file: StoredFile, rejection: string): Promise<void> {
+  try {
+    await driver.remove(file.storedPathname);
+  } catch (error) {
+    console.error(
+      JSON.stringify({ level: "error", code: "media_delete_failed", rejection, pathname: file.signedPathname, error: String(error) }),
+    );
+  }
 }

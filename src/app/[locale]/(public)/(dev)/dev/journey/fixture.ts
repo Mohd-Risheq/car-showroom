@@ -1,4 +1,4 @@
-import type { LatLng } from "@/features/journey/geo";
+import type { LatLng } from "@/features/journey/domain/geo";
 
 // Spike T-09's routes, on the seed places (SEED §7: OpenStreetMap through Nominatim, 18 Oct 2026)
 

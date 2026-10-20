@@ -1,8 +1,8 @@
-import type { DecodeMessage, DecodeReply } from "./decode.worker";
+import type { DecodeMessage, DecodeReply } from "../worker/decode.worker";
 import { type DecodeRequest, type Decoded, fetchAndDecode } from "./fetch-decode";
 
-// Where spin frames decode (FR-16, NFR-PERF-04): in a worker, or on the page's own thread.
-// Spike T-05 measures both (D-027).
+// Where spin frames decode (FR-16, NFR-PERF-04). D-027 made the worker the default, with
+// decoding on the page as the fallback. T-41 switches a viewer whose worker failed over to it.
 
 export type DecodeStrategy = "worker" | "main";
 
@@ -14,9 +14,11 @@ export interface FrameDecoder {
 type Pending = { resolve: (decoded: Decoded) => void; reject: (reason: unknown) => void };
 
 class WorkerDecoder implements FrameDecoder {
-  #worker = new Worker(new URL("./decode.worker.ts", import.meta.url), { type: "module" });
+  #worker = new Worker(new URL("../worker/decode.worker.ts", import.meta.url), { type: "module" });
   #pending = new Map<number, Pending>();
   #nextId = 0;
+  /** Why the worker stopped. A stopped worker answers nothing, so every request rejects at once. */
+  #stopped: Error | null = null;
 
   constructor() {
     this.#worker.onmessage = (event: MessageEvent<DecodeReply>) => {
@@ -31,40 +33,54 @@ class WorkerDecoder implements FrameDecoder {
         pending?.reject(new Error(reply.error));
       }
     };
-    this.#worker.onerror = (event) => this.#rejectAll(new Error(event.message || "decode worker failed"));
+    // A worker that fails, for example because its script didn't load, never answers again
+    this.#worker.onerror = (event) => this.#stop(new Error(event.message || "decode worker failed"));
   }
 
   decode(request: DecodeRequest, signal: AbortSignal): Promise<Decoded> {
-    const id = this.#nextId++;
     return new Promise<Decoded>((resolve, reject) => {
+      if (this.#stopped) {
+        reject(this.#stopped);
+        return;
+      }
       if (signal.aborted) {
         reject(signal.reason);
         return;
       }
-      this.#pending.set(id, { resolve, reject });
-      signal.addEventListener(
-        "abort",
-        () => {
-          if (!this.#pending.delete(id)) return;
-          this.#post({ cancel: id });
-          reject(signal.reason);
+      const id = this.#nextId++;
+      const onAbort = () => {
+        if (!this.#pending.delete(id)) return;
+        this.#post({ cancel: id });
+        reject(signal.reason);
+      };
+      signal.addEventListener("abort", onAbort, { once: true });
+      const settled = () => signal.removeEventListener("abort", onAbort);
+      this.#pending.set(id, {
+        resolve: (decoded) => {
+          settled();
+          resolve(decoded);
         },
-        { once: true },
-      );
+        reject: (reason) => {
+          settled();
+          reject(reason);
+        },
+      });
       this.#post({ id, request });
     });
   }
 
   dispose(): void {
-    this.#worker.terminate();
-    this.#rejectAll(new DOMException("The decoder was disposed", "AbortError"));
+    this.#stop(new DOMException("The decoder was disposed", "AbortError"));
   }
 
   #post(message: DecodeMessage): void {
     this.#worker.postMessage(message);
   }
 
-  #rejectAll(reason: unknown): void {
+  // Ends the worker, rejects what it still owes, and makes every later request reject
+  #stop(reason: Error): void {
+    this.#stopped ??= reason;
+    this.#worker.terminate();
     for (const pending of this.#pending.values()) pending.reject(reason);
     this.#pending.clear();
   }

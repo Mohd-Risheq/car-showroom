@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addAacRollGroup } from "@/features/reel/mp4";
+import { addAacRollGroup } from "@/features/reel/domain/mp4";
 
 // D-030: Apple's convention for AAC priming. The expected bytes are the ones afconvert and FFmpeg's
 // muxer write: sgpd version 1, 'roll', a default length of 2, one entry of -1; then sbgp, 'roll',

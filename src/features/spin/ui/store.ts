@@ -1,5 +1,5 @@
+import { bitmapBytes, fitInside, loadOrder, nearestLoaded, sameSize, type Size } from "../domain/ring";
 import type { FrameDecoder } from "./decode";
-import { bitmapBytes, fitInside, loadOrder, nearestLoaded, type Size } from "./ring";
 
 // A spin set's decoded frames (FR-16.1, FR-16.5, FR-16.9, NFR-PERF-07): the low-resolution ring
 // and at most one high-resolution frame. Every bitmap it lets go of is closed, so the decoded
@@ -41,8 +41,8 @@ export class FrameStore {
   readonly #lifetime = new AbortController();
   #active = 0;
   #restQueued = false;
-  #high: { index: number; bitmap: ImageBitmap } | null = null;
-  #highRequest: AbortController | null = null;
+  #high: { index: number; fit: Size; bitmap: ImageBitmap } | null = null;
+  #highRequest: { index: number; fit: Size; controller: AbortController } | null = null;
 
   constructor(options: StoreOptions) {
     this.#options = options;
@@ -85,26 +85,32 @@ export class FrameStore {
 
   /** FR-16.5: one frame at high resolution, fitted to the canvas, replacing the previous one */
   requestHigh(index: number, box: Size): void {
-    if (this.#high?.index === index || this.#lifetime.signal.aborted) return;
-    this.dropHigh();
-    const request = new AbortController();
-    this.#highRequest = request;
+    if (this.#lifetime.signal.aborted) return;
     const source = this.#options.source.highRes(index);
-    void this.#decode(index, true, source, fitInside(source.size, box), request.signal).then((bitmap) => {
+    const fit = fitInside(source.size, box);
+    // Nothing to do while this frame is shown or on its way at this size. A resize asks again.
+    const isWanted = (frame: { index: number; fit: Size } | null) => frame?.index === index && sameSize(frame.fit, fit);
+    if (isWanted(this.#high) || isWanted(this.#highRequest)) return;
+    this.dropHigh();
+    const request = { index, fit, controller: new AbortController() };
+    this.#highRequest = request;
+    void this.#decode(index, true, source, fit, request.controller.signal).then((bitmap) => {
+      // Replaced or dropped meanwhile, or failed (a later rest asks again)
+      const current = this.#highRequest === request;
+      if (current) this.#highRequest = null;
       if (!bitmap) return;
-      if (this.#highRequest !== request) {
+      if (!current) {
         bitmap.close();
         return;
       }
-      this.#highRequest = null;
-      this.#high = { index, bitmap };
+      this.#high = { index, fit, bitmap };
       this.#options.onChange();
     });
   }
 
   /** Lets the high-resolution frame go as soon as the viewer moves (NFR-PERF-07) */
   dropHigh(): void {
-    this.#highRequest?.abort();
+    this.#highRequest?.controller.abort();
     this.#highRequest = null;
     this.#high?.bitmap.close();
     this.#high = null;
@@ -161,7 +167,7 @@ export class FrameStore {
     fit: Size,
     signal: AbortSignal,
   ): Promise<ImageBitmap | undefined> {
-    const resize = fit.width === source.size.width && fit.height === source.size.height ? null : fit;
+    const resize = sameSize(fit, source.size) ? null : fit;
     try {
       const decoded = await this.#options.decoder.decode(
         { url: source.url, resize, quality: highRes ? "high" : "medium" },

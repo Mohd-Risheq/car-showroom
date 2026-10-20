@@ -1,8 +1,8 @@
 "use client";
 
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { JourneyGlobe } from "@/features/journey/journey-globe";
-import { journeySteps } from "@/features/journey/route";
+import { journeySteps } from "@/features/journey/domain/route";
+import { JourneyGlobe } from "@/features/journey/ui/journey-globe";
 import { FrameMeter, LongTaskLog, round, stats } from "../spin/meter";
 import { isRouteKey, placesOf, ROUTES, type RouteKey } from "./fixture";
 import { NativeArcs } from "./native-arcs";

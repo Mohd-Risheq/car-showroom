@@ -1,3 +1,5 @@
+import "server-only";
+
 // Typed storage failures with the SRS §8.1 codes. T-16's lib/errors (AppError, with the
 // catalog message) takes these over.
 

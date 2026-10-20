@@ -1,4 +1,4 @@
-import { type DecodeRequest, type Decoded, fetchAndDecode } from "./fetch-decode";
+import { type DecodeRequest, type Decoded, fetchAndDecode } from "../ui/fetch-decode";
 
 // Decodes spin frames off the page's thread and hands each bitmap over without copying it.
 // Messages: { id, request } decodes, { cancel: id } stops a request still in flight.

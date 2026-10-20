@@ -1,8 +1,10 @@
+import { notFoundOnDeployments } from "@/lib/deployment";
 import { TEST_CODES } from "../codes";
 
 // The VIN scan fixtures, large, to scan off this screen with a phone (BUILD-PLAN §4). Each code has
 // a screen of its own, so only one is in the camera's band at a time.
 export default function VinCodesPage() {
+  notFoundOnDeployments();
   return (
     <main className="grid gap-6 bg-white p-6 font-mono text-sm text-black">
       <h1 className="text-lg">Muftah dev: VIN test codes (T-10)</h1>

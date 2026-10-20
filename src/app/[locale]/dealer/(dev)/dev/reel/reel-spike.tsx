@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { prepareClip, type ReelPcm } from "@/features/reel/clip";
-import type { EncodeStats, ReelAudio } from "@/features/reel/encode";
+import { DEV_UPLOAD_PART_BYTES } from "@/app/_dev/upload-limits";
+import type { ReelPcm } from "@/features/reel/domain/clip";
 import {
   type AudioChoice,
   AUDIO_CONFIGS,
@@ -13,8 +13,9 @@ import {
   REEL,
   VIDEO_CODECS,
   videoConfig,
-} from "@/features/reel/support";
-import { DEV_UPLOAD_PART_BYTES } from "@/lib/dev-only";
+} from "@/features/reel/domain/support";
+import { prepareClip } from "@/features/reel/ui/prepare-clip";
+import type { EncodeStats, ReelAudio } from "@/features/reel/worker/encode";
 import { PATTERN } from "./pattern";
 import type { WorkerProbe, WorkerReply, WorkerRequest } from "./reel.worker";
 
@@ -235,17 +236,23 @@ async function checkPlayback(video: HTMLVideoElement, url: string): Promise<Play
   await loaded;
   const mediaTimes: number[] = [];
   const counting = typeof video.requestVideoFrameCallback === "function";
+  let frameCallback: number | undefined;
   if (counting) {
     const onFrame: VideoFrameRequestCallback = (_now, metadata) => {
       mediaTimes.push(metadata.mediaTime);
-      if (!video.ended) video.requestVideoFrameCallback(onFrame);
+      if (!video.ended) frameCallback = video.requestVideoFrameCallback(onFrame);
     };
-    video.requestVideoFrameCallback(onFrame);
+    frameCallback = video.requestVideoFrameCallback(onFrame);
   }
-  const ended = waitFor(video, "ended", 45_000);
   const started = performance.now();
-  await video.play();
-  await ended;
+  try {
+    await video.play();
+    // Waits only once playing, so a play() that fails leaves no listener or timer behind
+    await waitFor(video, "ended", 45_000);
+  } finally {
+    // The seeks below show frames too, and must not count as played ones
+    if (frameCallback !== undefined) video.cancelVideoFrameCallback(frameCallback);
+  }
   const playedMs = round(performance.now() - started);
   const quality = typeof video.getVideoPlaybackQuality === "function" ? video.getVideoPlaybackQuality() : null;
   const extra = video as HTMLVideoElement & { webkitAudioDecodedByteCount?: number; webkitVideoDecodedByteCount?: number; audioTracks?: { length: number } };
@@ -292,9 +299,8 @@ async function checkAudio(bytes: ArrayBuffer): Promise<AudioCheck> {
   }
 }
 
-async function checkFile(video: HTMLVideoElement, bytes: ArrayBuffer, urls: string[]): Promise<Checked> {
-  const url = URL.createObjectURL(new Blob([bytes], { type: "video/mp4" }));
-  urls.push(url);
+/** Plays `url`, a blob URL of `bytes` that the caller owns, and checks the file */
+async function checkFile(video: HTMLVideoElement, bytes: ArrayBuffer, url: string): Promise<Checked> {
   let playback: Checked["playback"];
   try {
     playback = await checkPlayback(video, url);
@@ -310,12 +316,14 @@ export function ReelSpike() {
   const [json, setJson] = useState("");
   const [sent, setSent] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
   const resultsRef = useRef<Results | null>(null);
   const setupRef = useRef<Setup | null>(null);
   const workerRef = useRef<Worker | null>(null);
   const mp4Ref = useRef<ArrayBuffer | null>(null);
   const cancelRef = useRef<{ at: number; frames: number } | null>(null);
-  const urlsRef = useRef<string[]>([]);
+  // One blob URL per reel serves its check, its preview and its download link
+  const previewUrlRef = useRef<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const show = () => setJson(JSON.stringify(resultsRef.current, null, 2));
@@ -336,6 +344,19 @@ export function ReelSpike() {
 
   const send = (worker: Worker, request: WorkerRequest, transfer: Transferable[] = []) => worker.postMessage(request, transfer);
 
+  const releasePreview = () => {
+    const url = previewUrlRef.current;
+    previewUrlRef.current = null;
+    setDownloadUrl(null);
+    const video = videoRef.current;
+    if (video) {
+      video.removeAttribute("src");
+      video.controls = false;
+      video.load();
+    }
+    if (url) URL.revokeObjectURL(url);
+  };
+
   const probeWorker = () =>
     new Promise<WorkerProbe | { error: string }>((resolve) => {
       const worker = startWorker((reply) => {
@@ -351,10 +372,15 @@ export function ReelSpike() {
     const setup = setupRef.current;
     const support = results?.support;
     if (!results || !setup || !support?.picks.video) return;
+    // Each run reports its own MP4 and answer
     setFrames(0);
-    setDownloadUrl(null);
+    releasePreview();
+    setSent("");
+    mp4Ref.current = null;
     results.encode = null;
     results.output = null;
+    results.answer = null;
+    results.mp4File = null;
     try {
       let pcm: ReelPcm | null = null;
       let prepareAudioMs: number | null = null;
@@ -378,9 +404,10 @@ export function ReelSpike() {
         send(worker, { type: "encode", videoCodec: videoCodec ?? "", bitrateMode: setup.mode, audio }, audio ? [audio.data.buffer] : []);
       });
       stopWorker();
+      // A cancel that came too late to stop the encode ends here too
+      const cancel = cancelRef.current;
+      cancelRef.current = null;
       if (reply.type === "failed") {
-        const cancel = cancelRef.current;
-        cancelRef.current = null;
         if (reply.cancelled && cancel) {
           results.cancels.push({ atFrames: cancel.frames, replyMs: round(performance.now() - cancel.at) });
           setPhase("cancelled");
@@ -407,16 +434,16 @@ export function ReelSpike() {
       mp4Ref.current = reply.mp4;
       setPhase("checking");
       show();
-      const video = videoRef.current;
-      if (video) results.output = await checkFile(video, reply.mp4, urlsRef.current);
       const url = URL.createObjectURL(new Blob([reply.mp4], { type: "video/mp4" }));
-      urlsRef.current.push(url);
-      setDownloadUrl(url);
+      previewUrlRef.current = url;
+      const video = videoRef.current;
       if (video) {
-        // The preview for a person: controls on, still muted until they unmute it
-        video.src = url;
+        results.output = await checkFile(video, reply.mp4, url);
+        // The preview for a person: from the start, controls on, still muted until they unmute it
+        video.currentTime = 0;
         video.controls = true;
       }
+      setDownloadUrl(url);
       setPhase("done");
     } catch (error) {
       stopWorker();
@@ -428,7 +455,8 @@ export function ReelSpike() {
 
   const cancel = () => {
     const worker = workerRef.current;
-    if (!worker) return;
+    // A second tap would restart the 2 s timer and the timing TC-43-4 records
+    if (!worker || cancelRef.current) return;
     cancelRef.current = { at: performance.now(), frames };
     setPhase("cancelling");
     send(worker, { type: "cancel" });
@@ -436,6 +464,7 @@ export function ReelSpike() {
     setTimeout(() => {
       if (workerRef.current === worker) {
         stopWorker();
+        cancelRef.current = null;
         resultsRef.current?.errors.push("cancel: no reply in 2 s, worker terminated");
         setPhase("cancelled");
         show();
@@ -447,34 +476,64 @@ export function ReelSpike() {
     const results = resultsRef.current;
     const video = videoRef.current;
     if (!results || !video) return;
+    const previous = phase;
+    const url = URL.createObjectURL(file);
     setPhase("checking");
-    results.crossPlay.push({ name: file.name, ...(await checkFile(video, await file.arrayBuffer(), urlsRef.current)) });
-    setPhase("done");
-    show();
+    try {
+      results.crossPlay.push({ name: file.name, ...(await checkFile(video, await file.arrayBuffer(), url)) });
+    } catch (error) {
+      results.errors.push(`check ${file.name}: ${String(error)}`);
+    } finally {
+      // The preview is this page's reel again, if it made one
+      const preview = previewUrlRef.current;
+      if (preview) {
+        video.src = preview;
+      } else {
+        video.removeAttribute("src");
+        video.load();
+      }
+      URL.revokeObjectURL(url);
+      setPhase(previous);
+      show();
+    }
   };
 
-  /** With report=1, sends the MP4 and then the results to the Mac; false when sending failed */
-  const report = async (answer: string): Promise<boolean> => {
+  /** In parts, one after another, each under what Next.js keeps of a body (DEV_UPLOAD_PART_BYTES) */
+  const uploadMp4 = async (locale: string, mp4: ArrayBuffer): Promise<string | null> => {
+    const id = Array.from(crypto.getRandomValues(new Uint8Array(6)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    let saved: string | null = null;
+    for (let offset = 0; offset < mp4.byteLength; offset += DEV_UPLOAD_PART_BYTES) {
+      const response = await fetch(`/${locale}/dev/report/mp4?id=${id}&offset=${offset}&total=${mp4.byteLength}`, {
+        method: "POST",
+        headers: { "content-type": "video/mp4" },
+        body: mp4.slice(offset, offset + DEV_UPLOAD_PART_BYTES),
+      });
+      if (!response.ok) throw new Error(`MP4 ${response.status} at byte ${offset}`);
+      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
+      saved = body?.saved ?? saved;
+    }
+    return saved;
+  };
+
+  /**
+   * With report=1, sends the MP4, if this run made one, and then the results to the Mac. A failed
+   * MP4 upload goes into the results, which are sent anyway. False when the results didn't arrive.
+   */
+  const report = async (answer: string | null): Promise<boolean> => {
     const results = resultsRef.current;
     const setup = setupRef.current;
-    if (!results || !setup) return false;
-    results.answer = answer;
+    if (!results || !setup || sending) return false;
+    if (answer !== null) results.answer = answer;
     show();
     if (!setup.report) return true;
+    setSending(true);
     try {
       const mp4 = mp4Ref.current;
       if (mp4 && !results.mp4File) {
-        // In parts, one after another, each under what Next.js keeps of a body (DEV_UPLOAD_PART_BYTES)
-        const id = Array.from(crypto.getRandomValues(new Uint8Array(6)), (byte) => byte.toString(16).padStart(2, "0")).join("");
-        for (let offset = 0; offset < mp4.byteLength; offset += DEV_UPLOAD_PART_BYTES) {
-          const response = await fetch(`/${setup.locale}/dev/report/mp4?id=${id}&offset=${offset}&total=${mp4.byteLength}`, {
-            method: "POST",
-            headers: { "content-type": "video/mp4" },
-            body: mp4.slice(offset, offset + DEV_UPLOAD_PART_BYTES),
-          });
-          if (!response.ok) throw new Error(`MP4 ${response.status} at byte ${offset}`);
-          const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-          if (body?.saved) results.mp4File = body.saved;
+        try {
+          results.mp4File = await uploadMp4(setup.locale, mp4);
+        } catch (error) {
+          results.errors.push(`report: ${String(error)}`);
         }
         show();
       }
@@ -489,6 +548,8 @@ export function ReelSpike() {
     } catch (error) {
       setSent(`Sending failed: ${String(error)}`);
       return false;
+    } finally {
+      setSending(false);
     }
   };
 
@@ -524,18 +585,22 @@ export function ReelSpike() {
       show();
       if (support.offered && setup.auto) await make();
     })();
-    const urls = urlsRef.current;
     return () => {
       live = false;
       document.removeEventListener("securitypolicyviolation", onViolation);
       stopWorker();
-      for (const url of urls) URL.revokeObjectURL(url);
+      const preview = previewUrlRef.current;
+      if (preview) URL.revokeObjectURL(preview);
     };
     // The page sets up once: the setup comes from the URL, and a new setup is a fresh page
   }, []);
 
   const support = resultsRef.current?.support;
   const busy = phase === "probing" || phase === "preparing" || phase === "encoding" || phase === "cancelling" || phase === "checking";
+  // Runs that end without a preview to answer for still send what they found (report=1)
+  const sendable =
+    setupRef.current?.report === true &&
+    (phase === "failed" || phase === "cancelled" || phase === "unsupported" || (phase === "ready" && (resultsRef.current?.crossPlay.length ?? 0) > 0));
 
   return (
     <section className="grid max-w-2xl gap-3" data-state={phase}>
@@ -549,10 +614,10 @@ export function ReelSpike() {
         <p>Checking what this browser can encode...</p>
       )}
       <div className="flex flex-wrap gap-3">
-        <button type="button" className="border border-(--ink) px-4 py-3" disabled={busy || !support?.offered} onClick={() => void make()} data-make>
+        <button type="button" className="border border-(--ink) px-4 py-3" disabled={busy || sending || !support?.offered} onClick={() => void make()} data-make>
           Make the test video
         </button>
-        {phase === "encoding" || phase === "cancelling" ? (
+        {phase === "encoding" ? (
           <button type="button" className="border border-(--ink) px-4 py-3" onClick={cancel} data-cancel>
             Cancel
           </button>
@@ -572,19 +637,35 @@ export function ReelSpike() {
       ) : null}
       <label className="grid gap-1">
         <span>Check an MP4</span>
-        <input type="file" accept="video/mp4" data-check-file onChange={(event) => event.target.files?.[0] && void checkOther(event.target.files[0])} />
+        <input
+          type="file"
+          accept="video/mp4"
+          data-check-file
+          disabled={busy || sending}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            // Cleared, so picking the same file again checks it again
+            event.target.value = "";
+            if (file) void checkOther(file);
+          }}
+        />
       </label>
       {phase === "done" ? (
         <div className="grid gap-2 border border-(--line) p-3">
           <p>Play the preview with the sound on. What happened?</p>
           <div className="flex flex-wrap gap-3">
             {["Played with sound", "Played, no sound", "Didn't play"].map((answer) => (
-              <button key={answer} type="button" className="border border-(--ink) px-4 py-3" onClick={() => void report(answer)}>
+              <button key={answer} type="button" className="border border-(--ink) px-4 py-3" disabled={sending} onClick={() => void report(answer)}>
                 {answer}
               </button>
             ))}
           </div>
         </div>
+      ) : null}
+      {sendable ? (
+        <button type="button" className="justify-self-start border border-(--ink) px-4 py-3" disabled={sending} onClick={() => void report(null)} data-send>
+          Send results
+        </button>
       ) : null}
       <p className="text-[0.8rem]">{sent}</p>
       <pre className="max-h-96 overflow-auto text-[0.7rem] break-all whitespace-pre-wrap" data-results>

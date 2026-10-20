@@ -1,12 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
 import { blobStoreHost, createNonce, dealerPolicy } from "@/lib/csp/policy";
-import { isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 
+// Any one locale, as a group
+const LOCALE = `(?:${routing.locales.join("|")})`;
 // The (dev) route groups: /{locale}/dev/** and /{locale}/dealer/dev/**
-const DEV_PATH = /^\/(?:ar|en)(?:\/dealer)?\/dev(?:\/|$)/;
+const DEV_PATH = new RegExp(`^/${LOCALE}(?:/dealer)?/dev(?:/|$)`);
 // The dealer workspace and its auth pages: /{locale}/dealer/**
-const DEALER_PATH = /^\/(?:ar|en)\/dealer(?:\/|$)/;
+const DEALER_PATH = new RegExp(`^/${LOCALE}/dealer(?:/|$)`);
 
 // Read once, so a bad BLOB_STORE_HOST stops the server instead of failing each request
 const POLICY_OPTIONS = {
@@ -58,7 +60,8 @@ function withDealerPolicy(request: NextRequest, notFound: boolean): NextResponse
 
 // Only unprefixed paths, the dealer workspace and the dev pages run the proxy, so cached
 // public pages, /api, Next internals and files are served without it (SRS §11.5 rule 1).
-// Matcher values must be literals, so the locales are spelled out here.
+// Next.js reads the matcher at build time, so its values must be literals and the locales are
+// spelled out here; tests/unit/proxy.test.ts checks them against routing.locales.
 export const config = {
   matcher: [
     "/((?!ar(?:/|$)|en(?:/|$)|api(?:/|$)|_next/|_vercel(?:/|$)|.*\\..*).*)",

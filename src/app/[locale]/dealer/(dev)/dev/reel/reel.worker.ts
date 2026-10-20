@@ -1,9 +1,10 @@
-import { type EncodeStats, encodeReel, type ReelAudio } from "@/features/reel/encode";
-import { type BitrateMode, pickAudioConfig, pickVideoCodec, REEL, workerCanvasProblem } from "@/features/reel/support";
+import { type BitrateMode, pickAudioConfig, pickVideoCodec, REEL } from "@/features/reel/domain/support";
+import { workerCanvasProblem } from "@/features/reel/worker/canvas-probe";
+import { type EncodeStats, encodeReel, type ReelAudio } from "@/features/reel/worker/encode";
 import { drawPattern, makePicture } from "./pattern";
 
 // Spike T-08's worker: draws the test pattern on an OffscreenCanvas and encodes it with
-// src/features/reel/encode.ts. Messages: probe, encode, cancel. Replies: probe, progress, done,
+// src/features/reel/worker/encode.ts. Messages: probe, encode, cancel. Replies: probe, progress, done,
 // failed.
 
 export type WorkerRequest =
@@ -76,9 +77,14 @@ scope.onmessage = (event) => {
     return;
   }
   if (request.type === "probe") {
-    void probe().then((result) => scope.postMessage({ type: "probe", probe: result }));
+    probe().then(
+      (result) => scope.postMessage({ type: "probe", probe: result }),
+      (error: unknown) => scope.postMessage({ type: "failed", message: `probe: ${String(error)}`, cancelled: false }),
+    );
     return;
   }
+  // A second encode replaces the first
+  running?.abort();
   const controller = new AbortController();
   running = controller;
   encode(request, controller.signal)

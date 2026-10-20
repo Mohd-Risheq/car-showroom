@@ -1,6 +1,6 @@
 import { cubicBezier as motionBezier, spring } from "motion";
 import { describe, expect, it } from "vitest";
-import { cubicBezier, easeOut, MOVE_OMEGA, Spring } from "@/features/journey/motion";
+import { cubicBezier, easeOut, MOVE_OMEGA, Spring } from "@/features/journey/domain/motion";
 
 // The globe's motion against Motion's own: the `move` spring and --ease-out (DESIGN §4.2, §4.3)
 
@@ -16,7 +16,9 @@ describe("the move spring", () => {
     expect(MOVE_OMEGA ** 2).toBeCloseTo(532.7, 0);
   });
 
-  it("never overshoots, settles within 0.4 s and 0.1 ms steps alike, and stops exactly on the target", () => {
+  // Within 0.1% of the target at 0.4 s, it rests only once it is within 1e-4 and all but still,
+  // which on a move of 2 comes a little later
+  it("never overshoots, rests within 0.75 s at any step size, and stops exactly on the target", () => {
     for (const dt of [0.0001, 0.008, 0.016, 0.05]) {
       const ours = new Spring(0);
       ours.target = 2;

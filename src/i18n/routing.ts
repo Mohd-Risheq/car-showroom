@@ -1,9 +1,10 @@
 import { defineRouting } from "next-intl/routing";
+import { DEFAULT_LOCALE, LOCALES } from "./locales";
 
-// Arabic first (RTL), English second (LTR), always behind a locale prefix (C-03, FR-01.1)
+// Every page sits behind a locale prefix (C-03, FR-01.1)
 export const routing = defineRouting({
-  locales: ["ar", "en"],
-  defaultLocale: "ar",
+  locales: LOCALES,
+  defaultLocale: DEFAULT_LOCALE,
   localePrefix: "always",
 });
 

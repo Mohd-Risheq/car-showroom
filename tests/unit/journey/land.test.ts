@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { MAP, toMap } from "@/features/journey/geo";
-import { landPath, landSvg } from "@/features/journey/land";
+import { MAP, toMap } from "@/features/journey/domain/geo";
+import { landPath, landSvg } from "@/features/journey/server/land";
 
 // The static map's land (FR-17.6), made at build time from world-atlas's land-110m
 

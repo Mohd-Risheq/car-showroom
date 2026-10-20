@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -150,8 +150,8 @@ describe("POST /api/csp-report", () => {
     expect(lines).toEqual([]);
   });
 
-  // Real bodies, as each engine sent them in T-06 (docs/evidence/T-06)
-  it.each(readdirSync(FIXTURES).filter((name) => name.endsWith(".json")))(
+  // Real bodies, as each engine sent them in T-06 (docs/evidence/T-06). Named, so a missing file fails.
+  it.each(["chromium-156.json", "firefox-157.json", "webkit-27.2.json"])(
     "logs the report %s sent",
     async (name) => {
       const fixture = JSON.parse(readFileSync(path.join(FIXTURES, name), "utf8")) as {

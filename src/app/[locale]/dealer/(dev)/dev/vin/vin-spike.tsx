@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { scanRegion, VIN_FORMATS } from "@/features/vin/barcode";
-import { closeCamera, createScanner, hasCamera, openCamera, type ScanEngine, type Scanned, scanPhoto, type ScanRead, scanVideo, type VinScanner } from "@/features/vin/scanner";
-import { ZXING_WASM_PATH } from "@/features/vin/zxing";
+import { scanRegion, VIN_FORMATS } from "@/features/vin/domain/barcode";
+import { closeCamera, createScanner, hasCamera, openCamera, type ScanEngine, type Scanned, scanPhoto, type ScanRead, scanVideo, type VinScanner } from "@/features/vin/ui/scanner";
+import { ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 import { checkVin, normalizeVin } from "@/lib/validation/vin";
 
 // Spike T-10 (FR-36.2): can this browser read a VIN barcode with its camera, and with what? The

@@ -12,7 +12,7 @@ import {
   SILENCE_DB,
   smooth,
   topFor,
-} from "@/features/sound/tach";
+} from "@/features/sound/domain/tach";
 
 // BR-19, FR-15.10 and DESIGN §5.3
 

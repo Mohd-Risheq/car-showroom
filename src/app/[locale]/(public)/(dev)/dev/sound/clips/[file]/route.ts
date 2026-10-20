@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 import { parseRange } from "@/lib/http/range";
 
 // The synthetic engine clips for spikes T-07 and T-08 (Q-04), made by scripts/fixtures/engine-clips.mts in

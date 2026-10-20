@@ -60,6 +60,11 @@ function riffChunk(id: string, data: Buffer): Buffer {
   return Buffer.concat([header, data, Buffer.alloc(data.length % 2)]);
 }
 
+/** A WebP's VP8X flags byte: after the 12-byte RIFF header and the chunk's own 8-byte header */
+export const VP8X_FLAGS_OFFSET = 20;
+/** The VP8X flag that marks an animated WebP */
+export const VP8X_ANIMATION = 0x02;
+
 // Appends a chunk and corrects the RIFF size
 export function withWebpChunk(webp: Buffer, fourcc: string, data: Buffer): Buffer {
   const file = Buffer.concat([webp, riffChunk(fourcc, data)]);

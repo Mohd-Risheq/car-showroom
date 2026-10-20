@@ -1,7 +1,7 @@
 import "server-only";
 import { feature } from "topojson-client";
 import land110m from "world-atlas/land-110m.json";
-import { MAP, toMap } from "./geo";
+import { MAP, toMap } from "../domain/geo";
 
 // The static map's land (FR-17.6): Natural Earth's 1:110m land from world-atlas, drawn on the
 // static map's frame when the app is built (SRS §14: no runtime fetch). world-atlas keeps rings

@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
-import { StaticRouteMap } from "@/features/journey/static-map";
+import { StaticRouteMap } from "@/features/journey/ui/static-map";
+import { notFoundOnDeployments } from "@/lib/deployment";
 import { placesOf, ROUTES } from "./fixture";
 import { JourneySpike } from "./journey-spike";
 
@@ -21,6 +22,7 @@ const TOKENS = {
 } as CSSProperties;
 
 export default function JourneySpikePage() {
+  notFoundOnDeployments();
   return (
     <main className="grid gap-8 p-6 font-mono text-sm" style={TOKENS}>
       <h1 className="text-lg">Muftah dev: Journey globe and static map (T-09)</h1>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AUDIO_CONFIGS, type Encoders, pickAudioConfig, pickVideoCodec, REEL, VIDEO_CODECS, videoConfig } from "@/features/reel/support";
+import { AUDIO_CONFIGS, type Encoders, pickAudioConfig, pickVideoCodec, REEL, VIDEO_CODECS, videoConfig } from "@/features/reel/domain/support";
 
 // FR-43.1, FR-43.3, BR-39 and SRS §10.8: what Reel It offers, found by feature detection only
 
@@ -105,6 +105,25 @@ describe("pickAudioConfig (FR-43.3)", () => {
     expect((await pickAudioConfig(mono.scope))?.numberOfChannels).toBe(1);
     const cd = browser({ audio: [{ codec: "mp4a.40.2", sampleRate: 44_100, numberOfChannels: 2 }] });
     expect((await pickAudioConfig(cd.scope))?.sampleRate).toBe(44_100);
+    // With both, 48 kHz mono comes before 44.1 kHz stereo
+    const both = browser({
+      audio: [
+        { codec: "mp4a.40.2", sampleRate: 44_100, numberOfChannels: 2 },
+        { codec: "mp4a.40.2", sampleRate: 48_000, numberOfChannels: 1 },
+      ],
+    });
+    expect(await pickAudioConfig(both.scope)).toMatchObject({ sampleRate: 48_000, numberOfChannels: 1 });
+  });
+
+  it("asks in order, and for every config before giving up", async () => {
+    const { scope, asked } = browser({});
+    expect(await pickAudioConfig(scope)).toBeNull();
+    expect(asked.audio.map(({ sampleRate, numberOfChannels }) => [sampleRate, numberOfChannels])).toEqual([
+      [48_000, 2],
+      [48_000, 1],
+      [44_100, 2],
+      [44_100, 1],
+    ]);
   });
 
   it("only ever asks for AAC-LC, never HE-AAC at the clip's own 22,050 Hz", async () => {

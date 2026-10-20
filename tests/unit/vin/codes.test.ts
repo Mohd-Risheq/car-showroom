@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TEST_CODES } from "@/app/[locale]/dealer/(dev)/dev/vin/codes";
-import { VIN_FORMATS, vinFromBarcode } from "@/features/vin/barcode";
+import { VIN_FORMATS, vinFromBarcode } from "@/features/vin/domain/barcode";
 
 // The scan fixtures say what the scanner should fill, so a browser run can check each read against them
 

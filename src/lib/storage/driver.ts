@@ -1,5 +1,5 @@
 import "server-only";
-import { isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 import { createBlobStore } from "./blob";
 import { createLocalStore } from "./local";
 

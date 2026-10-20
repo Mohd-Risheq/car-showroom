@@ -80,7 +80,7 @@ describe("public policy", () => {
     expect(policy.has("worker-src")).toBe(false);
   });
 
-  it("leaves the store out when BLOB_STORE_HOST is unset", () => {
+  it("leaves the store out when no store is given", () => {
     expect(publicPolicy()).not.toContain("https://");
     expect(dealerPolicy(createNonce())).not.toContain("blob.vercel-storage.com");
   });

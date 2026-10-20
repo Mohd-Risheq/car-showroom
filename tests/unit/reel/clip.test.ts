@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clipEnvelope, FADE_SECONDS, gainAt, shapeClip } from "@/features/reel/clip";
+import { clipEnvelope, FADE_SECONDS, gainAt, shapeClip } from "@/features/reel/domain/clip";
 
 // DESIGN §5.16: the clip plays once from 0 s, 300 ms fade-in, 300 ms fade-out ending with the clip
 // or at 15 s, whichever comes first; never looped

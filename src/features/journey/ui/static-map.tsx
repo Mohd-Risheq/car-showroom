@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
-import { MAP, type MapPoint, mapRoute, toMap, type LatLng } from "./geo";
-import { journeySteps } from "./route";
+import { MAP, type MapPoint, mapRoute, toMap, type LatLng } from "../domain/geo";
+import { journeySteps } from "../domain/route";
 
 // The Journey's static map (FR-17.6, DESIGN §5.5): the route over a dotted world in SVG and CSS
 // only, so it needs neither JavaScript nor WebGL. The land is one file made at build time

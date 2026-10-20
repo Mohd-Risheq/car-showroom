@@ -1,4 +1,4 @@
-import { REEL } from "@/features/reel/support";
+import { REEL } from "@/features/reel/domain/support";
 
 // Spike T-08's test pattern: frames made for the checks, not a reel (T-66 draws DESIGN §5.16's
 // template). Every frame has:

@@ -1,4 +1,4 @@
-import type { ClipType } from "@/features/sound/tach";
+import type { ClipType } from "@/features/sound/domain/tach";
 
 // The synthetic engine clips (Q-04, scripts/fixtures/engine-clips.mts) for the T-07 page
 

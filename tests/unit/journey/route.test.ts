@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { LatLng } from "@/features/journey/geo";
-import { hasRoute, journeySteps } from "@/features/journey/route";
+import type { LatLng } from "@/features/journey/domain/geo";
+import { hasRoute, journeySteps } from "@/features/journey/domain/route";
 
 // What each milestone adds to the Journey's route (BR-10, FR-17)
 

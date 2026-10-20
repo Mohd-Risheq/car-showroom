@@ -10,7 +10,7 @@ const OVERRIDES = {
 };
 
 /** Loads the scanner on demand, pointed at our copy of its .wasm */
-export async function loadScanner() {
+export async function loadZxingPolyfill() {
   const scanner = await import("barcode-detector/ponyfill");
   scanner.prepareZXingModule({ overrides: OVERRIDES });
   return scanner;
@@ -21,7 +21,7 @@ export async function loadScanner() {
  * next read fetches our copy again. Purging also drops the overrides, and zxing-wasm's default is
  * jsDelivr, so they go straight back.
  */
-export async function reloadScanner() {
+export async function resetZxingWasm() {
   const scanner = await import("barcode-detector/ponyfill");
   scanner.purgeZXingModule();
   scanner.prepareZXingModule({ overrides: OVERRIDES });

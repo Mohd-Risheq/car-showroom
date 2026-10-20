@@ -1,5 +1,6 @@
 import type { PutBlobResult, UploadProgressEvent } from "@vercel/blob";
 import { upload } from "@vercel/blob/client";
+import type { UploadClientPayload } from "@/lib/validation/media";
 import { type MediaExtension, type MediaKind, MEDIA_TYPES, uploadPathname } from "./rules";
 
 // The browser side of API-16: one variant goes straight to storage, with a token for its
@@ -21,7 +22,7 @@ export function uploadVariant(input: {
   return upload(uploadPathname({ carId, kind, clientUploadId, variant, ext }), input.body, {
     access: "public",
     handleUploadUrl: input.handleUploadUrl ?? "/api/upload",
-    clientPayload: JSON.stringify({ carId, kind, clientUploadId, variant }),
+    clientPayload: JSON.stringify({ carId, kind, clientUploadId, variant } satisfies UploadClientPayload),
     contentType: MEDIA_TYPES[ext],
     multipart: false,
     ...(input.onProgress ? { onUploadProgress: input.onProgress } : {}),

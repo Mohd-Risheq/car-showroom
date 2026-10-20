@@ -314,7 +314,8 @@ export function SpinSpike() {
     report: boolean;
     defer: boolean;
   } | null>(null);
-  const [state, setState] = useState<"starting" | "idle" | "running" | "done">("starting");
+  const [state, setState] = useState<"starting" | "idle" | "running" | "done" | "failed">("starting");
+  const [failure, setFailure] = useState<string | null>(null);
   const [json, setJson] = useState("");
   const [sent, setSent] = useState("");
 
@@ -404,25 +405,33 @@ export function SpinSpike() {
     const locale = window.location.pathname.split("/")[1] ?? "en";
     const longTasks = new LongTaskLog();
     let cancelled = false;
-    void Promise.all([import("@/features/spin"), measureRefresh()]).then(([spin, refreshMs]) => {
-      if (cancelled) return;
-      const config = configFromUrl(params);
-      const defer = params.get("defer") === "1";
-      contextRef.current = { spin, locale, refreshMs, longTasks, config, report: params.get("report") === "1", defer };
-      resultsRef.current = {
-        kind: "t05-spin",
-        page: window.location.pathname + window.location.search,
-        at: new Date().toISOString(),
-        environment: environment(longTasks),
-        refreshMs: round(refreshMs, 2),
-        runs: [],
-        recordings: [],
-        errors: [],
-      };
-      if (!defer) reopen();
-      setState("idle");
-      if (params.get("auto") === "1") void runAll(RUN_ALL);
-    });
+    void Promise.all([import("@/features/spin"), measureRefresh()]).then(
+      ([spin, refreshMs]) => {
+        if (cancelled) return;
+        const config = configFromUrl(params);
+        const defer = params.get("defer") === "1";
+        contextRef.current = { spin, locale, refreshMs, longTasks, config, report: params.get("report") === "1", defer };
+        resultsRef.current = {
+          kind: "t05-spin",
+          page: window.location.pathname + window.location.search,
+          at: new Date().toISOString(),
+          environment: environment(longTasks),
+          refreshMs: round(refreshMs, 2),
+          runs: [],
+          recordings: [],
+          errors: [],
+        };
+        if (!defer) reopen();
+        setState("idle");
+        if (params.get("auto") === "1") void runAll(RUN_ALL);
+      },
+      (reason: unknown) => {
+        // The viewer's chunk didn't load (over the tunnel, say): say so instead of staying at "starting"
+        if (cancelled) return;
+        setFailure(String(reason));
+        setState("failed");
+      },
+    );
     const status = setInterval(() => {
       const element = statusRef.current;
       if (!element) return;
@@ -515,6 +524,7 @@ export function SpinSpike() {
         </button>
       </div>
       <p className="text-xs">{state === "running" ? "Measuring. Keep this tab in front." : sent}</p>
+      {failure ? <p role="alert">Spike failed: {failure}</p> : null}
 
       {json ? (
         <pre data-results dir="ltr" className="overflow-x-auto whitespace-pre-wrap text-xs">

@@ -1,7 +1,7 @@
 import createGlobe, { type Globe, type Marker } from "cobe";
-import { angleBetween, centreOn, greatCircle, nearestTurn, type LatLng, type Vec3, toVector } from "./geo";
-import { easeOut, Spring } from "./motion";
-import { type JourneyStep, journeySteps } from "./route";
+import { angleBetween, centreOn, greatCircle, nearestTurn, type LatLng, type Vec3, toVector } from "../domain/geo";
+import { easeOut, Spring } from "../domain/motion";
+import { type JourneyStep, journeySteps } from "../domain/route";
 
 // The Journey globe (FR-17, DESIGN §5.5), loaded with cobe as one lazy chunk (NFR-PERF-03). cobe 2
 // draws the dotted globe and the markers. A 2D canvas over it draws the arcs and pulses: cobe gives
@@ -108,13 +108,16 @@ export type JourneyGlobeOptions = {
   onSettle?: () => void;
 };
 
-export interface JourneyGlobe {
+export interface GlobeHandle {
   activate(index: number): void;
   destroy(): void;
 }
 
-class GlobeView implements JourneyGlobe {
+class GlobeView implements GlobeHandle {
   readonly #host: HTMLElement;
+  readonly #canvas: HTMLCanvasElement;
+  /** Owns every listener the view adds; destroy() aborts it, and nothing draws after that */
+  readonly #lifetime = new AbortController();
   readonly #options: JourneyGlobeOptions;
   readonly #steps: JourneyStep[];
   readonly #arcs: Arc[];
@@ -139,6 +142,7 @@ class GlobeView implements JourneyGlobe {
 
   constructor(host: HTMLElement, canvas: HTMLCanvasElement, globe: Globe, size: number, dpr: number, accent: RGB, options: JourneyGlobeOptions) {
     this.#host = host;
+    this.#canvas = canvas;
     this.#options = options;
     this.#globe = globe;
     this.#size = size;
@@ -166,12 +170,13 @@ class GlobeView implements JourneyGlobe {
 
     this.#reveal(options.active, false);
     host.style.touchAction = "pan-y";
-    host.addEventListener("pointerdown", this.#down);
-    host.addEventListener("pointermove", this.#move);
-    host.addEventListener("pointerup", this.#up);
-    host.addEventListener("pointercancel", this.#up);
-    canvas.addEventListener("webglcontextlost", this.#lost);
-    document.addEventListener("visibilitychange", this.#wake);
+    const { signal } = this.#lifetime;
+    host.addEventListener("pointerdown", this.#down, { signal });
+    host.addEventListener("pointermove", this.#move, { signal });
+    host.addEventListener("pointerup", this.#up, { signal });
+    host.addEventListener("pointercancel", this.#up, { signal });
+    canvas.addEventListener("webglcontextlost", this.#lost, { signal });
+    document.addEventListener("visibilitychange", this.#wake, { signal });
     this.#resize = new ResizeObserver(() => this.#fit());
     this.#resize.observe(host);
     this.#presence = new IntersectionObserver((entries) => {
@@ -201,21 +206,19 @@ class GlobeView implements JourneyGlobe {
     this.#wake();
   }
 
-  /** Redraws once now, for example when cobe's map texture arrives */
-  redraw(): void {
-    this.#wake();
+  /** cobe doesn't draw again when its map texture arrives, so the view does */
+  redrawOnLoad(texture: HTMLImageElement): void {
+    if (!texture.complete) texture.addEventListener("load", this.#wake, { once: true, signal: this.#lifetime.signal });
   }
 
   destroy(): void {
+    this.#lifetime.abort();
     cancelAnimationFrame(this.#frame);
+    this.#frame = 0;
     this.#resize.disconnect();
     this.#presence.disconnect();
-    this.#host.removeEventListener("pointerdown", this.#down);
-    this.#host.removeEventListener("pointermove", this.#move);
-    this.#host.removeEventListener("pointerup", this.#up);
-    this.#host.removeEventListener("pointercancel", this.#up);
-    document.removeEventListener("visibilitychange", this.#wake);
     this.#globe.destroy();
+    releaseContext(this.#canvas);
     this.#host.style.touchAction = "";
     this.#host.replaceChildren();
   }
@@ -272,6 +275,7 @@ class GlobeView implements JourneyGlobe {
 
   /** Asks for a frame, or stops asking while the globe is off-screen or the tab hidden (FR-17.8) */
   #wake = (): void => {
+    if (this.#lifetime.signal.aborted) return;
     if (!this.#onScreen || document.hidden) {
       cancelAnimationFrame(this.#frame);
       this.#frame = 0;
@@ -436,11 +440,16 @@ class GlobeView implements JourneyGlobe {
   };
 }
 
+/** cobe's destroy() deletes its buffers and programs but keeps the context, so release it now, not at GC */
+function releaseContext(canvas: HTMLCanvasElement): void {
+  (canvas.getContext("webgl2") ?? canvas.getContext("webgl"))?.getExtension("WEBGL_lose_context")?.loseContext();
+}
+
 /**
  * Mounts the globe in `host`, an empty square element that the caller sizes, or returns null
  * when the browser has no WebGL (FR-17.6): the caller then keeps the static map.
  */
-export function mountJourneyGlobe(host: HTMLElement, options: JourneyGlobeOptions): JourneyGlobe | null {
+export function mountJourneyGlobe(host: HTMLElement, options: JourneyGlobeOptions): GlobeHandle | null {
   const size = host.clientWidth;
   const first = options.places.find((place) => place !== null);
   if (size === 0 || !first) return null;
@@ -480,6 +489,9 @@ export function mountJourneyGlobe(host: HTMLElement, options: JourneyGlobeOption
       markerElevation: MARKER_LIFT,
       context: { powerPreference: "low-power" },
     });
+  } catch (error) {
+    host.replaceChildren();
+    throw error;
   } finally {
     window.Image = NativeImage;
   }
@@ -490,8 +502,17 @@ export function mountJourneyGlobe(host: HTMLElement, options: JourneyGlobeOption
     host.replaceChildren();
     return null;
   }
-  const view = new GlobeView(host, canvas, globe, size, dpr, colours.accent, options);
+  // A failure leaves nothing behind, so the caller only has to keep its static map
+  let view: GlobeView;
+  try {
+    view = new GlobeView(host, canvas, globe, size, dpr, colours.accent, options);
+  } catch (error) {
+    globe.destroy();
+    releaseContext(canvas);
+    host.replaceChildren();
+    throw error;
+  }
   const arrived = texture as HTMLImageElement | null;
-  if (arrived && !arrived.complete) arrived.addEventListener("load", () => view.redraw(), { once: true });
+  if (arrived) view.redrawOnLoad(arrived);
   return view;
 }

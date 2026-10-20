@@ -1,4 +1,4 @@
-import type { Size } from "./ring";
+import type { Size } from "../domain/ring";
 
 // Fetches one spin frame and decodes it into an ImageBitmap, in whichever thread calls it: the
 // page, or the decode worker (decode.worker.ts). Kept apart from decode.ts so the worker's

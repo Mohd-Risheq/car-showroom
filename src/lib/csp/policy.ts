@@ -24,11 +24,12 @@ function serialize(directives: readonly Directive[]): string {
   return directives.map((directive) => directive.join(" ")).join("; ");
 }
 
-function store(host: string | undefined): string[] {
+function storeSources(host: string | undefined): string[] {
   return host ? [`https://${host}`] : [];
 }
 
-const ENDING: readonly Directive[] = [
+// The directives both policies end with
+const SHARED_DIRECTIVES: readonly Directive[] = [
   ["object-src", "'none'"],
   ["base-uri", "'none'"],
   ["form-action", "'self'"],
@@ -52,11 +53,11 @@ export function publicPolicy({ store: host, development = false }: PolicyOptions
     ["script-src", "'self'", "'unsafe-inline'", ...(development ? ["'unsafe-eval'"] : [])],
     ["script-src-attr", "'none'"],
     ["style-src", "'self'", "'unsafe-inline'"],
-    ["img-src", "'self'", "blob:", "data:", ...store(host)],
-    ["media-src", "'self'", ...store(host)],
-    ["connect-src", "'self'", ...store(host)],
+    ["img-src", "'self'", "blob:", "data:", ...storeSources(host)],
+    ["media-src", "'self'", ...storeSources(host)],
+    ["connect-src", "'self'", ...storeSources(host)],
     ["font-src", "'self'"],
-    ...ENDING,
+    ...SHARED_DIRECTIVES,
   ]);
 }
 
@@ -71,12 +72,12 @@ export function dealerPolicy(nonce: string, { store: host, development = false }
     // (SRS §12.5, DECISIONS.md D-028). No nonce here: browsers ignore 'unsafe-inline' next to one.
     ["style-src", "'self'", "'unsafe-inline'"],
     ["style-src-attr", "'unsafe-inline'"],
-    ["img-src", "'self'", "blob:", "data:", ...store(host)],
-    ["media-src", "'self'", "blob:", ...store(host)],
-    ["connect-src", "'self'", "https://vercel.com/api/blob/", ...store(host)],
+    ["img-src", "'self'", "blob:", "data:", ...storeSources(host)],
+    ["media-src", "'self'", "blob:", ...storeSources(host)],
+    ["connect-src", "'self'", "https://vercel.com/api/blob/", ...storeSources(host)],
     ["worker-src", "'self'", "blob:"],
     ["font-src", "'self'"],
-    ...ENDING,
+    ...SHARED_DIRECTIVES,
   ]);
 }
 

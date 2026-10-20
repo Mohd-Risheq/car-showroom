@@ -1,6 +1,6 @@
 import type { BarcodeDetector, DetectedBarcode } from "barcode-detector/ponyfill";
-import { scanRegion, VIN_FORMATS, vinFromBarcode, type VinFromBarcode } from "./barcode";
-import { loadScanner, reloadScanner } from "./zxing";
+import { scanRegion, VIN_FORMATS, vinFromBarcode, type VinFromBarcode } from "../domain/barcode";
+import { loadZxingPolyfill, resetZxingWasm } from "./zxing";
 
 // "Scan VIN" (FR-36.2): the rear camera, read a frame at a time until a barcode holds a VIN. It
 // runs on the dealer page's main thread, whose policy allows WebAssembly (D-028).
@@ -39,8 +39,8 @@ export async function createScanner({ polyfill = false }: { polyfill?: boolean }
     const formats: readonly string[] = await Native.getSupportedFormats().catch(() => []);
     if (VIN_FORMATS.every((format) => formats.includes(format))) return { engine: "native", detector: new Native({ formats: [...VIN_FORMATS] }) };
   }
-  const scanner = await loadScanner();
-  return { engine: "polyfill", detector: new scanner.BarcodeDetector({ formats: [...VIN_FORMATS] }) };
+  const zxing = await loadZxingPolyfill();
+  return { engine: "polyfill", detector: new zxing.BarcodeDetector({ formats: [...VIN_FORMATS] }) };
 }
 
 /**
@@ -86,7 +86,7 @@ async function detect(scanner: VinScanner, source: HTMLVideoElement | HTMLCanvas
   try {
     return await scanner.detector.detect(source);
   } catch (error) {
-    if (scanner.engine === "polyfill" && error instanceof DOMException && error.name === "NotSupportedError") await reloadScanner();
+    if (scanner.engine === "polyfill" && error instanceof DOMException && error.name === "NotSupportedError") await resetZxingWasm();
     throw error;
   }
 }

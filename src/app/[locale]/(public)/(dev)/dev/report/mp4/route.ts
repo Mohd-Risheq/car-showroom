@@ -1,7 +1,8 @@
 import { appendFile, mkdir, readdir, rename, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { DEV_UPLOAD_PART_BYTES } from "@/app/_dev/upload-limits";
 import { isSameOriginRequest } from "@/lib/auth/same-origin";
-import { DEV_UPLOAD_PART_BYTES, isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 import { readCapped } from "@/lib/storage/stream";
 
 // The MP4 a phone made in spike T-08, saved next to the JSON reports in the git-ignored

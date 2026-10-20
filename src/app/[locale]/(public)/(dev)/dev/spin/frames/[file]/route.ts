@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { isDeployment } from "@/lib/dev-only";
+import { isDeployment } from "@/lib/deployment";
 
 // The synthetic spin fixture for spike T-05 (Q-04), made by scripts/fixtures/spin-dials.mts in
 // the git-ignored .fixtures/spin/ folder. Not found on deployments, here and in the proxy.

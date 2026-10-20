@@ -10,8 +10,9 @@ import {
   releaseTarget,
   releaseVelocity,
   type Sample,
+  sameSize,
   type Size,
-} from "./ring";
+} from "../domain/ring";
 import type { FrameStore } from "./store";
 
 // The spin viewer's engine (FR-16, DESIGN §5.4): draws pre-decoded frames on a canvas and turns
@@ -202,12 +203,12 @@ export class SpinViewer {
     if (!box || box.width === 0 || box.height === 0) return;
     this.#cssSize = { width: box.width, height: box.height };
     const backing = backingSize(box.width, box.height, window.devicePixelRatio || 1);
-    if (backing.width === this.#backing.width && backing.height === this.#backing.height) return;
+    if (sameSize(backing, this.#backing)) return;
     this.#backing = backing;
     this.#canvas.width = backing.width;
     this.#canvas.height = backing.height;
     this.#drawn = null;
-    // FR-16.1: the poster, frame 0 at display resolution, before any interaction
+    // At rest, the frame showing again at display resolution: the poster on the first layout (FR-16.1)
     if (this.#resting) this.#store.requestHigh(this.frame, backing);
     this.#schedule();
   };

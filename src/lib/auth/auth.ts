@@ -6,8 +6,9 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import * as schema from "@/lib/db/schema";
 import { hashPassword, verifyPassword } from "./password";
+import { USER_ROLES } from "./roles";
 
-const DAY = 60 * 60 * 24;
+const DAY_SECONDS = 60 * 60 * 24;
 const BASE_PATH = "/api/auth";
 
 // Sign-up, profile update, email change and password reset return 404 (API-05, FR-29.11)
@@ -25,8 +26,8 @@ export const auth = betterAuth({
     password: { hash: hashPassword, verify: verifyPassword }, // SEC-02
   },
   session: {
-    expiresIn: 7 * DAY, // SEC-01: 7 days, sliding
-    updateAge: DAY,
+    expiresIn: 7 * DAY_SECONDS, // SEC-01: 7 days, sliding
+    updateAge: DAY_SECONDS,
     cookieCache: { enabled: false }, // SEC-01: a revoked session stops at the next request
     additionalFields: {
       stepUpAt: { type: "date", required: false, input: false }, // BR-41
@@ -34,7 +35,7 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      role: { type: ["owner", "staff"], required: true, defaultValue: "staff", input: false },
+      role: { type: [...USER_ROLES], required: true, defaultValue: "staff", input: false },
       mustChangePassword: { type: "boolean", required: true, defaultValue: true, input: false },
       disabledAt: { type: "date", required: false, input: false },
       tempPasswordExpiresAt: { type: "date", required: false, input: false },
@@ -48,12 +49,12 @@ export const auth = betterAuth({
       create: {
         // No IP address is stored (SEC-02), and a disabled user gets no session (ENT-User)
         before: async (session) => {
-          const [owner] = await db
+          const [sessionUser] = await db
             .select({ disabledAt: schema.user.disabledAt })
             .from(schema.user)
             .where(eq(schema.user.id, session.userId))
             .limit(1);
-          if (!owner || owner.disabledAt) return false;
+          if (!sessionUser || sessionUser.disabledAt) return false;
           return { data: { ipAddress: null } };
         },
       },

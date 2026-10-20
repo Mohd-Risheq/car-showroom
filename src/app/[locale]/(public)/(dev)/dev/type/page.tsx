@@ -1,10 +1,11 @@
 import { type CSSProperties, Fragment } from "react";
 import { getLocale } from "next-intl/server";
 import { type AppLocale, directionOf } from "@/i18n/routing";
+import { notFoundOnDeployments } from "@/lib/deployment";
 import { martianMono, readexPro } from "@/styles/fonts";
+import { C } from "./classes";
 import { COPY, DIGITS, HEXP_VALUES, JOINED_AR, STEPS } from "./copy";
 import { TypeChecks } from "./type-checks";
-import { C } from "./classes";
 
 // Spike T-11: Readex Pro and Martian Mono through next/font (DESIGN §3.3, NFR-PERF-08). The type
 // scale in this page's language, then fixtures in both scripts that type-checks.tsx measures. T-13
@@ -32,6 +33,7 @@ function DigitRow({ id, numeric, className, style }: { id: string; numeric: "nor
 }
 
 export default async function TypeSpikePage() {
+  notFoundOnDeployments();
   const locale = await getLocale();
   const copy = COPY[locale];
   const other: AppLocale = locale === "ar" ? "en" : "ar";

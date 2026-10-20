@@ -1,8 +1,8 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import type { LatLng } from "./geo";
-import type { JourneyGlobe as Globe, JourneyGlobeOptions } from "./globe";
+import type { LatLng } from "../domain/geo";
+import type { GlobeHandle, JourneyGlobeOptions } from "./globe";
 
 // The Journey's globe slot (FR-17.5, FR-17.6). It shows the static map it is given, and swaps in
 // the globe once the slot comes within one viewport of the screen, unless reduced motion is
@@ -23,7 +23,7 @@ type Props = {
 export function JourneyGlobe({ places, active, children, onFrame, onSettle, onShow }: Props) {
   const slot = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
-  const globe = useRef<Globe | null>(null);
+  const globe = useRef<GlobeHandle | null>(null);
   const activeNow = useRef(active);
   const callbacks = useRef({ onFrame, onSettle, onShow });
   const [shown, setShown] = useState(false);
@@ -63,16 +63,20 @@ export function JourneyGlobe({ places, active, children, onFrame, onSettle, onSh
           loading = false;
           if (disposed || !near || motion.matches || globe.current) return;
           try {
-            globe.current = mountJourneyGlobe(target, {
+            const view: GlobeHandle | null = mountJourneyGlobe(target, {
               places,
               active: activeNow.current,
-              onFail: unmount,
+              // A globe destroyed earlier never takes down the one showing now
+              onFail: () => {
+                if (globe.current === view) unmount();
+              },
               onFrame: (cpuMs) => callbacks.current.onFrame?.(cpuMs),
               onSettle: () => callbacks.current.onSettle?.(),
             });
+            globe.current = view;
           } catch {
-            // A globe that fails to start leaves the static map in place (FR-17 error states)
-            target.replaceChildren();
+            // A globe that fails to start cleans up after itself and leaves the static map in place
+            // (FR-17 error states). T-42 logs it once T-16's lib/log exists.
             globe.current = null;
           }
           show(globe.current !== null);

@@ -3,7 +3,7 @@ import { createHash, randomInt } from "node:crypto";
 import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { StorageDriver } from "./driver";
-import { extensionOf, MEDIA_TYPES, RANDOM_SUFFIX_LENGTH } from "./rules";
+import { extensionOf, MEDIA_TYPES, RANDOM_SUFFIX_LENGTH, splitExtension } from "./rules";
 import { readCapped } from "./stream";
 import { verifyLocalClientToken } from "./token";
 
@@ -40,11 +40,13 @@ function fileOf(storedPathname: string): string | undefined {
   return file.startsWith(ROOT + path.sep) ? file : undefined;
 }
 
+// The suffix goes before the extension, which handleLocalPut has already checked
 function withRandomSuffix(pathname: string): string {
-  const dot = pathname.lastIndexOf(".");
+  const split = splitExtension(pathname);
+  if (!split) throw new Error(`No extension in ${pathname}`);
   let suffix = "";
   for (let k = 0; k < RANDOM_SUFFIX_LENGTH; k++) suffix += SUFFIX_ALPHABET.charAt(randomInt(SUFFIX_ALPHABET.length));
-  return `${pathname.slice(0, dot)}-${suffix}${pathname.slice(dot)}`;
+  return `${split.base}-${suffix}.${split.ext}`;
 }
 
 export function createLocalStore(): StorageDriver {

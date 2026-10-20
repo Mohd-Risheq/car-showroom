@@ -119,6 +119,10 @@ export function fitInside(source: Size, box: Size): Size {
   };
 }
 
+export function sameSize(a: Size, b: Size): boolean {
+  return a.width === b.width && a.height === b.height;
+}
+
 /** Where an image is drawn in a box: centred, as large as fits, letterboxed (contain) */
 export function containRect(source: Size, box: Size): Rect {
   const scale = Math.min(box.width / source.width, box.height / source.height);

@@ -1,14 +1,14 @@
 "use client";
 
 import { type PointerEvent, useEffect, useId, useRef, useState } from "react";
-import { audioSession, EnginePlayer, type PlayerEvent, type PlayerMode } from "@/features/sound/player";
-import { needsSilentHint } from "@/features/sound/platform";
-import { angleFor, type Dial, dialFor, type FuelType, needleTarget, REST, smooth, topFor } from "@/features/sound/tach";
+import { needsSilentHint } from "@/features/sound/domain/platform";
+import { angleFor, type Dial, dialFor, type FuelType, needleTarget, REST, smooth, topFor } from "@/features/sound/domain/tach";
+import { audioSession, EnginePlayer, type PlayerEvent, type PlayerMode } from "@/features/sound/ui/player";
 import { CLIPS, type ClipName, clipUrl, isClipName } from "./fixture";
 
 // Spike T-07: a tap-to-play engine clip with the tachometer needle on the analyser (FR-15, BR-19,
 // DESIGN §5.3). T-40 builds the card on what it finds. Query:
-// - clip (steps-8s, idle-12s, rev-6s), mode (buffer, element), session=playback and fuel
+// - clip (a name in CLIPS), mode (buffer, element), session=playback and fuel
 //   (gasoline, diesel) choose a setup;
 // - run=1 to 6 takes the setup from RUNS instead, for the phone session. After the clip, the page
 //   asks whether you heard it, then opens the next run as a fresh page, so no run inherits an
@@ -207,6 +207,8 @@ export function SoundSpike() {
   const setupRef = useRef<Setup | null>(null);
   const playerRef = useRef<EnginePlayer | null>(null);
   const resultsRef = useRef<Results | null>(null);
+  // Asks the run's question if the clip never ends. An error doesn't end it, so it keeps the timer.
+  const askTimerRef = useRef<number | undefined>(undefined);
   const loopRef = useRef<{ clickAt: number; frame: number; last: number | null; value: number; intervals: number[]; needles: number[] }>({
     clickAt: 0,
     frame: 0,
@@ -293,6 +295,11 @@ export function SoundSpike() {
     }
   };
 
+  const stopAskTimer = () => {
+    window.clearTimeout(askTimerRef.current);
+    askTimerRef.current = undefined;
+  };
+
   const onEvent = (event: PlayerEvent) => {
     const results = resultsRef.current;
     const player = playerRef.current;
@@ -314,6 +321,7 @@ export function SoundSpike() {
       results.timings.clickToEnded ??= t;
       results.playhead.duration = player?.duration ?? null;
       setPhase("ended");
+      stopAskTimer();
       if (setupRef.current?.run !== null) setAsking(true);
       void publish(setupRef.current?.run === null);
     }
@@ -383,6 +391,7 @@ export function SoundSpike() {
     }
     void publish(false);
     return () => {
+      stopAskTimer();
       cancelAnimationFrame(loopRef.current.frame);
       player.dispose();
       void probe?.close();
@@ -417,13 +426,17 @@ export function SoundSpike() {
     setPlaying(true);
     setPhase("playing");
     // If nothing ever ends, ask anyway
-    if (setupRef.current?.run !== null) setTimeout(() => setAsking(true), (CLIPS[setupRef.current?.clip ?? "steps-8s"].seconds + 4) * 1000);
+    if (setupRef.current?.run !== null) {
+      stopAskTimer();
+      askTimerRef.current = window.setTimeout(() => setAsking(true), (CLIPS[setupRef.current?.clip ?? "steps-8s"].seconds + 4) * 1000);
+    }
   };
 
   const answer = async (heard: boolean) => {
     const results = resultsRef.current;
     const current = setupRef.current;
     if (!results || !current || current.run === null) return;
+    stopAskTimer();
     results.answer = heard ? "heard" : "silent";
     setAsking(false);
     setPhase("answered");

@@ -5,6 +5,7 @@ import {
   maxBytesFor,
   nominalWidth,
   RANDOM_SUFFIX_LENGTH,
+  splitExtension,
   uploadPathname,
 } from "@/lib/storage/rules";
 
@@ -85,5 +86,16 @@ describe("pathnames", () => {
     ]) {
       expect(isStoredPathnameOf(signed, stored)).toBe(false);
     }
+  });
+
+  it("finds an extension only after a name in the last path segment", () => {
+    expect(splitExtension(signed)).toEqual({ base: `cars/${carId}/photo/${clientUploadId}-960`, ext: "webp" });
+    expect(splitExtension("cars/a/b.tar.gz")).toEqual({ base: "cars/a/b.tar", ext: "gz" });
+    for (const pathname of ["cars/a.webp/photo/b", "cars/a/.webp", ".webp", "cars/a/b.", "webp", "cars/a/"]) {
+      expect(splitExtension(pathname), pathname).toBeUndefined();
+    }
+    expect(extensionOf("cars/a.webp/photo/b")).toBeUndefined();
+    const suffix = "a".repeat(RANDOM_SUFFIX_LENGTH);
+    expect(isStoredPathnameOf("cars/a/photo/b", `cars/a/photo/b-${suffix}`)).toBe(false);
   });
 });

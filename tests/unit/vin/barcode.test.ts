@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { scanRegion, vinFromBarcode } from "@/features/vin/barcode";
+import { scanRegion, vinFromBarcode } from "@/features/vin/domain/barcode";
 
 // What the scanner keeps of a barcode's text (FR-36.2, TC-36-5), and the part of a frame it reads
 

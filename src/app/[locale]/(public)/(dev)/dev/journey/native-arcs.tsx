@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { centreOn, type LatLng } from "@/features/journey/geo";
-import { journeySteps } from "@/features/journey/route";
+import { centreOn, type LatLng } from "@/features/journey/domain/geo";
+import { journeySteps } from "@/features/journey/domain/route";
 
 // Spike T-09's comparison for D-031: the same route with cobe 2's own arcs, which all rise to one
 // height, set as the COBE Globe pick sets it (arcHeight 0.25, arcWidth 0.5). Drawn once, for a
@@ -21,7 +21,7 @@ export function NativeArcs({ places, centre }: { places: LatLng[]; centre: numbe
     let cancelled = false;
     let destroy = () => {};
     const timers: number[] = [];
-    void Promise.all([import("cobe"), import("@/features/journey/globe")]).then(([{ default: createGlobe }, { globeColours }]) => {
+    void Promise.all([import("cobe"), import("@/features/journey/ui/globe")]).then(([{ default: createGlobe }, { globeColours }]) => {
       if (cancelled) return;
       const canvas = document.createElement("canvas");
       canvas.style.cssText = "display:block;width:100%;height:100%";

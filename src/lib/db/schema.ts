@@ -1,4 +1,5 @@
 import { bigint, boolean, index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { USER_ROLES } from "../auth/roles";
 
 // Auth tables (ENT-User, SRS §11.2). Property names are the auth library's field names and
 // columns are snake_case. The library checks this object against its config at the first
@@ -8,7 +9,7 @@ import { bigint, boolean, index, pgEnum, pgTable, text, timestamp, uuid } from "
 
 const timestamptz = (name: string) => timestamp(name, { withTimezone: true });
 
-export const userRole = pgEnum("user_role", ["owner", "staff"]);
+export const userRole = pgEnum("user_role", USER_ROLES);
 
 export const user = pgTable("user", {
   id: uuid("id").primaryKey().defaultRandom(),

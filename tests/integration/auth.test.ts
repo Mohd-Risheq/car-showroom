@@ -1,5 +1,5 @@
 import { eq, inArray } from "drizzle-orm";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { GET, POST } from "@/app/api/auth/[...all]/route";
 import { auth } from "@/lib/auth/auth";
 import { createPasswordUser } from "@/lib/auth/users";
@@ -14,6 +14,8 @@ const run = crypto.randomUUID();
 const password = `t02-password-${run}`;
 const activeEmail = `t02-active-${run}@example.test`;
 const disabledEmail = `t02-disabled-${run}@example.test`;
+const unlinkedEmail = `t02-unlinked-${run}@example.test`;
+const unhashedEmail = `t02-unhashed-${run}@example.test`;
 const userAgent = "Muftah-T02-test/1.0";
 
 type SessionBody = { user: { id: string; email: string; role: string } } | null;
@@ -52,6 +54,7 @@ async function signIn(email: string): Promise<string> {
 }
 
 const sessionsOf = (userId: string) => db.select().from(session).where(eq(session.userId, userId));
+const usersWith = (email: string) => db.select({ id: user.id }).from(user).where(eq(user.email, email));
 
 let activeUserId = "";
 let disabledUserId = "";
@@ -76,9 +79,34 @@ beforeAll(async () => {
   disabledUserId = disabled.id;
 });
 
+// Each test starts signed out, whatever the one before it left
+afterEach(async () => {
+  await db.delete(session).where(inArray(session.userId, [activeUserId, disabledUserId]));
+});
+
 // Deleting the users cascades to their sessions and accounts
 afterAll(async () => {
-  await db.delete(user).where(inArray(user.email, [activeEmail, disabledEmail]));
+  await db.delete(user).where(inArray(user.email, [activeEmail, disabledEmail, unlinkedEmail, unhashedEmail]));
+});
+
+describe("createPasswordUser", () => {
+  const input = { name: "T-02 partial", password, role: "staff", mustChangePassword: false } as const;
+
+  it("removes the user again when its password can't be linked", async () => {
+    const { internalAdapter } = await auth.$context;
+    const link = vi.spyOn(internalAdapter, "linkAccount").mockRejectedValueOnce(new Error("link failed"));
+    await expect(createPasswordUser({ ...input, email: unlinkedEmail })).rejects.toThrow("link failed");
+    link.mockRestore();
+    expect(await usersWith(unlinkedEmail)).toEqual([]);
+  });
+
+  it("writes nothing when the password can't be hashed", async () => {
+    const { password: hasher } = await auth.$context;
+    const hash = vi.spyOn(hasher, "hash").mockRejectedValueOnce(new Error("hash failed"));
+    await expect(createPasswordUser({ ...input, email: unhashedEmail })).rejects.toThrow("hash failed");
+    hash.mockRestore();
+    expect(await usersWith(unhashedEmail)).toEqual([]);
+  });
 });
 
 describe("sign-in round trip", () => {

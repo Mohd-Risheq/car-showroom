@@ -1,4 +1,4 @@
-import { clipLevels, type Levels, rmsDb, SILENCE_DB } from "./tach";
+import { clipLevels, type Levels, rmsDb, SILENCE_DB } from "../domain/tach";
 
 // The Hear It player (FR-15, DESIGN §5.3), first cut from spike T-07. T-40 builds on it.
 //
@@ -7,11 +7,12 @@ import { clipLevels, type Levels, rmsDb, SILENCE_DB } from "./tach";
 // source → analyser → gain → destination: the analyser reads the clip before the gain, where
 // clipLevels() measured its range, so the live level and the needle mapping agree (BR-19).
 //
-// Two ways in, compared on the iPhone in T-07 (D-029):
+// Two ways in. D-029 made "buffer" the default:
 // - "buffer": fetch and decode the whole file, then play it from an AudioBufferSourceNode. The
 //   decoded samples give the clip's range before it plays.
 // - "element": an <audio> element through createMediaElementSource. It streams, but it has no
-//   samples before playback, so the range still comes from decoding the file.
+//   samples before playback, so the range still comes from decoding the file. It stays for the
+//   iPhone's silent-switch test only, and T-40 settles whether it goes.
 
 export type PlayerMode = "buffer" | "element";
 
@@ -100,7 +101,8 @@ export class EnginePlayer {
   /** FR-15.5: hover or focus on the play control starts the download */
   prefetch(): void {
     if (this.#options.mode === "element") this.#ensureElement().preload = "auto";
-    this.#fetch();
+    // Reported, and not kept: the next play() downloads again
+    this.#fetch().catch((error: unknown) => this.#emit("prefetch", errorText(error)));
   }
 
   /** Call from a click handler: everything before the first await runs inside the gesture */
@@ -189,10 +191,16 @@ export class EnginePlayer {
   }
 
   #fetch(): Promise<ArrayBuffer> {
-    this.#bytes ??= fetch(this.#options.url).then((response) => {
-      if (!response.ok) throw new Error(`audio ${response.status}`);
-      return response.arrayBuffer();
-    });
+    this.#bytes ??= fetch(this.#options.url)
+      .then((response) => {
+        if (!response.ok) throw new Error(`audio ${response.status}`);
+        return response.arrayBuffer();
+      })
+      .catch((error: unknown) => {
+        // A failed download is never cached, so a retry downloads again
+        this.#bytes = null;
+        throw error;
+      });
     return this.#bytes;
   }
 
@@ -251,10 +259,14 @@ export class EnginePlayer {
   #fail(error: unknown): void {
     this.#playing = false;
     this.#stopSource();
-    this.#emit("error", error instanceof Error ? `${error.name}: ${error.message}` : String(error));
+    this.#emit("error", errorText(error));
   }
 
   #emit(type: string, detail?: string): void {
     this.#options.onEvent?.({ at: performance.now(), type, ...(detail === undefined ? {} : { detail }) });
   }
+}
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? `${error.name}: ${error.message}` : String(error);
 }

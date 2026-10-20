@@ -1,5 +1,5 @@
-import type { Size } from "@/features/spin/ring";
-import type { SpinSource } from "@/features/spin/store";
+import type { Size } from "@/features/spin/domain/ring";
+import type { SpinSource } from "@/features/spin/ui/store";
 
 // The synthetic spin fixture (Q-04, scripts/fixtures/spin-dials.mts) as spin sets for the T-05
 // page: 36 and 72 landscape frames, and 72 portrait frames for the letterbox edge case.

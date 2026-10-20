@@ -5,12 +5,15 @@ import {
   EXIF_WITH_GPS,
   image,
   jfif,
+  VP8X_ANIMATION,
+  VP8X_FLAGS_OFFSET,
   wav,
   withJpegSegment,
   withPngChunk,
   withWebpChunk,
   XMP,
 } from "../../support/media";
+import { randomBelow, seededRandom } from "../../support/random";
 
 // API-17 container checks and FR-32.2a metadata rejection (TC-32-2), on real encoder output
 
@@ -87,10 +90,10 @@ describe("WebP", () => {
     expect(inspectMedia(xmp, "image/webp")).toEqual(rejected("METADATA_PRESENT", "webp.vp8x-metadata"));
     // The same files with the VP8X flags cleared still carry the chunks
     const unflagged = Buffer.from(exif);
-    unflagged[20] = 0;
+    unflagged[VP8X_FLAGS_OFFSET] = 0;
     expect(inspectMedia(unflagged, "image/webp")).toEqual(rejected("METADATA_PRESENT", "webp.exif"));
     const unflaggedXmp = Buffer.from(xmp);
-    unflaggedXmp[20] = 0;
+    unflaggedXmp[VP8X_FLAGS_OFFSET] = 0;
     expect(inspectMedia(unflaggedXmp, "image/webp")).toEqual(rejected("METADATA_PRESENT", "webp.xmp"));
   });
 
@@ -102,7 +105,7 @@ describe("WebP", () => {
     expect(inspectMedia(oversized, "image/webp")).toEqual(rejected("VALIDATION_ERROR", "webp.riff-size"));
     const alpha = await image(64, 48, 4).webp({ quality: 82 }).toBuffer();
     const animated = Buffer.from(alpha);
-    animated.writeUInt8(animated.readUInt8(20) | 0x02, 20);
+    animated.writeUInt8(animated.readUInt8(VP8X_FLAGS_OFFSET) | VP8X_ANIMATION, VP8X_FLAGS_OFFSET);
     expect(inspectMedia(animated, "image/webp")).toEqual(rejected("VALIDATION_ERROR", "webp.animation"));
   });
 });
@@ -182,14 +185,18 @@ describe("damaged files", () => {
       [await image(32, 24).png().toBuffer(), "image/png"],
       [wav({ seconds: 0.01 }), "audio/wav"],
     ];
-    let seed = 99;
-    const next = () => (seed = (seed * 1103515245 + 12345) % 2 ** 31);
+    const random = seededRandom(99);
+    const values = new Set<number>();
     for (const [file, type] of files) {
       for (let round = 0; round < 2000; round++) {
         const damaged = Buffer.from(file);
-        damaged[next() % damaged.length] = next() % 256;
+        const value = randomBelow(random, 256);
+        values.add(value);
+        damaged[randomBelow(random, damaged.length)] = value;
         expect(() => inspectMedia(damaged, type)).not.toThrow();
       }
     }
+    // Every byte value was written somewhere, so the parsers met every marker and odd length
+    expect(values.size).toBe(256);
   });
 });

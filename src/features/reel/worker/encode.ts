@@ -8,9 +8,9 @@ import {
   Output,
   Quality,
 } from "mediabunny";
-import type { ReelPcm } from "./clip";
-import { addAacRollGroup } from "./mp4";
-import { type BitrateMode, REEL } from "./support";
+import type { ReelPcm } from "../domain/clip";
+import { addAacRollGroup } from "../domain/mp4";
+import { type BitrateMode, REEL } from "../domain/support";
 
 // Reel It's encoder path (FR-43, SRS §11.6, D-030). Each frame is drawn on an OffscreenCanvas in a
 // worker, then Mediabunny's sources drive WebCodecs: H.264 through VideoEncoder, AAC through

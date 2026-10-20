@@ -6,7 +6,7 @@ import { MotionConfig, motion } from "motion/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
-import { loadScanner, ZXING_WASM_PATH } from "@/features/vin/zxing";
+import { loadZxingPolyfill, ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 import type { WorkerReply, WorkerRequest } from "./probe.worker";
 import { PROBE_QR } from "./qr";
 import sample from "./sample.png";
@@ -88,7 +88,7 @@ function pageScrollLocked(): boolean {
 }
 
 async function decodeProbeQr(): Promise<Check> {
-  const { BarcodeDetector } = await loadScanner();
+  const { BarcodeDetector } = await loadZxingPolyfill();
   const image = new window.Image();
   image.src = PROBE_QR.dataUrl;
   await image.decode();

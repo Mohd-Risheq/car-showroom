@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { needsSilentHint } from "@/features/sound/platform";
+import { needsSilentHint } from "@/features/sound/domain/platform";
 
 // FR-15.12 and TC-15-1. The user agents are those of Safari 18 on each device.
 

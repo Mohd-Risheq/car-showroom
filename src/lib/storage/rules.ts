@@ -87,9 +87,20 @@ const REPORT_PDF_MAX_BYTES = 10 * MB;
 // Client upload tokens live 10 minutes (API-16)
 export const UPLOAD_TOKEN_TTL_MS = 10 * 60 * 1000;
 
+/** A pathname's base and extension, split at the last dot with a name before it and an extension after it */
+export function splitExtension(pathname: string): { base: string; ext: string } | undefined {
+  const dot = pathname.lastIndexOf(".");
+  if (dot <= pathname.lastIndexOf("/") + 1 || dot === pathname.length - 1) return undefined;
+  return { base: pathname.slice(0, dot), ext: pathname.slice(dot + 1) };
+}
+
+export function isMediaExtension(ext: string): ext is MediaExtension {
+  return Object.hasOwn(MEDIA_TYPES, ext);
+}
+
 export function extensionOf(pathname: string): MediaExtension | undefined {
-  const ext = pathname.slice(pathname.lastIndexOf(".") + 1);
-  return Object.hasOwn(MEDIA_TYPES, ext) ? (ext as MediaExtension) : undefined;
+  const ext = splitExtension(pathname)?.ext;
+  return ext !== undefined && isMediaExtension(ext) ? ext : undefined;
 }
 
 function variantRule(kind: MediaKind, variant: string): VariantRule | undefined {
@@ -131,9 +142,10 @@ export const RANDOM_SUFFIX_LENGTH = 30;
 const RANDOM_SUFFIX = /^[A-Za-z0-9]{16,64}$/;
 
 export function isStoredPathnameOf(signedPathname: string, storedPathname: string): boolean {
-  const dot = signedPathname.lastIndexOf(".");
-  const base = `${signedPathname.slice(0, dot)}-`;
-  const ext = signedPathname.slice(dot);
+  const signed = splitExtension(signedPathname);
+  if (!signed) return false;
+  const base = `${signed.base}-`;
+  const ext = `.${signed.ext}`;
   return (
     storedPathname.startsWith(base) &&
     storedPathname.endsWith(ext) &&

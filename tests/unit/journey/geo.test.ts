@@ -13,7 +13,7 @@ import {
   toMap,
   toVector,
   type Vec3,
-} from "@/features/journey/geo";
+} from "@/features/journey/domain/geo";
 
 // The Journey's place geometry (FR-17, BR-10). How the globe and the static map look is checked
 // in the browsers (spike T-09).
@@ -110,7 +110,7 @@ describe("great circles", () => {
 
 describe("turning the globe", () => {
   it("puts each place in the middle, facing the viewer, as cobe draws it", () => {
-    for (const place of PLACES.slice(0, 8)) {
+    for (const place of PLACES) {
       const { phi, theta } = centreOn(place);
       const [x, y, z] = cobeRotate(cobeVector(place), phi, theta);
       expect(x).toBeCloseTo(0, 12);

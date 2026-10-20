@@ -14,6 +14,8 @@ type Route = {
 };
 
 export async function startRouteServer(routes: Route[]) {
+  // Set once the server listens, before any request can arrive
+  let origin = "";
   const server = createServer((incoming, outgoing) => {
     void (async () => {
       const url = new URL(incoming.url ?? "/", "http://127.0.0.1");
@@ -45,11 +47,14 @@ export async function startRouteServer(routes: Route[]) {
       outgoing.writeHead(response.status, responseHeaders);
       outgoing.end(Buffer.from(await response.arrayBuffer()));
     })().catch((error: unknown) => {
-      outgoing.writeHead(500).end(String(error));
+      // A handler that throws is a failure to see, and its headers may be out already
+      console.error(error);
+      if (!outgoing.headersSent) outgoing.writeHead(500);
+      outgoing.end();
     });
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
-  const origin = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+  origin = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
   return {
     origin,
     close: () => new Promise<void>((resolve) => server.close(() => resolve())),

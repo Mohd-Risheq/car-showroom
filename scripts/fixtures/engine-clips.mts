@@ -32,6 +32,8 @@ type Clip = {
   gainDb: (t: number) => number;
   /** How much each firing's strength varies, from 0 (none) */
   jitter: number;
+  /** The noise generator's seed: a clip's own, so adding or moving clips changes no other */
+  seed: number;
 };
 
 // A small seeded generator, so the fixture is the same on every machine
@@ -88,6 +90,7 @@ function revRpm(t: number): number {
 const CLIPS: Clip[] = [
   {
     name: "steps-8s",
+    seed: 0x7007,
     clipType: "idle",
     seconds: 8,
     rpm: () => 800,
@@ -97,6 +100,7 @@ const CLIPS: Clip[] = [
   },
   {
     name: "idle-12s",
+    seed: 0x7008,
     clipType: "idle",
     seconds: 12,
     rpm: (t) => 800 + 15 * Math.sin(2 * Math.PI * 0.7 * t),
@@ -105,6 +109,7 @@ const CLIPS: Clip[] = [
   },
   {
     name: "rev-6s",
+    seed: 0x7009,
     clipType: "rev",
     seconds: 6,
     rpm: revRpm,
@@ -112,9 +117,9 @@ const CLIPS: Clip[] = [
     gainDb: (t) => -14 + 12 * ((revRpm(t) - 800) / 4200),
     jitter: 0.4,
   },
-  // Last, because each seed is a position: the clips above stay as T-07 measured them
   {
     name: "steps-20s",
+    seed: 0x700a,
     clipType: "idle",
     seconds: 20,
     rpm: () => 800,
@@ -124,8 +129,8 @@ const CLIPS: Clip[] = [
   },
 ];
 
-function synthesize(clip: Clip, seed: number): Float32Array {
-  const next = random(seed);
+function synthesize(clip: Clip): Float32Array {
+  const next = random(clip.seed);
   const length = Math.round(clip.seconds * RATE);
   const samples = new Float32Array(length);
   const body = resonator(170, 0.012);
@@ -203,8 +208,8 @@ function peaks(samples: Float32Array): number[] {
 
 await mkdir(OUT, { recursive: true });
 const manifest = [];
-for (const [index, clip] of CLIPS.entries()) {
-  const samples = synthesize(clip, 0x7007 + index);
+for (const clip of CLIPS) {
+  const samples = synthesize(clip);
   const file = `${clip.name}.wav`;
   const bytes = wav(samples);
   await writeFile(path.join(OUT, file), bytes);

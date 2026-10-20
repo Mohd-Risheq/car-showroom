@@ -1,6 +1,7 @@
 import "server-only";
 import { handleUpload } from "@vercel/blob/client";
 import { auth } from "@/lib/auth/auth";
+import { isUserRole } from "@/lib/auth/roles";
 import { isSameOriginRequest } from "@/lib/auth/same-origin";
 import { uploadClientPayloadSchema, uploadTokenRequestSchema } from "@/lib/validation/media";
 import { getStorageDriver } from "./driver";
@@ -31,7 +32,7 @@ async function issueUploadToken(request: Request) {
   const { user } = session;
   // The disabled-user and onboarding guard (FR-29.6), then the role (§4.2)
   if (user.disabledAt || user.mustChangePassword) throw new StorageError("FORBIDDEN", "account guard");
-  if (user.role !== "owner" && user.role !== "staff") throw new StorageError("FORBIDDEN", "role");
+  if (!isUserRole(user.role)) throw new StorageError("FORBIDDEN", "role");
 
   // Uploads are off without a storage driver, and no storage call is made (TC-32-9)
   const driver = getStorageDriver();
