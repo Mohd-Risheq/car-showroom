@@ -1,0 +1,60 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# builds and reports
+build/
+dist/
+coverage/
+*.tsbuildinfo
+build-metrics.json
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.lighthouseci/
+
+# environment: every .env file except the placeholder template (SEC-10)
+.env*
+!.env.example
+
+# local secrets and local-only data (BUILD-PLAN T-01, SRS §6.4, §6.3)
+.owner-password
+seed-originals/
+.storage-local/
+.fixtures/
+.dev-reports/
+docs/_progress.md
+.publish-local-patterns
+
+# next dev --experimental-https certificates
+certificates/
+*.pem
+
+# vercel
+.vercel
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# os and editors
+.DS_Store
+Thumbs.db
+
+# python caches from docs/_tools
+__pycache__/
+
+# private: the specification, plans and build records stay in the private repository
+/AGENTS.md
+/BUILD-PLAN.md
+/CONFIG.md
+/DECISIONS.md
+/docs/

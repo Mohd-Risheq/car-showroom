@@ -1,0 +1,26 @@
+# pnpm settings for this single-package repository (SRS §11.2, SEC-11).
+
+# Exact version pins: dependencies are saved without a range prefix.
+savePrefix: ''
+
+# A release must be at least 3 days old (in minutes) before it can be installed.
+# For an advisory patch, list the package under minimumReleaseAgeExclude for that
+# update only, and log it in DECISIONS.md.
+minimumReleaseAge: 4320
+
+# Fail when a package's trust evidence (provenance, trusted publishing) gets weaker
+# than an earlier release of the same package.
+trustPolicy: no-downgrade
+# Exact versions reviewed and excepted, each with its evidence in DECISIONS.md.
+trustPolicyExclude:
+  - undici-types@6.21.0 # D-011
+
+# Install scripts run only for the packages listed here.
+onlyBuiltDependencies: []
+
+# Reviewed and denied: each ships prebuilt platform binaries, and its script only
+# builds from source or installs a wasm fallback when no prebuilt binary exists.
+ignoredBuiltDependencies:
+  - '@parcel/watcher' # via next-intl
+  - '@swc/core' # via next-intl
+  - esbuild # via drizzle-kit and vitest

@@ -1,0 +1,6 @@
+// A QR code written by zxing-wasm 3.1.3's own writer, decoded by the dealer probe's scanner
+export const PROBE_QR = {
+  text: "MUFTAH T-06 CSP",
+  dataUrl:
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAAAAABx8Un7AAAB0UlEQVR4XmP8z0B/wMQwaikNQ2A0eGmavEaDdzR4qRICowlp+CUkFnQvMeLxI6juxSaPSxxmFHqdPZqQaJqQWLCZjq3dhB6X2NQQow9k32ic0j9OQTYixyFyXMHYuORxiSP7YjROByZO8dlKTLzh0z8ap4MvTkEuIlSHjsbpgNUyLLjCnpixCGLrVHQ7RvMp/fMpvrYvSA6WR5Fp9Dp4NJ8OWD4dHRukaZYZkBIJa9kLy4vI3sXWLkLPs+jBA9Mz2j9loCdgIdYy5HjBFlfI6QBZHls5Plqf0r8+hdWN+OIRud0LY6Pnb0YcTh+NU5rGKd76FL28xVb+Isc/rjgdLXvpWvZixCmudi22shXdpeh91v+j+ZRhAADJ7V5c7R5i8zTIj6NlL33rU0Y81qHnO+T4Re+rgozBNdY0Gqf0jVNYXKDbihx/2PIktvYUev0KM3M0Tukfp7B2D8xm9PyJnCex1b/48ihIbjROByZOCdmKLZ6R4xJXHh2NUwZaAxZyLUCvd7G1nXC1p0bz6cDkU1z9EOT8h60NhB6P2Npco3FK/zgl1PbFlkfR61hcdfFo2Uvzsnd0XoamQTxaIo0GL1VCYDQhjSak0YREUggMSJYBAJanUvxIHA9jAAAAAElFTkSuQmCC",
+};

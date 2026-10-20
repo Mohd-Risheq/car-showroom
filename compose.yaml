@@ -1,0 +1,45 @@
+# Local database for development, tests and CI (BUILD-PLAN §6.3): Postgres 17 behind
+# Neon's HTTP and WebSocket proxy, so the app runs the same serverless driver code as on
+# Neon. Start it with `pnpm db:up`. Images are pinned by digest (SEC-11); each digest is a
+# multi-arch index that includes linux/amd64 and linux/arm64.
+name: muftah
+
+services:
+  postgres:
+    image: postgres:17@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: main
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d main"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main@sha256:cd2ae14edf2feafbc3330492de5c80506f77274c3bd013154cdef697bdeb768a
+    environment:
+      PG_CONNECTION_STRING: postgres://postgres:postgres@postgres:5432/main
+    ports:
+      - "127.0.0.1:4444:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS -o /dev/null -X POST http://localhost:4444/sql
+          -H 'Neon-Connection-String: postgres://postgres:postgres@db.localtest.me:5432/main'
+          -d '{"query":"select 1","params":[]}'
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  db_data:

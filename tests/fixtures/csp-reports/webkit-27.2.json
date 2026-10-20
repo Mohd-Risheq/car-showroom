@@ -1,0 +1,22 @@
+{
+  "engine": "WebKit 27.2 (Playwright, macOS)",
+  "received": "T-06 strict run, through the recording proxy (docs/evidence/T-06)",
+  "contentType": "application/csp-report",
+  "body": {
+    "type": "csp-violation",
+    "url": "https://localhost:3443/en/dealer/dev/csp",
+    "body": {
+      "documentURL": "https://localhost:3443/en/dealer/dev/csp",
+      "disposition": "enforce",
+      "referrer": "",
+      "effectiveDirective": "style-src-elem",
+      "blockedURL": "inline",
+      "originalPolicy": "default-src 'self'; script-src 'self' 'nonce-Frum/VRSEopxvDS6ODpVJA==' 'strict-dynamic' 'wasm-unsafe-eval'; style-src 'self' 'nonce-Frum/VRSEopxvDS6ODpVJA=='; style-src-attr 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' https://vercel.com/api/blob/; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /api/csp-report; report-to csp",
+      "statusCode": 200,
+      "sample": "",
+      "sourceFile": "https://localhost:3443/_next/static/chunks/0cv4fv00uklda.js",
+      "lineNumber": 3,
+      "columnNumber": 211699
+    }
+  }
+}

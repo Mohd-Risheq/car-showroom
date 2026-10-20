@@ -1,0 +1,26 @@
+{
+  "engine": "Chromium 156.0.8078.4 (Playwright's full build, new headless mode, macOS)",
+  "received": "T-06 strict run, through the recording proxy (docs/evidence/T-06)",
+  "contentType": "application/reports+json",
+  "body": [
+    {
+      "age": 0,
+      "body": {
+        "blockedURL": "inline",
+        "columnNumber": 211635,
+        "disposition": "enforce",
+        "documentURL": "https://localhost:3443/en/dealer/dev/csp",
+        "effectiveDirective": "style-src-elem",
+        "lineNumber": 3,
+        "originalPolicy": "default-src 'self'; script-src 'self' 'nonce-xf40opTpyvHvAOKI8tXjZg==' 'strict-dynamic' 'wasm-unsafe-eval'; style-src 'self' 'nonce-xf40opTpyvHvAOKI8tXjZg=='; style-src-attr 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' https://vercel.com/api/blob/; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /api/csp-report; report-to csp",
+        "referrer": "",
+        "sample": "",
+        "sourceFile": "https://localhost:3443/_next/static/chunks/0cv4fv00uklda.js",
+        "statusCode": 200
+      },
+      "type": "csp-violation",
+      "url": "https://localhost:3443/en/dealer/dev/csp",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+import { CanvasSpike } from "./canvas-spike";
+
+// Spike T-04 (R-01): does the browser shape, join, order and wrap Arabic on a canvas?
+export default function CanvasSpikePage() {
+  return (
+    <main className="grid gap-4 p-6 font-mono text-sm">
+      <h1 className="text-lg">Muftah dev: Arabic canvas text (T-04)</h1>
+      <CanvasSpike />
+    </main>
+  );
+}

@@ -1,0 +1,45 @@
+{
+  "engine": "Firefox 157.0 (Playwright, Linux container)",
+  "received": "T-06 strict run, through the recording proxy (docs/evidence/T-06)",
+  "contentType": "application/reports+json",
+  "body": [
+    {
+      "age": 4,
+      "type": "csp-violation",
+      "url": "http://localhost:3100/en/dealer/dev/csp",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0",
+      "body": {
+        "documentURL": "http://localhost:3100/en/dealer/dev/csp",
+        "blockedURL": "inline",
+        "referrer": null,
+        "effectiveDirective": "style-src-elem",
+        "originalPolicy": "default-src 'self'; script-src 'self' 'nonce-vQBSNwa8iHekUECMbzYNtw==' 'strict-dynamic' 'wasm-unsafe-eval'; style-src 'self' 'nonce-vQBSNwa8iHekUECMbzYNtw=='; style-src-attr 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' https://vercel.com/api/blob/; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri http://localhost:3100/api/csp-report; report-to csp",
+        "sourceFile": "http://localhost:3100/_next/static/chunks/0cv4fv00uklda.js",
+        "sample": null,
+        "disposition": "enforce",
+        "statusCode": 200,
+        "lineNumber": 3,
+        "columnNumber": 211635
+      }
+    },
+    {
+      "age": 4,
+      "type": "csp-violation",
+      "url": "http://localhost:3100/en/dealer/dev/csp",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0",
+      "body": {
+        "documentURL": "http://localhost:3100/en/dealer/dev/csp",
+        "blockedURL": "inline",
+        "referrer": null,
+        "effectiveDirective": "style-src-elem",
+        "originalPolicy": "default-src 'self'; script-src 'self' 'nonce-vQBSNwa8iHekUECMbzYNtw==' 'strict-dynamic' 'wasm-unsafe-eval'; style-src 'self' 'nonce-vQBSNwa8iHekUECMbzYNtw=='; style-src-attr 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' https://vercel.com/api/blob/; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri http://localhost:3100/api/csp-report; report-to csp",
+        "sourceFile": "http://localhost:3100/_next/static/chunks/0cv4fv00uklda.js",
+        "sample": null,
+        "disposition": "enforce",
+        "statusCode": 200,
+        "lineNumber": 3,
+        "columnNumber": 211688
+      }
+    }
+  ]
+}

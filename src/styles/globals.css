@@ -1,0 +1,39 @@
+@import "tailwindcss";
+/* Readex Pro sets all text (DESIGN §3.3). next/font declares --font-readex-pro and
+   --font-martian-mono on <html> (src/styles/fonts.ts), and font-fallbacks.css builds each type
+   step's font stack from them: font-sans (body and small), font-lead, font-head, font-display and
+   font-figures. font-mono stays the system monospace of the development pages. */
+@import "./font-fallbacks.css";
+
+@layer base {
+  /* Arabic body text at line-height 1.8; Latin keeps 1.5 (NFR-I18N-06) */
+  html:lang(ar) {
+    line-height: 1.8;
+  }
+
+  /* Arabic is never italic, so emphasis uses weight (DESIGN §9.4) */
+  :is(em, i):lang(ar) {
+    font-weight: 600;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Arabic is never letter-spaced, italic, transformed or given faux bold (NFR-I18N-06, DESIGN §9.4).
+   Important, so no utility or component style can undo it: a Latin display heading's tracking stays
+   off its Arabic twin. */
+:lang(ar) {
+  letter-spacing: 0 !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  font-synthesis: none !important;
+}
