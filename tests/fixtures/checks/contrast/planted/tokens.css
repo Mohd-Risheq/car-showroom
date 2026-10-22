@@ -1,0 +1,57 @@
+/* check:contrast's planted fixture: the clean fixture with one violation of each kind, each marked
+   "Planted". The increased-contrast block of DESIGN §4.5 is planted missing. */
+
+:root,
+[data-theme='dark'] {
+  --bg: #0b0d10;
+  --surface-1: #12161b;
+  --surface-2: #1a1f26;
+  --surface-3: #232a33;
+  /* Planted: 2.9955:1 on surface-3 rounds to 3.00 but stays under 3:1, and drifts on the others */
+  --line: #4d778e;
+  --ink: #eef2f6;
+  --muted: #a9b4c2;
+  /* Planted: passes 4.5:1 but no longer has the ratios DESIGN states */
+  --meta: #8a97a8;
+  --on-scan: #0b0d10;
+  --warn: #e2a447;
+  --fail: #e87470;
+}
+
+:root {
+  --scan-cyan: #5cc8db;
+  --scan: var(--scan-cyan);
+}
+
+[data-accent="electric_blue"] {
+  /* Planted: 4.4952:1 on surface-3 rounds to 4.50 but stays under 4.5:1 */
+  --scan: #618ee6;
+}
+
+[data-accent="mint"] {
+  /* Planted: a token that is never defined */
+  --scan: var(--mint);
+}
+
+[data-accent="ivory"] {
+  /* Planted: a colour the check doesn't read */
+  --scan: rgb(232 226 208);
+}
+
+[data-accent="violet"] {
+  /* Planted: var() going round in a loop */
+  --scan: var(--violet);
+  --violet: var(--scan);
+}
+
+[data-theme="daylight"] {
+  --bg: #f3f5f7;
+  --surface-1: #fff;
+  --surface-2: #e9edf1;
+  --line: #7a8696;
+  /* Planted: --ink left out, so the public near-white ink shows on the light ground */
+  --muted: #4a5565;
+  --accent: #1a6e7e;
+  --warn: #8f5a12;
+  --fail: #a8403a;
+}

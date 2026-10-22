@@ -1,0 +1,394 @@
+{
+  "$comment": [
+    "check:contrast's test pairs: every pair in the colour tables of DESIGN §3.1 and §3.2, the accent presets on each surface, and the increased-contrast line of DESIGN §4.5. T-13 starts scripts/contrast-pairs.json from this list once tokens.css sets its selectors.",
+    "min is 3 for UI (the --line data lines) and 4.5 for text. stated is the ratio as DESIGN writes it, checked at that precision.",
+    "A scope layers blocks in order, a later block overriding an earlier one. A block is named by the at-rules around it and its selector.",
+    "The workspace's dark theme is the public tokens (DESIGN §3.2), so the public pairs cover it.",
+    "fg and bg are tokens, or a hex colour for a literal one such as white text."
+  ],
+  "scopes": {
+    "public": [
+      ":root"
+    ],
+    "public-more-contrast": [
+      ":root",
+      "@media (prefers-contrast: more) :root"
+    ],
+    "daylight": [
+      ":root",
+      "[data-theme=\"daylight\"]"
+    ],
+    "accent-electric_blue": [
+      ":root",
+      "[data-accent=\"electric_blue\"]"
+    ],
+    "accent-mint": [
+      ":root",
+      "[data-accent=\"mint\"]"
+    ],
+    "accent-ivory": [
+      ":root",
+      "[data-accent=\"ivory\"]"
+    ],
+    "accent-violet": [
+      ":root",
+      "[data-accent=\"violet\"]"
+    ]
+  },
+  "pairs": [
+    {
+      "scope": "public",
+      "fg": "--line",
+      "bg": "--bg",
+      "min": 3,
+      "stated": "4.26",
+      "design": "DESIGN §3.1 --line"
+    },
+    {
+      "scope": "public",
+      "fg": "--line",
+      "bg": "--surface-1",
+      "min": 3,
+      "stated": "3.97",
+      "design": "DESIGN §3.1 --line"
+    },
+    {
+      "scope": "public",
+      "fg": "--line",
+      "bg": "--surface-2",
+      "min": 3,
+      "stated": "3.62",
+      "design": "DESIGN §3.1 --line"
+    },
+    {
+      "scope": "public",
+      "fg": "--line",
+      "bg": "--surface-3",
+      "min": 3,
+      "stated": "3.17",
+      "design": "DESIGN §3.1 --line"
+    },
+    {
+      "scope": "public",
+      "fg": "--ink",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "17.3",
+      "design": "DESIGN §3.1 --ink"
+    },
+    {
+      "scope": "public",
+      "fg": "--muted",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "9.26",
+      "design": "DESIGN §3.1 --muted"
+    },
+    {
+      "scope": "public",
+      "fg": "--meta",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "6.15",
+      "design": "DESIGN §3.1 --meta"
+    },
+    {
+      "scope": "public",
+      "fg": "--meta",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "stated": "4.58",
+      "design": "DESIGN §3.1 --meta"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "9.95",
+      "design": "DESIGN §3.1 --scan"
+    },
+    {
+      "scope": "public",
+      "fg": "--on-scan",
+      "bg": "--scan",
+      "min": 4.5,
+      "stated": "9.95",
+      "design": "DESIGN §3.1 --on-scan"
+    },
+    {
+      "scope": "public",
+      "fg": "--warn",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "8.93",
+      "design": "DESIGN §3.1 --warn"
+    },
+    {
+      "scope": "public",
+      "fg": "--fail",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "6.64",
+      "design": "DESIGN §3.1 --fail"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--surface-1",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: scan_cyan"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: scan_cyan"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: scan_cyan"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--scan",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "8.15",
+      "design": "DESIGN §3.1 dealer accent presets: electric_blue"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--scan",
+      "bg": "--surface-1",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: electric_blue"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--scan",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: electric_blue"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--scan",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "stated": "6.07",
+      "design": "DESIGN §3.1 dealer accent presets: electric_blue, the lowest preset pair"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--on-scan",
+      "bg": "--scan",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: electric_blue, with --on-scan for text on it"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--scan",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "10.52",
+      "design": "DESIGN §3.1 dealer accent presets: mint"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--scan",
+      "bg": "--surface-1",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: mint"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--scan",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: mint"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--scan",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: mint"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--on-scan",
+      "bg": "--scan",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: mint, with --on-scan for text on it"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--scan",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "15.03",
+      "design": "DESIGN §3.1 dealer accent presets: ivory"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--scan",
+      "bg": "--surface-1",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: ivory"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--scan",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: ivory"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--scan",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: ivory"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--on-scan",
+      "bg": "--scan",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: ivory, with --on-scan for text on it"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--scan",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "8.49",
+      "design": "DESIGN §3.1 dealer accent presets: violet"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--scan",
+      "bg": "--surface-1",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: violet"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--scan",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: violet"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--scan",
+      "bg": "--surface-3",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: violet"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--on-scan",
+      "bg": "--scan",
+      "min": 4.5,
+      "design": "DESIGN §3.1 dealer accent presets: violet, with --on-scan for text on it"
+    },
+    {
+      "scope": "public-more-contrast",
+      "fg": "--line",
+      "bg": "--bg",
+      "min": 3,
+      "design": "DESIGN §4.5 prefers-contrast: more"
+    },
+    {
+      "scope": "public-more-contrast",
+      "fg": "--line",
+      "bg": "--surface-1",
+      "min": 3,
+      "design": "DESIGN §4.5 prefers-contrast: more"
+    },
+    {
+      "scope": "public-more-contrast",
+      "fg": "--line",
+      "bg": "--surface-2",
+      "min": 3,
+      "design": "DESIGN §4.5 prefers-contrast: more"
+    },
+    {
+      "scope": "public-more-contrast",
+      "fg": "--line",
+      "bg": "--surface-3",
+      "min": 3,
+      "design": "DESIGN §4.5 prefers-contrast: more"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--line",
+      "bg": "--bg",
+      "min": 3,
+      "stated": "3.38",
+      "design": "DESIGN §3.2 Daylight --line"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--ink",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "17.2",
+      "design": "DESIGN §3.2 Daylight --ink"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--muted",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "6.92",
+      "design": "DESIGN §3.2 Daylight --muted"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--accent",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "5.37",
+      "design": "DESIGN §3.2 Daylight --accent"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--accent",
+      "bg": "--surface-2",
+      "min": 4.5,
+      "stated": "4.99",
+      "design": "DESIGN §3.2 Daylight --accent"
+    },
+    {
+      "scope": "daylight",
+      "fg": "#FFFFFF",
+      "bg": "--accent",
+      "min": 4.5,
+      "stated": "5.87",
+      "design": "DESIGN §3.2 Daylight --accent: white text on it"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--warn",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "5.28",
+      "design": "DESIGN §3.2 Daylight --warn"
+    },
+    {
+      "scope": "daylight",
+      "fg": "--fail",
+      "bg": "--bg",
+      "min": 4.5,
+      "stated": "5.55",
+      "design": "DESIGN §3.2 Daylight --fail"
+    }
+  ]
+}

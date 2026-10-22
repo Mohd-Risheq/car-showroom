@@ -22,8 +22,7 @@ const claimsSchema = z.object({
 export type ClientTokenClaims = z.infer<typeof claimsSchema>;
 
 export type ClientTokenCheck =
-  | { ok: true; claims: ClientTokenClaims }
-  | { ok: false; code: "forbidden" | "client_token_expired" };
+  { ok: true; claims: ClientTokenClaims } | { ok: false; code: "forbidden" | "client_token_expired" };
 
 const forbidden: ClientTokenCheck = { ok: false, code: "forbidden" };
 

@@ -46,7 +46,7 @@ function jpegSegments(bytes: Uint8Array): string[] {
 function pngChunks(bytes: Uint8Array): string[] {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const list: string[] = [];
-  for (let at = 8; at + 8 <= bytes.length; ) {
+  for (let at = 8; at + 8 <= bytes.length;) {
     const length = view.getUint32(at);
     list.push(`${ascii(bytes, at + 4, 4)} (${length} bytes)`);
     at += 12 + length;
@@ -57,7 +57,7 @@ function pngChunks(bytes: Uint8Array): string[] {
 function webpChunks(bytes: Uint8Array): string[] {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const list: string[] = [];
-  for (let at = 12; at + 8 <= bytes.length; ) {
+  for (let at = 12; at + 8 <= bytes.length;) {
     const length = view.getUint32(at + 4, true);
     const fourCC = ascii(bytes, at, 4);
     const flags = fourCC === "VP8X" ? `, flags 0x${(bytes[at + 8] ?? 0).toString(16)}` : "";

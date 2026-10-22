@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { wrapLines } from "@/features/share/renderer/text";
-import { pick, randomBelow, seededRandom } from "../../support/random";
+import { seededRandom } from "@/lib/seeded-random";
+import { pick, randomBelow } from "../../support/random";
 
 // The renderer's line breaking (SRS §11.6, DESIGN §9.4). Shaping is the browser's job and is
 // checked in the browsers (spike T-04); here every character is 10 px wide.

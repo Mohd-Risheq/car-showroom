@@ -88,7 +88,9 @@ scope.onmessage = (event) => {
   const controller = new AbortController();
   running = controller;
   encode(request, controller.signal)
-    .catch((error: unknown) => scope.postMessage({ type: "failed", message: String(error), cancelled: controller.signal.aborted }))
+    .catch((error: unknown) =>
+      scope.postMessage({ type: "failed", message: String(error), cancelled: controller.signal.aborted }),
+    )
     .finally(() => {
       if (running === controller) running = null;
     });

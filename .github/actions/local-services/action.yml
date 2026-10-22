@@ -1,0 +1,23 @@
+# The local services of BUILD-PLAN §6.3 on the runner: Postgres 17 behind Neon's local proxy
+# (compose.yaml, pinned by digest), migrated, and this run's own secrets for Better Auth and the
+# local store. The secrets are random and masked, and nothing here reaches a real service.
+name: Local services
+description: The local database, migrated, and secrets made for this run
+runs:
+  using: composite
+  steps:
+    - name: Secrets for this run
+      shell: bash
+      run: |
+        set -euo pipefail
+        auth_secret="$(openssl rand -base64 32)"
+        store_token="vercel_blob_rw_local_$(openssl rand -hex 16)"
+        echo "::add-mask::${auth_secret}"
+        echo "::add-mask::${store_token}"
+        {
+          echo "BETTER_AUTH_SECRET=${auth_secret}"
+          echo "BLOB_READ_WRITE_TOKEN=${store_token}"
+        } >> "$GITHUB_ENV"
+    - name: Database
+      shell: bash
+      run: pnpm db:up && pnpm db:migrate

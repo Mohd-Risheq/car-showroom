@@ -24,7 +24,18 @@ const ZARQA: LatLng = [32.0972, 36.2177];
 const AMMAN: LatLng = [31.9516, 35.924];
 const FREMONT: LatLng = [37.5483, -121.9886];
 const INCHEON: LatLng = [37.4677, 126.6117];
-const PLACES = [HOUSTON, AQABA, ZARQA, AMMAN, FREMONT, INCHEON, [0, 0], [-33.9, 18.4], [89.9, 10], [-60, -179.9]] as const;
+const PLACES = [
+  HOUSTON,
+  AQABA,
+  ZARQA,
+  AMMAN,
+  FREMONT,
+  INCHEON,
+  [0, 0],
+  [-33.9, 18.4],
+  [89.9, 10],
+  [-60, -179.9],
+] as const;
 
 // cobe 2.0.1's own place vector (its U function), as written in dist/index.esm.js
 function cobeVector([lat, lng]: LatLng): Vec3 {
@@ -43,7 +54,9 @@ function cobeRotate([x, y, z]: Vec3, phi: number, theta: number): Vec3 {
 // The haversine formula, written independently of geo.ts
 function haversineKm([lat1, lng1]: LatLng, [lat2, lng2]: LatLng): number {
   const rad = Math.PI / 180;
-  const h = Math.sin(((lat2 - lat1) * rad) / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(((lng2 - lng1) * rad) / 2) ** 2;
+  const h =
+    Math.sin(((lat2 - lat1) * rad) / 2) ** 2 +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(((lng2 - lng1) * rad) / 2) ** 2;
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
 }
 

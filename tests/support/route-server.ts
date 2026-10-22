@@ -38,7 +38,12 @@ export async function startRouteServer(routes: Route[]) {
         body: hasBody ? (Readable.toWeb(incoming) as ReadableStream<Uint8Array>) : null,
         duplex: "half",
       } as RequestInit);
-      const segments = route.prefix ? url.pathname.slice(route.path.length + 1).split("/").map(decodeURIComponent) : [];
+      const segments = route.prefix
+        ? url.pathname
+            .slice(route.path.length + 1)
+            .split("/")
+            .map(decodeURIComponent)
+        : [];
       const response = await route.handle(request, segments);
       const responseHeaders = Object.fromEntries(response.headers);
       // A handler that stopped reading the body (a size cap) leaves the connection unusable,

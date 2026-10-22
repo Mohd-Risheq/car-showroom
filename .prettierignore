@@ -1,0 +1,18 @@
+# Prettier also skips everything in .gitignore.
+
+# The specification and the build records keep their own layout (check_docs.py, and
+# BUILD-PLAN.md must stay byte-identical to docs/04-BUILD-PLAN.md)
+docs/
+AGENTS.md
+BUILD-PLAN.md
+CONFIG.md
+DECISIONS.md
+
+# Written by tools: pnpm, drizzle-kit and scripts/font-fallbacks.ts
+pnpm-lock.yaml
+drizzle/
+src/styles/font-fallbacks.css
+
+# Files kept exactly as received or served
+public/
+tests/fixtures/

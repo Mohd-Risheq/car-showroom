@@ -36,7 +36,12 @@ export type ReelPcm = {
  * Lays mono `samples` out for the reel: the envelope applied, cut or padded with silence to the
  * reel's length, copied to every output channel.
  */
-export function shapeClip(samples: Float32Array, sampleRate: number, numberOfChannels: number, reelSeconds: number = REEL.seconds): ReelPcm {
+export function shapeClip(
+  samples: Float32Array,
+  sampleRate: number,
+  numberOfChannels: number,
+  reelSeconds: number = REEL.seconds,
+): ReelPcm {
   const clipSeconds = samples.length / sampleRate;
   const envelope = clipEnvelope(clipSeconds, reelSeconds);
   const frames = Math.round(reelSeconds * sampleRate);

@@ -1,8 +1,22 @@
 "use client";
+/* eslint-disable react-hooks/refs -- a measuring harness kept as it ran for its evidence; T-49 replaces it (D-037) */
 
 import { useEffect, useRef, useState } from "react";
+import { describeError, round, watchViolations } from "@/app/_dev/harness";
+import { postDevReport } from "@/app/_dev/report";
 import { scanRegion, VIN_FORMATS } from "@/features/vin/domain/barcode";
-import { closeCamera, createScanner, hasCamera, openCamera, type ScanEngine, type Scanned, scanPhoto, type ScanRead, scanVideo, type VinScanner } from "@/features/vin/ui/scanner";
+import {
+  closeCamera,
+  createScanner,
+  hasCamera,
+  openCamera,
+  type ScanEngine,
+  type Scanned,
+  scanPhoto,
+  type ScanRead,
+  scanVideo,
+  type VinScanner,
+} from "@/features/vin/ui/scanner";
 import { ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 import { checkVin, normalizeVin } from "@/lib/validation/vin";
 
@@ -36,7 +50,16 @@ type Scan = {
   error: string | null;
 };
 
-type Photo = { name: string; type: string; bytes: number; engine: ScanEngine | null; ms: number | null; codes: Array<{ format: string; text: string }>; result: Scanned | null; error: string | null };
+type Photo = {
+  name: string;
+  type: string;
+  bytes: number;
+  engine: ScanEngine | null;
+  ms: number | null;
+  codes: Array<{ format: string; text: string }>;
+  result: Scanned | null;
+  error: string | null;
+};
 
 type Results = {
   kind: "t10-vin";
@@ -57,17 +80,11 @@ type Results = {
 
 type Phase = "probing" | "ready" | "opening" | "scanning" | "reading";
 
-const round = (value: number, digits = 1) => Math.round(value * 10 ** digits) / 10 ** digits;
-
 function summarize(values: number[]): Summary | null {
   if (values.length === 0) return null;
   const sorted = [...values].sort((a, b) => a - b);
   const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))] ?? 0;
   return { median: round(at(0.5)), p95: round(at(0.95)), max: round(sorted.at(-1) ?? 0) };
-}
-
-function describe(error: unknown): string {
-  return error instanceof Error ? `${error.name}: ${error.message}` : String(error);
 }
 
 function setupFromUrl(): Setup {
@@ -120,18 +137,21 @@ export function VinSpike() {
     const setup = setupRef.current;
     if (!results || !setup) return;
     const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
-    results.otherOrigins = resources.filter((entry) => new URL(entry.name).origin !== window.location.origin).map((entry) => entry.name);
+    results.otherOrigins = resources
+      .filter((entry) => new URL(entry.name).origin !== window.location.origin)
+      .map((entry) => entry.name);
     const wasm = resources.find((entry) => new URL(entry.name).pathname === ZXING_WASM_PATH);
-    results.wasm = wasm ? { url: wasm.name, transferSize: wasm.transferSize, decodedBodySize: wasm.decodedBodySize, ms: round(wasm.duration) } : null;
+    results.wasm = wasm
+      ? {
+          url: wasm.name,
+          transferSize: wasm.transferSize,
+          decodedBodySize: wasm.decodedBodySize,
+          ms: round(wasm.duration),
+        }
+      : null;
     show();
     if (!setup.report) return;
-    try {
-      const response = await fetch(`/${setup.locale}/dev/report`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(results) });
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-    } catch (error) {
-      setSent(`Sending failed: ${describe(error)}`);
-    }
+    setSent((await postDevReport(setup.locale, results)).message);
   };
 
   const fill = (found: Scanned) => {
@@ -197,7 +217,9 @@ export function VinSpike() {
         }
         if (performance.now() - shown > 250) {
           shown = performance.now();
-          setLive(`${record.reads.count} reads, last ${round(read.ms)} ms, ${record.reads.size}${record.seen.length ? `, seen ${record.seen.map((seen) => seen.text).join(", ")}` : ""}`);
+          setLive(
+            `${record.reads.count} reads, last ${round(read.ms)} ms, ${record.reads.size}${record.seen.length ? `, seen ${record.seen.map((seen) => seen.text).join(", ")}` : ""}`,
+          );
         }
       };
       const found = await scanVideo(video, ready, { signal: stop.controller.signal, onRead });
@@ -214,7 +236,7 @@ export function VinSpike() {
       }
     } catch (error) {
       record.end = "failed";
-      record.error = describe(error);
+      record.error = describeError(error);
       setFilled(`Scanning failed: ${record.error}. Type the VIN instead.`);
     } finally {
       if (record.end === null) record.end = stop.end ?? "stopped";
@@ -238,7 +260,16 @@ export function VinSpike() {
   const readPhoto = async (file: File) => {
     const results = resultsRef.current;
     if (!results) return;
-    const record: Photo = { name: file.name, type: file.type, bytes: file.size, engine: null, ms: null, codes: [], result: null, error: null };
+    const record: Photo = {
+      name: file.name,
+      type: file.type,
+      bytes: file.size,
+      engine: null,
+      ms: null,
+      codes: [],
+      result: null,
+      error: null,
+    };
     results.photos.push(record);
     setPhase("reading");
     setFilled("");
@@ -253,7 +284,7 @@ export function VinSpike() {
       if (found) fill(found);
       else setFilled(codes.length ? "No VIN in this photo's barcodes" : "No barcode found in this photo");
     } catch (error) {
-      record.error = describe(error);
+      record.error = describeError(error);
       setFilled(`Reading failed: ${record.error}`);
     } finally {
       setPhase("ready");
@@ -280,15 +311,14 @@ export function VinSpike() {
       errors: [],
     };
     resultsRef.current = results;
-    const onViolation = (event: SecurityPolicyViolationEvent) => {
-      results.csp.push(`${event.effectiveDirective} blocked ${event.blockedURI || "inline"}`);
+    const stopWatching = watchViolations((line) => {
+      results.csp.push(line);
       show();
-    };
+    });
     // The camera is released whenever the page is hidden (as FR-38.8 asks of guided capture)
     const onVisibility = () => {
       if (document.visibilityState === "hidden") stopScan("hidden");
     };
-    document.addEventListener("securitypolicyviolation", onViolation);
     document.addEventListener("visibilitychange", onVisibility);
     let live = true;
     void (async () => {
@@ -296,7 +326,7 @@ export function VinSpike() {
       try {
         results.native.formats = Native ? await Native.getSupportedFormats() : null;
       } catch (error) {
-        results.errors.push(describe(error));
+        results.errors.push(describeError(error));
       }
       results.camera = await hasCamera();
       if (!live) return;
@@ -305,7 +335,7 @@ export function VinSpike() {
     })();
     return () => {
       live = false;
-      document.removeEventListener("securitypolicyviolation", onViolation);
+      stopWatching();
       document.removeEventListener("visibilitychange", onVisibility);
       stopScan("stopped");
     };
@@ -320,7 +350,9 @@ export function VinSpike() {
   return (
     <section className="grid max-w-2xl gap-3" data-state={phase}>
       <p>
-        {results?.native.present ? `This browser has its own detector (${results.native.formats?.join(", ") ?? "formats unknown"})` : "This browser has no detector of its own"}
+        {results?.native.present
+          ? `This browser has its own detector (${results.native.formats?.join(", ") ?? "formats unknown"})`
+          : "This browser has no detector of its own"}
         {results?.setup.polyfill ? "; using the polyfill (engine=polyfill)" : ""}
         {results ? `; camera asked for ${results.setup.width} pixels across` : ""}
       </p>
@@ -337,16 +369,29 @@ export function VinSpike() {
           enterKeyHint="done"
           data-vin
         />
-        <span data-check={check === null ? "empty" : check.ok ? (check.warning ? "warning" : "valid") : "error"}>{check === null ? " " : check.ok ? (check.warning ?? "valid") : check.error}</span>
+        <span data-check={check === null ? "empty" : check.ok ? (check.warning ? "warning" : "valid") : "error"}>
+          {check === null ? " " : check.ok ? (check.warning ?? "valid") : check.error}
+        </span>
       </label>
       <div className="flex flex-wrap gap-3">
         {results?.camera ? (
           cameraOn ? (
-            <button type="button" className="border border-(--ink) px-4 py-3" onClick={() => stopScan("stopped")} data-stop>
+            <button
+              type="button"
+              className="border border-(--ink) px-4 py-3"
+              onClick={() => stopScan("stopped")}
+              data-stop
+            >
               Stop
             </button>
           ) : (
-            <button type="button" className="border border-(--ink) px-4 py-3" disabled={phase !== "ready"} onClick={() => void scan()} data-scan>
+            <button
+              type="button"
+              className="border border-(--ink) px-4 py-3"
+              disabled={phase !== "ready"}
+              onClick={() => void scan()}
+              data-scan
+            >
               Scan VIN
             </button>
           )
@@ -370,13 +415,32 @@ export function VinSpike() {
       <p>{results?.camera === false ? "No camera here, so Scan VIN is not offered." : ""}</p>
       <div
         className={cameraOn ? "relative overflow-hidden bg-black" : "hidden"}
-        style={frame ? { aspectRatio: `${frame.width} / ${frame.height}`, width: `min(100%, calc(60svh * ${frame.width} / ${frame.height}))` } : { aspectRatio: "16 / 9", width: "100%" }}
+        style={
+          frame
+            ? {
+                aspectRatio: `${frame.width} / ${frame.height}`,
+                width: `min(100%, calc(60svh * ${frame.width} / ${frame.height}))`,
+              }
+            : { aspectRatio: "16 / 9", width: "100%" }
+        }
       >
-        <video ref={videoRef} className="absolute inset-0 h-full w-full object-cover" muted playsInline autoPlay data-video />
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          muted
+          playsInline
+          autoPlay
+          data-video
+        />
         {frame && band ? (
           <div
             className="absolute border-2 border-white"
-            style={{ left: `${(band.x / frame.width) * 100}%`, top: `${(band.y / frame.height) * 100}%`, width: `${(band.width / frame.width) * 100}%`, height: `${(band.height / frame.height) * 100}%` }}
+            style={{
+              left: `${(band.x / frame.width) * 100}%`,
+              top: `${(band.y / frame.height) * 100}%`,
+              width: `${(band.width / frame.width) * 100}%`,
+              height: `${(band.height / frame.height) * 100}%`,
+            }}
           />
         ) : null}
       </div>

@@ -1,18 +1,19 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { clipOfFile, SOUND_FOLDER } from "@/app/_dev/fixtures";
 import { isDeployment } from "@/lib/deployment";
 import { parseRange } from "@/lib/http/range";
 
-// The synthetic engine clips for spikes T-07 and T-08 (Q-04), made by scripts/fixtures/engine-clips.mts in
+// The synthetic engine clips for spikes T-07 and T-08 (Q-04), made by scripts/fixtures/engine-clips.ts in
 // the git-ignored .fixtures/sound/ folder. Byte ranges work, because iOS Safari plays an <audio>
-// source only from a server that answers them. Not found on deployments, here and in the proxy.
-const NAME = /^(?:steps-8s|steps-20s|idle-12s|rev-6s)\.wav$/;
-const FOLDER = path.join(process.cwd(), ".fixtures", "sound");
+// source only from a server that answers them. Not found on deployments, here and in the proxy, so
+// its paths carry turbopackIgnore and the build never traces the folder.
+const FOLDER = path.join(/*turbopackIgnore: true*/ process.cwd(), SOUND_FOLDER);
 
 export async function GET(request: Request, ctx: RouteContext<"/[locale]/dev/sound/clips/[file]">): Promise<Response> {
   if (isDeployment()) return new Response(null, { status: 404 });
   const { file } = await ctx.params;
-  if (!NAME.test(file)) return new Response(null, { status: 404 });
+  if (!clipOfFile(file)) return new Response(null, { status: 404 });
   let body: Uint8Array<ArrayBuffer>;
   try {
     body = new Uint8Array(await readFile(/*turbopackIgnore: true*/ path.join(FOLDER, file)));

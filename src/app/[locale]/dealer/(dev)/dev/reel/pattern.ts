@@ -1,4 +1,5 @@
 import { REEL } from "@/features/reel/domain/support";
+import { seededRandom } from "@/lib/seeded-random";
 
 // Spike T-08's test pattern: frames made for the checks, not a reel (T-66 draws DESIGN §5.16's
 // template). Every frame has:
@@ -30,17 +31,6 @@ export const PATTERN = {
 
 export type Picture = OffscreenCanvas;
 
-// The same small seeded generator as the clip fixtures, so every engine draws the same picture
-function random(seed: number): () => number {
-  let state = seed >>> 0;
-  return () => {
-    state = (state + 0x6d2b79f5) >>> 0;
-    let t = Math.imul(state ^ (state >>> 15), 1 | state);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 /** Smooth noise from -1 to 1 with features about `spacing` pixels across */
 function noise(width: number, height: number, spacing: number, next: () => number): Float32Array {
   const columns = Math.ceil(width / spacing) + 2;
@@ -70,7 +60,8 @@ export function makePicture(): Picture {
   const { width: w, height: h, margin } = PATTERN.picture;
   const width = Math.round(w * margin);
   const height = Math.round(h * margin);
-  const next = random(0x7e08);
+  // Seeded, so every engine draws the same picture
+  const next = seededRandom(0x7e08);
   const broad = noise(width, height, 160, next);
   const mid = noise(width, height, 28, next);
   const fine = noise(width, height, 5, next);

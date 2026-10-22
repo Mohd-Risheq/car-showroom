@@ -25,8 +25,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.unstubAllEnvs();
-  vi.unstubAllGlobals();
   vi.mocked(del).mockReset();
 });
 

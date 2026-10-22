@@ -18,7 +18,12 @@ export default function VinCodesPage() {
         ))}
       </ol>
       {TEST_CODES.map((code) => (
-        <section key={code.id} id={code.id} className="grid min-h-svh content-center justify-items-center gap-4" data-code={code.id}>
+        <section
+          key={code.id}
+          id={code.id}
+          className="grid min-h-svh content-center justify-items-center gap-4"
+          data-code={code.id}
+        >
           <svg
             viewBox={`0 0 ${code.width} ${code.height}`}
             className={code.format === "code_39" || code.format === "code_128" ? "w-full max-w-4xl" : "w-72"}

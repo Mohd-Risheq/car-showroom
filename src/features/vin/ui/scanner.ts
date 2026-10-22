@@ -37,7 +37,8 @@ export async function createScanner({ polyfill = false }: { polyfill?: boolean }
   if (Native && !polyfill) {
     // Some Android phones list no formats at all, and the constructor throws on an empty list
     const formats: readonly string[] = await Native.getSupportedFormats().catch(() => []);
-    if (VIN_FORMATS.every((format) => formats.includes(format))) return { engine: "native", detector: new Native({ formats: [...VIN_FORMATS] }) };
+    if (VIN_FORMATS.every((format) => formats.includes(format)))
+      return { engine: "native", detector: new Native({ formats: [...VIN_FORMATS] }) };
   }
   const zxing = await loadZxingPolyfill();
   return { engine: "polyfill", detector: new zxing.BarcodeDetector({ formats: [...VIN_FORMATS] }) };
@@ -50,7 +51,11 @@ export async function createScanner({ polyfill = false }: { polyfill?: boolean }
 export function openCamera({ width = 1920 }: { width?: number } = {}): Promise<MediaStream> {
   return navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: { facingMode: { ideal: "environment" }, width: { ideal: width }, height: { ideal: Math.round((width * 9) / 16) } },
+    video: {
+      facingMode: { ideal: "environment" },
+      width: { ideal: width },
+      height: { ideal: Math.round((width * 9) / 16) },
+    },
   });
 }
 
@@ -82,11 +87,15 @@ function wait(ms: number, signal: AbortSignal): Promise<void> {
 }
 
 /** The detector's read. The polyfill answers NotSupportedError when its .wasm didn't load, and is reset for the next try. */
-async function detect(scanner: VinScanner, source: HTMLVideoElement | HTMLCanvasElement | ImageData): Promise<DetectedBarcode[]> {
+async function detect(
+  scanner: VinScanner,
+  source: HTMLVideoElement | HTMLCanvasElement | ImageData,
+): Promise<DetectedBarcode[]> {
   try {
     return await scanner.detector.detect(source);
   } catch (error) {
-    if (scanner.engine === "polyfill" && error instanceof DOMException && error.name === "NotSupportedError") await resetZxingWasm();
+    if (scanner.engine === "polyfill" && error instanceof DOMException && error.name === "NotSupportedError")
+      await resetZxingWasm();
     throw error;
   }
 }
@@ -106,7 +115,11 @@ function firstVin(codes: DetectedBarcode[]): Scanned | null {
  * polyfill reads the band of scanRegion, because it cannot be told to try less, and a whole
  * frame costs more than the page can spare between taps.
  */
-export async function scanVideo(video: HTMLVideoElement, scanner: VinScanner, { signal, onRead }: { signal: AbortSignal; onRead?: (read: ScanRead) => void }): Promise<Scanned | null> {
+export async function scanVideo(
+  video: HTMLVideoElement,
+  scanner: VinScanner,
+  { signal, onRead }: { signal: AbortSignal; onRead?: (read: ScanRead) => void },
+): Promise<Scanned | null> {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", { willReadFrequently: true });
   if (!context) throw new Error("No 2D canvas");
@@ -117,13 +130,19 @@ export async function scanVideo(video: HTMLVideoElement, scanner: VinScanner, { 
     let source: HTMLVideoElement | ImageData = video;
     if (scanner.engine === "polyfill") {
       const region = scanRegion(video.videoWidth, video.videoHeight);
-      if (canvas.width !== region.width || canvas.height !== region.height) Object.assign(canvas, { width: region.width, height: region.height });
+      if (canvas.width !== region.width || canvas.height !== region.height)
+        Object.assign(canvas, { width: region.width, height: region.height });
       context.drawImage(video, region.x, region.y, region.width, region.height, 0, 0, region.width, region.height);
       source = context.getImageData(0, 0, region.width, region.height);
     }
     const codes = await detect(scanner, source);
     const ms = performance.now() - started;
-    onRead?.({ ms, width: source instanceof ImageData ? source.width : video.videoWidth, height: source instanceof ImageData ? source.height : video.videoHeight, codes });
+    onRead?.({
+      ms,
+      width: source instanceof ImageData ? source.width : video.videoWidth,
+      height: source instanceof ImageData ? source.height : video.videoHeight,
+      codes,
+    });
     const found = firstVin(codes);
     if (found) return found;
     await wait(READ_INTERVAL_MS - ms, signal);
@@ -132,7 +151,10 @@ export async function scanVideo(video: HTMLVideoElement, scanner: VinScanner, { 
 }
 
 /** A photo's VIN, the camera-less way in (SRS §10.8). Large photos are read at 2048 pixels on the long side. */
-export async function scanPhoto(photo: Blob, scanner: VinScanner): Promise<{ found: Scanned | null; codes: DetectedBarcode[] }> {
+export async function scanPhoto(
+  photo: Blob,
+  scanner: VinScanner,
+): Promise<{ found: Scanned | null; codes: DetectedBarcode[] }> {
   const bitmap = await createImageBitmap(photo);
   try {
     const scale = Math.min(1, 2048 / Math.max(bitmap.width, bitmap.height));
@@ -141,7 +163,10 @@ export async function scanPhoto(photo: Blob, scanner: VinScanner): Promise<{ fou
     const context = canvas.getContext("2d", { willReadFrequently: true });
     if (!context) throw new Error("No 2D canvas");
     context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const codes = await detect(scanner, scanner.engine === "polyfill" ? context.getImageData(0, 0, canvas.width, canvas.height) : canvas);
+    const codes = await detect(
+      scanner,
+      scanner.engine === "polyfill" ? context.getImageData(0, 0, canvas.width, canvas.height) : canvas,
+    );
     return { found: firstVin(codes), codes };
   } finally {
     bitmap.close();

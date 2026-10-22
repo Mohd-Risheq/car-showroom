@@ -9,7 +9,7 @@ import { ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 // changes the build must update the copy too
 describe("self-hosted zxing-wasm", () => {
   it("is the build the installed barcode-detector expects", async () => {
-    const bytes = await readFile(path.join(process.cwd(), "public", ZXING_WASM_PATH));
+    const bytes = await readFile(path.join(import.meta.dirname, "../../../public", ZXING_WASM_PATH));
     expect(createHash("sha256").update(bytes).digest("hex")).toBe(ZXING_WASM_SHA256);
   });
 });

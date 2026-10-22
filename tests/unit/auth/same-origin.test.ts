@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { isSameOriginRequest } from "@/lib/auth/same-origin";
 
 // SEC-14: a mutating route handler accepts only the site's own pages. Browsers say so with
@@ -12,10 +12,6 @@ function request(headers: Record<string, string>): Request {
 
 beforeEach(() => {
   vi.stubEnv("NEXT_PUBLIC_SITE_URL", SITE);
-});
-
-afterEach(() => {
-  vi.unstubAllEnvs();
 });
 
 describe("isSameOriginRequest", () => {

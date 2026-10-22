@@ -1,96 +1,62 @@
 import { eq, inArray } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { GET, POST } from "@/app/api/auth/[...all]/route";
 import { auth } from "@/lib/auth/auth";
 import { createPasswordUser } from "@/lib/auth/users";
 import { db } from "@/lib/db/client";
 import { account, session, user } from "@/lib/db/schema";
+import {
+  authOrigin,
+  authRequest,
+  cookiePair,
+  createTestUser,
+  deleteTestUsers,
+  sessionSetCookie,
+  signIn,
+  TEST_USER_AGENT,
+  type TestUser,
+} from "../support/auth";
 
 // Sign-in round trip through the API-05 route handler with database sessions (FR-29, SEC-01,
 // SEC-02). Runs unchanged on the local proxy (BUILD-PLAN §6.3) and on a Neon branch (T-37).
 
-const origin = new URL(process.env.BETTER_AUTH_URL ?? "http://localhost:3000").origin;
 const run = crypto.randomUUID();
-const password = `t02-password-${run}`;
-const activeEmail = `t02-active-${run}@example.test`;
-const disabledEmail = `t02-disabled-${run}@example.test`;
 const unlinkedEmail = `t02-unlinked-${run}@example.test`;
 const unhashedEmail = `t02-unhashed-${run}@example.test`;
-const userAgent = "Muftah-T02-test/1.0";
 
 type SessionBody = { user: { id: string; email: string; role: string } } | null;
 type ErrorBody = { code?: string };
 
-function authRequest(
-  method: "GET" | "POST",
-  path: string,
-  init: { body?: unknown; cookie?: string; origin?: string } = {},
-): Promise<Response> {
-  const headers = new Headers({
-    origin: init.origin ?? origin,
-    "user-agent": userAgent,
-    "x-forwarded-for": "203.0.113.7",
-  });
-  if (init.cookie) headers.set("cookie", init.cookie);
-  if (init.body !== undefined) headers.set("content-type", "application/json");
-  const request = new Request(`${origin}/api/auth${path}`, {
-    method,
-    headers,
-    body: init.body === undefined ? null : JSON.stringify(init.body),
-  });
-  return method === "GET" ? GET(request) : POST(request);
-}
-
-function sessionSetCookie(response: Response): string {
-  const setCookie = response.headers.getSetCookie().find((value) => value.includes("session_token="));
-  if (!setCookie) throw new Error("the response set no session cookie");
-  return setCookie;
-}
-
-async function signIn(email: string): Promise<string> {
-  const response = await authRequest("POST", "/sign-in/email", { body: { email, password } });
-  expect(response.status).toBe(200);
-  return sessionSetCookie(response).split(";")[0] ?? "";
-}
-
 const sessionsOf = (userId: string) => db.select().from(session).where(eq(session.userId, userId));
 const usersWith = (email: string) => db.select({ id: user.id }).from(user).where(eq(user.email, email));
 
-let activeUserId = "";
-let disabledUserId = "";
+let active: TestUser;
+let disabled: TestUser;
 
 beforeAll(async () => {
-  const active = await createPasswordUser({
-    email: activeEmail,
-    name: "T-02 active",
-    password,
-    role: "staff",
-    mustChangePassword: false,
-  });
-  const disabled = await createPasswordUser({
-    email: disabledEmail,
-    name: "T-02 disabled",
-    password,
-    role: "staff",
-    mustChangePassword: false,
-  });
+  active = await createTestUser("staff");
+  disabled = await createTestUser("staff");
   await db.update(user).set({ disabledAt: new Date() }).where(eq(user.id, disabled.id));
-  activeUserId = active.id;
-  disabledUserId = disabled.id;
 });
 
 // Each test starts signed out, whatever the one before it left
 afterEach(async () => {
-  await db.delete(session).where(inArray(session.userId, [activeUserId, disabledUserId]));
+  await db.delete(session).where(inArray(session.userId, [active.id, disabled.id]));
 });
 
-// Deleting the users cascades to their sessions and accounts
+// The createPasswordUser cases below must leave no user behind; deleting by email clears one
+// they left, so a failure there doesn't carry over to the next run
 afterAll(async () => {
-  await db.delete(user).where(inArray(user.email, [activeEmail, disabledEmail, unlinkedEmail, unhashedEmail]));
+  await deleteTestUsers();
+  await db.delete(user).where(inArray(user.email, [unlinkedEmail, unhashedEmail]));
 });
 
 describe("createPasswordUser", () => {
-  const input = { name: "T-02 partial", password, role: "staff", mustChangePassword: false } as const;
+  const input = {
+    name: "T-02 partial",
+    password: `t02-password-${run}`,
+    role: "staff",
+    mustChangePassword: false,
+  } as const;
 
   it("removes the user again when its password can't be linked", async () => {
     const { internalAdapter } = await auth.$context;
@@ -114,34 +80,36 @@ describe("sign-in round trip", () => {
     const [row] = await db
       .select({ password: account.password, accountId: account.accountId, providerId: account.providerId })
       .from(account)
-      .where(eq(account.userId, activeUserId));
+      .where(eq(account.userId, active.id));
     expect(row?.password).toMatch(/^\$argon2id\$v=19\$m=19456,t=2,p=1\$/);
     expect(row?.providerId).toBe("credential");
-    expect(row?.accountId).toBe(activeUserId);
+    expect(row?.accountId).toBe(active.id);
   });
 
   it("signs in, reads the session from the database, and signs out server-side", async () => {
-    const response = await authRequest("POST", "/sign-in/email", { body: { email: activeEmail, password } });
+    const response = await authRequest("POST", "/sign-in/email", {
+      body: { email: active.email, password: active.password },
+    });
     expect(response.status).toBe(200);
     const setCookie = sessionSetCookie(response);
     expect(setCookie).toMatch(/;\s*HttpOnly/i);
     expect(setCookie).toMatch(/;\s*SameSite=Lax/i);
     expect(setCookie).toMatch(/;\s*Path=\//i);
-    const cookie = setCookie.split(";")[0] ?? "";
+    const cookie = cookiePair(setCookie);
 
-    const [stored, ...others] = await sessionsOf(activeUserId);
+    const [stored, ...others] = await sessionsOf(active.id);
     expect(others).toEqual([]);
     expect(stored?.ipAddress).toBeNull();
-    expect(stored?.userAgent).toBe(userAgent);
+    expect(stored?.userAgent).toBe(TEST_USER_AGENT);
 
     const current = await authRequest("GET", "/get-session", { cookie });
     expect(current.status).toBe(200);
     const body = (await current.json()) as SessionBody;
-    expect(body?.user).toMatchObject({ id: activeUserId, email: activeEmail, role: "staff" });
+    expect(body?.user).toMatchObject({ id: active.id, email: active.email, role: "staff" });
 
     const signOut = await authRequest("POST", "/sign-out", { cookie, body: {} });
     expect(signOut.status).toBe(200);
-    expect(await sessionsOf(activeUserId)).toEqual([]);
+    expect(await sessionsOf(active.id)).toEqual([]);
 
     const afterSignOut = await authRequest("GET", "/get-session", { cookie });
     expect((await afterSignOut.json()) as SessionBody).toBeNull();
@@ -149,29 +117,31 @@ describe("sign-in round trip", () => {
 
   it("refuses a wrong password and creates no session", async () => {
     const response = await authRequest("POST", "/sign-in/email", {
-      body: { email: activeEmail, password: `${password}-wrong` },
+      body: { email: active.email, password: `${active.password}-wrong` },
     });
     expect(response.status).toBe(401);
     expect(((await response.json()) as ErrorBody).code).toBe("INVALID_EMAIL_OR_PASSWORD");
-    expect(await sessionsOf(activeUserId)).toEqual([]);
+    expect(await sessionsOf(active.id)).toEqual([]);
   });
 
   it("gives a disabled user no session", async () => {
-    const response = await authRequest("POST", "/sign-in/email", { body: { email: disabledEmail, password } });
+    const response = await authRequest("POST", "/sign-in/email", {
+      body: { email: disabled.email, password: disabled.password },
+    });
     expect(response.status).toBe(401);
     expect(((await response.json()) as ErrorBody).code).toBe("FAILED_TO_CREATE_SESSION");
-    expect(await sessionsOf(disabledUserId)).toEqual([]);
+    expect(await sessionsOf(disabled.id)).toEqual([]);
   });
 
   it("refuses a request from another origin that carries the session cookie", async () => {
-    const cookie = await signIn(activeEmail);
+    const cookie = await signIn(active);
     const forged = await authRequest("POST", "/sign-out", { cookie, body: {}, origin: "https://attacker.example" });
     expect(forged.status).toBe(403);
-    expect(await sessionsOf(activeUserId)).toHaveLength(1);
+    expect(await sessionsOf(active.id)).toHaveLength(1);
 
     const signOut = await authRequest("POST", "/sign-out", { cookie, body: {} });
     expect(signOut.status).toBe(200);
-    expect(await sessionsOf(activeUserId)).toEqual([]);
+    expect(await sessionsOf(active.id)).toEqual([]);
   });
 });
 
@@ -198,9 +168,9 @@ describe("disabled auth routes (API-05, FR-29.11)", () => {
     "the library itself refuses POST %s",
     async (path) => {
       const response = await auth.handler(
-        new Request(`${origin}/api/auth${path}`, {
+        new Request(`${authOrigin}/api/auth${path}`, {
           method: "POST",
-          headers: { origin, "content-type": "application/json" },
+          headers: { origin: authOrigin, "content-type": "application/json" },
           body: "{}",
         }),
       );

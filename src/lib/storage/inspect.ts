@@ -5,10 +5,7 @@ import type { MediaType } from "./rules";
 
 export type InspectFailure = { ok: false; code: "METADATA_PRESENT" | "VALIDATION_ERROR"; reason: string };
 export type InspectResult =
-  | { ok: true; width: number; height: number }
-  | { ok: true; durationMs: number }
-  | { ok: true }
-  | InspectFailure;
+  { ok: true; width: number; height: number } | { ok: true; durationMs: number } | { ok: true } | InspectFailure;
 
 type Size = { width: number; height: number };
 
@@ -82,7 +79,8 @@ const JPEG = {
 // JPEG: every marker segment, skipping scan data, and nothing after EOI. A canvas encoder writes
 // JFIF (APP0, no thumbnail), an ICC profile (APP2) and Adobe (APP14) segments at most.
 function inspectJpeg(b: Uint8Array): InspectResult {
-  if (byteAt(b, 0) !== MARKER_PREFIX || byteAt(b, 1) !== JPEG.SOI || byteAt(b, 2) !== MARKER_PREFIX) return malformed("jpeg.magic");
+  if (byteAt(b, 0) !== MARKER_PREFIX || byteAt(b, 1) !== JPEG.SOI || byteAt(b, 2) !== MARKER_PREFIX)
+    return malformed("jpeg.magic");
   let i = 2;
   let size: Size | undefined;
   let scanned = false;
@@ -95,7 +93,8 @@ function inspectJpeg(b: Uint8Array): InspectResult {
       return i === b.length ? { ok: true, ...size } : metadata("jpeg.trailing-data");
     }
     // Markers without a length: none of them belongs here
-    if (marker === JPEG.STUFFED || marker === JPEG.TEM || (marker >= JPEG.RST0 && marker <= JPEG.SOI)) return malformed("jpeg.marker");
+    if (marker === JPEG.STUFFED || marker === JPEG.TEM || (marker >= JPEG.RST0 && marker <= JPEG.SOI))
+      return malformed("jpeg.marker");
     const end = i + u16be(b, i);
     const data = i + 2;
     if (end < data || end > b.length) return malformed("jpeg.length");
@@ -128,7 +127,8 @@ function appSegmentProblem(b: Uint8Array, marker: number, data: number, end: num
   const length = end - data;
   if (marker === JPEG.APP0) {
     // JFIF with a 0×0 thumbnail; a JFXX extension or a thumbnail could hold the uncropped photo
-    const plainJfif = length === 14 && ascii(b, data, 5) === "JFIF\0" && byteAt(b, data + 12) === 0 && byteAt(b, data + 13) === 0;
+    const plainJfif =
+      length === 14 && ascii(b, data, 5) === "JFIF\0" && byteAt(b, data + 12) === 0 && byteAt(b, data + 13) === 0;
     return plainJfif ? undefined : "jpeg.app0";
   }
   if (marker === JPEG.APP2) return length >= 12 && ascii(b, data, 12) === "ICC_PROFILE\0" ? undefined : "jpeg.app2";
@@ -163,7 +163,7 @@ function inspectWebp(b: Uint8Array): InspectResult {
   let canvas: Size | undefined;
   let frame: Size | undefined;
   let flags = 0;
-  for (let i = 12; i < b.length; ) {
+  for (let i = 12; i < b.length;) {
     const fourcc = ascii(b, i, 4);
     const length = u32le(b, i + 4);
     const data = i + 8;
@@ -237,7 +237,7 @@ function inspectPng(b: Uint8Array): InspectResult {
   if (!PNG_SIGNATURE.every((value, k) => byteAt(b, k) === value)) return malformed("png.magic");
   let size: Size | undefined;
   let hasData = false;
-  for (let i = 8; ; ) {
+  for (let i = 8; ;) {
     const length = u32be(b, i);
     const type = ascii(b, i + 4, 4);
     const next = i + 12 + length; // length, type, data, CRC
@@ -261,7 +261,7 @@ function inspectPng(b: Uint8Array): InspectResult {
 
 // WAV from the audio pipeline: a "fmt " chunk in BR-19's format, then a "data" chunk that ends
 // the file, at most 30 s long (FR-39.2). Any other chunk may carry metadata.
-const WAV_FORMAT = { pcm: 1, channels: 1, sampleRate: 22_050, bitsPerSample: 16 } as const;
+export const WAV_FORMAT = { pcm: 1, channels: 1, sampleRate: 22_050, bitsPerSample: 16 } as const;
 const WAV_BLOCK_ALIGN = WAV_FORMAT.channels * (WAV_FORMAT.bitsPerSample / 8);
 const WAV_BYTES_PER_SECOND = WAV_FORMAT.sampleRate * WAV_BLOCK_ALIGN;
 const WAV_MAX_SECONDS = 30;
@@ -270,15 +270,20 @@ function inspectWav(b: Uint8Array): InspectResult {
   if (ascii(b, 0, 4) !== "RIFF" || ascii(b, 8, 4) !== "WAVE") return malformed("wav.magic");
   if (u32le(b, 4) + 8 !== b.length) return malformed("wav.riff-size");
   let format = false;
-  for (let i = 12; i < b.length; ) {
+  for (let i = 12; i < b.length;) {
     const id = ascii(b, i, 4);
     const length = u32le(b, i + 4);
     const data = i + 8;
     if (id === "fmt ") {
       if (format || length !== 16) return malformed("wav.fmt");
-      const pcm = u16le(b, data) === WAV_FORMAT.pcm && u16le(b, data + 2) === WAV_FORMAT.channels && u32le(b, data + 4) === WAV_FORMAT.sampleRate;
+      const pcm =
+        u16le(b, data) === WAV_FORMAT.pcm &&
+        u16le(b, data + 2) === WAV_FORMAT.channels &&
+        u32le(b, data + 4) === WAV_FORMAT.sampleRate;
       const layout =
-        u32le(b, data + 8) === WAV_BYTES_PER_SECOND && u16le(b, data + 12) === WAV_BLOCK_ALIGN && u16le(b, data + 14) === WAV_FORMAT.bitsPerSample;
+        u32le(b, data + 8) === WAV_BYTES_PER_SECOND &&
+        u16le(b, data + 12) === WAV_BLOCK_ALIGN &&
+        u16le(b, data + 14) === WAV_FORMAT.bitsPerSample;
       if (!pcm || !layout) return malformed("wav.format");
       format = true;
     } else if (id === "data") {

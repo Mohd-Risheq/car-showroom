@@ -36,7 +36,10 @@ describe("the player's graph", () => {
 });
 
 // A clip that gets louder window by window, so its range has a distinct floor and ceiling
-const CLIP = Float32Array.from({ length: FFT_SIZE * 20 }, (_, i) => Math.sin(i / 7) * (1 + Math.floor(i / FFT_SIZE)) * 0.04);
+const CLIP = Float32Array.from(
+  { length: FFT_SIZE * 20 },
+  (_, i) => Math.sin(i / 7) * (1 + Math.floor(i / FFT_SIZE)) * 0.04,
+);
 // What the analyser hands over while the clip plays: its last window
 const LIVE_WINDOW = CLIP.slice(19 * FFT_SIZE);
 const CLIP_URL = "https://store.test/engine.wav";
@@ -94,11 +97,13 @@ describe("EnginePlayer, buffer mode", () => {
   beforeEach(() => {
     contexts = [];
     vi.stubGlobal("AudioContext", FakeAudioContext);
-    vi.stubGlobal("fetch", vi.fn(async () => clipResponse()));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => clipResponse()),
+    );
   });
 
   afterEach(() => {
-    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -114,7 +119,10 @@ describe("EnginePlayer, buffer mode", () => {
 
   it("starts nothing when paused while the clip downloads", async () => {
     let deliver: (response: Response) => void = () => {};
-    vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>((resolve) => (deliver = resolve))));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => new Promise<Response>((resolve) => (deliver = resolve))),
+    );
     const createSource = vi.spyOn(FakeAudioContext.prototype, "createBufferSource");
     const events: PlayerEvent[] = [];
     const player = new EnginePlayer({ url: CLIP_URL, mode: "buffer", onEvent: (event) => events.push(event) });
@@ -142,7 +150,10 @@ describe("EnginePlayer, buffer mode", () => {
   });
 
   it("downloads again on the first play after a failed prefetch (FR-15.5)", async () => {
-    const fetchClip = vi.fn<typeof fetch>().mockRejectedValueOnce(new TypeError("Failed to fetch")).mockImplementation(async () => clipResponse());
+    const fetchClip = vi
+      .fn<typeof fetch>()
+      .mockRejectedValueOnce(new TypeError("Failed to fetch"))
+      .mockImplementation(async () => clipResponse());
     vi.stubGlobal("fetch", fetchClip);
     const events: PlayerEvent[] = [];
     const player = new EnginePlayer({ url: CLIP_URL, mode: "buffer", onEvent: (event) => events.push(event) });
@@ -158,7 +169,10 @@ describe("EnginePlayer, buffer mode", () => {
   });
 
   it("reports a failed play, then plays on the next tap", async () => {
-    const fetchClip = vi.fn<typeof fetch>().mockResolvedValueOnce(new Response(null, { status: 503 })).mockImplementation(async () => clipResponse());
+    const fetchClip = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockImplementation(async () => clipResponse());
     vi.stubGlobal("fetch", fetchClip);
     const events: PlayerEvent[] = [];
     const player = new EnginePlayer({ url: CLIP_URL, mode: "buffer", onEvent: (event) => events.push(event) });

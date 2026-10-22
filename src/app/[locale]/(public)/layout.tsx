@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { directionOf, routing } from "@/i18n/routing";
+import { NO_ICON_YET } from "@/lib/metadata";
 import { fontVariables } from "@/styles/fonts";
 import "@/styles/globals.css";
+
+export const metadata: Metadata = { icons: NO_ICON_YET };
 
 // Root layout 1 of 2: the public site, prerendered per locale (SRS §11.5 rules 8 and 13)
 export function generateStaticParams() {

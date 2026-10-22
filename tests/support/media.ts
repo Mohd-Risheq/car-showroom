@@ -1,5 +1,6 @@
 import { crc32 } from "node:zlib";
 import sharp from "sharp";
+import { WAV_FORMAT } from "@/lib/storage/inspect";
 
 // Media fixtures for the T-03 storage tests: real encoder output from sharp, plus byte-level
 // edits for the segments and chunks a canvas encoder never writes.
@@ -83,14 +84,19 @@ export function withPngChunk(png: Buffer, type: string, data: Buffer): Buffer {
   return Buffer.concat([png.subarray(0, iend), chunk, png.subarray(iend)]);
 }
 
-// Silence in the audio pipeline's format (PCM, mono, 22,050 Hz, 16-bit) unless overridden
+// Silence in the audio pipeline's format (BR-19: PCM, mono, 22,050 Hz, 16-bit) unless overridden
 export function wav(
   options: { seconds?: number; sampleRate?: number; channels?: number; bits?: number; extra?: [string, Buffer] } = {},
 ): Buffer {
-  const { seconds = 1, sampleRate = 22050, channels = 1, bits = 16 } = options;
+  const {
+    seconds = 1,
+    sampleRate = WAV_FORMAT.sampleRate,
+    channels = WAV_FORMAT.channels,
+    bits = WAV_FORMAT.bitsPerSample,
+  } = options;
   const blockAlign = channels * (bits / 8);
   const fmt = Buffer.alloc(16);
-  fmt.writeUInt16LE(1, 0);
+  fmt.writeUInt16LE(WAV_FORMAT.pcm, 0);
   fmt.writeUInt16LE(channels, 2);
   fmt.writeUInt32LE(sampleRate, 4);
   fmt.writeUInt32LE(sampleRate * blockAlign, 8);

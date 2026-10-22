@@ -37,7 +37,12 @@ const CAR_ID = "0190f5a0-1111-7000-8000-000000000001";
 const USER_ID = "0190f5a0-2222-7000-8000-000000000002";
 const SUFFIX = "N".repeat(RANDOM_SUFFIX_LENGTH);
 
-type Staged = { clientUploadId: string; variants: Record<string, string>; stored: Record<string, string>; signed: Record<string, string> };
+type Staged = {
+  clientUploadId: string;
+  variants: Record<string, string>;
+  stored: Record<string, string>;
+  signed: Record<string, string>;
+};
 
 // Signs each variant as API-16 does, then puts its file on the fake store under a random suffix
 async function stage(files: Record<string, Buffer>, ext: MediaExtension = "jpg"): Promise<Staged> {
@@ -45,7 +50,14 @@ async function stage(files: Record<string, Buffer>, ext: MediaExtension = "jpg")
   const staged: Staged = { clientUploadId, variants: {}, stored: {}, signed: {} };
   for (const [variant, file] of Object.entries(files)) {
     const pathname = uploadPathname({ carId: CAR_ID, kind: "photo", clientUploadId, variant, ext });
-    await uploadRepository.recordExpectedPath({ userId: USER_ID, carId: CAR_ID, kind: "photo", clientUploadId, variant, pathname });
+    await uploadRepository.recordExpectedPath({
+      userId: USER_ID,
+      carId: CAR_ID,
+      kind: "photo",
+      clientUploadId,
+      variant,
+      pathname,
+    });
     const stored = pathname.replace(`.${ext}`, `-${SUFFIX}.${ext}`);
     fake.files.set(stored, new Uint8Array(file));
     staged.variants[variant] = fake.driver.publicUrl(stored);
@@ -56,7 +68,10 @@ async function stage(files: Record<string, Buffer>, ext: MediaExtension = "jpg")
 }
 
 const register = (staged: Staged, size: { width: number; height: number }, kind = "photo") =>
-  registerMedia({ carId: CAR_ID, kind, clientUploadId: staged.clientUploadId, variants: staged.variants, ...size }, { userId: USER_ID });
+  registerMedia(
+    { carId: CAR_ID, kind, clientUploadId: staged.clientUploadId, variants: staged.variants, ...size },
+    { userId: USER_ID },
+  );
 
 const jpeg = (width: number, height: number) => solid(width, height).jpeg().toBuffer();
 const isStored = (staged: Staged, variant: string) => fake.files.has(staged.stored[variant] ?? "");
@@ -79,33 +94,48 @@ describe("registerMedia's storage checks", () => {
     ["more than twice as tall as it is wide (D-023)", 480, 961],
   ])("rejects and deletes an image %s", async (_case, width, height) => {
     const staged = await stage({ "480": await jpeg(width, height), "960": await jpeg(960, 640) });
-    await expect(register(staged, { width: 960, height: 640 })).rejects.toMatchObject({ code: "VALIDATION_ERROR", message: "480 dimensions" });
+    await expect(register(staged, { width: 960, height: 640 })).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      message: "480 dimensions",
+    });
     expect(isStored(staged, "480")).toBe(false);
     expect(isStored(staged, "960")).toBe(false);
   });
 
   it("rejects and deletes a file larger than its variant's cap", async () => {
     const staged = await stage({ "480": Buffer.alloc(153_601) });
-    await expect(register(staged, { width: 480, height: 320 })).rejects.toMatchObject({ code: "VALIDATION_ERROR", message: "480 too large" });
+    await expect(register(staged, { width: 480, height: 320 })).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      message: "480 too large",
+    });
     expect(isStored(staged, "480")).toBe(false);
   });
 
   it("keeps the other files when one is missing, so the client can upload it again", async () => {
     const staged = await stage({ "480": await jpeg(480, 320), "960": await jpeg(960, 640) });
     fake.files.delete(staged.stored["960"] ?? "");
-    await expect(register(staged, { width: 960, height: 640 })).rejects.toMatchObject({ code: "VALIDATION_ERROR", message: "960 not found" });
+    await expect(register(staged, { width: 960, height: 640 })).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      message: "960 not found",
+    });
     expect(isStored(staged, "480")).toBe(true);
   });
 
   it("refuses a kind other than the one its token was signed for", async () => {
     const staged = await stage({ "480": await jpeg(480, 320) });
-    await expect(register(staged, { width: 480, height: 320 }, "spin_frame")).rejects.toMatchObject({ code: "VALIDATION_ERROR", message: "upload mismatch" });
+    await expect(register(staged, { width: 480, height: 320 }, "spin_frame")).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      message: "upload mismatch",
+    });
     expect(isStored(staged, "480")).toBe(true);
   });
 
   it("still rejects when a file can't be deleted, and logs it once with the signed pathname", async () => {
     const logged = vi.spyOn(console, "error").mockImplementation(() => {});
-    const staged = await stage({ "480": await solid(480, 320).withExif(EXIF_WITH_GPS).jpeg().toBuffer(), "960": await jpeg(960, 640) });
+    const staged = await stage({
+      "480": await solid(480, 320).withExif(EXIF_WITH_GPS).jpeg().toBuffer(),
+      "960": await jpeg(960, 640),
+    });
     fake.unremovable.add(staged.stored["480"] ?? "");
 
     await expect(register(staged, { width: 960, height: 640 })).rejects.toMatchObject({ code: "METADATA_PRESENT" });

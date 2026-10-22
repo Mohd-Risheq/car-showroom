@@ -18,7 +18,8 @@ function newIdentifier(): string {
 }
 
 afterEach(async () => {
-  for (const identifier of written.splice(0)) await db.delete(verification).where(eq(verification.identifier, identifier));
+  for (const identifier of written.splice(0))
+    await db.delete(verification).where(eq(verification.identifier, identifier));
 });
 
 describe("database drivers", () => {

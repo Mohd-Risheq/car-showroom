@@ -13,9 +13,17 @@ const TURN = 2 * Math.PI;
 export const EARTH_RADIUS_KM = 6371.0088;
 
 const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const cross = (a: Vec3, b: Vec3): Vec3 => [
+  a[1] * b[2] - a[2] * b[1],
+  a[2] * b[0] - a[0] * b[2],
+  a[0] * b[1] - a[1] * b[0],
+];
 const length = (a: Vec3) => Math.hypot(a[0], a[1], a[2]);
-const along = (a: Vec3, b: Vec3, s: number, t: number): Vec3 => [a[0] * s + b[0] * t, a[1] * s + b[1] * t, a[2] * s + b[2] * t];
+const along = (a: Vec3, b: Vec3, s: number, t: number): Vec3 => [
+  a[0] * s + b[0] * t,
+  a[1] * s + b[1] * t,
+  a[2] * s + b[2] * t,
+];
 
 export function toVector([lat, lng]: LatLng): Vec3 {
   const cosLat = Math.cos(lat * RAD);

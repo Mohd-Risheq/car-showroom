@@ -1,0 +1,152 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "pnpm-lock.yaml",
+        "type": "lockfile"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "braces",
+            "version": "3.0.3",
+            "ecosystem": "npm"
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-vfj7-8cjw-p6xm"
+              ],
+              "aliases": [
+                "CVE-2026-93687",
+                "GHSA-vfj7-8cjw-p6xm"
+              ],
+              "max_severity": "8.7"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-vfj7-8cjw-p6xm",
+              "aliases": [
+                "CVE-2026-93687"
+              ],
+              "summary": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+              "database_specific": {
+                "severity": "HIGH"
+              }
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "esbuild",
+            "version": "0.18.20",
+            "ecosystem": "npm"
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-67mh-4wv8-2f99"
+              ],
+              "aliases": [
+                "GHSA-67mh-4wv8-2f99"
+              ],
+              "max_severity": "5.3"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-67mh-4wv8-2f99",
+              "summary": "esbuild enables any website to send any requests to the development server and read the response",
+              "database_specific": {
+                "severity": "MODERATE"
+              }
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "extract-zip",
+            "version": "2.0.1",
+            "ecosystem": "npm"
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-7pqw-9j4j-h8q3"
+              ],
+              "aliases": [
+                "CVE-2026-19693",
+                "GHSA-7pqw-9j4j-h8q3"
+              ],
+              "max_severity": "8.1"
+            },
+            {
+              "ids": [
+                "GHSA-jmr9-qjv8-65gv"
+              ],
+              "aliases": [
+                "CVE-2026-56876",
+                "GHSA-jmr9-qjv8-65gv"
+              ],
+              "max_severity": "8.6"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-7pqw-9j4j-h8q3",
+              "aliases": [
+                "CVE-2026-19693"
+              ],
+              "summary": "extract-zip allows arbitrary file writes through symlink archive entries",
+              "database_specific": {
+                "severity": "HIGH"
+              }
+            },
+            {
+              "id": "GHSA-jmr9-qjv8-65gv",
+              "aliases": [
+                "CVE-2026-56876"
+              ],
+              "summary": "extract-zip unvalidated symlink path traversal",
+              "database_specific": {
+                "severity": "HIGH"
+              }
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "sprintf-js",
+            "version": "1.0.3",
+            "ecosystem": "npm"
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-hp3w-g68c-fv3c"
+              ],
+              "aliases": [
+                "CVE-2026-97058",
+                "GHSA-hp3w-g68c-fv3c"
+              ],
+              "max_severity": "6.9"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-hp3w-g68c-fv3c",
+              "aliases": [
+                "CVE-2026-97058"
+              ],
+              "summary": "sprintf-js vulnerable to denial of service through unbounded precision specifiers",
+              "database_specific": {
+                "severity": "MODERATE"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

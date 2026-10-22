@@ -1,0 +1,29 @@
+# The two scanners of SRS §16.2 step 1, gitleaks and OSV-Scanner, each pinned by version and by the
+# SHA-256 its release publishes, so a changed download fails the run (SEC-11). pnpm audit:deps
+# runs both; locally they come from Homebrew, unpinned, so a local run can use other versions.
+# Renovate proposes new versions from the comment above each one, but it can't update a SHA-256:
+# its pull request fails this step until the hash the release publishes is put in by hand.
+name: Install gitleaks and OSV-Scanner
+description: gitleaks and OSV-Scanner at pinned versions, checked against their SHA-256
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        # renovate: datasource=github-releases depName=gitleaks/gitleaks
+        GITLEAKS_VERSION: 8.30.1
+        GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        # renovate: datasource=github-releases depName=google/osv-scanner
+        OSV_SCANNER_VERSION: 2.7.0
+        OSV_SCANNER_SHA256: 160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b
+      run: |
+        set -euo pipefail
+        downloads="$(mktemp -d)"
+        curl -fsSL -o "$downloads/gitleaks.tar.gz" \
+          "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+        echo "${GITLEAKS_SHA256}  ${downloads}/gitleaks.tar.gz" | sha256sum --check --strict
+        tar -xzf "$downloads/gitleaks.tar.gz" -C "$downloads" gitleaks
+        curl -fsSL -o "$downloads/osv-scanner" \
+          "https://github.com/google/osv-scanner/releases/download/v${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+        echo "${OSV_SCANNER_SHA256}  ${downloads}/osv-scanner" | sha256sum --check --strict
+        sudo install -m 0755 "$downloads/gitleaks" "$downloads/osv-scanner" /usr/local/bin/

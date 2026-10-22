@@ -90,7 +90,13 @@ async function removeOrLog(driver: StorageDriver, file: StoredFile, rejection: s
     await driver.remove(file.storedPathname);
   } catch (error) {
     console.error(
-      JSON.stringify({ level: "error", code: "media_delete_failed", rejection, pathname: file.signedPathname, error: String(error) }),
+      JSON.stringify({
+        level: "error",
+        code: "media_delete_failed",
+        rejection,
+        pathname: file.signedPathname,
+        error: String(error),
+      }),
     );
   }
 }

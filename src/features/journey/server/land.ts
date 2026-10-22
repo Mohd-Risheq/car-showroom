@@ -42,7 +42,17 @@ function clip(ring: Ring, meridian: number, keep: "west" | "east"): Ring {
 function pieces(ring: Ring): Ring[] {
   const whole = unwrap(ring);
   return [-360, 0, 360]
-    .map((turn) => clip(clip(whole.map(([lng, lat]): [number, number] => [lng + turn, lat]), 180, "west"), -180, "east"))
+    .map((turn) =>
+      clip(
+        clip(
+          whole.map(([lng, lat]): [number, number] => [lng + turn, lat]),
+          180,
+          "west",
+        ),
+        -180,
+        "east",
+      ),
+    )
     .filter((piece) => piece.length >= 3);
 }
 
@@ -66,7 +76,8 @@ function ringPath(ring: Ring): string {
   for (let i = 1; i < points.length; i += 1) {
     const [x, y] = points[i] ?? first;
     const [px, py] = points[i - 1] ?? first;
-    for (const value of [number(x - px), number(y - py)]) path += `${value.startsWith("-") || path.endsWith("l") ? "" : " "}${value}`;
+    for (const value of [number(x - px), number(y - py)])
+      path += `${value.startsWith("-") || path.endsWith("l") ? "" : " "}${value}`;
   }
   return `${path}z`;
 }

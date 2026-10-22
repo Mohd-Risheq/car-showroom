@@ -11,8 +11,6 @@ import { verifyLocalClientToken } from "./token";
 // .storage-local/ folder and are served from /api/storage-local/files/. /api/storage-local takes
 // the SDK's upload PUT and enforces the client token the way the service does (DECISIONS.md D-022).
 
-// Reads below carry turbopackIgnore: the store is local data, never traced into a build
-const ROOT = path.join(process.cwd(), ".storage-local");
 const FILES_PATH = "/api/storage-local/files/";
 const LOCAL_TOKEN_PREFIX = "vercel_blob_rw_local_";
 const SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]{0,199}$/;
@@ -22,6 +20,14 @@ function siteOrigin(): string {
   const site = process.env.NEXT_PUBLIC_SITE_URL;
   if (!site) throw new Error("NEXT_PUBLIC_SITE_URL is not set (SRS §15.1)");
   return new URL(site).origin;
+}
+
+// STORAGE_LOCAL_ROOT moves the store, so the integration tests keep theirs in a temporary folder. An
+// empty value counts as unset: path.resolve("") is the working folder, which would put the project's
+// own files in the store. The root and the reads below carry turbopackIgnore: the store is local
+// data, never traced into a build.
+function storeRoot(): string {
+  return path.resolve(/*turbopackIgnore: true*/ process.env.STORAGE_LOCAL_ROOT || ".storage-local");
 }
 
 function localReadWriteToken(): string {
@@ -36,8 +42,9 @@ function localReadWriteToken(): string {
 function fileOf(storedPathname: string): string | undefined {
   const segments = storedPathname.split("/");
   if (!segments.every((segment) => SEGMENT.test(segment))) return undefined;
-  const file = path.join(ROOT, ...segments);
-  return file.startsWith(ROOT + path.sep) ? file : undefined;
+  const root = storeRoot();
+  const file = path.join(root, ...segments);
+  return file.startsWith(root + path.sep) ? file : undefined;
 }
 
 // The suffix goes before the extension, which handleLocalPut has already checked
@@ -127,7 +134,8 @@ export async function handleLocalPut(request: Request): Promise<Response> {
   try {
     await writeFile(file, body, { flag: claims.allowOverwrite ? "w" : "wx" });
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "EEXIST") return blobError(400, "bad_request", "the blob already exists");
+    if ((error as NodeJS.ErrnoException).code === "EEXIST")
+      return blobError(400, "bad_request", "the blob already exists");
     throw error;
   }
 

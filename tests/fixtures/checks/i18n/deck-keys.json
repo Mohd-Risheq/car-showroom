@@ -1,0 +1,8 @@
+{
+  "keys": [
+    "common.close",
+    "common.retry",
+    "contact.viewing",
+    "inventory.count"
+  ]
+}

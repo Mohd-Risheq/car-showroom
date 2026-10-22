@@ -11,7 +11,7 @@ import {
 
 // API-30 (SRS §8.2, §12.5) and NFR-OBS-01
 
-const FIXTURES = path.join(process.cwd(), "tests/fixtures/csp-reports");
+const FIXTURES = path.join(import.meta.dirname, "../../fixtures/csp-reports");
 const ORIGIN = "http://localhost:3000";
 const PAGE = `${ORIGIN}/en/cars/2021-toyota-corolla-hybrid-mu-24q7?utm_source=window`;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -29,9 +29,7 @@ const VIOLATION = {
 };
 
 function reports(...bodies: Record<string, unknown>[]): string {
-  return JSON.stringify(
-    bodies.map((body) => ({ type: "csp-violation", age: 0, url: PAGE, user_agent: "test", body })),
-  );
+  return JSON.stringify(bodies.map((body) => ({ type: "csp-violation", age: 0, url: PAGE, user_agent: "test", body })));
 }
 
 function post(body: string, contentType = "application/reports+json", headers: Record<string, string> = {}) {
@@ -91,7 +89,9 @@ describe("POST /api/csp-report", () => {
       },
     });
     expect((await POST(post(body, "application/csp-report"))).status).toBe(204);
-    expect(logged()).toMatchObject([{ directive: "style-src-elem", blocked: "inline", document: "/[locale]/dealer/…" }]);
+    expect(logged()).toMatchObject([
+      { directive: "style-src-elem", blocked: "inline", document: "/[locale]/dealer/…" },
+    ]);
   });
 
   it("drops reports caused by browser extensions", async () => {
@@ -151,28 +151,25 @@ describe("POST /api/csp-report", () => {
   });
 
   // Real bodies, as each engine sent them in T-06 (docs/evidence/T-06). Named, so a missing file fails.
-  it.each(["chromium-156.json", "firefox-157.json", "webkit-27.2.json"])(
-    "logs the report %s sent",
-    async (name) => {
-      const fixture = JSON.parse(readFileSync(path.join(FIXTURES, name), "utf8")) as {
-        contentType: string;
-        body: unknown;
-      };
-      const { POST, logged } = setup();
-      const response = await POST(post(JSON.stringify(fixture.body), fixture.contentType));
-      expect(response.status).toBe(204);
-      const lines = logged();
-      expect(lines).toHaveLength(Array.isArray(fixture.body) ? fixture.body.length : 1);
-      for (const line of lines) {
-        expect(line).toMatchObject({
-          code: "csp_violation",
-          directive: "style-src-elem",
-          blocked: "inline",
-          document: "/[locale]/dealer/…",
-        });
-      }
-    },
-  );
+  it.each(["chromium-156.json", "firefox-157.json", "webkit-27.2.json"])("logs the report %s sent", async (name) => {
+    const fixture = JSON.parse(readFileSync(path.join(FIXTURES, name), "utf8")) as {
+      contentType: string;
+      body: unknown;
+    };
+    const { POST, logged } = setup();
+    const response = await POST(post(JSON.stringify(fixture.body), fixture.contentType));
+    expect(response.status).toBe(204);
+    const lines = logged();
+    expect(lines).toHaveLength(Array.isArray(fixture.body) ? fixture.body.length : 1);
+    for (const line of lines) {
+      expect(line).toMatchObject({
+        code: "csp_violation",
+        directive: "style-src-elem",
+        blocked: "inline",
+        document: "/[locale]/dealer/…",
+      });
+    }
+  });
 
   it("takes one Reporting API report under either content type", async () => {
     for (const contentType of ["application/reports+json", "application/csp-report"]) {

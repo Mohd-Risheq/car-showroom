@@ -1,10 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { AUDIO_CONFIGS, type Encoders, pickAudioConfig, pickVideoCodec, REEL, VIDEO_CODECS, videoConfig } from "@/features/reel/domain/support";
+import {
+  AUDIO_CONFIGS,
+  type Encoders,
+  pickAudioConfig,
+  pickVideoCodec,
+  REEL,
+  VIDEO_CODECS,
+  videoConfig,
+} from "@/features/reel/domain/support";
 
 // FR-43.1, FR-43.3, BR-39 and SRS §10.8: what Reel It offers, found by feature detection only
 
 /** A browser whose encoders say yes to `yes`, and record every config they were asked about */
-function browser(yes: { video?: string[]; audio?: Array<{ codec: string; sampleRate: number; numberOfChannels: number }> }) {
+function browser(yes: {
+  video?: string[];
+  audio?: Array<{ codec: string; sampleRate: number; numberOfChannels: number }>;
+}) {
   const asked: { video: VideoEncoderConfig[]; audio: AudioEncoderConfig[] } = { video: [], audio: [] };
   const scope: Encoders = {
     VideoEncoder: {
@@ -17,7 +28,10 @@ function browser(yes: { video?: string[]; audio?: Array<{ codec: string; sampleR
       isConfigSupported: async (config) => {
         asked.audio.push(config);
         const match = (yes.audio ?? []).some(
-          (a) => a.codec === config.codec && a.sampleRate === config.sampleRate && a.numberOfChannels === config.numberOfChannels,
+          (a) =>
+            a.codec === config.codec &&
+            a.sampleRate === config.sampleRate &&
+            a.numberOfChannels === config.numberOfChannels,
         );
         return { supported: match };
       },
@@ -97,7 +111,12 @@ describe("pickAudioConfig (FR-43.3)", () => {
 
   it("picks AAC-LC at 48 kHz in stereo first", async () => {
     const { scope } = browser({ audio: [...AUDIO_CONFIGS] });
-    expect(await pickAudioConfig(scope)).toEqual({ codec: "mp4a.40.2", sampleRate: 48_000, numberOfChannels: 2, bitrate: 128_000 });
+    expect(await pickAudioConfig(scope)).toEqual({
+      codec: "mp4a.40.2",
+      sampleRate: 48_000,
+      numberOfChannels: 2,
+      bitrate: 128_000,
+    });
   });
 
   it("falls back to mono, then to 44.1 kHz", async () => {

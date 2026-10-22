@@ -28,7 +28,10 @@ describe("local client tokens", () => {
     const clientToken = await token();
     expect(clientToken.startsWith("vercel_blob_client_local_")).toBe(true);
     const check = verifyLocalClientToken(clientToken, readWriteToken);
-    expect(check).toEqual({ ok: true, claims: { ...claims, validUntil: getPayloadFromClientToken(clientToken).validUntil } });
+    expect(check).toEqual({
+      ok: true,
+      claims: { ...claims, validUntil: getPayloadFromClientToken(clientToken).validUntil },
+    });
   });
 
   it("refuses an expired token", async () => {
@@ -56,7 +59,9 @@ describe("local client tokens", () => {
   it("refuses non-canonical encodings and tokens without the scoped claims", async () => {
     const clientToken = await token();
     expect(verifyLocalClientToken(`${clientToken}=`, readWriteToken).ok).toBe(false);
-    expect(verifyLocalClientToken(`${clientToken.slice(0, 40)}!${clientToken.slice(40)}`, readWriteToken).ok).toBe(false);
+    expect(verifyLocalClientToken(`${clientToken.slice(0, 40)}!${clientToken.slice(40)}`, readWriteToken).ok).toBe(
+      false,
+    );
     const unscoped = await token({ maximumSizeInBytes: undefined });
     expect(verifyLocalClientToken(unscoped, readWriteToken)).toEqual({ ok: false, code: "forbidden" });
   });

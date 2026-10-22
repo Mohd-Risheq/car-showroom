@@ -93,7 +93,7 @@ describe("loading order", () => {
     // After 2^k picks, no gap round the ring is wider than 36 / 2^k, rounded up
     for (const picks of [2, 4, 8, 16]) {
       const taken = [...order.slice(0, picks)].sort((a, b) => a - b);
-      const gaps = taken.map((value, k) => ((taken[k + 1] ?? (taken[0] ?? 0) + 36) - value));
+      const gaps = taken.map((value, k) => (taken[k + 1] ?? (taken[0] ?? 0) + 36) - value);
       expect(Math.max(...gaps)).toBeLessThanOrEqual(Math.ceil(36 / picks));
     }
   });

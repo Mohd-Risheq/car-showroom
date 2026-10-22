@@ -1,0 +1,94 @@
+# The quality gates of SRS §16.2 and the pull-request pipeline of SRS §17.2, in the order SRS §16.2
+# gives them: gitleaks and the supply chain first, so a leaked secret or a known-vulnerable
+# dependency stops the run before anything else installs or runs. CodeQL (step 8) is codeql.yml.
+# Every job reads the repository only; actions are pinned by commit SHA (SEC-11).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# The local services of BUILD-PLAN §6.3, never a real one: Postgres behind Neon's local proxy, whose
+# credentials are compose.yaml's, and the local storage adapter. The secrets are made per run
+# (.github/actions/local-services).
+env:
+  DATABASE_URL: postgres://postgres:postgres@db.localtest.me:5432/main
+  DATABASE_URL_UNPOOLED: postgres://postgres:postgres@db.localtest.me:5432/main
+  BETTER_AUTH_URL: http://localhost:3000
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  STORAGE_DRIVER: local
+  NEXT_PUBLIC_VERCEL_BLOB_API_URL: http://localhost:3000/api/storage-local?
+
+jobs:
+  gates:
+    name: Gates (SRS §16.2 steps 1 to 4)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # gitleaks reads every commit
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Step 1: secrets, then the frozen install, then pnpm audit, OSV-Scanner and the version floor
+      - uses: ./.github/actions/scanners
+      - name: gitleaks
+        run: gitleaks git --no-banner --redact
+      - uses: ./.github/actions/setup
+      - name: Supply chain (pnpm audit:deps)
+        run: pnpm audit:deps
+
+      # Step 2. Catalog parity joins in T-14, with the catalogs (BUILD-PLAN §6.2).
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm check:dashes
+      - run: pnpm db:check
+
+      # Step 3
+      - uses: ./.github/actions/local-services
+      - run: pnpm test
+      - run: pnpm test:int
+
+      # Step 4
+      - run: pnpm build
+      - run: pnpm check:bundle
+
+  e2e:
+    name: E2E, axe, visual and Lighthouse (SRS §16.2 steps 5 to 7)
+    needs: gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/local-services
+      - run: pnpm build
+
+      # Steps 5 and 6: journeys, axe and the visual comparison, with the browsers in Playwright's
+      # image pinned by digest, where the approved baselines come from (D-037)
+      - run: pnpm e2e:linux
+
+      # Step 7: Lighthouse drives Playwright's own Chromium on the runner
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm lhci
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-and-lighthouse-reports
+          path: |
+            playwright-report/
+            test-results/
+            .lighthouseci/reports/
+          retention-days: 14

@@ -1,0 +1,18 @@
+{
+  "common": {
+    "close": "Close",
+    "retry": "Try again"
+  },
+  "contact": {
+    "viewing": "Book a viewing"
+  },
+  "family": {
+    "text": "What do you think of this car? <b>{title}</b>"
+  },
+  "garage": {
+    "saved": "{count, plural, =0 {Nothing saved yet} one {# car saved} other {# cars saved}}"
+  },
+  "inventory": {
+    "count": "{count, plural, one {# car} other {# cars}}"
+  }
+}

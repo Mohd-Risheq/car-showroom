@@ -1,0 +1,25 @@
+{
+  "$comment": [
+    "The bundle budgets of NFR-PERF-03, held by pnpm check:bundle (scripts/check-bundle.ts) after next build.",
+    "Sizes are gzip level 9 bytes of the emitted files, with 1 KB = 1,024 bytes (D-022). The method is D-037 in DECISIONS.md.",
+    "firstLoad: the first rule whose pattern matches a route sets its budget. A pattern ending in /** also matches the route itself.",
+    "lazy: a budget counts the chunks that import() of its trigger modules fetches, on the route where they weigh most, Web Workers included. A trigger is a path from the project root or a package name. A budget with no triggers is pending until its feature loads lazily. A shared budget's chunks count there only, never again in another budget."
+  ],
+  "firstLoad": [
+    { "routes": "/[locale]/dev/**", "skip": "dev spikes, not found on deployments" },
+    { "routes": "/[locale]/dealer/dev/**", "skip": "dev spikes, not found on deployments" },
+    { "routes": "/[locale]/dealer", "name": "Dealer dashboard", "maxKB": 170 },
+    { "routes": "/[locale]/dealer/**", "name": "Dealer route", "maxKB": 260 },
+    { "routes": "/**", "name": "Public route", "maxKB": 170 }
+  ],
+  "lazy": [
+    { "name": "GSAP core and ScrollTrigger", "maxKB": 55, "shared": true, "triggers": [] },
+    { "name": "Body Scan", "maxKB": 25, "triggers": [] },
+    { "name": "Hear It", "maxKB": 15, "triggers": [] },
+    { "name": "Spin", "maxKB": 20, "triggers": ["src/features/spin/index.ts"] },
+    { "name": "Journey (cobe + code)", "maxKB": 60, "triggers": ["src/features/journey/ui/globe.ts", "cobe"] },
+    { "name": "Drag Race", "maxKB": 20, "triggers": [] },
+    { "name": "Hero effect", "maxKB": 15, "triggers": [] },
+    { "name": "Reel It", "maxKB": 150, "triggers": [] }
+  ]
+}

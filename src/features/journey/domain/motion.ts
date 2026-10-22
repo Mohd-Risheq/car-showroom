@@ -27,10 +27,12 @@ export const MOVE_OMEGA = 23.08;
 
 /** The `move` spring on one value. It never overshoots, and keeps its velocity when the target moves */
 export class Spring {
+  value: number;
   velocity = 0;
   target: number;
 
-  constructor(public value: number) {
+  constructor(value: number) {
+    this.value = value;
     this.target = value;
   }
 

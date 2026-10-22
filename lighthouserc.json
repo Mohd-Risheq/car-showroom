@@ -1,0 +1,25 @@
+{
+  "$comment": [
+    "pnpm lhci (scripts/lhci.ts) runs Lighthouse CI on the production build: mobile, three runs a page, failing below NFR-PERF-02's budget. It gives Chrome the flags every Chromium here gets (scripts/checks/chromium.ts).",
+    "pages: NFR-PERF-02's pages. The task that builds a page adds its paths, in both locales, once it paints. Until then the page is pending, because Lighthouse can't score a page that paints nothing (D-037)."
+  ],
+  "pages": [
+    { "name": "Home", "paths": [] },
+    { "name": "Inventory", "paths": [] },
+    { "name": "Car page", "paths": [] }
+  ],
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.9, "aggregationMethod": "median-run" }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci/reports"
+    }
+  }
+}

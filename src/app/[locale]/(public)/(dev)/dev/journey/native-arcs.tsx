@@ -21,42 +21,52 @@ export function NativeArcs({ places, centre }: { places: LatLng[]; centre: numbe
     let cancelled = false;
     let destroy = () => {};
     const timers: number[] = [];
-    void Promise.all([import("cobe"), import("@/features/journey/ui/globe")]).then(([{ default: createGlobe }, { globeColours }]) => {
-      if (cancelled) return;
-      const canvas = document.createElement("canvas");
-      canvas.style.cssText = "display:block;width:100%;height:100%";
-      target.append(canvas);
-      const size = target.clientWidth;
-      const colours = globeColours(target);
-      const surface = colours.baseColor.map((channel) => channel * 0.1);
-      const arcColor = colours.accent.map((channel, i) => channel * 0.8 + (surface[i] ?? 0) * 0.2) as [number, number, number];
-      const steps = journeySteps(places);
-      const { phi, theta } = centreOn(place);
-      const globe = createGlobe(canvas, {
-        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-        width: size,
-        height: size,
-        phi,
-        theta,
-        dark: 1,
-        diffuse: 0.6,
-        mapSamples: 16_000,
-        mapBrightness: colours.mapBrightness,
-        mapBaseBrightness: 0,
-        baseColor: colours.baseColor,
-        markerColor: colours.accent,
-        glowColor: colours.glowColor,
-        markerElevation: 0.01,
-        markers: steps.flatMap((step) => (step.kind === "unplaced" ? [] : [{ location: [step.place[0], step.place[1]], size: 0.025 }])),
-        arcs: steps.flatMap((step) => (step.kind === "arc" ? [{ from: [step.from[0], step.from[1]], to: [step.place[0], step.place[1]] }] : [])),
-        arcColor,
-        arcHeight: ARC_HEIGHT,
-        arcWidth: ARC_WIDTH,
-      });
-      destroy = () => globe.destroy();
-      // cobe draws only when asked, so draw again once its land texture has had time to load
-      for (const ms of [100, 500, 1500]) timers.push(window.setTimeout(() => globe.update({}), ms));
-    });
+    void Promise.all([import("cobe"), import("@/features/journey/ui/globe")]).then(
+      ([{ default: createGlobe }, { globeColours }]) => {
+        if (cancelled) return;
+        const canvas = document.createElement("canvas");
+        canvas.style.cssText = "display:block;width:100%;height:100%";
+        target.append(canvas);
+        const size = target.clientWidth;
+        const colours = globeColours(target);
+        const surface = colours.baseColor.map((channel) => channel * 0.1);
+        const arcColor = colours.accent.map((channel, i) => channel * 0.8 + (surface[i] ?? 0) * 0.2) as [
+          number,
+          number,
+          number,
+        ];
+        const steps = journeySteps(places);
+        const { phi, theta } = centreOn(place);
+        const globe = createGlobe(canvas, {
+          devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+          width: size,
+          height: size,
+          phi,
+          theta,
+          dark: 1,
+          diffuse: 0.6,
+          mapSamples: 16_000,
+          mapBrightness: colours.mapBrightness,
+          mapBaseBrightness: 0,
+          baseColor: colours.baseColor,
+          markerColor: colours.accent,
+          glowColor: colours.glowColor,
+          markerElevation: 0.01,
+          markers: steps.flatMap((step) =>
+            step.kind === "unplaced" ? [] : [{ location: [step.place[0], step.place[1]], size: 0.025 }],
+          ),
+          arcs: steps.flatMap((step) =>
+            step.kind === "arc" ? [{ from: [step.from[0], step.from[1]], to: [step.place[0], step.place[1]] }] : [],
+          ),
+          arcColor,
+          arcHeight: ARC_HEIGHT,
+          arcWidth: ARC_WIDTH,
+        });
+        destroy = () => globe.destroy();
+        // cobe draws only when asked, so draw again once its land texture has had time to load
+        for (const ms of [100, 500, 1500]) timers.push(window.setTimeout(() => globe.update({}), ms));
+      },
+    );
     return () => {
       cancelled = true;
       for (const timer of timers) clearTimeout(timer);

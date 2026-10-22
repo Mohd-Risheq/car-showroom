@@ -9,7 +9,9 @@ export function createBlobStore(readWriteToken: string): StorageDriver {
   if (!storeId || storeId === "local") throw new Error("BLOB_READ_WRITE_TOKEN is not a Vercel Blob store token");
   // The API URL override sends the SDK to the local store; it must never meet a real token
   if (process.env.VERCEL_BLOB_API_URL || process.env.NEXT_PUBLIC_VERCEL_BLOB_API_URL) {
-    throw new Error("Unset VERCEL_BLOB_API_URL and NEXT_PUBLIC_VERCEL_BLOB_API_URL to use Vercel Blob (DECISIONS.md D-022)");
+    throw new Error(
+      "Unset VERCEL_BLOB_API_URL and NEXT_PUBLIC_VERCEL_BLOB_API_URL to use Vercel Blob (DECISIONS.md D-022)",
+    );
   }
   const origin = `https://${storeId.toLowerCase()}.public.blob.vercel-storage.com`;
 

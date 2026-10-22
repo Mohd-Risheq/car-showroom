@@ -1,0 +1,14 @@
+# pnpm and Node.js as package.json pins them (packageManager and engines), then the frozen install of
+# SRS §16.2 step 1. Actions are pinned by commit SHA, with their release beside each (SEC-11).
+name: Set up pnpm and Node.js
+description: pnpm and Node.js from package.json, then pnpm install --frozen-lockfile
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version-file: package.json
+        cache: pnpm
+    - run: pnpm install --frozen-lockfile
+      shell: bash

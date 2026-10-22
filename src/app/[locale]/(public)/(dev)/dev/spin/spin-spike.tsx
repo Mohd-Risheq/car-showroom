@@ -1,10 +1,14 @@
 "use client";
+/* eslint-disable react-hooks/exhaustive-deps -- a measuring harness kept as it ran for its evidence; T-41 replaces it (D-037) */
 
 import { useEffect, useRef, useState } from "react";
+import { isSpinSetName, type SpinFormat, type SpinSetName } from "@/app/_dev/fixtures";
+import { round } from "@/app/_dev/harness";
+import { FrameMeter, LongTaskLog, type Stats, stats } from "@/app/_dev/meter";
+import { postDevReport } from "@/app/_dev/report";
 import type * as Spin from "@/features/spin";
 import type { DecodeStrategy, DrawInfo, FrameRecord, FrameStore, SpinViewer } from "@/features/spin";
-import { type FixtureFormat, type FixtureSet, fixtureSource, isFixtureSet } from "./fixture";
-import { FrameMeter, LongTaskLog, round, type Stats, stats } from "./meter";
+import { fixtureSource } from "./fixture";
 
 // Spike T-05: the spin viewer on the synthetic fixture. "Run all" measures each setup in turn:
 // loading, a stress pass that shows a new frame on every refresh, and three flicks. "Record"
@@ -14,7 +18,7 @@ import { FrameMeter, LongTaskLog, round, type Stats, stats } from "./meter";
 // The engine arrives as one lazy chunk, as it will on the car page (T-41).
 
 type SpinModule = typeof Spin;
-type Config = { set: FixtureSet; format: FixtureFormat; decode: DecodeStrategy };
+type Config = { set: SpinSetName; format: SpinFormat; decode: DecodeStrategy };
 type Release = { velocity: number; from: number; target: number };
 type Session = {
   config: Config;
@@ -55,7 +59,7 @@ const roundStats = (value: Stats) => ({
 function configFromUrl(params: URLSearchParams): Config {
   const set = params.get("set");
   return {
-    set: isFixtureSet(set) ? set : "l36",
+    set: isSpinSetName(set) ? set : "l36",
     format: params.get("format") === "jpg" ? "jpg" : "webp",
     decode: params.get("decode") === "main" ? "main" : "worker",
   };
@@ -203,7 +207,8 @@ function loadStats(session: Session) {
     highRes: pass(high),
     resize: {
       requested: resized.length,
-      honoured: resized.filter((r) => r.size.width === r.requested?.width && r.size.height === r.requested?.height).length,
+      honoured: resized.filter((r) => r.size.width === r.requested?.width && r.size.height === r.requested?.height)
+        .length,
     },
     failed: store.failed,
   };
@@ -323,20 +328,9 @@ export function SpinSpike() {
     const results = resultsRef.current;
     const context = contextRef.current;
     if (!results || !context) return;
-    const text = JSON.stringify(results, null, 2);
-    setJson(text);
+    setJson(JSON.stringify(results, null, 2));
     if (!context.report) return;
-    try {
-      const response = await fetch(`/${context.locale}/dev/report`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: text,
-      });
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-    } catch (error) {
-      setSent(`Sending failed: ${String(error)}`);
-    }
+    setSent((await postDevReport(context.locale, results)).message);
   };
 
   const reopen = () => {
@@ -361,7 +355,15 @@ export function SpinSpike() {
     for (const config of configs) {
       try {
         results.runs.push(
-          await runConfig(context.spin, config, canvas, context.locale, context.refreshMs, context.longTasks, labelRef.current),
+          await runConfig(
+            context.spin,
+            config,
+            canvas,
+            context.locale,
+            context.refreshMs,
+            context.longTasks,
+            labelRef.current,
+          ),
         );
       } catch (error) {
         results.errors.push(`${config.set} ${config.format} ${config.decode}: ${String(error)}`);
@@ -410,7 +412,15 @@ export function SpinSpike() {
         if (cancelled) return;
         const config = configFromUrl(params);
         const defer = params.get("defer") === "1";
-        contextRef.current = { spin, locale, refreshMs, longTasks, config, report: params.get("report") === "1", defer };
+        contextRef.current = {
+          spin,
+          locale,
+          refreshMs,
+          longTasks,
+          config,
+          report: params.get("report") === "1",
+          defer,
+        };
         resultsRef.current = {
           kind: "t05-spin",
           page: window.location.pathname + window.location.search,
@@ -461,7 +471,8 @@ export function SpinSpike() {
   }, []);
 
   const busy = state !== "idle" && state !== "done";
-  const link = (set: FixtureSet, format: FixtureFormat, decode: DecodeStrategy) => `?set=${set}&format=${format}&decode=${decode}`;
+  const link = (set: SpinSetName, format: SpinFormat, decode: DecodeStrategy) =>
+    `?set=${set}&format=${format}&decode=${decode}`;
 
   return (
     <section data-state={state} className="grid max-w-[720px] gap-4">
@@ -498,7 +509,13 @@ export function SpinSpike() {
       <p ref={statusRef} data-status className="text-xs" />
 
       <div className="flex flex-wrap gap-2">
-        <button type="button" disabled={busy} className="min-h-11 border px-4" data-action="run-all" onClick={() => void runAll(RUN_ALL)}>
+        <button
+          type="button"
+          disabled={busy}
+          className="min-h-11 border px-4"
+          data-action="run-all"
+          onClick={() => void runAll(RUN_ALL)}
+        >
           Run all setups
         </button>
         <button
@@ -510,7 +527,13 @@ export function SpinSpike() {
         >
           Run this setup
         </button>
-        <button type="button" disabled={busy} className="min-h-11 border px-4" data-action="record" onClick={() => void record()}>
+        <button
+          type="button"
+          disabled={busy}
+          className="min-h-11 border px-4"
+          data-action="record"
+          onClick={() => void record()}
+        >
           Record my drags (10 s)
         </button>
         <button type="button" disabled={busy} className="min-h-11 border px-4" data-action="load" onClick={reopen}>
@@ -519,7 +542,12 @@ export function SpinSpike() {
         <button type="button" disabled={busy} className="min-h-11 border px-4" data-action="release" onClick={release}>
           Release frames
         </button>
-        <button type="button" disabled={!json} className="min-h-11 border px-4" onClick={() => void navigator.clipboard?.writeText(json)}>
+        <button
+          type="button"
+          disabled={!json}
+          className="min-h-11 border px-4"
+          onClick={() => void navigator.clipboard?.writeText(json)}
+        >
           Copy results
         </button>
       </div>

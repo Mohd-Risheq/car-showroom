@@ -1,0 +1,163 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Weekly grouped updates with a 3-day minimum release age; security fixes open at once (SEC-11, NFR-MAINT-04, D-037)",
+  "extends": ["config:best-practices", "schedule:weekly", ":timezone(Asia/Amman)", "group:allNonMajor"],
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "pin",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null,
+    "labels": ["security"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Major updates wait for the owner's approval on the Dependency Dashboard",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Node.js stays on 22 until a decision moves it (D-015)",
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    },
+    {
+      "description": "Playwright and its pinned Linux image move together, and new browsers can change the visual baselines (D-037)",
+      "matchPackageNames": ["@playwright/test", "mcr.microsoft.com/playwright"],
+      "groupName": "Playwright"
+    },
+    {
+      "description": "gitleaks and OSV-Scanner come in a pull request of their own, which fails until their SHA-256 pins are put in by hand (SEC-11)",
+      "matchPackageNames": ["gitleaks/gitleaks", "google/osv-scanner"],
+      "groupName": "CI scanners",
+      "prBodyNotes": [
+        "Put the SHA-256 the release publishes beside each new version in `.github/actions/scanners/action.yml`. The scanners step fails until then."
+      ]
+    },
+    {
+      "description": "SRS §11.2 version ranges, from here on: an update outside them needs a spec change first (D-010)",
+      "matchPackageNames": ["next", "eslint-config-next", "@next/env"],
+      "allowedVersions": "16.4.x"
+    },
+    {
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "allowedVersions": "19.3.x"
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "5.x"
+    },
+    {
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/turbopack"],
+      "allowedVersions": "4.x"
+    },
+    {
+      "matchPackageNames": ["@base-ui/react"],
+      "allowedVersions": "1.9.x"
+    },
+    {
+      "matchPackageNames": ["motion"],
+      "allowedVersions": "14.3.x"
+    },
+    {
+      "matchPackageNames": ["cobe"],
+      "allowedVersions": "2.0.1"
+    },
+    {
+      "matchPackageNames": ["next-intl"],
+      "allowedVersions": "4.14.x"
+    },
+    {
+      "matchPackageNames": ["drizzle-orm"],
+      "allowedVersions": "0.45.x"
+    },
+    {
+      "matchPackageNames": ["drizzle-kit"],
+      "allowedVersions": "0.31.x"
+    },
+    {
+      "matchPackageNames": ["@neondatabase/serverless"],
+      "allowedVersions": "1.2.x"
+    },
+    {
+      "matchPackageNames": ["better-auth", "@better-auth/drizzle-adapter"],
+      "allowedVersions": "1.7.x"
+    },
+    {
+      "matchPackageNames": ["@vercel/blob"],
+      "allowedVersions": "2.8.x"
+    },
+    {
+      "matchPackageNames": ["zod"],
+      "allowedVersions": "4.x"
+    },
+    {
+      "matchPackageNames": ["barcode-detector"],
+      "allowedVersions": "3.2.x"
+    },
+    {
+      "matchPackageNames": ["world-atlas"],
+      "allowedVersions": "2.0.2"
+    },
+    {
+      "matchPackageNames": ["topojson-client"],
+      "allowedVersions": "3.1.0"
+    },
+    {
+      "matchPackageNames": ["@playwright/test"],
+      "allowedVersions": "1.64.x"
+    },
+    {
+      "matchPackageNames": ["mcr.microsoft.com/playwright"],
+      "allowedVersions": "/^v1\\.64\\.\\d+-noble$/"
+    },
+    {
+      "matchPackageNames": ["@axe-core/playwright"],
+      "allowedVersions": "4.14.x"
+    },
+    {
+      "matchPackageNames": ["@lhci/cli"],
+      "allowedVersions": "0.15.x"
+    },
+    {
+      "matchPackageNames": ["eslint"],
+      "allowedVersions": "9.x"
+    },
+    {
+      "matchPackageNames": ["prettier"],
+      "allowedVersions": "3.x"
+    },
+    {
+      "matchPackageNames": ["pnpm"],
+      "allowedVersions": "10.x"
+    },
+    {
+      "description": "@types/node follows the Node.js major (D-015)",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "22.x"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "The Playwright image pnpm e2e:linux runs the browsers in, pinned by digest",
+      "managerFilePatterns": ["/^scripts/e2e-linux\\.ts$/"],
+      "matchStrings": [
+        "\"(?<depName>mcr\\.microsoft\\.com/playwright):(?<currentValue>v[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "gitleaks and OSV-Scanner in CI, from the renovate comment above each version in the scanners action",
+      "managerFilePatterns": ["/^\\.github/actions/scanners/action\\.yml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\w+_VERSION: (?<currentValue>\\S+)"
+      ],
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    }
+  ]
+}

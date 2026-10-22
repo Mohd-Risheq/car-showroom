@@ -7,7 +7,8 @@ import { addAacRollGroup } from "@/features/reel/domain/mp4";
 
 const ROLL_BYTES = 54;
 const SGPD = "0000001a73677064" + "01000000726f6c6c0000000200000001ffff";
-const sbgp = (samples: number) => `0000001c73626770${"00000000726f6c6c00000001"}${samples.toString(16).padStart(8, "0")}00000001`;
+const sbgp = (samples: number) =>
+  `0000001c73626770${"00000000726f6c6c00000001"}${samples.toString(16).padStart(8, "0")}00000001`;
 
 const CHUNK = 16;
 const CONTAINERS = new Set(["moov", "trak", "mdia", "minf", "stbl"]);
@@ -52,27 +53,54 @@ function trak({ handler, entry, samples, offsets, co64 }: Track): Uint8Array {
   const hdlr = box("hdlr", full(), u32(0), ascii(handler), new Uint8Array(12), ascii("test\0"));
   const stsd = box("stsd", full(), u32(1), box(entry, new Uint8Array(28)));
   const stsz = box("stsz", full(), u32(0), u32(samples), ...Array.from({ length: samples }, () => u32(CHUNK / 2)));
-  const chunks = co64 ? box("co64", full(), u32(offsets.length), ...offsets.map(u64)) : box("stco", full(), u32(offsets.length), ...offsets.map(u32));
+  const chunks = co64
+    ? box("co64", full(), u32(offsets.length), ...offsets.map(u64))
+    : box("stco", full(), u32(offsets.length), ...offsets.map(u32));
   const stbl = box("stbl", stsd, box("stts", full(), u32(0)), box("stsc", full(), u32(0)), stsz, chunks);
-  return box("trak", box("tkhd", full(), new Uint8Array(80)), box("mdia", box("mdhd", full(), new Uint8Array(20)), hdlr, box("minf", stbl)));
+  return box(
+    "trak",
+    box("tkhd", full(), new Uint8Array(80)),
+    box("mdia", box("mdhd", full(), new Uint8Array(20)), hdlr, box("minf", stbl)),
+  );
 }
 
-type Layout = { audioFirst?: boolean; moovLast?: boolean; co64?: boolean; largeMoov?: boolean; audioEntry?: string | null };
+type Layout = {
+  audioFirst?: boolean;
+  moovLast?: boolean;
+  co64?: boolean;
+  largeMoov?: boolean;
+  audioEntry?: string | null;
+};
 
 /** ftyp, moov and mdat, with three video chunks and two audio chunks of distinct bytes in mdat */
 function makeMp4(layout: Layout = {}): ArrayBuffer {
   const co64 = layout.co64 ?? false;
   const moovAt = (base: number) => {
-    const video = trak({ handler: "vide", entry: "avc1", samples: 6, offsets: [0, 1, 2].map((i) => base + i * CHUNK), co64 });
+    const video = trak({
+      handler: "vide",
+      entry: "avc1",
+      samples: 6,
+      offsets: [0, 1, 2].map((i) => base + i * CHUNK),
+      co64,
+    });
     const traks = [video];
     if (layout.audioEntry !== null) {
-      const audio = trak({ handler: "soun", entry: layout.audioEntry ?? "mp4a", samples: 4, offsets: [3, 4].map((i) => base + i * CHUNK), co64 });
+      const audio = trak({
+        handler: "soun",
+        entry: layout.audioEntry ?? "mp4a",
+        samples: 4,
+        offsets: [3, 4].map((i) => base + i * CHUNK),
+        co64,
+      });
       traks[layout.audioFirst ? "unshift" : "push"](audio);
     }
     return (layout.largeMoov ? largeBox : box)("moov", box("mvhd", full(), new Uint8Array(96)), ...traks);
   };
   const ftyp = box("ftyp", ascii("isom"), u32(512), ascii("isomavc1"));
-  const mdat = box("mdat", Uint8Array.from({ length: 5 * CHUNK }, (_, i) => 1 + Math.floor(i / CHUNK)));
+  const mdat = box(
+    "mdat",
+    Uint8Array.from({ length: 5 * CHUNK }, (_, i) => 1 + Math.floor(i / CHUNK)),
+  );
   // The offsets are fixed-width, so the moov is as long whatever they say
   const base = layout.moovLast ? ftyp.length + 8 : ftyp.length + moovAt(0).length + 8;
   return (layout.moovLast ? concat([ftyp, mdat, moovAt(base)]) : concat([ftyp, moovAt(base), mdat])).buffer;
@@ -82,7 +110,7 @@ type Node = { type: string; at: number; size: number; header: number; children: 
 
 function parse(view: DataView, start: number, end: number): Node[] {
   const nodes: Node[] = [];
-  for (let at = start; at < end; ) {
+  for (let at = start; at < end;) {
     const large = view.getUint32(at) === 1;
     const size = large ? Number(view.getBigUint64(at + 8)) : view.getUint32(at);
     const header = large ? 16 : 8;
@@ -109,14 +137,21 @@ function read(file: ArrayBuffer) {
     const mdia = child(trak.children, "mdia");
     const hdlr = child(mdia.children, "hdlr");
     const minf = child(mdia.children, "minf");
-    tracks.set(String.fromCharCode(...new Uint8Array(file, hdlr.at + 16, 4)), { trak, mdia, minf, stbl: child(minf.children, "stbl") });
+    tracks.set(String.fromCharCode(...new Uint8Array(file, hdlr.at + 16, 4)), {
+      trak,
+      mdia,
+      minf,
+      stbl: child(minf.children, "stbl"),
+    });
   }
   const offsets = (handler: string) => {
     const stbl = tracks.get(handler)?.stbl;
     const table = stbl?.children.find((node) => node.type === "stco" || node.type === "co64");
     if (!table) throw new Error(`no chunk offsets for ${handler}`);
     const count = view.getUint32(table.at + 12);
-    return Array.from({ length: count }, (_, i) => (table.type === "stco" ? view.getUint32(table.at + 16 + i * 4) : Number(view.getBigUint64(table.at + 16 + i * 8))));
+    return Array.from({ length: count }, (_, i) =>
+      table.type === "stco" ? view.getUint32(table.at + 16 + i * 4) : Number(view.getBigUint64(table.at + 16 + i * 8)),
+    );
   };
   const track = (handler: string) => {
     const found = tracks.get(handler);
@@ -150,7 +185,9 @@ describe("addAacRollGroup", () => {
       expect(after.track("soun")[level].size).toBe(before.track("soun")[level].size + ROLL_BYTES);
       expect(after.track("vide")[level].size).toBe(before.track("vide")[level].size);
     }
-    expect(after.top.map((node) => [node.type, node.size])).toEqual(before.top.map((node) => [node.type, node.type === "moov" ? node.size + ROLL_BYTES : node.size]));
+    expect(after.top.map((node) => [node.type, node.size])).toEqual(
+      before.top.map((node) => [node.type, node.type === "moov" ? node.size + ROLL_BYTES : node.size]),
+    );
   });
 
   it.each([
@@ -165,7 +202,9 @@ describe("addAacRollGroup", () => {
     const after = read(output);
     for (const handler of ["vide", "soun"]) {
       expect(after.offsets(handler)).toEqual(before.offsets(handler).map((offset) => offset + ROLL_BYTES));
-      after.offsets(handler).forEach((offset, i) => expect(chunkAt(output, offset)).toBe(chunkAt(input, before.offsets(handler)[i] ?? -1)));
+      after
+        .offsets(handler)
+        .forEach((offset, i) => expect(chunkAt(output, offset)).toBe(chunkAt(input, before.offsets(handler)[i] ?? -1)));
     }
     expect(after.moov.size).toBe(before.moov.size + ROLL_BYTES);
   });
@@ -201,7 +240,9 @@ describe("addAacRollGroup", () => {
   });
 
   it("throws on a file it can't read", () => {
-    expect(() => addAacRollGroup(concat([box("ftyp", ascii("isom")), box("mdat", new Uint8Array(8))]).buffer)).toThrow("no moov box");
+    expect(() => addAacRollGroup(concat([box("ftyp", ascii("isom")), box("mdat", new Uint8Array(8))]).buffer)).toThrow(
+      "no moov box",
+    );
     const cut = makeMp4().slice(0, 200);
     expect(() => addAacRollGroup(cut)).toThrow("malformed MP4 box");
   });

@@ -1,7 +1,7 @@
 # pnpm settings for this single-package repository (SRS §11.2, SEC-11).
 
 # Exact version pins: dependencies are saved without a range prefix.
-savePrefix: ''
+savePrefix: ""
 
 # A release must be at least 3 days old (in minutes) before it can be installed.
 # For an advisory patch, list the package under minimumReleaseAgeExclude for that
@@ -14,6 +14,8 @@ trustPolicy: no-downgrade
 # Exact versions reviewed and excepted, each with its evidence in DECISIONS.md.
 trustPolicyExclude:
   - undici-types@6.21.0 # D-011
+  # One entry per package: pnpm reads only the first entry that names it
+  - semver@5.7.2 || 6.3.1 # D-037
 
 # Install scripts run only for the packages listed here.
 onlyBuiltDependencies: []
@@ -21,6 +23,19 @@ onlyBuiltDependencies: []
 # Reviewed and denied: each ships prebuilt platform binaries, and its script only
 # builds from source or installs a wasm fallback when no prebuilt binary exists.
 ignoredBuiltDependencies:
-  - '@parcel/watcher' # via next-intl
-  - '@swc/core' # via next-intl
+  - "@parcel/watcher" # via next-intl
+  - "@swc/core" # via next-intl
   - esbuild # via drizzle-kit and vitest
+  - unrs-resolver # via eslint-config-next (D-037)
+
+# eslint-config-next asks for eslint-import-resolver-typescript ^3.5.2. Its newest 3.x release,
+# 3.10.1, came out without provenance after 4.x releases that had it, so trustPolicy refuses it.
+# 3.10.0, published before any release had provenance, is the same code (D-037).
+overrides:
+  eslint-config-next>eslint-import-resolver-typescript: 3.10.0
+  # Patched releases under Lighthouse CI, newer than its dependencies' ranges allow, as
+  # pnpm audit --fix would set them (D-037): GHSA-ph9p-34f9-6g65, GHSA-c475-qrg2-pj4r and
+  # GHSA-w5hq-g745-h8pq
+  tmp@<0.2.6: 0.2.7
+  basic-ftp@<6.2.1: 6.2.3
+  uuid@<11.1.1: 11.1.1

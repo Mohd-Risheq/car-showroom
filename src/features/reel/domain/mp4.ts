@@ -12,7 +12,7 @@ const ROLL_BOXES_BYTES = 54;
 
 function children(view: DataView, start: number, end: number): Box[] {
   const boxes: Box[] = [];
-  for (let at = start; at + 8 <= end; ) {
+  for (let at = start; at + 8 <= end;) {
     let size = view.getUint32(at);
     let header = 8;
     if (size === 1) {
@@ -22,7 +22,12 @@ function children(view: DataView, start: number, end: number): Box[] {
       size = end - at;
     }
     if (size < header || at + size > end) throw new Error(`malformed MP4 box at ${at}`);
-    const type = String.fromCharCode(view.getUint8(at + 4), view.getUint8(at + 5), view.getUint8(at + 6), view.getUint8(at + 7));
+    const type = String.fromCharCode(
+      view.getUint8(at + 4),
+      view.getUint8(at + 5),
+      view.getUint8(at + 6),
+      view.getUint8(at + 7),
+    );
     boxes.push({ type, at, size, header });
     at += size;
   }
@@ -50,7 +55,9 @@ function aacTrackPath(view: DataView, moov: Box): Box[] | null {
 }
 
 function hasRollGroup(view: DataView, stbl: Box): boolean {
-  return inside(view, stbl).some((box) => box.type === "sgpd" && view.getUint32(box.at + box.header + 4) === 0x726f6c6c); // 'roll'
+  return inside(view, stbl).some(
+    (box) => box.type === "sgpd" && view.getUint32(box.at + box.header + 4) === 0x726f6c6c,
+  ); // 'roll'
 }
 
 function sampleCount(view: DataView, stbl: Box): number {

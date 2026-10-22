@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 // Spike and diagnostic pages never render on a deployment (BUILD-PLAN §9.1). The proxy answers
 // 404 first (tests/unit/proxy.test.ts). Behind it, every page and layout in a (dev) group calls
@@ -23,10 +23,6 @@ const pages = filesNamed("page.tsx");
 const layouts = filesNamed("layout.tsx");
 const routes = filesNamed("route.ts");
 
-afterEach(() => {
-  vi.unstubAllEnvs();
-});
-
 describe("dev pages and routes on deployments", () => {
   it("finds every kind of file it checks", () => {
     expect(pages.length).toBeGreaterThan(0);
@@ -35,18 +31,22 @@ describe("dev pages and routes on deployments", () => {
   });
 
   it.each(pages)("%s calls the guard first", (file) => {
-    expect(readFileSync(file, "utf8")).toMatch(/export default (?:async )?function \w+\(\) \{\n {2}notFoundOnDeployments\(\);\n/);
+    expect(readFileSync(file, "utf8")).toMatch(
+      /export default (?:async )?function \w+\(\) \{\n {2}notFoundOnDeployments\(\);\n/,
+    );
   });
 
   it.each(layouts)("%s calls the guard first", (file) => {
-    expect(readFileSync(file, "utf8")).toMatch(/export default (?:async )?function \w+\([^)]*\)[^{]*\{\n {2}notFoundOnDeployments\(\);\n/);
+    expect(readFileSync(file, "utf8")).toMatch(
+      /export default (?:async )?function \w+\([^)]*\)[^{]*\{\n {2}notFoundOnDeployments\(\);\n/,
+    );
   });
 
   it.each(routes)("%s answers 404", async (file) => {
     vi.stubEnv("VERCEL_ENV", "production");
-    const module: Record<string, unknown> = await import(path.resolve(file));
+    const routeModule: Record<string, unknown> = await import(path.resolve(file));
     const handlers = METHODS.flatMap((method) => {
-      const handler = module[method];
+      const handler = routeModule[method];
       return typeof handler === "function" ? [{ method, handler }] : [];
     });
     expect(handlers.length).toBeGreaterThan(0);

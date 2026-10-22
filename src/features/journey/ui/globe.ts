@@ -140,7 +140,15 @@ class GlobeView implements GlobeHandle {
   #pointer: { id: number; x: number; y: number; samples: Sample[] } | null = null;
   #coast: { phi: number; theta: number } | null = null;
 
-  constructor(host: HTMLElement, canvas: HTMLCanvasElement, globe: Globe, size: number, dpr: number, accent: RGB, options: JourneyGlobeOptions) {
+  constructor(
+    host: HTMLElement,
+    canvas: HTMLCanvasElement,
+    globe: Globe,
+    size: number,
+    dpr: number,
+    accent: RGB,
+    options: JourneyGlobeOptions,
+  ) {
     this.#host = host;
     this.#canvas = canvas;
     this.#options = options;
@@ -411,13 +419,17 @@ class GlobeView implements GlobeHandle {
     // The surface at the middle of the globe stays under the pointer
     const radiansPerPixel = 1 / (SPHERE * (this.#size / 2));
     this.#phi.value += (event.clientX - pointer.x) * radiansPerPixel;
-    this.#theta.value = Math.max(-MAX_THETA, Math.min(MAX_THETA, this.#theta.value + (event.clientY - pointer.y) * radiansPerPixel));
+    this.#theta.value = Math.max(
+      -MAX_THETA,
+      Math.min(MAX_THETA, this.#theta.value + (event.clientY - pointer.y) * radiansPerPixel),
+    );
     this.#phi.halt();
     this.#theta.halt();
     pointer.x = event.clientX;
     pointer.y = event.clientY;
     pointer.samples.push({ time: event.timeStamp, phi: this.#phi.value, theta: this.#theta.value });
-    while (pointer.samples.length > 2 && event.timeStamp - (pointer.samples[0]?.time ?? 0) > 100) pointer.samples.shift();
+    while (pointer.samples.length > 2 && event.timeStamp - (pointer.samples[0]?.time ?? 0) > 100)
+      pointer.samples.shift();
     this.#wake();
   };
 
@@ -463,12 +475,13 @@ export function mountJourneyGlobe(host: HTMLElement, options: JourneyGlobeOption
   // that image while cobe is created (synchronously) and draw once more when it loads
   const NativeImage = window.Image;
   let texture: HTMLImageElement | null = null;
-  window.Image = class extends NativeImage {
-    constructor(width?: number, height?: number) {
-      super(width, height);
-      texture ??= this;
-    }
-  };
+  window.Image = new Proxy(NativeImage, {
+    construct(target, args: ConstructorParameters<typeof Image>) {
+      const image = Reflect.construct(target, args);
+      texture ??= image;
+      return image;
+    },
+  });
   let globe: Globe;
   try {
     const start = centreOn(first);

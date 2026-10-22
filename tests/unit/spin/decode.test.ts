@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createDecoder } from "@/features/spin/ui/decode";
 import type { DecodeRequest, Decoded } from "@/features/spin/ui/fetch-decode";
 import type { DecodeMessage, DecodeReply } from "@/features/spin/worker/decode.worker";
@@ -49,10 +49,6 @@ beforeEach(() => {
   vi.stubGlobal("Worker", FakeWorker);
 });
 
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
-
 describe("the worker decoder", () => {
   it("settles a request with its reply, then stops listening for its abort", async () => {
     const { decoder, worker } = workerDecoder();
@@ -101,7 +97,9 @@ describe("the worker decoder", () => {
     await expect(pending).rejects.toThrow("decode.worker.ts failed to load");
     expect(worker.terminate).toHaveBeenCalledTimes(1);
 
-    await expect(decoder.decode(REQUEST, new AbortController().signal)).rejects.toThrow("decode.worker.ts failed to load");
+    await expect(decoder.decode(REQUEST, new AbortController().signal)).rejects.toThrow(
+      "decode.worker.ts failed to load",
+    );
     expect(worker.posted).toHaveLength(1);
   });
 

@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { describeError } from "@/app/_dev/harness";
+import { postDevReport } from "@/app/_dev/report";
+import type { AppLocale } from "@/i18n/routing";
 import { inspectMedia } from "@/lib/storage/inspect";
 import type { MediaType } from "@/lib/storage/rules";
 import {
@@ -18,7 +21,8 @@ import type { WorkerReply } from "./encode.worker";
 
 // Spike T-04 (R-01): Arabic and English cards on a canvas, the same card drawn in a worker, and
 // what each encoder writes (D-025). The results are shown on the page and, as JSON, in
-// <pre data-results> for the capture script.
+// <pre data-results> for the capture script. With ?report=1 they are also sent to the Mac running
+// the server (the phone session, BUILD-PLAN §4).
 
 const LOCALES: SpikeLocale[] = ["ar", "en"];
 const TYPES = ["image/webp", "image/jpeg", "image/png"];
@@ -34,6 +38,7 @@ type Encoded = {
 };
 
 type Results = {
+  kind: "t04-canvas";
   userAgent: string;
   features: Record<string, string | number | boolean>;
   digits: Record<SpikeLocale, string>;
@@ -49,7 +54,9 @@ function encoded(via: Encoded["via"], requested: string, type: string, bytes: Ui
 }
 
 function codePoints(text: string): string {
-  return [...text].map((char) => `U+${(char.codePointAt(0) ?? 0).toString(16).toUpperCase().padStart(4, "0")}`).join(" ");
+  return [...text]
+    .map((char) => `U+${(char.codePointAt(0) ?? 0).toString(16).toUpperCase().padStart(4, "0")}`)
+    .join(" ");
 }
 
 function runWorker(): Promise<WorkerReply> {
@@ -105,6 +112,7 @@ async function runSpike(canvases: Canvases): Promise<Results> {
   }
 
   return {
+    kind: "t04-canvas",
     userAgent: navigator.userAgent,
     features,
     digits: { ar: codePoints(formatInteger(14500, "ar")), en: codePoints(formatInteger(14500, "en")) },
@@ -114,16 +122,34 @@ async function runSpike(canvases: Canvases): Promise<Results> {
   };
 }
 
-export function CanvasSpike() {
+export function CanvasSpike({ locale }: { locale: AppLocale }) {
   const canvases = useRef<Partial<Canvases>>({});
   const [results, setResults] = useState<Results | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState("");
 
   useEffect(() => {
     const { ar, en, worker } = canvases.current;
     if (!ar || !en || !worker) return;
-    runSpike({ ar, en, worker }).then(setResults, (reason: unknown) => setError(String(reason)));
-  }, []);
+    const report = new URLSearchParams(window.location.search).get("report") === "1";
+    // A remount (StrictMode in development) runs the spike again, and only the last run shows and reports
+    let cancelled = false;
+    runSpike({ ar, en, worker }).then(
+      async (measured) => {
+        if (cancelled) return;
+        setResults(measured);
+        if (!report) return;
+        const { message } = await postDevReport(locale, measured);
+        if (!cancelled) setSent(message);
+      },
+      (reason: unknown) => {
+        if (!cancelled) setError(describeError(reason));
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
 
   return (
     <section data-ready={results || error ? "true" : "false"} className="grid gap-6">
@@ -163,7 +189,13 @@ export function CanvasSpike() {
         {LOCALES.map((locale) => {
           const text = spikeText(locale);
           return (
-            <div key={locale} lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} className="max-w-[540px]" style={{ fontFamily: FAMILY }}>
+            <div
+              key={locale}
+              lang={locale}
+              dir={locale === "ar" ? "rtl" : "ltr"}
+              className="max-w-[540px]"
+              style={{ fontFamily: FAMILY }}
+            >
               <p className="text-2xl font-semibold">{text.title}</p>
               <p className="text-lg">{text.facts}</p>
               <p className="text-base">{text.body}</p>
@@ -174,6 +206,7 @@ export function CanvasSpike() {
       </div>
 
       {error ? <p role="alert">Spike failed: {error}</p> : null}
+      {sent ? <p>{sent}</p> : null}
       {results ? (
         <div className="grid gap-4">
           <h2 className="text-base">Encoders (D-025)</h2>

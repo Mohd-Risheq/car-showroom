@@ -1,13 +1,18 @@
 import { getRedirectUrl, unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { NextRequest } from "next/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { routing } from "@/i18n/routing";
 
 // src/proxy.ts (SRS §11.5 rule 1, §12.5, FR-01.2, BUILD-PLAN §9.1): which paths run it, the dev
 // pages' hard 404 on deployments, the dealer nonce policy and the locale redirect.
 
 const ORIGIN = "https://muftah.test";
-const DEV_PATHS = routing.locales.flatMap((locale) => [`/${locale}/dev`, `/${locale}/dev/spin`, `/${locale}/dealer/dev`, `/${locale}/dealer/dev/vin`]);
+const DEV_PATHS = routing.locales.flatMap((locale) => [
+  `/${locale}/dev`,
+  `/${locale}/dev/spin`,
+  `/${locale}/dealer/dev`,
+  `/${locale}/dealer/dev/vin`,
+]);
 
 // The proxy reads its environment when it loads, so each test loads it after stubbing
 async function loadProxy(env: Record<string, string | undefined> = {}) {
@@ -23,26 +28,34 @@ function request(path: string, headers: Record<string, string> = {}): NextReques
 const passedOn = (response: Response) => response.headers.get("x-middleware-next") === "1";
 const nonceOf = (policy: string | null) => policy?.match(/'nonce-([^']+)'/)?.[1];
 
-afterEach(() => {
-  vi.unstubAllEnvs();
-});
-
 describe("which paths run the proxy", () => {
-  it.each(["/", "/cars", "/cars/toyota", "/ar/dealer", "/en/dealer/cars", "/ar/dev", "/en/dev/spin", "/en/dealer/dev/vin"])(
-    "runs on %s",
-    async (url) => {
-      const { config } = await loadProxy();
-      expect(unstable_doesMiddlewareMatch({ config, url })).toBe(true);
-    },
-  );
+  it.each([
+    "/",
+    "/cars",
+    "/cars/toyota",
+    "/ar/dealer",
+    "/en/dealer/cars",
+    "/ar/dev",
+    "/en/dev/spin",
+    "/en/dealer/dev/vin",
+  ])("runs on %s", async (url) => {
+    const { config } = await loadProxy();
+    expect(unstable_doesMiddlewareMatch({ config, url })).toBe(true);
+  });
 
-  it.each(["/ar", "/en/cars", "/ar/cars/toyota-rav4", "/api/upload", "/api/auth/get-session", "/_next/static/chunk.js", "/favicon.ico", "/maps/land-110m.svg"])(
-    "leaves %s alone",
-    async (url) => {
-      const { config } = await loadProxy();
-      expect(unstable_doesMiddlewareMatch({ config, url })).toBe(false);
-    },
-  );
+  it.each([
+    "/ar",
+    "/en/cars",
+    "/ar/cars/toyota-rav4",
+    "/api/upload",
+    "/api/auth/get-session",
+    "/_next/static/chunk.js",
+    "/favicon.ico",
+    "/maps/land-110m.svg",
+  ])("leaves %s alone", async (url) => {
+    const { config } = await loadProxy();
+    expect(unstable_doesMiddlewareMatch({ config, url })).toBe(false);
+  });
 
   // Next.js reads the matcher at build time, so its locales are literals that must follow routing.ts
   it("names exactly the app's locales in its matcher", async () => {

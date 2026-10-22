@@ -6,7 +6,7 @@ import { Martian_Mono, Readex_Pro } from "next/font/google";
 
 // next/font's own fallback is one Arial face sized for Latin text at HEXP 0, so the wide steps and
 // Arabic text would reflow when the font swaps in. src/styles/font-fallbacks.css has a set per type
-// step and script instead (scripts/font-fallbacks.mts), so both fonts turn that fallback off.
+// step and script instead (scripts/font-fallbacks.ts), so both fonts turn that fallback off.
 // Turbopack (Next.js 16.4.2) ignores adjustFontFallback: false and drops its fallback face only
 // when it is given a fallback list, so the list is empty (D-033).
 

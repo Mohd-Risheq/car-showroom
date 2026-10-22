@@ -5,9 +5,29 @@ const VIN = /^[A-HJ-NPR-Z0-9]{17}$/;
 
 // ISO 3779 transliteration (05-SEED-DATA §6.1). Digits keep their value; I, O and Q never occur.
 const LETTERS: Readonly<Record<string, number>> = {
-  A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8,
-  J: 1, K: 2, L: 3, M: 4, N: 5, P: 7, R: 9,
-  S: 2, T: 3, U: 4, V: 5, W: 6, X: 7, Y: 8, Z: 9,
+  A: 1,
+  B: 2,
+  C: 3,
+  D: 4,
+  E: 5,
+  F: 6,
+  G: 7,
+  H: 8,
+  J: 1,
+  K: 2,
+  L: 3,
+  M: 4,
+  N: 5,
+  P: 7,
+  R: 9,
+  S: 2,
+  T: 3,
+  U: 4,
+  V: 5,
+  W: 6,
+  X: 7,
+  Y: 8,
+  Z: 9,
 };
 const WEIGHTS = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2] as const;
 
@@ -42,5 +62,7 @@ export function isNorthAmerican(vin: string): boolean {
 export function checkVin(vin: string): VinCheck {
   if (!VIN.test(vin)) return { ok: false, error: "validation.vin" };
   if (vin.charAt(8) === vinCheckDigit(vin)) return { ok: true, warning: null };
-  return isNorthAmerican(vin) ? { ok: false, error: "validation.vinCheckDigit" } : { ok: true, warning: "validation.vinCheckDigitWarn" };
+  return isNorthAmerican(vin)
+    ? { ok: false, error: "validation.vinCheckDigit" }
+    : { ok: true, warning: "validation.vinCheckDigitWarn" };
 }

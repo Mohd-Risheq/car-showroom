@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { describeError, round } from "@/app/_dev/harness";
+import { postDevReport } from "@/app/_dev/report";
 import { C } from "./classes";
 import { JOINED_AR } from "./copy";
 
@@ -27,12 +29,27 @@ type Results = {
   environment: { userAgent: string; devicePixelRatio: number; viewport: { width: number; height: number } };
   families: Families;
   faces: { family: string; status: string; weight: string; stretch: string; unicodeRange: string }[];
-  fontFiles: { url: string; initiator: string; transferSize: number; decodedBodySize: number; startMs: number; ms: number }[];
+  fontFiles: {
+    url: string;
+    initiator: string;
+    transferSize: number;
+    decodedBodySize: number;
+    startMs: number;
+    ms: number;
+  }[];
   hexp: { script: Script; wght: number; widths: Record<string, number>; gain: number }[];
   digits: { row: string; numeric: string; widths: number[]; spread: number }[];
   stretch: { wdth100: number; wdth875: number; ratio: number } | null;
   fallbacks: { family: string; loaded: number; failed: number; drawsArabic: boolean | null }[];
-  swap: { sample: string; fallback: string; width: number; height: number; fallbackHeight: number; lines: number; fallbackLines: number }[];
+  swap: {
+    sample: string;
+    fallback: string;
+    width: number;
+    height: number;
+    fallbackHeight: number;
+    lines: number;
+    fallbackLines: number;
+  }[];
   fit: { sample: string; column: number; widestLine: number; over: number }[];
   pageOverflowX: boolean;
   arabicRules: { letterSpacing: string; fontStyle: string; textTransform: string } | null;
@@ -40,12 +57,6 @@ type Results = {
   otherOrigins: string[];
   errors: string[];
 };
-
-const round = (value: number, digits = 2) => Math.round(value * 10 ** digits) / 10 ** digits;
-
-function describe(error: unknown): string {
-  return error instanceof Error ? `${error.name}: ${error.message}` : String(error);
-}
 
 /** The first family of a font-family list, the web font itself */
 const first = (family: string) => family.split(",")[0]?.trim() ?? family;
@@ -69,7 +80,7 @@ function measureHexp(): Results["hexp"] {
     const wght = Number(element.dataset.wght);
     const key = `${script}-${wght}`;
     const row = rows.get(key) ?? { script, wght, widths: {} };
-    row.widths[element.dataset.hexp ?? ""] = round(width(element));
+    row.widths[element.dataset.hexp ?? ""] = round(width(element), 2);
     rows.set(key, row);
   }
   return [...rows.values()].map((row) => {
@@ -96,15 +107,22 @@ function measureStretch(): Results["stretch"] {
   const wide = at("100");
   const narrow = at("87.5");
   if (!wide || !narrow) return null;
-  const wdth100 = round(width(wide));
-  const wdth875 = round(width(narrow));
+  const wdth100 = round(width(wide), 2);
+  const wdth875 = round(width(narrow), 2);
   return { wdth100, wdth875, ratio: round(wdth875 / wdth100, 4) };
 }
 
 /** Loads every fallback face, so the swap measurement finds each local font ready */
 async function probeFallbacks(): Promise<Results["fallbacks"]> {
   const faces = [...document.fonts].filter((face) => face.family.includes("Fallback"));
-  const loaded = await Promise.all(faces.map((face) => face.load().then(() => true, () => false)));
+  const loaded = await Promise.all(
+    faces.map((face) =>
+      face.load().then(
+        () => true,
+        () => false,
+      ),
+    ),
+  );
   const families = new Map<string, Results["fallbacks"][number]>();
   faces.forEach((face, index) => {
     const family = face.family.replaceAll('"', "");
@@ -148,20 +166,31 @@ function measureSwap(): Results["swap"] {
     // The stacks are read from the sample, whose elements line up with the clone's
     const originals = [sample, ...sample.querySelectorAll<HTMLElement>("*")];
     const copies = [clone, ...clone.querySelectorAll<HTMLElement>("*")];
-    const fallback = rest(getComputedStyle(figures ? (sample.querySelector("[data-figure]") ?? sample) : sample).fontFamily);
+    const fallback = rest(
+      getComputedStyle(figures ? (sample.querySelector("[data-figure]") ?? sample) : sample).fontFamily,
+    );
     originals.forEach((original, index) => {
       const copy = copies[index];
-      if (copy && (!figures || original.hasAttribute("data-figure"))) copy.style.fontFamily = rest(getComputedStyle(original).fontFamily);
+      if (copy && (!figures || original.hasAttribute("data-figure")))
+        copy.style.fontFamily = rest(getComputedStyle(original).fontFamily);
     });
     box.append(clone);
     slot?.append(box);
     const rect = sample.getBoundingClientRect();
-    const height = round(rect.height);
-    const fallbackHeight = round(clone.getBoundingClientRect().height);
+    const height = round(rect.height, 2);
+    const fallbackHeight = round(clone.getBoundingClientRect().height, 2);
     const lines = Math.round(rect.height / lineHeight(sample));
     const fallbackLines = Math.round(clone.getBoundingClientRect().height / lineHeight(clone));
     box.remove();
-    return { sample: sample.dataset.sample ?? "", fallback, width: round(rect.width), height, fallbackHeight, lines, fallbackLines };
+    return {
+      sample: sample.dataset.sample ?? "",
+      fallback,
+      width: round(rect.width, 2),
+      height,
+      fallbackHeight,
+      lines,
+      fallbackLines,
+    };
   });
 }
 
@@ -172,13 +201,21 @@ function measureFit(): Results["fit"] {
     range.selectNodeContents(sample);
     const widestLine = Math.max(0, ...[...range.getClientRects()].map((rect) => rect.width));
     const column = sample.clientWidth;
-    return { sample: sample.dataset.sample ?? "", column, widestLine: round(widestLine, 1), over: round(Math.max(0, widestLine - column), 1) };
+    return {
+      sample: sample.dataset.sample ?? "",
+      column,
+      widestLine: round(widestLine, 1),
+      over: round(Math.max(0, widestLine - column), 1),
+    };
   });
 }
 
 function setupFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return { locale: window.location.pathname.split("/")[1] === "ar" ? "ar" : "en", report: params.get("report") === "1" };
+  return {
+    locale: window.location.pathname.split("/")[1] === "ar" ? "ar" : "en",
+    report: params.get("report") === "1",
+  };
 }
 
 export function TypeChecks({ families }: { families: Families }) {
@@ -197,12 +234,18 @@ export function TypeChecks({ families }: { families: Families }) {
         document.fonts.load(`600 40px ${first(families.readex)}`, "مفتاح Muftah"),
         document.fonts.load(`400 18px ${first(families.readex)}`, "شوف 0123456789"),
         document.fonts.load(`450 18px ${first(families.martian)}`, "0123456789"),
-      ]).catch((error: unknown) => errors.push(`fonts.load: ${describe(error)}`));
+      ]).catch((error: unknown) => errors.push(`fonts.load: ${describeError(error)}`));
       await document.fonts.ready;
 
       const faces: Results["faces"] = [];
       document.fonts.forEach((face) => {
-        faces.push({ family: face.family, status: face.status, weight: face.weight, stretch: face.stretch, unicodeRange: face.unicodeRange.slice(0, 48) });
+        faces.push({
+          family: face.family,
+          status: face.status,
+          weight: face.weight,
+          stretch: face.stretch,
+          unicodeRange: face.unicodeRange.slice(0, 48),
+        });
       });
       const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
       const fontFiles = resources
@@ -223,8 +266,11 @@ export function TypeChecks({ families }: { families: Families }) {
       const display = document.querySelector<HTMLElement>('[data-sample="display"]');
       const arabicStyle = display?.closest('[lang="ar"]') ? getComputedStyle(display) : null;
 
-      const gainOf = (script: Script, wght: number) => hexp.find((row) => row.script === script && row.wght === wght)?.gain ?? 0;
-      const hexpArabic = [600, 400].every((wght) => gainOf("ar", wght) >= 0.05 && gainOf("ar", wght) >= 0.5 * gainOf("en", wght));
+      const gainOf = (script: Script, wght: number) =>
+        hexp.find((row) => row.script === script && row.wght === wght)?.gain ?? 0;
+      const hexpArabic = [600, 400].every(
+        (wght) => gainOf("ar", wght) >= 0.05 && gainOf("ar", wght) >= 0.5 * gainOf("en", wght),
+      );
       const tabular = digits.filter((row) => row.numeric === "tabular-nums");
       const spreadOf = (row: string) => tabular.find((entry) => entry.row === row)?.spread ?? Infinity;
 
@@ -247,13 +293,21 @@ export function TypeChecks({ families }: { families: Families }) {
         swap: measureSwap(),
         fit: measureFit(),
         pageOverflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-        arabicRules: arabicStyle ? { letterSpacing: arabicStyle.letterSpacing, fontStyle: arabicStyle.fontStyle, textTransform: arabicStyle.textTransform } : null,
+        arabicRules: arabicStyle
+          ? {
+              letterSpacing: arabicStyle.letterSpacing,
+              fontStyle: arabicStyle.fontStyle,
+              textTransform: arabicStyle.textTransform,
+            }
+          : null,
         verdict: {
           hexpArabic,
           tnum: spreadOf("readex-body") <= 0.01 && spreadOf("readex-display") <= 0.01,
           martian: spreadOf("martian-875") <= 0.01 && (stretch?.ratio ?? 1) < 0.95,
         },
-        otherOrigins: resources.map((entry) => entry.name).filter((name) => new URL(name).origin !== window.location.origin),
+        otherOrigins: resources
+          .map((entry) => entry.name)
+          .filter((name) => new URL(name).origin !== window.location.origin),
         errors,
       };
       if (cancelled) return;
@@ -261,18 +315,13 @@ export function TypeChecks({ families }: { families: Families }) {
       setState("done");
 
       if (!setup.report) return;
-      try {
-        const response = await fetch(`/${setup.locale}/dev/report`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(measured) });
-        const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-        if (!cancelled) setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-      } catch (error) {
-        if (!cancelled) setSent(`Sending failed: ${describe(error)}`);
-      }
+      const { message } = await postDevReport(setup.locale, measured);
+      if (!cancelled) setSent(message);
     };
 
     run().catch((error: unknown) => {
       if (cancelled) return;
-      setFailure(describe(error));
+      setFailure(describeError(error));
       setState("failed");
     });
     return () => {
@@ -280,7 +329,9 @@ export function TypeChecks({ families }: { families: Families }) {
     };
   }, [families]);
 
-  const verdict = (pass: boolean) => <td className={`${C.cell} ${pass ? C.pass : C.fail}`}>{pass ? "pass" : "fail"}</td>;
+  const verdict = (pass: boolean) => (
+    <td className={`${C.cell} ${pass ? C.pass : C.fail}`}>{pass ? "pass" : "fail"}</td>
+  );
   const gain = (script: Script, wght: number) => {
     const row = results?.hexp.find((entry) => entry.script === script && entry.wght === wght);
     return row ? `${row.gain >= 0 ? "+" : ""}${round(row.gain * 100, 1)} %` : "none";
@@ -302,9 +353,15 @@ export function TypeChecks({ families }: { families: Families }) {
           <table className={C.table}>
             <thead>
               <tr>
-                <th scope="col" className={C.headCell}>Check</th>
-                <th scope="col" className={C.headCell}>Measured</th>
-                <th scope="col" className={C.headCell}>Result</th>
+                <th scope="col" className={C.headCell}>
+                  Check
+                </th>
+                <th scope="col" className={C.headCell}>
+                  Measured
+                </th>
+                <th scope="col" className={C.headCell}>
+                  Result
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -325,8 +382,8 @@ export function TypeChecks({ families }: { families: Families }) {
               <tr>
                 <td className={C.cell}>Readex Pro digits under tabular-nums</td>
                 <td className={C.cell}>
-                  spread {spread("readex-body", "tabular-nums")} at body, {spread("readex-display", "tabular-nums")} at display; without it{" "}
-                  {spread("readex-body", "normal")}
+                  spread {spread("readex-body", "tabular-nums")} at body, {spread("readex-display", "tabular-nums")} at
+                  display; without it {spread("readex-body", "normal")}
                 </td>
                 {verdict(results.verdict.tnum)}
               </tr>
@@ -351,8 +408,8 @@ export function TypeChecks({ families }: { families: Families }) {
               <tr>
                 <td className={C.cell}>Fallback faces on this device</td>
                 <td className={C.cell}>
-                  {results.fallbacks.filter((entry) => entry.loaded > 0).length} of {results.fallbacks.length} families load; Arabic drawn by{" "}
-                  {results.fallbacks.filter((entry) => entry.drawsArabic).length}
+                  {results.fallbacks.filter((entry) => entry.loaded > 0).length} of {results.fallbacks.length} families
+                  load; Arabic drawn by {results.fallbacks.filter((entry) => entry.drawsArabic).length}
                 </td>
                 <td className={C.cell}>listed below</td>
               </tr>
@@ -368,7 +425,9 @@ export function TypeChecks({ families }: { families: Families }) {
             </tbody>
           </table>
           {sent ? <p>{sent}</p> : null}
-          <pre className={C.json} data-results>{JSON.stringify(results, null, 2)}</pre>
+          <pre className={C.json} data-results>
+            {JSON.stringify(results, null, 2)}
+          </pre>
         </>
       ) : null}
     </section>

@@ -69,7 +69,8 @@ function count(track: TrackStats, packet: EncodedPacket, decoderCodec: string | 
   if (decoderCodec) track.decoderCodec = decoderCodec;
 }
 
-const plain = (config: object): Record<string, unknown> => JSON.parse(JSON.stringify(config)) as Record<string, unknown>;
+const plain = (config: object): Record<string, unknown> =>
+  JSON.parse(JSON.stringify(config)) as Record<string, unknown>;
 
 // AAC-LC's AudioSpecificConfig: object type 2, the rate's index, the channel count (ISO/IEC
 // 14496-3, 1.6.2.1). The delay check decodes with this, not with what the encoder reports: WebKit
@@ -110,7 +111,14 @@ export async function measureEncoderDelay(config: AudioEncoderConfig): Promise<E
       },
     });
     encoder.configure(config);
-    const data = new AudioData({ format: "f32-planar", sampleRate: rate, numberOfFrames: length, numberOfChannels: channels, timestamp: 0, data: planar });
+    const data = new AudioData({
+      format: "f32-planar",
+      sampleRate: rate,
+      numberOfFrames: length,
+      numberOfChannels: channels,
+      timestamp: 0,
+      data: planar,
+    });
     encoder.encode(data);
     data.close();
     await encoder.flush();
@@ -129,7 +137,12 @@ export async function measureEncoderDelay(config: AudioEncoderConfig): Promise<E
         failure = error;
       },
     });
-    decoder.configure({ codec: config.codec, sampleRate: rate, numberOfChannels: channels, description: aacLcConfig(rate, channels) });
+    decoder.configure({
+      codec: config.codec,
+      sampleRate: rate,
+      numberOfChannels: channels,
+      description: aacLcConfig(rate, channels),
+    });
     for (const chunk of chunks) decoder.decode(chunk);
     await decoder.flush();
     decoder.close();
@@ -199,7 +212,10 @@ export async function encodeReel(options: EncodeOptions): Promise<{ mp4: ArrayBu
     codec: "avc",
     fullCodecString: options.videoCodec,
     // An explicit bitrate, so Mediabunny never switches to quantizer encoding (BR-39's 8 Mbps)
-    quality: new Quality({ bitrate: options.bitrate ?? REEL.videoBitrate, bitrateMode: options.bitrateMode ?? "variable" }),
+    quality: new Quality({
+      bitrate: options.bitrate ?? REEL.videoBitrate,
+      bitrateMode: options.bitrateMode ?? "variable",
+    }),
     onEncoderConfig: (config) => {
       stats.video.encoderConfig = plain(config);
     },
@@ -211,9 +227,18 @@ export async function encodeReel(options: EncodeOptions): Promise<{ mp4: ArrayBu
   let audioSource: AudioSampleSource | null = null;
   let delay = 0;
   if (audio) {
-    const measured = await measureEncoderDelay({ codec: audio.codec, sampleRate: audio.sampleRate, numberOfChannels: audio.numberOfChannels, bitrate: audio.bitrate });
+    const measured = await measureEncoderDelay({
+      codec: audio.codec,
+      sampleRate: audio.sampleRate,
+      numberOfChannels: audio.numberOfChannels,
+      bitrate: audio.bitrate,
+    });
     delay = measured.samples;
-    const audioStats = { ...emptyStats(), delay: measured, rollGroup: { added: false, reason: "not finished" } as RollGroup };
+    const audioStats = {
+      ...emptyStats(),
+      delay: measured,
+      rollGroup: { added: false, reason: "not finished" } as RollGroup,
+    };
     stats.audio = audioStats;
     audioSource = new AudioSampleSource({
       codec: "aac",

@@ -12,7 +12,13 @@ const DAY_SECONDS = 60 * 60 * 24;
 const BASE_PATH = "/api/auth";
 
 // Sign-up, profile update, email change and password reset return 404 (API-05, FR-29.11)
-const DISABLED_PATHS = ["/sign-up/email", "/update-user", "/change-email", "/request-password-reset", "/reset-password"];
+const DISABLED_PATHS = [
+  "/sign-up/email",
+  "/update-user",
+  "/change-email",
+  "/request-password-reset",
+  "/reset-password",
+];
 
 // Each option is confirmed against the installed library source in DECISIONS.md (API-05).
 // BETTER_AUTH_SECRET and BETTER_AUTH_URL come from the environment (SRS §15.1).

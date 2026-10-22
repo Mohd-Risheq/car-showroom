@@ -139,7 +139,10 @@ export function CspProbe({ side, nonce }: { side: Side; nonce?: string | undefin
         return { ok: transform === "matrix(1, 0, 0, 1, 48, 0)", detail: `transform ${transform}` };
       });
       checks.tabs = await check(async () => {
-        const span = await waitFor(() => (indicator.current && !indicator.current.hidden ? indicator.current : null), "indicator");
+        const span = await waitFor(
+          () => (indicator.current && !indicator.current.hidden ? indicator.current : null),
+          "indicator",
+        );
         const width = getComputedStyle(span).width;
         return { ok: Number.parseFloat(width) > 0, detail: `indicator width ${width}` };
       });

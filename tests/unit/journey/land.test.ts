@@ -33,7 +33,11 @@ describe("the static map's land", () => {
 
   it("is one SVG file on the static map's frame", () => {
     const svg = landSvg();
-    expect(svg).toMatch(new RegExp(`^<svg xmlns="http://www.w3.org/2000/svg" width="${MAP.width}" height="${MAP.height}" viewBox="0 0 ${MAP.width} ${MAP.height}">`));
+    expect(svg).toMatch(
+      new RegExp(
+        `^<svg xmlns="http://www.w3.org/2000/svg" width="${MAP.width}" height="${MAP.height}" viewBox="0 0 ${MAP.width} ${MAP.height}">`,
+      ),
+    );
     expect(svg).toContain('fill-rule="evenodd"');
     expect(svg.length).toBeLessThan(40_000);
   });
@@ -52,7 +56,8 @@ describe("the static map's land", () => {
 
   it("cuts the land that crosses the antimeridian, so Chukotka shows at the west edge", () => {
     const [, chukotkaY] = toMap([66, -175]);
-    const atEdge = (edge: number) => rings.filter((ring) => ring.some(([x, y]) => x === edge && Math.abs(y - chukotkaY) < 12));
+    const atEdge = (edge: number) =>
+      rings.filter((ring) => ring.some(([x, y]) => x === edge && Math.abs(y - chukotkaY) < 12));
     expect(atEdge(0).length).toBeGreaterThan(0);
     expect(atEdge(MAP.width).length).toBeGreaterThan(0);
   });

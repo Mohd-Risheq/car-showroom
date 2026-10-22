@@ -1,5 +1,5 @@
-import { type CSSProperties, Fragment } from "react";
 import { getLocale } from "next-intl/server";
+import { type CSSProperties, Fragment } from "react";
 import { type AppLocale, directionOf } from "@/i18n/routing";
 import { notFoundOnDeployments } from "@/lib/deployment";
 import { martianMono, readexPro } from "@/styles/fonts";
@@ -15,13 +15,29 @@ const SCRIPTS: AppLocale[] = ["ar", "en"];
 
 const sampleClass = { display: C.display, head: C.head, lead: C.lead, body: C.body, small: C.small };
 
-function DigitRow({ id, numeric, className, style }: { id: string; numeric: "normal" | "tabular-nums"; className?: string | undefined; style: CSSProperties }) {
+function DigitRow({
+  id,
+  numeric,
+  className,
+  style,
+}: {
+  id: string;
+  numeric: "normal" | "tabular-nums";
+  className?: string | undefined;
+  style: CSSProperties;
+}) {
   return (
     <div className={C.row}>
       <span className={C.rowLabel} lang="en" dir="ltr">
         {id} · {numeric}
       </span>
-      <span dir="ltr" className={`${C.sample} ${className ?? ""}`} style={{ ...style, fontVariantNumeric: numeric }} data-digits={id} data-numeric={numeric}>
+      <span
+        dir="ltr"
+        className={`${C.sample} ${className ?? ""}`}
+        style={{ ...style, fontVariantNumeric: numeric }}
+        data-digits={id}
+        data-numeric={numeric}
+      >
         {DIGITS.map((digit) => (
           <span key={digit} className={C.digit} data-digit={digit}>
             {digit}
@@ -122,7 +138,11 @@ export default async function TypeSpikePage() {
                           lang={script}
                           dir={directionOf(script)}
                           className={C.sample}
-                          style={{ fontSize: wght === 600 ? "2.5rem" : "1.25rem", fontWeight: wght, fontVariationSettings: `"HEXP" ${hexp}` }}
+                          style={{
+                            fontSize: wght === 600 ? "2.5rem" : "1.25rem",
+                            fontWeight: wght,
+                            fontVariationSettings: `"HEXP" ${hexp}`,
+                          }}
                           data-hexp={hexp}
                           data-script={script}
                           data-wght={wght}
@@ -138,17 +158,25 @@ export default async function TypeSpikePage() {
 
             <div className={C.fixture}>
               <p className={C.label} lang="en" dir="ltr">
-                <b className={C.labelName}>joins</b>a fully joined word at HEXP 0 and 100, wght 600: every letter should stay connected
+                <b className={C.labelName}>joins</b>a fully joined word at HEXP 0 and 100, wght 600: every letter should
+                stay connected
               </p>
               <div className={C.rows}>
                 {[0, 100].map((hexp) => (
                   <div key={hexp} className={C.row}>
-                    <span className={C.rowLabel} lang="en" dir="ltr">ar · 600 · HEXP {hexp}</span>
+                    <span className={C.rowLabel} lang="en" dir="ltr">
+                      ar · 600 · HEXP {hexp}
+                    </span>
                     <span
                       lang="ar"
                       dir="rtl"
                       className={C.sample}
-                      style={{ fontSize: "6rem", fontWeight: 600, lineHeight: 1.25, fontVariationSettings: `"HEXP" ${hexp}` }}
+                      style={{
+                        fontSize: "6rem",
+                        fontWeight: 600,
+                        lineHeight: 1.25,
+                        fontVariationSettings: `"HEXP" ${hexp}`,
+                      }}
                       data-join={hexp}
                     >
                       {JOINED_AR}
@@ -160,23 +188,51 @@ export default async function TypeSpikePage() {
 
             <div className={C.fixture}>
               <p className={C.label} lang="en" dir="ltr">
-                <b className={C.labelName}>digits</b>each digit boxed by its advance: Readex Pro at 18 and 64 px, Martian Mono at wdth 100 and 87.5
+                <b className={C.labelName}>digits</b>each digit boxed by its advance: Readex Pro at 18 and 64 px,
+                Martian Mono at wdth 100 and 87.5
               </p>
               <div className={C.rows}>
                 <DigitRow id="readex-body" numeric="normal" style={{ fontSize: "1.125rem" }} />
                 <DigitRow id="readex-body" numeric="tabular-nums" style={{ fontSize: "1.125rem" }} />
-                <DigitRow id="readex-display" numeric="normal" style={{ fontSize: "4rem", fontWeight: 600, lineHeight: 1.25 }} />
-                <DigitRow id="readex-display" numeric="tabular-nums" style={{ fontSize: "4rem", fontWeight: 600, lineHeight: 1.25 }} />
-                <DigitRow id="martian-875" numeric="tabular-nums" className={C.figure} style={{ fontSize: "1.125rem" }} />
+                <DigitRow
+                  id="readex-display"
+                  numeric="normal"
+                  style={{ fontSize: "4rem", fontWeight: 600, lineHeight: 1.25 }}
+                />
+                <DigitRow
+                  id="readex-display"
+                  numeric="tabular-nums"
+                  style={{ fontSize: "4rem", fontWeight: 600, lineHeight: 1.25 }}
+                />
+                <DigitRow
+                  id="martian-875"
+                  numeric="tabular-nums"
+                  className={C.figure}
+                  style={{ fontSize: "1.125rem" }}
+                />
                 <div className={C.row}>
-                  <span className={C.rowLabel} lang="en" dir="ltr">martian · wdth</span>
-                  <span dir="ltr" className={`${C.sample} ${C.figure}`} style={{ fontSize: "1.125rem", fontStretch: "100%" }} data-stretch="100">
+                  <span className={C.rowLabel} lang="en" dir="ltr">
+                    martian · wdth
+                  </span>
+                  <span
+                    dir="ltr"
+                    className={`${C.sample} ${C.figure}`}
+                    style={{ fontSize: "1.125rem", fontStretch: "100%" }}
+                    data-stretch="100"
+                  >
                     4T1B31HK3KU190069
                   </span>
                 </div>
                 <div className={C.row}>
-                  <span className={C.rowLabel} lang="en" dir="ltr">martian · wdth 87.5</span>
-                  <span dir="ltr" className={`${C.sample} ${C.figure}`} style={{ fontSize: "1.125rem" }} data-stretch="87.5">
+                  <span className={C.rowLabel} lang="en" dir="ltr">
+                    martian · wdth 87.5
+                  </span>
+                  <span
+                    dir="ltr"
+                    className={`${C.sample} ${C.figure}`}
+                    style={{ fontSize: "1.125rem" }}
+                    data-stretch="87.5"
+                  >
                     4T1B31HK3KU190069
                   </span>
                 </div>

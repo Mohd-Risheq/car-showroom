@@ -1,0 +1,111 @@
+{
+  "advisories": {
+    "1102341": {
+      "github_advisory_id": "GHSA-67mh-4wv8-2f99",
+      "module_name": "esbuild",
+      "severity": "moderate",
+      "title": "esbuild enables any website to send any requests to the development server and read the response",
+      "cves": [],
+      "vulnerable_versions": "<=0.24.2",
+      "patched_versions": ">=0.25.0",
+      "findings": [
+        {
+          "version": "0.18.20",
+          "paths": [
+            ".>drizzle-kit>@esbuild-kit/esm-loader>@esbuild-kit/core-utils>esbuild"
+          ]
+        }
+      ],
+      "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99"
+    },
+    "1139346": {
+      "github_advisory_id": "GHSA-jmr9-qjv8-65gv",
+      "module_name": "extract-zip",
+      "severity": "high",
+      "title": "extract-zip unvalidated symlink path traversal",
+      "cves": [
+        "CVE-2026-56876"
+      ],
+      "vulnerable_versions": "<=2.0.1",
+      "patched_versions": "<0.0.0",
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>@lhci/cli>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip"
+          ]
+        }
+      ],
+      "url": "https://github.com/advisories/GHSA-jmr9-qjv8-65gv"
+    },
+    "1193685": {
+      "github_advisory_id": "GHSA-7pqw-9j4j-h8q3",
+      "module_name": "extract-zip",
+      "severity": "high",
+      "title": "extract-zip allows arbitrary file writes through symlink archive entries",
+      "cves": [
+        "CVE-2026-19693"
+      ],
+      "vulnerable_versions": "<=2.0.1",
+      "patched_versions": "<0.0.0",
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>@lhci/cli>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip"
+          ]
+        }
+      ],
+      "url": "https://github.com/advisories/GHSA-7pqw-9j4j-h8q3"
+    },
+    "1240992": {
+      "github_advisory_id": "GHSA-vfj7-8cjw-p6xm",
+      "module_name": "braces",
+      "severity": "high",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "cves": [
+        "CVE-2026-93687"
+      ],
+      "vulnerable_versions": "<=3.0.3",
+      "patched_versions": "<0.0.0",
+      "findings": [
+        {
+          "version": "3.0.3",
+          "paths": [
+            ".>eslint-config-next>@next/eslint-plugin-next>fast-glob>micromatch>braces"
+          ]
+        }
+      ],
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
+    },
+    "1241202": {
+      "github_advisory_id": "GHSA-hp3w-g68c-fv3c",
+      "module_name": "sprintf-js",
+      "severity": "moderate",
+      "title": "sprintf-js vulnerable to denial of service through unbounded precision specifiers",
+      "cves": [
+        "CVE-2026-97058"
+      ],
+      "vulnerable_versions": "<=1.1.3",
+      "patched_versions": "<0.0.0",
+      "findings": [
+        {
+          "version": "1.0.3",
+          "paths": [
+            ".>@lhci/cli>@lhci/utils>js-yaml>argparse>sprintf-js"
+          ]
+        }
+      ],
+      "url": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c"
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 3,
+      "critical": 0
+    }
+  }
+}

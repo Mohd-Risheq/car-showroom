@@ -14,7 +14,8 @@ const HOST = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9]
 /** BLOB_STORE_HOST, checked: unset or empty means local runs and previews, which leave it out */
 export function blobStoreHost(value: string | undefined): string | undefined {
   if (value === undefined || value === "") return undefined;
-  if (!HOST.test(value)) throw new Error("BLOB_STORE_HOST must be a host name, such as abc123.public.blob.vercel-storage.com");
+  if (!HOST.test(value))
+    throw new Error("BLOB_STORE_HOST must be a host name, such as abc123.public.blob.vercel-storage.com");
   return value;
 }
 
@@ -67,7 +68,14 @@ export function dealerPolicy(nonce: string, { store: host, development = false }
   // stays ahead of any script-src-elem or script-src-attr
   return serialize([
     ["default-src", "'self'"],
-    ["script-src", "'self'", `'nonce-${nonce}'`, "'strict-dynamic'", "'wasm-unsafe-eval'", ...(development ? ["'unsafe-eval'"] : [])],
+    [
+      "script-src",
+      "'self'",
+      `'nonce-${nonce}'`,
+      "'strict-dynamic'",
+      "'wasm-unsafe-eval'",
+      ...(development ? ["'unsafe-eval'"] : []),
+    ],
     // Sonner adds its stylesheet as a <style> with no nonce, so styles fall back to 'unsafe-inline'
     // (SRS §12.5, DECISIONS.md D-028). No nonce here: browsers ignore 'unsafe-inline' next to one.
     ["style-src", "'self'", "'unsafe-inline'"],
@@ -90,7 +98,8 @@ export function createNonce(): string {
 export type Header = { key: string; value: string };
 
 const PERMISSIONS = {
-  public: "camera=(), microphone=(), geolocation=(), accelerometer=(), gyroscope=(), magnetometer=(), payment=(), usb=()",
+  public:
+    "camera=(), microphone=(), geolocation=(), accelerometer=(), gyroscope=(), magnetometer=(), payment=(), usb=()",
   dealer: "camera=(self), microphone=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self)",
 } as const;
 

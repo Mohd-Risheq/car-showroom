@@ -1,9 +1,11 @@
 "use client";
 
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { round } from "@/app/_dev/harness";
+import { FrameMeter, LongTaskLog, stats } from "@/app/_dev/meter";
+import { postDevReport } from "@/app/_dev/report";
 import { journeySteps } from "@/features/journey/domain/route";
 import { JourneyGlobe } from "@/features/journey/ui/journey-globe";
-import { FrameMeter, LongTaskLog, round, stats } from "../spin/meter";
 import { isRouteKey, placesOf, ROUTES, type RouteKey } from "./fixture";
 import { NativeArcs } from "./native-arcs";
 
@@ -41,7 +43,10 @@ const summarise = (values: number[]): Summary => {
 const scripts = () =>
   performance
     .getEntriesByType("resource")
-    .filter((entry): entry is PerformanceResourceTiming => entry instanceof PerformanceResourceTiming && entry.initiatorType === "script");
+    .filter(
+      (entry): entry is PerformanceResourceTiming =>
+        entry instanceof PerformanceResourceTiming && entry.initiatorType === "script",
+    );
 
 function measureRefresh(): Promise<number> {
   return new Promise((resolve) => {
@@ -155,22 +160,11 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
       frames: longTasks.current ? frames.summary(refreshMs, longTasks.current) : null,
       errors,
     };
-    const text = JSON.stringify(report, null, 2);
-    setJson(text);
+    setJson(JSON.stringify(report, null, 2));
     running.current = false;
     setState("done");
     if (!options.current.report) return;
-    try {
-      const response = await fetch(`/${options.current.locale}/dev/report`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: text,
-      });
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-    } catch (error) {
-      setSent(`Sending failed: ${String(error)}`);
-    }
+    setSent((await postDevReport(options.current.locale, report)).message);
   }, [route, steps]);
 
   useEffect(() => {
@@ -231,7 +225,14 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
       <div className="grid gap-6 md:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
         <div className="sticky top-0 z-10 self-start py-2 md:top-[10vh]" style={{ background: "var(--bg)" }}>
           <div className="mx-auto w-full max-w-[280px] md:max-w-[520px]">
-            <JourneyGlobe key={route} places={places} active={active} onFrame={onFrame} onSettle={onSettle} onShow={onShow}>
+            <JourneyGlobe
+              key={route}
+              places={places}
+              active={active}
+              onFrame={onFrame}
+              onSettle={onSettle}
+              onShow={onShow}
+            >
               {maps[route]}
             </JourneyGlobe>
           </div>
@@ -242,7 +243,11 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
 
         <ol ref={list} key={route} className="grid gap-2 md:gap-0">
           {milestones.map((milestone, index) => (
-            <li key={`${milestone.type}-${milestone.month}`} data-index={index} className="md:flex md:min-h-[45vh] md:items-center">
+            <li
+              key={`${milestone.type}-${milestone.month}`}
+              data-index={index}
+              className="md:flex md:min-h-[45vh] md:items-center"
+            >
               <button
                 type="button"
                 className="w-full p-3 text-start"
@@ -266,11 +271,15 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
         <div className="grid gap-4 md:grid-cols-2" data-testid="compare">
           <figure className="grid gap-2">
             <NativeArcs places={places} centre={places.length - 1} />
-            <figcaption style={{ color: "var(--muted)" }}>cobe&apos;s own arcs (arcHeight 0.25), centred on the last place</figcaption>
+            <figcaption style={{ color: "var(--muted)" }}>
+              cobe&apos;s own arcs (arcHeight 0.25), centred on the last place
+            </figcaption>
           </figure>
           <figure className="grid gap-2">
             <NativeArcs places={places} centre={1} />
-            <figcaption style={{ color: "var(--muted)" }}>cobe&apos;s own arcs (arcHeight 0.25), centred on the second place</figcaption>
+            <figcaption style={{ color: "var(--muted)" }}>
+              cobe&apos;s own arcs (arcHeight 0.25), centred on the second place
+            </figcaption>
           </figure>
         </div>
       ) : null}

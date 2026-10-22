@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { seededRandom } from "@/lib/seeded-random";
 import { inspectMedia } from "@/lib/storage/inspect";
 import type { MediaType } from "@/lib/storage/rules";
 import {
@@ -13,7 +14,7 @@ import {
   withWebpChunk,
   XMP,
 } from "../../support/media";
-import { randomBelow, seededRandom } from "../../support/random";
+import { randomBelow } from "../../support/random";
 
 // API-17 container checks and FR-32.2a metadata rejection (TC-32-2), on real encoder output
 

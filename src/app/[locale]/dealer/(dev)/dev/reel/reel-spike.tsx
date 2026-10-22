@@ -1,7 +1,10 @@
 "use client";
+/* eslint-disable react-hooks/refs, react-hooks/purity, react-hooks/exhaustive-deps -- a measuring harness kept as it ran for its evidence; T-66 replaces it (D-037) */
 
 import { useEffect, useRef, useState } from "react";
-import { DEV_UPLOAD_PART_BYTES } from "@/app/_dev/upload-limits";
+import { type ClipName, clipUrl, isClipName } from "@/app/_dev/fixtures";
+import { describeError, round, watchViolations } from "@/app/_dev/harness";
+import { postDevMp4, postDevReport } from "@/app/_dev/report";
 import type { ReelPcm } from "@/features/reel/domain/clip";
 import {
   type AudioChoice,
@@ -28,8 +31,7 @@ import type { WorkerProbe, WorkerReply, WorkerRequest } from "./reel.worker";
 // mode=constant for constant bitrate; auto=1 starts at once; report=1 sends the results and the
 // MP4 to the Mac running the server (BUILD-PLAN §4).
 
-const CLIP_NAMES = ["steps-8s", "steps-20s", "idle-12s", "rev-6s"] as const;
-type ClipChoice = (typeof CLIP_NAMES)[number] | "none";
+type ClipChoice = ClipName | "none";
 
 type Setup = { locale: "ar" | "en"; clip: ClipChoice; mode: BitrateMode; auto: boolean; report: boolean };
 
@@ -54,7 +56,11 @@ type Support = {
   silent: boolean;
 };
 
-type FrameRead = { requested: number; index: number | null; patches: Array<{ name: string; expected: readonly number[]; got: number[]; diff: number }> };
+type FrameRead = {
+  requested: number;
+  index: number | null;
+  patches: Array<{ name: string; expected: readonly number[]; got: number[]; diff: number }>;
+};
 
 type Playback = {
   width: number;
@@ -73,7 +79,14 @@ type Playback = {
 };
 
 type AudioCheck =
-  | { decoded: true; seconds: number; sampleRate: number; channels: number; peakDb: number; rmsDbPerHalfSecond: number[] }
+  | {
+      decoded: true;
+      seconds: number;
+      sampleRate: number;
+      channels: number;
+      peakDb: number;
+      rmsDbPerHalfSecond: number[];
+    }
   | { decoded: false; error: string };
 
 type Checked = { bytes: number; sha256: string; playback: Playback | { error: string }; audio: AudioCheck };
@@ -106,14 +119,27 @@ type Results = {
 };
 
 type Summary = { median: number; p95: number; max: number; total: number };
-type Phase = "probing" | "unsupported" | "ready" | "preparing" | "encoding" | "cancelling" | "checking" | "done" | "failed" | "cancelled";
-
-const round = (value: number, digits = 1) => Math.round(value * 10 ** digits) / 10 ** digits;
+type Phase =
+  | "probing"
+  | "unsupported"
+  | "ready"
+  | "preparing"
+  | "encoding"
+  | "cancelling"
+  | "checking"
+  | "done"
+  | "failed"
+  | "cancelled";
 
 function summarize(values: number[]): Summary {
   const sorted = [...values].sort((a, b) => a - b);
   const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))] ?? 0;
-  return { median: round(at(0.5), 2), p95: round(at(0.95), 2), max: round(sorted.at(-1) ?? 0, 2), total: round(values.reduce((a, b) => a + b, 0)) };
+  return {
+    median: round(at(0.5), 2),
+    p95: round(at(0.95), 2),
+    max: round(sorted.at(-1) ?? 0, 2),
+    total: round(values.reduce((a, b) => a + b, 0)),
+  };
 }
 
 function setupFromUrl(): Setup {
@@ -121,7 +147,7 @@ function setupFromUrl(): Setup {
   const clip = params.get("clip");
   return {
     locale: window.location.pathname.split("/")[1] === "ar" ? "ar" : "en",
-    clip: clip === "none" ? "none" : CLIP_NAMES.find((name) => name === clip) ?? "steps-8s",
+    clip: clip === "none" ? "none" : isClipName(clip) ? clip : "steps-8s",
     mode: params.get("mode") === "constant" ? "constant" : "variable",
     auto: params.get("auto") === "1",
     report: params.get("report") === "1",
@@ -152,22 +178,39 @@ function waitFor(target: HTMLMediaElement, type: string, ms: number): Promise<vo
 
 async function probeSupport(worker: WorkerProbe | { error: string } | null): Promise<Support> {
   const video: Record<string, boolean> = {};
-  const videoCheck = typeof VideoEncoder === "undefined" ? undefined : VideoEncoder.isConfigSupported.bind(VideoEncoder);
+  const videoCheck =
+    typeof VideoEncoder === "undefined" ? undefined : VideoEncoder.isConfigSupported.bind(VideoEncoder);
   for (const codec of [...VIDEO_CODECS, ...OTHER_VIDEO]) {
-    for (const mode of ["variable", "constant"] as const) video[`${codec} ${mode}`] = await isSupported(videoCheck, videoConfig(codec, mode));
+    for (const mode of ["variable", "constant"] as const)
+      video[`${codec} ${mode}`] = await isSupported(videoCheck, videoConfig(codec, mode));
   }
   for (const hardwareAcceleration of ["prefer-hardware", "prefer-software"] as const) {
-    video[`avc1.640028 ${hardwareAcceleration}`] = await isSupported(videoCheck, { ...videoConfig("avc1.640028"), hardwareAcceleration });
+    video[`avc1.640028 ${hardwareAcceleration}`] = await isSupported(videoCheck, {
+      ...videoConfig("avc1.640028"),
+      hardwareAcceleration,
+    });
   }
-  video["avc1.640028 landscape 1920x1080"] = await isSupported(videoCheck, { ...videoConfig("avc1.640028"), width: 1920, height: 1080 });
+  video["avc1.640028 landscape 1920x1080"] = await isSupported(videoCheck, {
+    ...videoConfig("avc1.640028"),
+    width: 1920,
+    height: 1080,
+  });
 
   const audio: Record<string, boolean> = {};
-  const audioCheck = typeof AudioEncoder === "undefined" ? undefined : AudioEncoder.isConfigSupported.bind(AudioEncoder);
+  const audioCheck =
+    typeof AudioEncoder === "undefined" ? undefined : AudioEncoder.isConfigSupported.bind(AudioEncoder);
   for (const config of [...AUDIO_CONFIGS, ...OTHER_AUDIO]) {
-    audio[`${config.codec} ${config.sampleRate} Hz ${config.numberOfChannels} ch`] = await isSupported(audioCheck, config);
+    audio[`${config.codec} ${config.sampleRate} Hz ${config.numberOfChannels} ch`] = await isSupported(
+      audioCheck,
+      config,
+    );
   }
 
-  const picks = { video: await pickVideoCodec(), videoConstant: await pickVideoCodec(globalThis, "constant"), audio: await pickAudioConfig() };
+  const picks = {
+    video: await pickVideoCodec(),
+    videoConstant: await pickVideoCodec(globalThis, "constant"),
+    audio: await pickAudioConfig(),
+  };
   const workerOk = worker !== null && !("error" in worker) && worker.canvasProblem === null;
   return {
     features: {
@@ -221,7 +264,10 @@ async function seekTo(video: HTMLVideoElement, frame: number): Promise<void> {
   await seeked;
   // A paused element presents the new frame a little after "seeked" in some engines
   if (typeof video.requestVideoFrameCallback === "function") {
-    await Promise.race([new Promise<void>((resolve) => video.requestVideoFrameCallback(() => resolve())), new Promise((r) => setTimeout(r, 500))]);
+    await Promise.race([
+      new Promise<void>((resolve) => video.requestVideoFrameCallback(() => resolve())),
+      new Promise((r) => setTimeout(r, 500)),
+    ]);
   }
 }
 
@@ -255,7 +301,11 @@ async function checkPlayback(video: HTMLVideoElement, url: string): Promise<Play
   }
   const playedMs = round(performance.now() - started);
   const quality = typeof video.getVideoPlaybackQuality === "function" ? video.getVideoPlaybackQuality() : null;
-  const extra = video as HTMLVideoElement & { webkitAudioDecodedByteCount?: number; webkitVideoDecodedByteCount?: number; audioTracks?: { length: number } };
+  const extra = video as HTMLVideoElement & {
+    webkitAudioDecodedByteCount?: number;
+    webkitVideoDecodedByteCount?: number;
+    audioTracks?: { length: number };
+  };
   const playback: Playback = {
     width: video.videoWidth,
     height: video.videoHeight,
@@ -293,7 +343,14 @@ async function checkAudio(bytes: ArrayBuffer): Promise<AudioCheck> {
       for (const v of window) sum += v * v;
       rmsDbPerHalfSecond.push(round(10 * Math.log10(sum / Math.max(1, window.length) + 1e-12), 1));
     }
-    return { decoded: true, seconds: round(buffer.duration, 4), sampleRate: rate, channels: buffer.numberOfChannels, peakDb: round(20 * Math.log10(peak + 1e-12), 2), rmsDbPerHalfSecond };
+    return {
+      decoded: true,
+      seconds: round(buffer.duration, 4),
+      sampleRate: rate,
+      channels: buffer.numberOfChannels,
+      peakDb: round(20 * Math.log10(peak + 1e-12), 2),
+      rmsDbPerHalfSecond,
+    };
   } catch (error) {
     return { decoded: false, error: String(error) };
   }
@@ -342,7 +399,8 @@ export function ReelSpike() {
     return worker;
   };
 
-  const send = (worker: Worker, request: WorkerRequest, transfer: Transferable[] = []) => worker.postMessage(request, transfer);
+  const send = (worker: Worker, request: WorkerRequest, transfer: Transferable[] = []) =>
+    worker.postMessage(request, transfer);
 
   const releasePreview = () => {
     const url = previewUrlRef.current;
@@ -388,7 +446,7 @@ export function ReelSpike() {
       if (choice && setup.clip !== "none") {
         setPhase("preparing");
         const started = performance.now();
-        const response = await fetch(`/${setup.locale}/dev/sound/clips/${setup.clip}.wav`);
+        const response = await fetch(clipUrl(setup.locale, setup.clip, null));
         if (!response.ok) throw new Error(`clip ${response.status}`);
         pcm = await prepareClip(await response.arrayBuffer(), choice.sampleRate, choice.numberOfChannels);
         prepareAudioMs = round(performance.now() - started);
@@ -401,7 +459,11 @@ export function ReelSpike() {
           else if (message.type === "done" || message.type === "failed") resolve(message);
         });
         const videoCodec = setup.mode === "constant" ? support.picks.videoConstant : support.picks.video;
-        send(worker, { type: "encode", videoCodec: videoCodec ?? "", bitrateMode: setup.mode, audio }, audio ? [audio.data.buffer] : []);
+        send(
+          worker,
+          { type: "encode", videoCodec: videoCodec ?? "", bitrateMode: setup.mode, audio },
+          audio ? [audio.data.buffer] : [],
+        );
       });
       stopWorker();
       // A cancel that came too late to stop the encode ends here too
@@ -422,7 +484,15 @@ export function ReelSpike() {
       results.encode = {
         pictureMs: round(reply.pictureMs),
         prepareAudioMs,
-        audio: pcm && choice ? { codec: choice.codec, sampleRate: pcm.sampleRate, numberOfChannels: pcm.numberOfChannels, clipSeconds: round(pcm.clipSeconds, 3) } : null,
+        audio:
+          pcm && choice
+            ? {
+                codec: choice.codec,
+                sampleRate: pcm.sampleRate,
+                numberOfChannels: pcm.numberOfChannels,
+                clipSeconds: round(pcm.clipSeconds, 3),
+              }
+            : null,
         drawMs: summarize(stats.drawMs),
         addMs: summarize(stats.addMs),
         finalizeMs: round(stats.finalizeMs),
@@ -498,23 +568,6 @@ export function ReelSpike() {
     }
   };
 
-  /** In parts, one after another, each under what Next.js keeps of a body (DEV_UPLOAD_PART_BYTES) */
-  const uploadMp4 = async (locale: string, mp4: ArrayBuffer): Promise<string | null> => {
-    const id = Array.from(crypto.getRandomValues(new Uint8Array(6)), (byte) => byte.toString(16).padStart(2, "0")).join("");
-    let saved: string | null = null;
-    for (let offset = 0; offset < mp4.byteLength; offset += DEV_UPLOAD_PART_BYTES) {
-      const response = await fetch(`/${locale}/dev/report/mp4?id=${id}&offset=${offset}&total=${mp4.byteLength}`, {
-        method: "POST",
-        headers: { "content-type": "video/mp4" },
-        body: mp4.slice(offset, offset + DEV_UPLOAD_PART_BYTES),
-      });
-      if (!response.ok) throw new Error(`MP4 ${response.status} at byte ${offset}`);
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      saved = body?.saved ?? saved;
-    }
-    return saved;
-  };
-
   /**
    * With report=1, sends the MP4, if this run made one, and then the results to the Mac. A failed
    * MP4 upload goes into the results, which are sent anyway. False when the results didn't arrive.
@@ -531,23 +584,15 @@ export function ReelSpike() {
       const mp4 = mp4Ref.current;
       if (mp4 && !results.mp4File) {
         try {
-          results.mp4File = await uploadMp4(setup.locale, mp4);
+          results.mp4File = await postDevMp4(setup.locale, mp4);
         } catch (error) {
-          results.errors.push(`report: ${String(error)}`);
+          results.errors.push(`report: ${describeError(error)}`);
         }
         show();
       }
-      const response = await fetch(`/${setup.locale}/dev/report`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(results),
-      });
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-      return response.ok;
-    } catch (error) {
-      setSent(`Sending failed: ${String(error)}`);
-      return false;
+      const outcome = await postDevReport(setup.locale, results);
+      setSent(outcome.message);
+      return outcome.ok;
     } finally {
       setSending(false);
     }
@@ -572,10 +617,7 @@ export function ReelSpike() {
       csp: [],
     };
     resultsRef.current = results;
-    const onViolation = (event: SecurityPolicyViolationEvent) => {
-      results.csp.push(`${event.effectiveDirective} blocked ${event.blockedURI || "inline"}`);
-    };
-    document.addEventListener("securitypolicyviolation", onViolation);
+    const stopWatching = watchViolations((line) => results.csp.push(line));
     let live = true;
     void (async () => {
       const support = await probeSupport(await probeWorker());
@@ -587,7 +629,7 @@ export function ReelSpike() {
     })();
     return () => {
       live = false;
-      document.removeEventListener("securitypolicyviolation", onViolation);
+      stopWatching();
       stopWorker();
       const preview = previewUrlRef.current;
       if (preview) URL.revokeObjectURL(preview);
@@ -596,11 +638,19 @@ export function ReelSpike() {
   }, []);
 
   const support = resultsRef.current?.support;
-  const busy = phase === "probing" || phase === "preparing" || phase === "encoding" || phase === "cancelling" || phase === "checking";
+  const busy =
+    phase === "probing" ||
+    phase === "preparing" ||
+    phase === "encoding" ||
+    phase === "cancelling" ||
+    phase === "checking";
   // Runs that end without a preview to answer for still send what they found (report=1)
   const sendable =
     setupRef.current?.report === true &&
-    (phase === "failed" || phase === "cancelled" || phase === "unsupported" || (phase === "ready" && (resultsRef.current?.crossPlay.length ?? 0) > 0));
+    (phase === "failed" ||
+      phase === "cancelled" ||
+      phase === "unsupported" ||
+      (phase === "ready" && (resultsRef.current?.crossPlay.length ?? 0) > 0));
 
   return (
     <section className="grid max-w-2xl gap-3" data-state={phase}>
@@ -608,13 +658,23 @@ export function ReelSpike() {
       {support ? (
         <p>
           {support.offered ? `Offered: ${support.picks.video}` : "Not offered"}
-          {support.offered ? (support.silent ? ", silent (no AAC encoder)" : `, with ${support.picks.audio?.codec} sound`) : ""}
+          {support.offered
+            ? support.silent
+              ? ", silent (no AAC encoder)"
+              : `, with ${support.picks.audio?.codec} sound`
+            : ""}
         </p>
       ) : (
         <p>Checking what this browser can encode...</p>
       )}
       <div className="flex flex-wrap gap-3">
-        <button type="button" className="border border-(--ink) px-4 py-3" disabled={busy || sending || !support?.offered} onClick={() => void make()} data-make>
+        <button
+          type="button"
+          className="border border-(--ink) px-4 py-3"
+          disabled={busy || sending || !support?.offered}
+          onClick={() => void make()}
+          data-make
+        >
           Make the test video
         </button>
         {phase === "encoding" ? (
@@ -655,7 +715,13 @@ export function ReelSpike() {
           <p>Play the preview with the sound on. What happened?</p>
           <div className="flex flex-wrap gap-3">
             {["Played with sound", "Played, no sound", "Didn't play"].map((answer) => (
-              <button key={answer} type="button" className="border border-(--ink) px-4 py-3" disabled={sending} onClick={() => void report(answer)}>
+              <button
+                key={answer}
+                type="button"
+                className="border border-(--ink) px-4 py-3"
+                disabled={sending}
+                onClick={() => void report(answer)}
+              >
                 {answer}
               </button>
             ))}
@@ -663,7 +729,13 @@ export function ReelSpike() {
         </div>
       ) : null}
       {sendable ? (
-        <button type="button" className="justify-self-start border border-(--ink) px-4 py-3" disabled={sending} onClick={() => void report(null)} data-send>
+        <button
+          type="button"
+          className="justify-self-start border border-(--ink) px-4 py-3"
+          disabled={sending}
+          onClick={() => void report(null)}
+          data-send
+        >
           Send results
         </button>
       ) : null}

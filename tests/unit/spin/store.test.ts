@@ -63,7 +63,11 @@ describe("the first pass (FR-16.1, FR-16.9)", () => {
     store.loadFirstPass();
     const order = loadOrder(FRAMES).firstPass;
     expect(calls.map((call) => call.request.url)).toEqual(order.slice(0, 6).map((index) => `low-${index}.webp`));
-    expect(calls[0]?.request).toEqual({ url: `low-${order[0]}.webp`, resize: fitInside(LOW_SIZE, LOW_RES_BOX), quality: "medium" });
+    expect(calls[0]?.request).toEqual({
+      url: `low-${order[0]}.webp`,
+      resize: fitInside(LOW_SIZE, LOW_RES_BOX),
+      quality: "medium",
+    });
 
     at(calls, 0).succeed();
     await settle();
@@ -162,7 +166,9 @@ describe("memory (NFR-PERF-07)", () => {
     store.requestHigh(0, { width: 640, height: 400 });
     at(calls, 6).succeed();
     await settle();
-    expect(store.decodedBytes()).toBe(2 * bitmapBytes(LOW_RES_BOX) + bitmapBytes(fitInside(HIGH_SIZE, { width: 640, height: 400 })));
+    expect(store.decodedBytes()).toBe(
+      2 * bitmapBytes(LOW_RES_BOX) + bitmapBytes(fitInside(HIGH_SIZE, { width: 640, height: 400 })),
+    );
   });
 
   it("closes every bitmap and the decoder on dispose, and a bitmap that arrives after it", async () => {

@@ -39,7 +39,10 @@ export async function createPasswordUser(input: NewPasswordUser): Promise<Create
     try {
       await ctx.internalAdapter.deleteUser(user.id);
     } catch (cleanupError) {
-      throw new AggregateError([linkError, cleanupError], `Linking the password failed, and user ${user.id} could not be removed`);
+      throw new AggregateError(
+        [linkError, cleanupError],
+        `Linking the password failed, and user ${user.id} could not be removed`,
+      );
     }
     throw linkError;
   }

@@ -1,14 +1,26 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps -- a measuring harness kept as it ran for its evidence; T-40 replaces it (D-037) */
 
 import { type PointerEvent, useEffect, useId, useRef, useState } from "react";
+import { type ClipName, clipUrl, ENGINE_CLIPS, isClipName } from "@/app/_dev/fixtures";
+import { round } from "@/app/_dev/harness";
+import { postDevReport } from "@/app/_dev/report";
 import { needsSilentHint } from "@/features/sound/domain/platform";
-import { angleFor, type Dial, dialFor, type FuelType, needleTarget, REST, smooth, topFor } from "@/features/sound/domain/tach";
+import {
+  angleFor,
+  type Dial,
+  dialFor,
+  type FuelType,
+  needleTarget,
+  REST,
+  smooth,
+  topFor,
+} from "@/features/sound/domain/tach";
 import { audioSession, EnginePlayer, type PlayerEvent, type PlayerMode } from "@/features/sound/ui/player";
-import { CLIPS, type ClipName, clipUrl, isClipName } from "./fixture";
 
 // Spike T-07: a tap-to-play engine clip with the tachometer needle on the analyser (FR-15, BR-19,
 // DESIGN §5.3). T-40 builds the card on what it finds. Query:
-// - clip (a name in CLIPS), mode (buffer, element), session=playback and fuel
+// - clip (a name in ENGINE_CLIPS), mode (buffer, element), session=playback and fuel
 //   (gasoline, diesel) choose a setup;
 // - run=1 to 6 takes the setup from RUNS instead, for the phone session. After the clip, the page
 //   asks whether you heard it, then opens the next run as a fresh page, so no run inherits an
@@ -92,8 +104,6 @@ type Results = {
   errors: string[];
 };
 
-const round = (value: number, digits = 0) => Math.round(value * 10 ** digits) / 10 ** digits;
-
 function median(values: number[]): number | null {
   if (values.length === 0) return null;
   const sorted = [...values].sort((a, b) => a - b);
@@ -153,7 +163,10 @@ function DialFace({ dial }: { dial: Dial }) {
           <line x1="0" y1="0" x2="0" y2="4" className="stroke-(--fail) [stroke-width:1.5]" />
         </pattern>
       </defs>
-      <path className="fill-none stroke-(--line) [stroke-width:1]" d={`M ${start.x} ${start.y} A ${radius} ${radius} 0 ${large(0, dial.max)} 1 ${end.x} ${end.y}`} />
+      <path
+        className="fill-none stroke-(--line) [stroke-width:1]"
+        d={`M ${start.x} ${start.y} A ${radius} ${radius} 0 ${large(0, dial.max)} 1 ${end.x} ${end.y}`}
+      />
       <path
         className="stroke-(--fail) [stroke-width:1]"
         fill={`url(#${hatch})`}
@@ -162,14 +175,31 @@ function DialFace({ dial }: { dial: Dial }) {
       {ticks.map(({ value, major }) => {
         const outer = point(value, radius);
         const inner = point(value, radius - (major ? 10 : 5));
-        return <line key={value} className="stroke-(--line)" x1={outer.x} y1={outer.y} x2={inner.x} y2={inner.y} strokeWidth={major ? 1.5 : 1} />;
+        return (
+          <line
+            key={value}
+            className="stroke-(--line)"
+            x1={outer.x}
+            y1={outer.y}
+            x2={inner.x}
+            y2={inner.y}
+            strokeWidth={major ? 1.5 : 1}
+          />
+        );
       })}
       {ticks
         .filter(({ major }) => major)
         .map(({ value }) => {
           const at = point(value, radius - 24);
           return (
-            <text key={value} className="fill-(--ink) text-[13px]" x={at.x} y={at.y} textAnchor="middle" dominantBaseline="central">
+            <text
+              key={value}
+              className="fill-(--ink) text-[13px]"
+              x={at.x}
+              y={at.y}
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
               {value}
             </text>
           );
@@ -209,7 +239,14 @@ export function SoundSpike() {
   const resultsRef = useRef<Results | null>(null);
   // Asks the run's question if the clip never ends. An error doesn't end it, so it keeps the timer.
   const askTimerRef = useRef<number | undefined>(undefined);
-  const loopRef = useRef<{ clickAt: number; frame: number; last: number | null; value: number; intervals: number[]; needles: number[] }>({
+  const loopRef = useRef<{
+    clickAt: number;
+    frame: number;
+    last: number | null;
+    value: number;
+    intervals: number[];
+    needles: number[];
+  }>({
     clickAt: 0,
     frame: 0,
     last: null,
@@ -244,28 +281,21 @@ export function SoundSpike() {
     if (!results || !current) return false;
     const loop = loopRef.current;
     const medianMs = median(loop.intervals);
-    results.frames = { count: loop.intervals.length, medianMs: medianMs === null ? null : round(medianMs, 2), fps: medianMs ? round(1000 / medianMs, 1) : null };
+    results.frames = {
+      count: loop.intervals.length,
+      medianMs: medianMs === null ? null : round(medianMs, 2),
+      fps: medianMs ? round(1000 / medianMs, 1) : null,
+    };
     const needles = [...loop.needles].sort((a, b) => a - b);
     results.needle = needles.length
       ? { min: round(needles[0] ?? 0, 3), median: round(median(needles) ?? 0, 3), max: round(needles.at(-1) ?? 0, 3) }
       : null;
     results.environment.audioSession.typeAtEnd = audioSession()?.type ?? null;
-    const text = JSON.stringify(results, null, 2);
-    setJson(text);
+    setJson(JSON.stringify(results, null, 2));
     if (!post || !current.report) return true;
-    try {
-      const response = await fetch(`/${current.locale}/dev/report`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(results),
-      });
-      const body = (await response.json().catch(() => null)) as { saved?: string } | null;
-      setSent(response.ok ? `Sent to the Mac: ${body?.saved ?? "saved"}` : `Sending failed: ${response.status}`);
-      return response.ok;
-    } catch (error) {
-      setSent(`Sending failed: ${String(error)}`);
-      return false;
-    }
+    const outcome = await postDevReport(current.locale, results);
+    setSent(outcome.message);
+    return outcome.ok;
   };
 
   const tick = (now: number) => {
@@ -280,16 +310,22 @@ export function SoundSpike() {
     const clipTime = player.currentTime;
     if (player.playing) {
       loop.intervals.push(elapsed);
-      if (results.timings.clickToFirstSound === null && level > SOUND_DB) results.timings.clickToFirstSound = round(now - loop.clickAt);
+      if (results.timings.clickToFirstSound === null && level > SOUND_DB)
+        results.timings.clickToFirstSound = round(now - loop.clickAt, 0);
       results.playhead.furthest = Math.max(results.playhead.furthest, round(clipTime, 3));
       const levels = player.levels;
       if (levels && !results.environment.reducedMotion && needle) {
-        const top = topFor(CLIPS[setupRef.current?.clip ?? "steps-8s"].clipType, dial);
+        const top = topFor(ENGINE_CLIPS[setupRef.current?.clip ?? "steps-8s"].clipType, dial);
         loop.value = smooth(loop.value, needleTarget(level, levels, top), elapsed);
         needle.style.transform = `rotate(${angleFor(loop.value, dial)}deg)`;
         loop.needles.push(loop.value);
       }
-      results.trace.push([round(now - loop.clickAt), round(clipTime * 1000), round(level, 1), round(loop.value, 3)]);
+      results.trace.push([
+        round(now - loop.clickAt, 0),
+        round(clipTime * 1000, 0),
+        round(level, 1),
+        round(loop.value, 3),
+      ]);
       if (timeRef.current) timeRef.current.textContent = `${clock(clipTime)} / ${clock(player.duration ?? 0)}`;
       loop.frame = requestAnimationFrame(tick);
     }
@@ -304,9 +340,10 @@ export function SoundSpike() {
     const results = resultsRef.current;
     const player = playerRef.current;
     if (!results) return;
-    const t = round(event.at - loopRef.current.clickAt);
+    const t = round(event.at - loopRef.current.clickAt, 0);
     results.events.push({ t, type: event.type, ...(event.detail === undefined ? {} : { detail: event.detail }) });
-    if (event.type === "context" && event.detail === "running" && results.timings.clickToRunning === null) results.timings.clickToRunning = t;
+    if (event.type === "context" && event.detail === "running" && results.timings.clickToRunning === null)
+      results.timings.clickToRunning = t;
     if (event.type === "playing" && results.timings.clickToPlaying === null) results.timings.clickToPlaying = t;
     if (event.type === "decoded" && player?.levels) {
       results.levels = { floorDb: round(player.levels.floorDb, 2), ceilDb: round(player.levels.ceilDb, 2) };
@@ -344,7 +381,7 @@ export function SoundSpike() {
       loadedAt: new Date().toISOString(),
       setup: {
         clip: current.clip,
-        clipType: CLIPS[current.clip].clipType,
+        clipType: ENGINE_CLIPS[current.clip].clipType,
         fuel: current.fuel,
         mode: current.mode,
         session: current.session,
@@ -357,7 +394,11 @@ export function SoundSpike() {
         maxTouchPoints: navigator.maxTouchPoints,
         silentHint,
         reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
-        audioSession: { present: audioSession() !== undefined, typeAtLoad: audioSession()?.type ?? null, typeAtEnd: null },
+        audioSession: {
+          present: audioSession() !== undefined,
+          typeAtLoad: audioSession()?.type ?? null,
+          typeAtEnd: null,
+        },
         autoplayProbe: null,
       },
       context: null,
@@ -428,7 +469,10 @@ export function SoundSpike() {
     // If nothing ever ends, ask anyway
     if (setupRef.current?.run !== null) {
       stopAskTimer();
-      askTimerRef.current = window.setTimeout(() => setAsking(true), (CLIPS[setupRef.current?.clip ?? "steps-8s"].seconds + 4) * 1000);
+      askTimerRef.current = window.setTimeout(
+        () => setAsking(true),
+        (ENGINE_CLIPS[setupRef.current?.clip ?? "steps-8s"].seconds + 4) * 1000,
+      );
     }
   };
 
@@ -454,7 +498,10 @@ export function SoundSpike() {
   const fixed = run === null ? null : RUNS[run - 1];
 
   return (
-    <section className="grid gap-4 bg-(--bg) p-4 text-(--ink) [--bg:#0b0d10] [--dur-pop:200ms] [--dur-press:120ms] [--ease-out:cubic-bezier(0.23,1,0.32,1)] [--fail:#e87470] [--ink:#eef2f6] [--line:#66778e] [--scan:#5cc8db]" data-state={phase}>
+    <section
+      className="grid gap-4 bg-(--bg) p-4 text-(--ink) [--bg:#0b0d10] [--dur-pop:200ms] [--dur-press:120ms] [--ease-out:cubic-bezier(0.23,1,0.32,1)] [--fail:#e87470] [--ink:#eef2f6] [--line:#66778e] [--scan:#5cc8db]"
+      data-state={phase}
+    >
       {fixed && run !== null ? (
         <div className="grid gap-2 border border-(--line) p-3">
           <p>
@@ -471,8 +518,20 @@ export function SoundSpike() {
       <div className="flex flex-wrap items-center gap-6">
         <div className="relative aspect-square w-[min(100%,280px)]" dir="ltr" data-dial>
           <DialFace dial={dial} />
-          <svg ref={needleRef} className="pointer-events-none absolute inset-0 size-full [transform:rotate(-120deg)] data-settling:[transition:transform_var(--dur-pop)_var(--ease-out)] motion-reduce:data-settling:[transition:none]" viewBox="0 0 240 240" aria-hidden="true" data-needle>
-            <line className="stroke-(--ink) [stroke-linecap:round] [stroke-width:2.5]" x1="120" y1="120" x2="120" y2="34" />
+          <svg
+            ref={needleRef}
+            className="pointer-events-none absolute inset-0 size-full [transform:rotate(-120deg)] data-settling:[transition:transform_var(--dur-pop)_var(--ease-out)] motion-reduce:data-settling:[transition:none]"
+            viewBox="0 0 240 240"
+            aria-hidden="true"
+            data-needle
+          >
+            <line
+              className="stroke-(--ink) [stroke-linecap:round] [stroke-width:2.5]"
+              x1="120"
+              y1="120"
+              x2="120"
+              y2="34"
+            />
             <circle className="fill-(--scan)" cx="120" cy="120" r="6" />
           </svg>
         </div>
@@ -499,7 +558,7 @@ export function SoundSpike() {
             </p>
           ) : null}
           <time ref={timeRef} className="text-[0.8rem] text-(--line)" dir="ltr">
-            0:00 / {clock(CLIPS[setup?.clip ?? "steps-8s"].seconds)}
+            0:00 / {clock(ENGINE_CLIPS[setup?.clip ?? "steps-8s"].seconds)}
           </time>
         </div>
       </div>
@@ -508,10 +567,18 @@ export function SoundSpike() {
         <div className="grid gap-2 border border-(--line) p-3">
           <p>Did you hear the engine?</p>
           <div className="flex gap-3">
-            <button type="button" className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)" onClick={() => void answer(true)}>
+            <button
+              type="button"
+              className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)"
+              onClick={() => void answer(true)}
+            >
               Heard it
             </button>
-            <button type="button" className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)" onClick={() => void answer(false)}>
+            <button
+              type="button"
+              className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)"
+              onClick={() => void answer(false)}
+            >
               Didn&apos;t hear it
             </button>
           </div>

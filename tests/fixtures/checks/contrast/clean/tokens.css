@@ -1,0 +1,68 @@
+/* check:contrast's clean fixture: the colours of DESIGN §3.1, §3.2 and §4.5, laid out the way
+   src/styles/tokens.css may be in T-13. A comment may hold { braces } and semicolons; freely. */
+
+/* DESIGN §3.1: the public site, which is also the workspace's dark theme (§3.2) */
+:root,
+[data-theme='dark'] {
+  --bg: #0b0d10;
+  --surface-1: #12161b;
+  --surface-2: #1a1f26;
+  --surface-3: #232a33;
+  --line: #66778e;
+  --ink: #eef2f6;
+  --muted: #a9b4c2;
+  --meta: #8592a3;
+  --on-scan: #0b0d10;
+  --warn: #e2a447;
+  --fail: #e87470;
+  --font-note: "Readex Pro; { not a block }", system-ui;
+}
+
+/* The accent is scan_cyan until a dealer picks another preset (DESIGN §3.1) */
+:root {
+  --scan-cyan: #5cc8db;
+  --scan: var(--scan-cyan);
+}
+
+[data-accent="electric_blue"] {
+  --scan: #7aa7ff;
+}
+
+[data-accent = "mint"] {
+  --scan: #5fd3a6;
+}
+
+[data-accent=ivory] {
+  --scan: #e8e2d0;
+}
+
+[data-accent="violet"] {
+  --scan: #b59cff;
+}
+
+/* DESIGN §3.2: Daylight, the workspace's default */
+[data-theme="daylight"] {
+  --bg: #f3f5f7;
+  --surface-1: #fff;
+  --surface-2: #e9edf1;
+  --line: #7a8696;
+  --ink: #0e1217;
+  --muted: #4a5565;
+  --accent: #1a6e7e;
+  --warn: #8f5a12;
+  --fail: #a8403a
+}
+
+/* DESIGN §4.5: increased contrast lightens the data lines */
+@media (prefers-contrast: more) {
+  :root {
+    --line: #8a9ab0;
+  }
+}
+
+/* Tailwind reads the tokens through @theme (DESIGN §3) */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-scan: var(--scan);
+}

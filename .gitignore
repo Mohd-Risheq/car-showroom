@@ -13,6 +13,7 @@ dist/
 coverage/
 *.tsbuildinfo
 build-metrics.json
+reports/
 test-results/
 playwright-report/
 blob-report/
@@ -53,6 +54,8 @@ Thumbs.db
 __pycache__/
 
 # private: the specification, plans and build records stay in the private repository
+/.git-blame-ignore-revs
+/.gitleaksignore
 /AGENTS.md
 /BUILD-PLAN.md
 /CONFIG.md

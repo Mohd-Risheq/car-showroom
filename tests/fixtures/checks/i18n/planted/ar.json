@@ -1,0 +1,16 @@
+{
+  "common": {
+    "close": "إغلاق",
+    "cancel": "(إلغاء)",
+    "save": "حفظ",
+    "count": "٣"
+  },
+  "contact": {
+    "viewing": {
+      "template": "مرحبًا، أرغب بمعاينة سيارة {title}"
+    }
+  },
+  "inventory": {
+    "count": "{count, plural, one {سيارة واحدة} other {# سيارة}}"
+  }
+}

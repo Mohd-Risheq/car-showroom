@@ -19,8 +19,14 @@ describe("VIN from a barcode", () => {
   });
 
   it("keeps a VIN from outside North America with its check digit warning", () => {
-    expect(vinFromBarcode("WVWZZZ1KZAW000001")).toEqual({ vin: "WVWZZZ1KZAW000001", warning: "validation.vinCheckDigitWarn" });
-    expect(vinFromBarcode("IWVWZZZ1KZAW000001")).toEqual({ vin: "WVWZZZ1KZAW000001", warning: "validation.vinCheckDigitWarn" });
+    expect(vinFromBarcode("WVWZZZ1KZAW000001")).toEqual({
+      vin: "WVWZZZ1KZAW000001",
+      warning: "validation.vinCheckDigitWarn",
+    });
+    expect(vinFromBarcode("IWVWZZZ1KZAW000001")).toEqual({
+      vin: "WVWZZZ1KZAW000001",
+      warning: "validation.vinCheckDigitWarn",
+    });
   });
 
   it("drops a North American VIN whose check digit fails, so a misread never fills the field", () => {
@@ -30,7 +36,16 @@ describe("VIN from a barcode", () => {
   });
 
   it("drops anything else: other lengths, other prefixes, and VINs inside longer text", () => {
-    for (const text of ["", "4T1B31HK3KU19006", "X4T1B31HK3KU190069", "II4T1B31HK3KU190069", "I4T1B31HK3KU19006", "VIN 4T1B31HK3KU190069", "https://example.com/4T1B31HK3KU190069", "MUFTAH T-10"]) {
+    for (const text of [
+      "",
+      "4T1B31HK3KU19006",
+      "X4T1B31HK3KU190069",
+      "II4T1B31HK3KU190069",
+      "I4T1B31HK3KU19006",
+      "VIN 4T1B31HK3KU190069",
+      "https://example.com/4T1B31HK3KU190069",
+      "MUFTAH T-10",
+    ]) {
       expect(vinFromBarcode(text), text).toBeNull();
     }
   });

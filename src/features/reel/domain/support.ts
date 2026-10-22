@@ -18,7 +18,14 @@ export const REEL = {
  * macroblocks, 244,800 a second at 30 fps: inside level 4.0's 8,192 and 245,760, so no lower level
  * fits. No lower profile is on the ladder, because BR-39 names High.
  */
-export const VIDEO_CODECS = ["avc1.640028", "avc1.640029", "avc1.64002a", "avc1.640032", "avc1.640033", "avc1.640034"] as const;
+export const VIDEO_CODECS = [
+  "avc1.640028",
+  "avc1.640029",
+  "avc1.64002a",
+  "avc1.640032",
+  "avc1.640033",
+  "avc1.640034",
+] as const;
 
 /**
  * AAC-LC (mp4a.40.2) at 48 or 44.1 kHz. The clips are 22,050 Hz (BR-19), a rate at which
@@ -66,7 +73,10 @@ export async function isSupported<C>(check: Check<C> | undefined, config: C): Pr
 }
 
 /** FR-43.1: the first codec on BR-39's ladder this browser encodes at 1080 × 1920 and 30 fps, or null */
-export async function pickVideoCodec(scope: Encoders = globalThis as Encoders, bitrateMode: BitrateMode = "variable"): Promise<string | null> {
+export async function pickVideoCodec(
+  scope: Encoders = globalThis as Encoders,
+  bitrateMode: BitrateMode = "variable",
+): Promise<string | null> {
   const encoder = scope.VideoEncoder;
   const check = encoder ? encoder.isConfigSupported.bind(encoder) : undefined;
   for (const codec of VIDEO_CODECS) {

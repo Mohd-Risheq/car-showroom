@@ -1,0 +1,10 @@
+{
+  "cost": {
+    "charging": {
+      "home": "Home charging — overnight"
+    }
+  },
+  "inventory": {
+    "count": "{count, plural, one {# car} other {# cars}} – updated today"
+  }
+}
