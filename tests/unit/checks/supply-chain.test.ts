@@ -17,7 +17,8 @@ import {
 } from "../../../scripts/checks/supply-chain.ts";
 
 // pnpm audit:deps' rules (SEC-11, SEC-10) on trimmed copies of the lockfile's real pnpm audit and
-// OSV-Scanner reports of 21 Oct 2026, in tests/fixtures/checks/supply-chain. Dates are fixed: the
+// OSV-Scanner reports of 21 Oct 2026, with the owner's acceptances of that day, in
+// tests/fixtures/checks/supply-chain. One test reads the live list instead. Dates are fixed: the
 // tests never read the clock (SRS §16.1).
 
 const FIXTURES = "tests/fixtures/checks/supply-chain";
@@ -32,11 +33,12 @@ function found(read: Finding[] | string): Finding[] {
 }
 const findings = (file: "pnpm-audit.json" | "osv.json") =>
   found((file === "osv.json" ? osvFindings : pnpmAuditFindings)(json(`${FIXTURES}/${file}`)));
-function accepted(): Acceptance[] {
-  const list = parseAccepted(json(ACCEPTED), ACCEPTED);
+function acceptances(file: string): Acceptance[] {
+  const list = parseAccepted(json(file), file);
   if (typeof list === "string") throw new Error(list);
   return list;
 }
+const accepted = () => acceptances(`${FIXTURES}/accepted-advisories.json`);
 const finding = (fields: Partial<Finding>): Finding => ({
   source: "OSV-Scanner",
   id: "GHSA-aaaa-bbbb-cccc",
@@ -157,7 +159,7 @@ describe("scanFindings", () => {
 });
 
 describe("findingProblems", () => {
-  it("passes today's reports with the owner's three acceptances", () => {
+  it("passes the reports of 21 Oct with that day's three acceptances", () => {
     expect(findingProblems([...findings("pnpm-audit.json"), ...findings("osv.json")], accepted(), NOW)).toStrictEqual(
       [],
     );
@@ -212,11 +214,10 @@ describe("staleAcceptances", () => {
 });
 
 describe("parseAccepted", () => {
-  it("holds exactly the three advisories the owner accepted, until 2027-01-21 (D-037)", () => {
+  it("holds exactly the owner's acceptances that an advisory still matches, until 2027-01-21 (D-037)", () => {
     expect(
-      accepted().map(({ id, package: name, reviewBy, decision }) => `${id} ${name} ${reviewBy} ${decision}`),
+      acceptances(ACCEPTED).map(({ id, package: name, reviewBy, decision }) => `${id} ${name} ${reviewBy} ${decision}`),
     ).toStrictEqual([
-      "GHSA-vfj7-8cjw-p6xm braces 2027-01-21 D-037",
       "GHSA-jmr9-qjv8-65gv extract-zip 2027-01-21 D-037",
       "GHSA-7pqw-9j4j-h8q3 extract-zip 2027-01-21 D-037",
     ]);

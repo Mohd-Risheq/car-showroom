@@ -1,0 +1,28 @@
+{
+  "$comment": [
+    "The owner's acceptances of 21 Oct 2026 (D-037), as scripts/accepted-advisories.json held them, for the reports of that day beside this file. GitHub withdrew the braces advisory on 23 Oct 2026, and the live list no longer has it."
+  ],
+  "accepted": [
+    {
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "reviewBy": "2027-01-21",
+      "decision": "D-037",
+      "reason": "Stack exhaustion through deeply nested brace patterns. braces 3.0.3 comes only through ESLint (eslint-config-next, @next/eslint-plugin-next, fast-glob, micromatch), which expands the project's own lint globs, never user input. No patched release exists."
+    },
+    {
+      "id": "GHSA-jmr9-qjv8-65gv",
+      "package": "extract-zip",
+      "reviewBy": "2027-01-21",
+      "decision": "D-037",
+      "reason": "Symlink path traversal on extraction. extract-zip 2.0.1 comes only through Lighthouse CI (@lhci/cli, lighthouse, puppeteer-core, @puppeteer/browsers), which unpacks browser downloads, never an archive a user supplies. No patched release exists."
+    },
+    {
+      "id": "GHSA-7pqw-9j4j-h8q3",
+      "package": "extract-zip",
+      "reviewBy": "2027-01-21",
+      "decision": "D-037",
+      "reason": "Arbitrary file writes through symlink archive entries. extract-zip 2.0.1 comes only through Lighthouse CI (@lhci/cli, lighthouse, puppeteer-core, @puppeteer/browsers), which unpacks browser downloads, never an archive a user supplies. No patched release exists."
+    }
+  ]
+}
