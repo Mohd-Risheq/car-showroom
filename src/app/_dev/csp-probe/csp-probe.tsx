@@ -5,7 +5,7 @@ import { Tabs } from "@base-ui/react/tabs";
 import { domAnimation, LazyMotion, m, MotionConfig } from "motion/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { loadZxingPolyfill, ZXING_WASM_PATH } from "@/features/vin/ui/zxing";
 import type { WorkerReply, WorkerRequest } from "./probe.worker";
 import { PROBE_QR } from "./qr";
@@ -239,7 +239,6 @@ export function CspProbe({ side, nonce }: { side: Side; nonce?: string | undefin
               </Dialog.Popup>
             </Dialog.Portal>
           </Dialog.Root>
-          <Toaster />
           <pre data-results className="text-xs whitespace-pre-wrap">
             {results ? JSON.stringify(results, null, 2) : ""}
           </pre>

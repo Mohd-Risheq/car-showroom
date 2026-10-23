@@ -7,10 +7,18 @@
   },
   "contact": {
     "viewing": {
-      "template": "مرحبًا، أرغب بمعاينة سيارة {title}"
+      "template": "مرحبًا، أرغب بمعاينة السيارة"
     }
   },
   "inventory": {
-    "count": "{count, plural, one {سيارة واحدة} other {# سيارة}}"
+    "count": "{count, plural, one {سيارة واحدة} other {# سيارة}}",
+    "found": "{count} سيارة",
+    "saved": "{count, plural, zero {لا سيارات} one {سيارة} two {سيارتان} few {سيارات} many {سيارة} other {سيارة}}",
+    "none": "{count, plural, zero {لا سيارات} one {سيارة واحدة} two {سيارتان} few {# سيارات} many {# سيارة} other {# سيارة}}",
+    "compare": "مقارنة {count, plural, zero {# سيارة} one {سيارة واحدة} two {سيارتين} few {# سيارات} many {# سيارة} other {# سيارة}}"
+  },
+  "search": {
+    "results": "نتائج '{query}'",
+    "radius": "ضمن {km} كم"
   }
 }

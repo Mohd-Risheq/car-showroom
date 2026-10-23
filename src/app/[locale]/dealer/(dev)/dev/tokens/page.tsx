@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
 import { SPECIMEN_COPY } from "@/app/_dev/specimen/copy";
 import { Demos } from "@/app/_dev/specimen/demos";
 import { Section, Shapes, Spacing, Swatches, WorkspaceType } from "@/app/_dev/specimen/sections";
@@ -7,6 +6,7 @@ import { SpecimenPage } from "@/app/_dev/specimen/specimen-page";
 import { ThemeSwitch } from "@/app/_dev/specimen/theme-switch";
 import { TokenList } from "@/app/_dev/specimen/token-list";
 import { notFoundOnDeployments } from "@/lib/deployment";
+import { getAppLocale } from "@/lib/i18n/server";
 
 // T-13: the dealer workspace's tokens in Daylight and dark (DESIGN §3.2), its fixed type scale, the
 // base controls on them, and every custom property the stylesheets declare. Motion and the placard
@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Muftah dev: tokens, dealer workspace
 
 export default async function DealerTokensPage() {
   notFoundOnDeployments();
-  const locale = await getLocale();
+  const locale = await getAppLocale();
   const copy = SPECIMEN_COPY[locale];
 
   return (

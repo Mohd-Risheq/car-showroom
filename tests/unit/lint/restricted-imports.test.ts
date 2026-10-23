@@ -66,7 +66,7 @@ describe("GSAP's imports", () => {
 
 describe("Motion's and Phosphor's imports", () => {
   // Each config that sets no-restricted-imports lists them again, so each is tried
-  const FILES = [FEATURE, "src/app/_dev/specimen/demo.tsx", "src/lib/motion/gsap.ts"];
+  const FILES = [FEATURE, "src/app/_dev/specimen/demo.tsx", "src/lib/motion/gsap.ts", "src/lib/i18n/server.ts"];
 
   it("refuse the full motion component and the framer-motion name, and take m", async () => {
     for (const filePath of FILES) {
@@ -93,6 +93,49 @@ describe("Motion's and Phosphor's imports", () => {
         await broken(filePath, 'import { CarIcon } from "@phosphor-icons/react/ssr";\nexport const icon = CarIcon;\n'),
         filePath,
       ).toStrictEqual([]);
+    }
+  });
+});
+
+describe("next-intl's locale", () => {
+  // The formatting locale, such as ar-JO-u-nu-latn (D-040). Every config that sets
+  // no-restricted-imports but one refuses it, so each is tried.
+  const FILES = [FEATURE, "src/app/_dev/specimen/demo.tsx", "src/lib/motion/gsap.ts", "src/lib/i18n/routing.ts"];
+  const READS = [
+    'import { getLocale } from "next-intl/server";\nexport const read = getLocale;\n',
+    'import { useLocale } from "next-intl";\nexport const read = useLocale;\n',
+    'import { createNavigation } from "next-intl/navigation";\nexport const links = createNavigation;\n',
+  ];
+
+  it("is read by getAppLocale alone, and next-intl's links, built with it, are refused", async () => {
+    for (const filePath of FILES) {
+      for (const code of READS) {
+        expect(await broken(filePath, code), `${filePath}: ${code}`).toStrictEqual(["no-restricted-imports"]);
+      }
+    }
+    expect(await broken("src/lib/i18n/server.ts", READS[0] ?? "")).toStrictEqual([]);
+  });
+
+  it("can't be reached through an import() of next-intl, which no-restricted-imports doesn't see", async () => {
+    // Each config that sets no-restricted-syntax lists it again, so each is tried
+    for (const filePath of [FEATURE, "src/features/spin/index.ts", "src/lib/motion/scrub.tsx"]) {
+      for (const specifier of ["next-intl", "next-intl/server", "next-intl/navigation"]) {
+        for (const source of [`"${specifier}"`, `\`${specifier}\``]) {
+          const code = `export const load = async () => (await import(${source})).default;\n`;
+          expect(await broken(filePath, code), `${filePath}: ${source}`).toStrictEqual(["no-restricted-syntax"]);
+        }
+      }
+    }
+  });
+
+  it("still formats: translations and the formatter come from next-intl anywhere", async () => {
+    for (const filePath of FILES) {
+      for (const code of [
+        'import { getTranslations } from "next-intl/server";\nexport const t = getTranslations;\n',
+        'import { useFormatter, useTranslations } from "next-intl";\nexport const hooks = [useFormatter, useTranslations];\n',
+      ]) {
+        expect(await broken(filePath, code), `${filePath}: ${code}`).toStrictEqual([]);
+      }
     }
   });
 });

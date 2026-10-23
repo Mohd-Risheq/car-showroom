@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { describeError } from "@/app/_dev/harness";
 import { postDevReport } from "@/app/_dev/report";
-import type { AppLocale } from "@/i18n/routing";
+import type { AppLocale } from "@/lib/i18n/routing";
 import { inspectMedia } from "@/lib/storage/inspect";
 import type { MediaType } from "@/lib/storage/rules";
 import {

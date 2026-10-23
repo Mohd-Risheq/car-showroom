@@ -1,8 +1,11 @@
 // pnpm check:i18n: the message catalogs against NFR-I18N-01, NFR-I18N-03 and the copy deck (DESIGN
-// §9.2 and §9.3): the same keys in both, valid ICU, every plural form each language needs, every
-// deck key present and no deck note markers. Each problem names its file, key and rule, and the
-// check exits 1. The deck's keys come from scripts/i18n-deck-keys.json, since CI never reads the
-// private specification (pnpm i18n:deck-keys writes it).
+// §9.2 and §9.3): the same keys in both, valid ICU with none of its syntax kept as text, every
+// plural form each language needs and none it never selects, a plural in Arabic wherever English
+// counts with one, no number a plural counts or the other language formats printed as plain text
+// (BR-02), the same placeholders and tags in both, every deck key present and no deck note markers.
+// Each problem names its file, key and rule (scripts/checks/i18n.ts), and the check exits 1. The
+// deck's keys come from scripts/i18n-deck-keys.json, since CI never reads the private
+// specification (pnpm i18n:deck-keys writes it).
 //
 // Usage: pnpm check:i18n [folder with en.json and ar.json] [--deck keys.json]
 import path from "node:path";
@@ -35,7 +38,7 @@ function check(): { problems: string[]; messages: number } {
   if (typeof deck === "string" || typeof en === "string" || typeof ar === "string") {
     return { problems: [deck, en, ar].filter((result) => typeof result === "string"), messages: 0 };
   }
-  const problems = [...en.problems, ...ar.problems, ...catalogProblems([en.catalog, ar.catalog], deck)];
+  const problems = [...en.problems, ...ar.problems, ...catalogProblems({ en: en.catalog, ar: ar.catalog }, deck)];
   return { problems, messages: en.catalog.messages.size };
 }
 

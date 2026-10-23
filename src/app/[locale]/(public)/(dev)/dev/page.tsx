@@ -1,11 +1,11 @@
-import { getLocale } from "next-intl/server";
-import { directionOf } from "@/i18n/routing";
 import { notFoundOnDeployments } from "@/lib/deployment";
+import { directionOf } from "@/lib/i18n/routing";
+import { getAppLocale } from "@/lib/i18n/server";
 
 // Scaffold diagnostics (T-01): locale and direction under the public root layout
 export default async function PublicDevPage() {
   notFoundOnDeployments();
-  const locale = await getLocale();
+  const locale = await getAppLocale();
 
   return (
     <main className="p-8 font-mono text-sm">

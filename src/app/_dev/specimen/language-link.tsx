@@ -1,4 +1,4 @@
-import { type AppLocale, directionOf } from "@/i18n/routing";
+import { type AppLocale, directionOf } from "@/lib/i18n/routing";
 
 type LanguageLinkProps = {
   /** The page's language */

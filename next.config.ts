@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import { LOCALES } from "./src/i18n/locales";
 import { BOTID_PATH, blobStoreHost, publicPolicy, securityHeaders } from "./src/lib/csp/policy";
+import { LOCALES } from "./src/lib/i18n/locales";
 
 // Every path except /{locale}/dealer/** and BotID's path gets the public policy here. Dealer
 // paths get theirs, with a nonce, from proxy.ts, so each response carries exactly one policy
@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Finds the request config at src/i18n/request.ts
-const withNextIntl = createNextIntlPlugin();
+// next-intl's request config, with the catalogs and the formatting locale (D-040)
+const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 
 export default withNextIntl(nextConfig);

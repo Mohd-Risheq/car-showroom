@@ -1,4 +1,4 @@
-import type { AppLocale } from "@/i18n/routing";
+import type { AppLocale } from "@/lib/i18n/routing";
 import type { TypeStep } from "@/styles/type-scale";
 
 // The words of the token specimens (T-13), in both locales. Development pages only: shipped copy
@@ -25,7 +25,6 @@ export type SpecimenCopy = {
   clearFilters: string;
   loadError: string;
   tryAgain: string;
-  toasts: string;
   showToast: string;
   showRetryToast: string;
   copied: string;
@@ -59,7 +58,7 @@ export const SPECIMEN_COPY = {
     saving: "جارٍ الحفظ",
     sold: "مباعة",
     close: "إغلاق",
-    vin: "رقم الشاصي",
+    vin: "رقم الهيكل (الشاصي)",
     vinHint: "17 حرفاً ورقماً، على الزجاج الأمامي أو إطار الباب",
     vinError: "خانة التحقق لا تطابق. راجع الخانة التاسعة.",
     vinValid: "خانة التحقق مطابقة.",
@@ -67,7 +66,6 @@ export const SPECIMEN_COPY = {
     clearFilters: "امسح الفلاتر",
     loadError: "ما قدرنا نحمّل الفحص. تأكد من الاتصال وحاول مرة ثانية.",
     tryAgain: "حاول مرة ثانية",
-    toasts: "الإشعارات",
     showToast: "اعرض إشعاراً",
     showRetryToast: "اعرض إشعاراً فيه إعادة محاولة",
     copied: "تم نسخ الرابط",
@@ -119,7 +117,6 @@ export const SPECIMEN_COPY = {
     clearFilters: "Clear filters",
     loadError: "We couldn't load the inspection. Check your connection and try again.",
     tryAgain: "Try again",
-    toasts: "Notifications",
     showToast: "Show a toast",
     showRetryToast: "Show a toast with a retry",
     copied: "Link copied",

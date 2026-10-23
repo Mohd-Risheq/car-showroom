@@ -1,0 +1,1402 @@
+{
+  "common": {
+    "skip": "Skip to content",
+    "retry": "Try again",
+    "reload": "Reload",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "notSaved": "Not saved, retrying",
+    "loadMore": "Load more",
+    "showing": "Showing {shown} of {total}",
+    "share": "Share",
+    "copy": "Copy",
+    "copied": "Copied",
+    "unavailable": "Unavailable",
+    "offline": "You're offline. Showing what's already loaded.",
+    "hide": "Hide",
+    "undo": "Undo",
+    "delete": "Delete",
+    "edit": "Edit",
+    "details": "Details",
+    "apply": "Apply",
+    "required": "Required",
+    "inLanguage": "{label} in {locale, select, ar {Arabic} other {English}}",
+    "notifications": "Notifications",
+    "reorder": {
+      "instructions": "To move an item, press Space, then use the arrow keys. Press Space again to drop it, or Escape to cancel.",
+      "picked": "Picked up. Position {position} of {total}.",
+      "moved": "Moved to position {position} of {total}.",
+      "dropped": "Dropped at position {position} of {total}.",
+      "cancelled": "Move cancelled. Back at position {position} of {total}."
+    },
+    "language": "Language",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
+  },
+  "locale": {
+    "prompt": {
+      "text": "This page is in Arabic. View it in English?",
+      "switch": "View in English",
+      "stay": "متابعة بالعربية"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "cars": "Cars",
+    "compare": "Compare",
+    "visit": "Visit",
+    "garage": "My Garage",
+    "garageLabel": "My Garage, {count, plural, one {# saved car} other {# saved cars}}",
+    "search": "Search cars",
+    "menu": "Menu",
+    "label": "Main",
+    "language": "العربية",
+    "tryDealer": "Try the dealer side",
+    "viewSite": "View site",
+    "add": "Add",
+    "darkTheme": "Dark theme"
+  },
+  "compare": {
+    "toggle": "Compare",
+    "count": "Compare ({count})",
+    "tray": "{count} of 3 picked",
+    "clear": "Clear",
+    "full": "You can compare up to 3 cars. Remove one to add another.",
+    "added": "Added to compare",
+    "removed": "Removed from compare",
+    "race": "Race {count, number} cars"
+  },
+  "footer": {
+    "hours": "Hours",
+    "contact": "Contact",
+    "site": "Site",
+    "howBuilt": "How it's built",
+    "privacy": "Privacy",
+    "credits": "Credits",
+    "copyright": "© {year} {dealer}",
+    "builtBy": "Built by {author}"
+  },
+  "howBuilt": {
+    "metrics": {
+      "title": "Numbers from the latest build",
+      "measured": "Measured on {date}",
+      "bundle": "JavaScript size on first load, compressed",
+      "lazy": "JavaScript size of features loaded when used, compressed",
+      "page": "Page",
+      "feature": "Feature",
+      "size": "Size",
+      "budget": "Budget",
+      "lighthouse": "Lighthouse scores, out of 100",
+      "performance": "Performance",
+      "accessibility": "Accessibility",
+      "bestPractices": "Best practices",
+      "seo": "SEO",
+      "tests": "Automated tests",
+      "unitTests": "Unit tests",
+      "integrationTests": "Integration tests",
+      "e2eTests": "End-to-end tests",
+      "passed": "{passed} passed, {failed} failed"
+    },
+    "repo": "View the source code on GitHub"
+  },
+  "credits": {
+    "photos": "Car photos",
+    "sounds": "Engine sounds",
+    "data": "Data",
+    "fonts": "Fonts",
+    "software": "Software",
+    "col": {
+      "source": "Source",
+      "author": "Author",
+      "licence": "Licence",
+      "link": "Link",
+      "recording": "Recording"
+    }
+  },
+  "demo": {
+    "banner": "This showroom is a demo. Cars, prices and the business are examples.",
+    "bannerLabel": "Demo notice",
+    "tag": "Demo",
+    "workspaceBanner": "Demo workspace: your changes are private and expire after 24 hours",
+    "reset": "Reset my demo",
+    "expired": "Your previous demo and its changes expired after 24 hours. This is a new demo.",
+    "title": "Try the dealer side",
+    "what": "Add a car with photos, an inspection, a 360° spin and the engine sound, then see it on the site.",
+    "privacy": "Only you can see what you add, and it is deleted after your demo ends.",
+    "start": "Start the demo",
+    "needsCookies": "The demo needs cookies",
+    "rateLimited": "Many demos were started from this network. Please try again in an hour.",
+    "previewTitle": "Message preview",
+    "contactPreview": "In the live site this opens WhatsApp.",
+    "callPreview": "In the live site this calls the showroom.",
+    "copyMessage": "Copy message",
+    "cap": {
+      "cars": "The demo allows 3 cars. Delete one to add another.",
+      "copies": "The demo allows copies of 5 showroom cars.",
+      "photos": "The demo allows 12 photos in total. Delete some to add more.",
+      "spin": "The demo allows one 360° spin of 24 frames.",
+      "audio": "The demo allows 1 engine recording.",
+      "reports": "The demo allows 1 report, as a photo.",
+      "logo": "The demo allows one logo upload.",
+      "uploads": "This demo has used all its uploads. Everything else still works.",
+      "decodes": "The demo allows 20 VIN lookups. You can still type the details."
+    },
+    "uploadsPaused": "Uploads in the demo are paused until next month, to keep this free demo running. Everything else still works."
+  },
+  "meta": {
+    "titleTemplate": "{page} · {dealer}",
+    "home": {
+      "title": "{dealer} · Used car showroom",
+      "description": "Used cars for sale in Jordan. Check a car's inspection, hear its engine and see where it has been before you visit."
+    },
+    "inventory": {
+      "description": "Every car we have for sale, with its price, kilometres and inspection status. Filter by make, body type, price and more."
+    },
+    "car": {
+      "description": "{title}, {price}. {km} · {fuel} · {specs} · {customs}. {summary}"
+    },
+    "compare": {
+      "description": "Compare 2 or 3 cars side by side: price, kilometres, model year, running cost, power and inspection."
+    },
+    "garage": {
+      "description": "The cars you saved on this device, with any price change since you saved them."
+    },
+    "visit": {
+      "description": "Address, opening hours, directions and ways to contact {dealer}."
+    },
+    "howBuilt": {
+      "description": "How this showroom site is built: its architecture, stack, accessibility and performance."
+    },
+    "privacy": {
+      "description": "Exactly what this site stores and counts. Visits are counted without cookies and without personal data."
+    },
+    "credits": {
+      "description": "Where the photos, sounds, data, fonts and software on this site come from, with their authors and licences."
+    }
+  },
+  "home": {
+    "tagline": "See the inspection before you see the car.",
+    "lightsOn": "Lights on",
+    "lightsOnHint": "Show the full photo and stop the moving spotlight",
+    "seeInspection": "See the inspection",
+    "startEngine": "Start the engine",
+    "allCars": "All cars",
+    "quick": {
+      "title": "Quick search",
+      "make": "Make",
+      "body": "Body type",
+      "budget": "Max budget",
+      "any": "Any",
+      "submit": "Show cars"
+    },
+    "fresh": {
+      "title": "Freshly inspected",
+      "fallback": "Freshly added",
+      "seeAll": "See all cars"
+    },
+    "documented": {
+      "title": "How every car is documented",
+      "scan": {
+        "title": "We check every panel",
+        "body": "Paint, replaced parts and paint thickness, on one diagram you can read in seconds."
+      },
+      "hear": {
+        "title": "We record the engine",
+        "body": "Hear a cold start before you visit, and see whether it was recorded from this car."
+      },
+      "trace": {
+        "title": "We trace where it has been",
+        "body": "From the factory to our showroom, every stop with its date."
+      }
+    },
+    "tryIt": {
+      "title": "See it on a real car",
+      "open": "Open the car"
+    },
+    "bodyTypes": {
+      "title": "By body type"
+    },
+    "makes": {
+      "title": "Makes in stock",
+      "pause": "Pause",
+      "play": "Play"
+    },
+    "visit": {
+      "title": "Visit the showroom"
+    },
+    "empty": "Our next cars are being inspected",
+    "sectionError": "Couldn't load cars."
+  },
+  "inventory": {
+    "title": "Cars for sale",
+    "count": "{count, plural, one {# car} other {# cars}}",
+    "results": "Results",
+    "sort": {
+      "label": "Sort",
+      "newest": "Newest",
+      "priceAsc": "Price, low to high",
+      "priceDesc": "Price, high to low",
+      "kmAsc": "Lowest km",
+      "yearDesc": "Newest model year"
+    },
+    "view": {
+      "grid": "Grid",
+      "floor": "Floor plan"
+    },
+    "floor": {
+      "dimmed": "Doesn't match the filters",
+      "gridLink": "See all matching cars in the grid",
+      "failed": "Couldn't show the floor plan. Showing the grid instead."
+    },
+    "showSold": "Show sold cars",
+    "empty": {
+      "title": "No cars match these filters",
+      "clear": "Clear filters",
+      "notify": "Tell me when one arrives"
+    },
+    "loadError": "Couldn't load cars."
+  },
+  "filters": {
+    "title": "Filters",
+    "open": "Filters ({count})",
+    "clearAll": "Clear all",
+    "show": "Show {count, plural, one {# car} other {# cars}}",
+    "more": "More filters",
+    "min": "Min",
+    "max": "Max",
+    "range": "{range, select, min {From {min}} max {Up to {max}} other {{min} to {max}}}",
+    "noMatch": "No options match \"{query}\"",
+    "firstOwner": "First owner only",
+    "inspected": "Complete inspection only",
+    "spin": "Has 360° view",
+    "sound": "Has engine sound",
+    "removeChip": "Remove {label}",
+    "chip": "{label}: {value}",
+    "list": "{list}, {item}"
+  },
+  "card": {
+    "inspected": "Inspected",
+    "partial": "Partial inspection",
+    "priceDropped": "Price dropped",
+    "new": "Just added",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "spin": "360°",
+    "sound": "Sound"
+  },
+  "car": {
+    "ref": "Ref. {ref}",
+    "priceReduced": "Price reduced from {old} on {date}",
+    "priceBeforeCustoms": "Before customs and registration",
+    "keep": "Keep in My Garage",
+    "kept": "Kept in My Garage",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "facts": {
+      "title": "Key facts"
+    },
+    "mileage": {
+      "low": "Mileage: low for its age",
+      "typical": "Mileage: typical for its age",
+      "high": "Mileage: high for its age",
+      "info": "About {km} km a year since {year}. Typical is {low} to {high} km a year."
+    },
+    "battery": "Battery health {pct}%",
+    "batterySource": "Source: {source}",
+    "warranty": "Agency warranty until {date}",
+    "reserved": "Reserved. Message us to join the waiting list.",
+    "sold": "Sold",
+    "findSimilar": "Find a similar car",
+    "features": {
+      "title": "Features",
+      "interior": "Interior",
+      "exterior": "Exterior",
+      "technology": "Technology"
+    },
+    "description": {
+      "title": "About this car",
+      "onlyArabic": "Written in Arabic",
+      "onlyEnglish": "Written in English only"
+    },
+    "related": {
+      "title": "Similar cars"
+    },
+    "askFamily": "Ask your family",
+    "preparingCard": "Preparing the card",
+    "gallery": {
+      "imperfection": "Imperfection",
+      "alt": "{title}, {group, select, exterior {exterior} interior {interior} engine {engine bay} imperfection {imperfection} other {photo}}",
+      "altImperfection": "{title}, imperfection: {note}",
+      "more": "Show {count, plural, one {# more photo} other {# more photos}}",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
+    "loupe": "Loupe",
+    "sectionError": "Couldn't load this part.",
+    "stickyCta": "{title}, {price}"
+  },
+  "evidence": {
+    "title": "What's documented",
+    "inspection": "Inspection: {done} of 16 checked",
+    "sound": "Engine sound: from this car",
+    "soundSameEngine": "Engine sound: same engine type",
+    "spin": "360° view",
+    "journey": "Journey: {count, plural, one {# step} other {# steps}}",
+    "closeups": "{count, plural, one {# close-up of a flaw} other {# close-ups of flaws}}",
+    "none": "{item}: not documented",
+    "item": {
+      "inspection": "Inspection",
+      "sound": "Engine sound",
+      "journey": "Journey"
+    }
+  },
+  "family": {
+    "question": "What do you think of this car?",
+    "downloaded": "Card saved to your downloads. You can attach it to your message.",
+    "failed": "Couldn't make the card. Sharing the link instead.",
+    "text": "What do you think of this car? {title}, {price}.\n{url}"
+  },
+  "field": {
+    "make": "Make",
+    "model": "Model",
+    "trim": "Trim",
+    "year": "Model year",
+    "km": "Kilometres",
+    "price": "Price",
+    "bodyType": "Body type",
+    "fuel": "Fuel",
+    "transmission": "Transmission",
+    "drivetrain": "Drivetrain",
+    "engineSize": "Engine size",
+    "power": "Power",
+    "seats": "Seats",
+    "exteriorColour": "Exterior colour",
+    "colourHex": "Hex colour code",
+    "paintFinish": "Paint finish",
+    "interiorColour": "Interior colour",
+    "condition": "Condition",
+    "regionalSpecs": "Regional specs",
+    "customs": "Customs",
+    "licence": "Licence",
+    "licenceUntil": "Licence valid until",
+    "insurance": "Insurance",
+    "payment": "Payment",
+    "owners": "Owners",
+    "warranty": "Agency warranty",
+    "vin": "VIN",
+    "vinPublic": "Show the VIN to buyers",
+    "consumption": "Consumption",
+    "batteryHealth": "Battery health",
+    "batteryHealthSource": "How battery health was measured",
+    "ref": "Reference",
+    "octane": "Recommended octane",
+    "features": "Features",
+    "description": "Description"
+  },
+  "format": {
+    "unit": {
+      "jod": "JOD",
+      "jodPerLitre": "JOD/L",
+      "jodPerKwh": "JOD/kWh",
+      "km": "km",
+      "mm": "mm",
+      "litre": "L",
+      "cc": "cc",
+      "hp": "hp",
+      "micron": "µm",
+      "lPer100Km": "L/100 km",
+      "kwhPer100Km": "kWh/100 km",
+      "kb": "KB",
+      "mb": "MB"
+    },
+    "spoken": {
+      "jod": "Jordanian dinars",
+      "jodPerLitre": "Jordanian dinars per litre",
+      "jodPerKwh": "Jordanian dinars per kilowatt hour",
+      "km": "km",
+      "mm": "millimetres",
+      "lPer100Km": "litres per 100 kilometres",
+      "kwhPer100Km": "kilowatt hours per 100 kilometres"
+    },
+    "range": "{from} to {to}"
+  },
+  "inspection": {
+    "title": "Inspection report",
+    "diagram": "Inspection diagram",
+    "declared": "Declared by the dealer on {date}",
+    "testCentre": "Test centre",
+    "advisory": "This information is declared by the dealer. We recommend an independent inspection before you buy.",
+    "viewReport": "View official report",
+    "reportUnavailable": "Report unavailable",
+    "notPublished": "Inspection not published yet",
+    "replay": "Replay scan",
+    "counts": "{original} original · {touchUp} touch-up · {repainted} repainted · {replaced} replaced",
+    "unknownCount": "{count} not inspected",
+    "notDeclared": "Not declared",
+    "allSound": "Chassis, engine and gearbox sound.",
+    "allSoundEv": "Chassis, motor and gearbox sound.",
+    "item": {
+      "chassis": "Chassis",
+      "engine": "Engine",
+      "motor": "Electric motor",
+      "gearbox": "Gearbox"
+    },
+    "summary": {
+      "partialPrefix": "Partial inspection:",
+      "allOriginal": "All panels in factory paint.",
+      "replaced": "{count, plural, one {# panel replaced} other {# panels replaced}}",
+      "repainted": "{count, plural, one {# panel repainted} other {# panels repainted}}",
+      "touchUps": "{count, plural, one {# touch-up} other {# touch-ups}}",
+      "mech": "{item, select, chassis {Chassis} engine {Engine} motor {Electric motor} other {Gearbox}}: {state, select, notes {notes} other {issue}}.",
+      "soundOne": "{item, select, chassis {Chassis sound.} engine {Engine sound.} motor {Electric motor sound.} other {Gearbox sound.}}",
+      "soundTwo": "{pair, select, chassis_engine {Chassis and engine sound.} chassis_motor {Chassis and motor sound.} engine_gearbox {Engine and gearbox sound.} motor_gearbox {Motor and gearbox sound.} other {Chassis and gearbox sound.}}"
+    },
+    "panelLabel": "{panel}: {state}{hasMicrons, select, yes {, {microns} microns} other {}}",
+    "band": {
+      "factory": "Within factory range",
+      "refinish": "Possible refinish",
+      "filler": "Likely repainted or filler"
+    },
+    "panels": "Body panels",
+    "table": {
+      "panel": "Panel",
+      "state": "State",
+      "microns": "Paint thickness",
+      "note": "Note",
+      "photo": "Photo",
+      "item": "Item"
+    },
+    "mechanical": "Mechanical",
+    "side": {
+      "left": "Left side (driver)",
+      "right": "Right side (passenger)"
+    }
+  },
+  "sound": {
+    "title": "Engine sound",
+    "play": "Play the engine sound",
+    "pause": "Pause",
+    "note": "A recording is not a substitute for a mechanical inspection.",
+    "needleNote": "The needle follows the recording's loudness, not the real rpm.",
+    "dialUnit": "×1000 rpm",
+    "silentHint": "No sound? Turn off silent mode",
+    "textAlt": "Engine recording, {seconds, plural, one {# second} other {# seconds}}, recorded on {date}",
+    "loadError": "Couldn't load the sound.",
+    "sameEngine": "Recording of the same engine type, not this car",
+    "textAltNoDate": "Engine recording, {seconds, plural, one {# second} other {# seconds}}"
+  },
+  "spin": {
+    "title": "Walk around it",
+    "hint": "Drag or use the buttons to turn",
+    "rotateLeft": "Rotate left",
+    "rotateRight": "Rotate right",
+    "fullscreen": "Full screen",
+    "roledesc": "360 degree viewer",
+    "frame": "View {n} of {total}",
+    "closeups": "Close-ups",
+    "loading": "Loading the 360° view"
+  },
+  "journey": {
+    "title": "Where it has been",
+    "dateUnknown": "Date not recorded",
+    "whatIs": "What does this mean?",
+    "salvageExplain": "A salvage title means an insurer declared the car a total loss after damage, and it was then repaired. Have the repair checked by an independent inspector.",
+    "rebuiltExplain": "A rebuilt title means the car once had a salvage title, was repaired, and passed a state inspection to return to the road. Have the repair checked by an independent inspector.",
+    "floodExplain": "A flood title means water damaged the car. Water can harm the wiring, electronics and interior long after they dry. Have it checked by an independent inspector.",
+    "hailExplain": "Hail damage means hail dented the body. It is usually cosmetic, but check how the panels were repaired.",
+    "caption": "{place} · {month}"
+  },
+  "cost": {
+    "title": "Cost to run",
+    "perMonth": "JOD a month",
+    "dailyKm": "Daily distance (km)",
+    "octane": "Petrol octane",
+    "charging": {
+      "label": "Charging",
+      "offPeak": "Home, off-peak (05:00 to 14:00)",
+      "peak": "Home, evening peak",
+      "public": "Public charger"
+    },
+    "electricShare": "Share driven on electricity",
+    "saves": "Saves about {amount, number} JOD a month versus a typical petrol {bodyType, select, suv {SUV} sedan {sedan} hatchback {hatchback} pickup {pickup} coupe {coupe} convertible {convertible} van {van} truck {truck} other {car}}",
+    "costsMore": "Costs about {amount, number} JOD more a month",
+    "aqabaTrip": "Amman to Aqaba and back: about {amount, number} JOD",
+    "perYear": "{amount} a year",
+    "per100": "{amount} per 100 km",
+    "how": "How we calculate",
+    "formula": {
+      "fuel": "We multiply your daily distance by 30 days, then by the fuel the car uses per kilometre and the price per litre.",
+      "electric": "We multiply your daily distance by 30 days, then by the electricity the car uses per kilometre and the price per kilowatt hour for your charging choice.",
+      "plugin": "For a plug-in hybrid, the share driven on electricity is priced as charging, and the rest as fuel.",
+      "baseline": "We compare with a typical petrol car of the same body type, using {consumption} and the 90-octane price."
+    },
+    "prices": {
+      "octane": "{octane}-octane petrol"
+    },
+    "sources": {
+      "label": "Sources",
+      "tariff": "Energy and Minerals Regulatory Commission time-of-use tariff for homes"
+    },
+    "stale": "Prices from {date}. They may have changed.",
+    "missing": "Fuel consumption isn't available for this car."
+  },
+  "race": {
+    "title": "Compare {count, number} cars",
+    "track": {
+      "title": "Race"
+    },
+    "lap": "Lap {n} of {total}: {metric}",
+    "skip": "Skip race",
+    "replay": "Replay",
+    "addCar": "Add a car",
+    "best": "Best",
+    "winner": "{title} wins {metric}",
+    "tie": "Shared win on {metric}: {titles}",
+    "results": "Results",
+    "podium": {
+      "title": "Final standings",
+      "wins": "{count, plural, one {# win} other {# wins}}"
+    },
+    "empty": "Pick 2 or 3 cars to race",
+    "unavailable": "No longer available",
+    "someFailed": "Some cars could not be loaded",
+    "table": {
+      "title": "Comparison table"
+    },
+    "metric": {
+      "price": "Price",
+      "km": "Kilometres",
+      "year": "Model year",
+      "cost": "Running cost",
+      "power": "Power",
+      "inspection": "Inspection"
+    }
+  },
+  "contact": {
+    "cta": "Message on WhatsApp",
+    "more": "More ways",
+    "call": "Call",
+    "viewing": {
+      "label": "Request a viewing",
+      "template": "Hello, I'd like to see the {title} (ref {ref}) on {slot}. Is that time good for you?\n{url}"
+    },
+    "q": {
+      "inspection": "What's the inspection result?",
+      "negotiable": "Is the price negotiable?",
+      "customs": "Is it cleared through customs?",
+      "location": "Where is the showroom?"
+    },
+    "qr": "Scan to open WhatsApp on your phone",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "tiktok": "TikTok"
+    },
+    "whatsapp": {
+      "template": "Hello, I'm asking about the {title} listed at {price}. Reference {ref}.\n{url}",
+      "question": "Hello, I'm asking about the {title} listed at {price}. Reference {ref}.\n{question}\n{url}"
+    },
+    "waitlist": {
+      "template": "Hello, I'd like to join the waiting list for the {title} (ref {ref}).\n{url}"
+    },
+    "wanted": {
+      "template": "Hello, I'm looking for a car: {filters}. Please let me know when one arrives."
+    }
+  },
+  "viewing": {
+    "day": "Day",
+    "time": "Time",
+    "send": "Send the request on WhatsApp",
+    "none": "No open times in the next 7 days. Message us instead."
+  },
+  "garage": {
+    "title": "My Garage",
+    "deviceOnly": "Saved on this device only. Nothing is sent to us.",
+    "empty": "Tap the key on any car to keep it here",
+    "noStorage": "Saving cars needs browser storage, which isn't available right now.",
+    "added": "Saved to My Garage",
+    "removed": "Removed from My Garage",
+    "oldestRemoved": "Saved to My Garage. It holds up to 30 cars, so the earliest saved car was removed.",
+    "priceDown": "{amount} less than when you saved it",
+    "priceUp": "{amount} more than when you saved it",
+    "remove": "Remove",
+    "refreshError": "Couldn't refresh"
+  },
+  "visit": {
+    "title": "Visit us",
+    "hours": "Opening hours",
+    "openNow": "Open now",
+    "closedOpens": "Closed, opens {day} {time}",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "closedDay": "Closed",
+    "ramadan": "Ramadan hours",
+    "closures": {
+      "title": "Holiday closures"
+    },
+    "directions": "Get directions",
+    "directionsGoogle": "Open in Google Maps",
+    "directionsApple": "Open in Apple Maps",
+    "mapAlt": "Map of the area around the showroom",
+    "mapCredit": "© OpenStreetMap contributors",
+    "demoLocation": "Demo location",
+    "howWeDocument": "How we document every car",
+    "hearEngine": "Hear the engine",
+    "seeJourney": "See the journey"
+  },
+  "inShowroom": {
+    "strip": "You're in the showroom. We're happy to start the engine for you.",
+    "stripEv": "You're in the showroom. We're happy to switch it on for you."
+  },
+  "errors": {
+    "notFound": {
+      "title": "We couldn't find that page",
+      "body": "It may have moved. Search or browse all cars."
+    },
+    "carGone": "This car is no longer listed",
+    "segment": "Something went wrong loading this part",
+    "global": "Something went wrong. Please reload the page.",
+    "searchOffline": "Search is offline, try the cars page",
+    "code": {
+      "validationError": "Some fields need attention.",
+      "unauthenticated": "Please sign in again.",
+      "forbidden": "You don't have access to this.",
+      "notFound": "We couldn't find that.",
+      "versionConflict": "This was changed by someone else. Reload to see the latest.",
+      "invalidTransition": "This status change isn't allowed.",
+      "capReached": "You've reached the demo limit.",
+      "metadataPresent": "This file still has location or camera data. Upload it again from this page.",
+      "rateLimited": "Too many tries. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+      "stepUpRequired": "Please confirm it's you, then try again.",
+      "upstreamUnavailable": "This service isn't answering right now. You can carry on and try again later.",
+      "internal": "Something went wrong. Please try again."
+    },
+    "storageBudget": "Uploads are paused until next month, because this month's storage allowance is used up.",
+    "uploadsOff": "Uploads are off on this preview. They work on the live site."
+  },
+  "palette": {
+    "placeholder": "Search all cars",
+    "recent": "Recent searches",
+    "noMatch": "No cars match \"{query}\"",
+    "loading": "Loading cars…",
+    "group": {
+      "cars": "Cars",
+      "makes": "Makes",
+      "bodyTypes": "Body types",
+      "pages": "Pages"
+    },
+    "count": "{count, plural, one {# result} other {# results}}"
+  },
+  "auth": {
+    "title": "Sign in to your showroom",
+    "email": "Email",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submit": "Sign in",
+    "error": "Email or password is incorrect",
+    "unavailable": "Sign-in is unavailable, try again shortly",
+    "totp": "The 6-digit code from your authenticator app",
+    "tryDemo": "Just looking? Try the demo",
+    "security": {
+      "title": "Account security",
+      "twoStep": "Two-step sign-in",
+      "recoveryCodes": "Recovery codes"
+    },
+    "newPassword": {
+      "title": "Choose a new password",
+      "label": "New password",
+      "confirm": "Confirm new password",
+      "mismatch": "The two passwords don't match"
+    },
+    "policy": {
+      "length": "At least 12 characters",
+      "notEmail": "Different from your email",
+      "notBreached": "Not found in known data breaches",
+      "notCommon": "Not a common password, and not your name or the showroom's",
+      "state": "{met, select, yes {Met} other {Not met yet}}"
+    },
+    "savePassword": "Save password",
+    "currentPassword": "Current password",
+    "tempExpired": "This temporary password has expired. Ask the owner for a new one.",
+    "setup2fa": {
+      "title": "Turn on two-step sign-in",
+      "body": "Scan this code with an authenticator app, then enter the 6-digit code it shows.",
+      "manual": "Can't scan it? Enter this key instead: {key}",
+      "wrongCode": "This code is incorrect. Enter the current code from your authenticator app."
+    },
+    "recovery": {
+      "title": "Save your recovery codes",
+      "body": "Each code works once if you lose your phone. Keep them somewhere safe. They won't be shown again.",
+      "download": "Download .txt",
+      "use": "Use a recovery code",
+      "code": "Recovery code",
+      "saved": "I've saved them"
+    },
+    "stepUp": {
+      "title": "Confirm it's you",
+      "body": "Enter your password and the code from your authenticator app to continue."
+    },
+    "devices": {
+      "title": "Signed-in devices",
+      "name": "{browser} on {system}",
+      "unknown": "Unknown device",
+      "current": "This device",
+      "lastActive": "Last active {date}",
+      "signedIn": "Signed in on {date}",
+      "signOut": "Sign out",
+      "signOutOthers": "Sign out all other devices"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "evening": "Good evening, {name}"
+    },
+    "kpi": {
+      "live": "Live cars",
+      "daysOnLot": "Average days on lot",
+      "waTaps": "WhatsApp taps, last 7 days",
+      "inspections": "Complete inspections",
+      "unavailable": "Unavailable",
+      "downGood": "Down {days, plural, one {# day} other {# days}}, good",
+      "upDays": "Up {days, plural, one {# day} other {# days}}",
+      "tapsUp": "Up {count} on the week before",
+      "tapsDown": "Down {count} on the week before",
+      "same": "Same as the week before",
+      "inspectionsOf": "{done} of {total}"
+    },
+    "sampleData": "Sample data",
+    "sampleDataHint": "Generated for the demo, plus real visits to this site",
+    "attention": {
+      "title": "Needs attention",
+      "noInspection": "{count, plural, one {# car has no inspection} other {# cars have no inspection}}",
+      "stalePrices": "Fuel prices last updated {days, plural, one {# day ago} other {# days ago}}",
+      "drafts": "{count, plural, one {# draft not finished} other {# drafts not finished}}",
+      "partial": "{count, plural, one {# inspection is partial} other {# inspections are partial}}",
+      "oldPrices": "{count, plural, one {# car has had the same price for over 60 days} other {# cars have had the same price for over 60 days}}"
+    },
+    "addInspection": "Add inspection",
+    "completeInspection": "Complete inspection",
+    "reviewPrices": "Review prices",
+    "updateSettings": "Update settings",
+    "continue": "Continue",
+    "addFirst": "Add your first car",
+    "addCar": "Add a car",
+    "updateFuelPrices": "Update fuel prices",
+    "row": {
+      "menu": "Actions for {title}",
+      "shareKit": "Share Kit",
+      "windowCard": "Window Card",
+      "reel": "Make a Reel",
+      "reserve": "Mark reserved",
+      "sell": "Mark sold",
+      "markPublished": "Mark published",
+      "price": "Change price",
+      "view": "View on the site",
+      "archive": "Archive"
+    },
+    "confirmArchive": {
+      "title": "Archive this car?",
+      "body": "It leaves the site and the car list, and stays in the archive for 12 months."
+    },
+    "col": {
+      "photo": "Photo",
+      "car": "Car",
+      "price": "Price",
+      "status": "Status",
+      "days": "Days listed",
+      "completeness": "Listing completeness",
+      "actions": "Actions"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "search": "Search by name or reference",
+    "sort": {
+      "updated": "Recently updated",
+      "daysDesc": "Days listed, high to low"
+    },
+    "insights": {
+      "title": "Insights, last 30 days",
+      "viewsAndTaps": "Car views and contact taps",
+      "views": "Views",
+      "taps": "Contact taps",
+      "col": {
+        "date": "Date",
+        "feature": "Feature",
+        "openRate": "Open rate"
+      },
+      "topCars": "Cars buyers contact most",
+      "carCounts": "{views, plural, one {# view} other {# views}} · {taps, plural, one {# tap} other {# taps}} · {pct}% tap rate",
+      "tapRate": "Tap rate",
+      "features": "What buyers open",
+      "featureShare": "{pct}% of views on cars that have it",
+      "languages": "Arabic {ar}% · English {en}%",
+      "showTable": "Show as table",
+      "showChart": "Show as chart",
+      "empty": "No visits counted yet. Figures appear after the first visits."
+    }
+  },
+  "status": {
+    "invalidMove": "This car's status can't change from {from} to {to}"
+  },
+  "wizard": {
+    "step": "Step {n} of {total} · {name}",
+    "steps": {
+      "identity": "Identity",
+      "jordan": "Jordan details",
+      "features": "Features",
+      "price": "Price and description",
+      "photos": "Photos",
+      "inspection": "Inspection",
+      "spin": "360° spin",
+      "sound": "Engine sound",
+      "journey": "Journey",
+      "publish": "Review and publish"
+    },
+    "stepList": {
+      "title": "Steps",
+      "open": "Show all steps"
+    },
+    "check": {
+      "done": "Done",
+      "optional": "Optional",
+      "recommended": "Optional, recommended"
+    },
+    "scanVin": "Scan VIN",
+    "scanDenied": "Camera access is needed to scan the VIN. You can type it instead.",
+    "decode": "Decode",
+    "weFound": "We found: {summary}",
+    "builtIn": "built in {place}",
+    "decodeFailed": "Couldn't decode this VIN, please fill in the details",
+    "vinUsed": "Another car in your showroom has the same VIN.",
+    "vinUsedLink": "Open {title}",
+    "sampleVin": "Use a sample VIN",
+    "epaEstimate": "EPA estimate",
+    "epaLookup": "Look up the EPA estimate",
+    "epaPick": "Which of these matches this car?",
+    "epaUnavailable": "EPA data unavailable, enter consumption manually",
+    "addBuilt": "Add \"Built in {city}, {country}\" to the Journey",
+    "dimensions": "Dimensions (optional)",
+    "length": "Length (mm)",
+    "wheelbase": "Wheelbase (mm)",
+    "colourFromCover": "Pick the colour from the cover photo",
+    "fromMiles": "Convert from miles",
+    "miles": "Miles",
+    "conflict": "This car was changed by someone else, reload?"
+  },
+  "photos": {
+    "take": "Take photos",
+    "fromGallery": "From gallery",
+    "tip": "Start with the front three-quarter, then walk around the car.",
+    "uploading": "Uploading {n} of {total}",
+    "menu": "Actions for photo {n}",
+    "setCover": "Set as cover",
+    "cover": "Cover",
+    "moveEarlier": "Move earlier",
+    "moveLater": "Move later",
+    "moveGroup": "Move to group",
+    "deleted": "Photo deleted",
+    "alt": {
+      "label": "Alt text",
+      "hint": "Describes the photo for people who can't see it. If empty, we use: {suggestion}"
+    },
+    "hidePlate": "Hide plate",
+    "addBox": "Add another box",
+    "boxName": "Box {n} of {total}",
+    "removeBox": "Remove box",
+    "tapToPlace": "Tap the photo to move the box there",
+    "bigger": "Bigger",
+    "smaller": "Smaller",
+    "wider": "Wider",
+    "narrower": "Narrower",
+    "boxMoved": "Box moved",
+    "blurFailed": "Couldn't hide the plate. The photo hasn't changed.",
+    "platesConfirm": "Number plates are hidden or not visible",
+    "min": "Add at least 6 photos",
+    "unsupported": "This photo format isn't supported. Try JPEG or PNG.",
+    "cantShrink": "This photo couldn't be made small enough. Try another one.",
+    "duplicate": "This photo looks the same as one already added."
+  },
+  "processing": {
+    "queued": "Waiting",
+    "preparing": "Preparing",
+    "uploading": "Uploading {pct}%",
+    "done": "Ready",
+    "failed": "Didn't upload"
+  },
+  "inspectionEditor": {
+    "hint": "Tap a panel to change its state",
+    "setAll": "Set all to original",
+    "microns": "Paint thickness (µm)",
+    "addCloseup": "Add close-up",
+    "mismatch": "This reading looks high for original paint. Check the state.",
+    "mismatchLow": "This reading looks normal for factory paint. Check the state.",
+    "inspectedOn": "Inspected on",
+    "report": "Official report",
+    "uploadReport": "Upload report",
+    "reportPrivacy": "Buyers see the report as you upload it. Hide the previous owner's personal details first.",
+    "completeness": "Completeness"
+  },
+  "spinCapture": {
+    "walk": "Walk slowly around the car.",
+    "tips": "Keep the same distance, keep the car centred and walk clockwise.",
+    "safety": "Keep the phone and your hands away from moving parts.",
+    "counter": "Angles: {n} of {total}",
+    "shutter": "Take a photo",
+    "lowLight": "It's too dark for clear photos. Add more light.",
+    "denied": "Camera access is needed for guided capture. You can still upload photos.",
+    "upload": "Upload a set",
+    "start": "Start guided capture",
+    "filmstrip": "Filmstrip",
+    "frame": "Frame {n}",
+    "reverse": "Reverse direction",
+    "crop": "Crop",
+    "cropBox": "Crop box",
+    "nudge": {
+      "label": "Line up this frame",
+      "move": "{direction, select, left {Move left} right {Move right} up {Move up} other {Move down}}"
+    },
+    "hotspots": "Hotspots",
+    "addHotspot": "Add hotspot",
+    "placeHint": "Tap the photo where the hotspot goes",
+    "placed": "Hotspot placed on frame {n}",
+    "hotspotItem": "{note}, frame {n}",
+    "hotspotWindow": "Frames on each side that show the hotspot",
+    "retake": "Retake angle {n}",
+    "missed": "{count, plural, one {# angle missed. Walk back to fill it.} other {# angles missed. Walk back to fill them.}}",
+    "save": "Save spin"
+  },
+  "recorder": {
+    "clipType": "Clip type",
+    "tip": "Hold the phone 1 metre from the engine bay. Avoid wind.",
+    "level": "Sound level",
+    "record": "Record",
+    "stop": "Stop",
+    "trim": {
+      "label": "Trim",
+      "start": "Start",
+      "end": "End"
+    },
+    "preview": "Preview",
+    "save": "Save clip",
+    "tooShort": "The clip must be at least 5 seconds after trimming",
+    "clipping": "The sound is distorting. Move the phone a little further away.",
+    "uploadInstead": "Upload a recording instead",
+    "denied": "Microphone access is needed to record. You can still upload a recording.",
+    "unreadable": "This audio file couldn't be read",
+    "notNeeded": "Not needed for electric cars",
+    "source": {
+      "label": "Where was this recorded?",
+      "thisCar": "From this car",
+      "sameEngine": "From another car with the same engine"
+    }
+  },
+  "journeyEditor": {
+    "templates": "Start from a template",
+    "tpl": {
+      "us": "US import via Aqaba",
+      "gcc": "GCC import",
+      "korea": "Korean import",
+      "local": "Local agency car"
+    },
+    "add": "Add milestone",
+    "type": "Milestone type",
+    "place": "Place",
+    "noPlace": "No places match \"{query}\"",
+    "newPlace": "Add a new place",
+    "placeName": "Place name",
+    "month": "Month",
+    "year": "Year",
+    "titleBrand": "Title status",
+    "auctionHouse": "Auction house",
+    "damageNote": "Damage note",
+    "moveEarlier": "Move earlier",
+    "moveLater": "Move later"
+  },
+  "publish": {
+    "title": "Review and publish",
+    "missing": "Missing before publishing",
+    "item": {
+      "photos": "6 or more photos"
+    },
+    "completenessHint": "Based on the optional items: {electric, select, yes {inspection, 360° spin, journey and consumption} other {inspection, 360° spin, engine sound, journey and consumption}}.",
+    "preview": "Preview on the site",
+    "publish": "Publish",
+    "success": "Published. Your car is live.",
+    "makeShare": "Make share images",
+    "printCard": "Print Window Card"
+  },
+  "share": {
+    "post": "Post",
+    "story": "Story",
+    "linkPreview": "Link preview",
+    "tpl": {
+      "label": "Template",
+      "spec": "Spec card",
+      "inspection": "Inspection card",
+      "priceReduced": "Price reduced card"
+    },
+    "priceReducedHint": "Available for 30 days after a price drop",
+    "previewAlt": "Preview: {template}, {format}",
+    "copyCaption": "Copy caption",
+    "useAsPreview": "Use as link preview",
+    "drawing": "Drawing the card",
+    "download": "Download",
+    "failed": "Couldn't draw the card on this device. You can still copy the caption and download the cover photo.",
+    "downloadCover": "Download cover photo",
+    "caption": {
+      "spec": "{title}\n{km} · {fuel} · {specs} · {customs}\n{price}\nInspection: {summary}\nRef {ref} · {url}",
+      "inspection": "{title}: {summary}\nFull report: {url}",
+      "priceReduced": "New price for the {title}: {price}, was {old}.\n{url}"
+    }
+  },
+  "windowCard": {
+    "scan": "Scan to hear the engine and see the inspection",
+    "scanInspection": "Scan to see the inspection and every photo",
+    "scanSound": "Scan to hear the engine and see every photo",
+    "scanPhotos": "Scan to see every photo and detail",
+    "print": "Print",
+    "both": "Both languages",
+    "paper": {
+      "label": "Paper size",
+      "a5": "A5, one card",
+      "a4": "A4, two cards per sheet"
+    }
+  },
+  "reel": {
+    "unsupported": "Reels need Chrome, Edge, Firefox, or Safari 26 or newer",
+    "seek": "Playback position",
+    "summary": "A 15-second video of the {title}: {km} · {specs} · {customs}. {hasInspection, select, yes {Inspection: {summary} } other {}}Price: {price}. Ref {ref}.",
+    "make": "Make a Reel",
+    "silent": "{reason, select, browser {This browser can't add sound, so the Reel will be silent.} other {This car has no engine recording, so the Reel will be silent.}}",
+    "progress": "Making your Reel… {pct}%",
+    "ready": "Your Reel is ready",
+    "failed": "Couldn't make the video on this device"
+  },
+  "settings": {
+    "title": "Settings",
+    "section": {
+      "brand": "Brand",
+      "contact": "Contact",
+      "hours": "Hours",
+      "prices": "Prices",
+      "showcase": "Showcase",
+      "advanced": "Advanced"
+    },
+    "brand": {
+      "name": "Showroom name",
+      "tagline": "Tagline",
+      "logo": "Logo",
+      "logoUpload": "{hasLogo, select, yes {Replace logo} other {Upload logo}}",
+      "accent": "Brand colour"
+    },
+    "contact": {
+      "whatsapp": "WhatsApp number",
+      "phone": "Phone number",
+      "address": "Address",
+      "social": "Social media links"
+    },
+    "hours": {
+      "opens": "Opening time",
+      "closes": "Closing time",
+      "overnight": "Closes after midnight",
+      "addPeriod": "Add a second period",
+      "ramadanStart": "First day",
+      "ramadanEnd": "Last day",
+      "addClosure": "Add a closed day",
+      "closureDate": "Date",
+      "closureNote": "Note"
+    },
+    "pricesUpdated": "Last updated {date}",
+    "priceSource": "Ministry of Energy monthly prices",
+    "numberChanged": "The WhatsApp or phone number was changed on {date}. If that wasn't you, change your password and check the signed-in devices.",
+    "stale": "These prices are over 35 days old. Check this month's prices.",
+    "logoSvg": "Use a PNG or WebP logo",
+    "showcase": {
+      "heroCar": "Home hero car",
+      "heroPhoto": "Home hero photo",
+      "featured": "Featured cars"
+    },
+    "marks": {
+      "title": "Blueprint marks for the home hero",
+      "help": "Selected: {mark}. Tap the photo to move it there, or use the arrow keys (Shift for bigger steps).",
+      "position": "{mark} at {pct}% of the {axis, select, x {width} other {height}}",
+      "front": "Front",
+      "rear": "Rear",
+      "wheelFront": "Front wheel centre",
+      "wheelRear": "Rear wheel centre",
+      "ground": "Ground line",
+      "clear": "Clear marks",
+      "save": "Save marks"
+    },
+    "advanced": {
+      "soldDays": "Days a sold car stays on the site",
+      "mileageLow": "Low mileage: under (km a year)",
+      "mileageHigh": "High mileage: over (km a year)",
+      "factoryMax": "Within factory range: up to (µm)",
+      "refinishMax": "Possible refinish: up to (µm)"
+    },
+    "prices": {
+      "baseline": "Typical petrol consumption by body type"
+    }
+  },
+  "staff": {
+    "title": "Staff",
+    "add": "Add team member",
+    "tempPassword": "Temporary password",
+    "oneTime": "Share it privately. They'll change it on first sign-in.",
+    "empty": "Add your first team member",
+    "resetPassword": "Reset password",
+    "disable": "Disable",
+    "enable": "Enable",
+    "remove": "Remove",
+    "confirmRemove": {
+      "title": "Remove {name}?",
+      "body": "{name} will no longer be able to sign in, and the account will be deleted. This can't be undone."
+    },
+    "reset2fa": "Reset two-step sign-in",
+    "signOutAll": "Sign out all devices",
+    "col": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "lastSignIn": "Last sign-in",
+      "status": "Status"
+    },
+    "active": "Active",
+    "disabled": "Disabled",
+    "neverSignedIn": "Not signed in yet",
+    "emailTaken": "An account already uses this email. Use another one.",
+    "full": "You can add up to 10 team members. Remove one to add another."
+  },
+  "role": {
+    "owner": "Owner",
+    "staff": "Staff",
+    "demoDealer": "Demo dealer"
+  },
+  "dealer": {
+    "offline": "You're offline. Changes will save when you're back online."
+  },
+  "validation": {
+    "required": "Fill in this field",
+    "invalid": "Check this value",
+    "integer": "Enter a whole number",
+    "price": "Enter a price between 300 and 1,000,000 JOD",
+    "year": "Enter a model year between 1990 and {maxYear}",
+    "km": "Enter kilometres between 0 and 1,500,000",
+    "vin": "A VIN has 17 letters and numbers, without I, O or Q",
+    "vinCheckDigit": "The VIN's check digit doesn't match. Check each character.",
+    "vinCheckDigitWarn": "The check digit doesn't match. Cars made for outside North America may not use one, so you can keep this VIN.",
+    "vinCheckDigitOk": "The VIN's check digit matches",
+    "maxChars": "Use up to {max, plural, one {# character} other {# characters}}",
+    "description": "Add a description in Arabic or English",
+    "photoCount": "Up to 40 photos per car",
+    "photoType": "Use JPEG, PNG, WebP or HEIC photos",
+    "fileSize": "This file is larger than {max, number} MB",
+    "range": "Enter a value between {min, number} and {max, number}",
+    "microns": "Paint thickness is between 0 and 2,000 µm",
+    "percent": "Enter a percentage from 0 to 100",
+    "sohSource": "Choose how battery health was measured",
+    "milestonesMax": "Up to 10 milestones",
+    "futureDate": "That date is in the future",
+    "titleBrand": "Choose the title type for this auction",
+    "audioLength": "Clips must be 5 to 30 seconds",
+    "audioSource": "Choose where this was recorded",
+    "spinFrames": "A 360° spin needs 24 to {max, plural, one {# photo} other {# photos}}",
+    "hotspotNote": "Add a short note in Arabic or English",
+    "reportFile": "Reports can be images or PDF, up to 10 MB",
+    "phone": "Enter the number with its country code, like +962 7X XXX XXXX",
+    "nameLength": "Enter a name between 2 and 60 characters",
+    "email": "Enter a valid email address",
+    "coordinates": "Enter valid coordinates",
+    "socialUrl": "Use the full https link to your profile",
+    "unitPrice": "Enter a price between 0.050 and 5.000 JOD",
+    "hours": "Closing time must be after opening time",
+    "hoursOverlap": "The two periods must not overlap",
+    "ramadan": "Check the Ramadan dates",
+    "featured": "Feature up to 8 published cars",
+    "passwordLength": "Use at least 12 characters",
+    "passwordEmail": "Don't use your email as your password",
+    "passwordCommon": "This password is too common or too easy to guess. Choose another one.",
+    "passwordBreached": "This password appeared in a data breach. Choose another one.",
+    "dimension": "Check this measurement in millimetres",
+    "wheelbaseShorter": "The wheelbase must be shorter than the length"
+  },
+  "enum": {
+    "car_status": {
+      "draft": "Draft",
+      "published": "Published",
+      "reserved": "Reserved",
+      "sold": "Sold",
+      "archived": "Archived"
+    },
+    "body_type": {
+      "suv": "SUV",
+      "sedan": "Sedan",
+      "hatchback": "Hatchback",
+      "pickup": "Pickup",
+      "coupe": "Coupe",
+      "convertible": "Convertible",
+      "van": "Van",
+      "truck": "Truck"
+    },
+    "fuel_type": {
+      "gasoline": "Petrol",
+      "diesel": "Diesel",
+      "electric": "Electric",
+      "hybrid": "Hybrid",
+      "mild_hybrid": "Mild hybrid",
+      "plugin_hybrid": "Plug-in hybrid"
+    },
+    "transmission": {
+      "automatic": "Automatic",
+      "manual": "Manual"
+    },
+    "drivetrain": {
+      "fwd": "Front-wheel drive",
+      "rwd": "Rear-wheel drive",
+      "awd": "All-wheel drive",
+      "four_wd": "4x4"
+    },
+    "regional_specs": {
+      "american": "American specs",
+      "european": "European specs",
+      "gcc": "GCC specs",
+      "chinese": "Chinese specs",
+      "korean": "Korean specs",
+      "japanese": "Japanese specs",
+      "agency": "Local dealer import",
+      "other": "Other specs"
+    },
+    "customs_status": {
+      "cleared": "Customs paid",
+      "not_cleared": "Customs not paid"
+    },
+    "license_status": {
+      "licensed": "Licensed",
+      "unlicensed": "Not licensed"
+    },
+    "insurance_type": {
+      "comprehensive": "Comprehensive",
+      "compulsory": "Compulsory",
+      "none": "Not insured"
+    },
+    "payment_method": {
+      "cash": "Cash",
+      "instalments": "Instalments"
+    },
+    "car_condition": {
+      "used": "Used",
+      "new": "New"
+    },
+    "paint_finish": {
+      "solid": "Solid",
+      "metallic": "Metallic",
+      "pearl": "Pearl",
+      "matte": "Matte"
+    },
+    "color_family": {
+      "white": "White",
+      "black": "Black",
+      "silver": "Silver",
+      "gray": "Grey",
+      "blue": "Blue",
+      "red": "Red",
+      "green": "Green",
+      "beige": "Beige",
+      "brown": "Brown",
+      "gold": "Gold",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "other": "Other"
+    },
+    "photo_group": {
+      "exterior": "Exterior",
+      "interior": "Interior",
+      "engine": "Engine bay",
+      "imperfection": "Imperfections"
+    },
+    "panel_id": {
+      "front_bumper": "Front bumper",
+      "hood": "Hood",
+      "roof": "Roof",
+      "trunk": "Trunk",
+      "rear_bumper": "Rear bumper",
+      "fender_front_left": "Front left fender",
+      "fender_front_right": "Front right fender",
+      "door_front_left": "Front left door",
+      "door_front_right": "Front right door",
+      "door_rear_left": "Rear left door",
+      "door_rear_right": "Rear right door",
+      "quarter_rear_left": "Rear left quarter panel",
+      "quarter_rear_right": "Rear right quarter panel"
+    },
+    "panel_state": {
+      "original": "Original paint",
+      "touch_up": "Touch-up",
+      "repainted": "Repainted",
+      "replaced": "Replaced",
+      "unknown": "Not inspected"
+    },
+    "mech_state": {
+      "sound": "Sound",
+      "notes": "Notes",
+      "issue": "Issue",
+      "unknown": "Not inspected"
+    },
+    "milestone_type": {
+      "built": "Built",
+      "first_sold": "First sold",
+      "auction": "Auction",
+      "shipped": "Shipped",
+      "arrived_port": "Arrived at port",
+      "free_zone": "Free zone",
+      "customs_cleared": "Customs cleared",
+      "inspected": "Inspected",
+      "in_showroom": "In showroom"
+    },
+    "title_brand": {
+      "clean": "Clean title",
+      "salvage": "Salvage title",
+      "rebuilt": "Rebuilt",
+      "flood": "Flood damage",
+      "hail": "Hail damage",
+      "other": "Other",
+      "unknown": "Unknown"
+    },
+    "audio_clip_type": {
+      "cold_start": "Cold start",
+      "idle": "Idle",
+      "rev": "Revving"
+    },
+    "audio_source": {
+      "this_car": "Recorded from this car",
+      "same_engine": "Same engine type, not this car"
+    },
+    "accent_preset": {
+      "scan_cyan": "Cyan",
+      "electric_blue": "Electric blue",
+      "mint": "Mint",
+      "ivory": "Ivory",
+      "violet": "Violet"
+    },
+    "soh_source": {
+      "diagnostic_scan": "Diagnostic scan",
+      "service_report": "Service centre report",
+      "car_display": "Shown by the car"
+    },
+    "locale": {
+      "ar": "Arabic",
+      "en": "English"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { getRedirectUrl, unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
-import { routing } from "@/i18n/routing";
+import { routing } from "@/lib/i18n/routing";
 
 // src/proxy.ts (SRS §11.5 rule 1, §12.5, FR-01.2, BUILD-PLAN §9.1): which paths run it, the dev
 // pages' hard 404 on deployments, the dealer nonce policy and the locale redirect.

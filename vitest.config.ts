@@ -71,9 +71,8 @@ export default defineConfig({
         "src/lib/auth/users.ts",
         "src/lib/storage/repository.ts",
         "src/lib/storage/upload-token.ts",
-        // Run only inside Next.js: next/font's build-time transform and next-intl's request config
+        // Runs only inside Next.js: next/font's build-time transform
         "src/styles/fonts.ts",
-        "src/i18n/request.ts",
       ],
       reporter: ["text-summary", "json-summary", "html"],
       thresholds: {

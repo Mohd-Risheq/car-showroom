@@ -1,4 +1,4 @@
-import type { AppLocale } from "@/i18n/routing";
+import type { AppLocale } from "@/lib/i18n/routing";
 
 // The specimen's copy, in both languages: the DESIGN §9.2 copy deck and the S01 seed record
 // (05-SEED-DATA §5.4). Figures keep their unit outside the Martian Mono span, which has no Arabic.
@@ -43,7 +43,7 @@ export const COPY: Record<AppLocale, SpecimenCopy> = {
       { label: "عدد الكيلومترات", value: "84,000", unit: "كم" },
       { label: "السعر", value: "47,500", unit: "د.أ" },
       { label: "سماكة الدهان", value: "136", unit: "ميكرون" },
-      { label: "رقم الشاصي", value: "4T1B31HK3KU190069", unit: null },
+      { label: "رقم الهيكل (الشاصي)", value: "4T1B31HK3KU190069", unit: null },
     ],
   },
 };

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
 import { SPECIMEN_COPY } from "@/app/_dev/specimen/copy";
 import { Demos } from "@/app/_dev/specimen/demos";
 import { ScrubDemo, SpringDemo } from "@/app/_dev/specimen/motion-demos";
@@ -16,6 +15,7 @@ import {
 import { SpecimenPage } from "@/app/_dev/specimen/specimen-page";
 import { TokenList } from "@/app/_dev/specimen/token-list";
 import { notFoundOnDeployments } from "@/lib/deployment";
+import { getAppLocale } from "@/lib/i18n/server";
 
 // T-13: the public site's tokens (DESIGN §3 and §4) as components take them, the base controls on
 // them, and every custom property the stylesheets declare. /dealer/dev/tokens shows the workspace's.
@@ -24,7 +24,7 @@ export const metadata: Metadata = { title: "Muftah dev: tokens, public site" };
 
 export default async function PublicTokensPage() {
   notFoundOnDeployments();
-  const locale = await getLocale();
+  const locale = await getAppLocale();
   const copy = SPECIMEN_COPY[locale];
 
   return (

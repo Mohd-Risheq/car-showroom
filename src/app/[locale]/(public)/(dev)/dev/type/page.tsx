@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { getLocale } from "next-intl/server";
 import { type CSSProperties, Fragment } from "react";
 import { LanguageLink } from "@/app/_dev/specimen/language-link";
-import { type AppLocale, directionOf } from "@/i18n/routing";
 import { cn } from "@/lib/class-names";
 import { notFoundOnDeployments } from "@/lib/deployment";
+import { type AppLocale, directionOf } from "@/lib/i18n/routing";
+import { getAppLocale } from "@/lib/i18n/server";
 import { martianMono, readexPro } from "@/styles/fonts";
 import { readTypeScale, type ScriptValues, type StepTokens, type TypeStep } from "@/styles/type-scale";
 import { C } from "./classes";
@@ -81,7 +81,7 @@ function DigitRow({
 
 export default async function TypeSpikePage() {
   notFoundOnDeployments();
-  const locale = await getLocale();
+  const locale = await getAppLocale();
   const copy = COPY[locale];
   const scale = readTypeScale(readFileSync(TOKENS_CSS, "utf8"));
 

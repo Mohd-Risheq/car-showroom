@@ -21,7 +21,7 @@ import { Caption } from "./caption";
 import type { SpecimenCopy } from "./copy";
 
 // The base controls on the tokens (T-13), in each state DESIGN §6.4 gives them. The toasts show in
-// the Toaster that specimen-page.tsx mounts.
+// the Toaster each root layout mounts.
 
 /** A VIN whose check digit matches, and the same VIN with its 9th character changed */
 const VIN = { valid: "1HGCV3F18JA518032", mismatch: "1HGCV3F19JA518032" };

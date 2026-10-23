@@ -4,8 +4,8 @@ import { hasLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import { describeError, reportRequested, round } from "@/app/_dev/harness";
 import { postDevReport } from "@/app/_dev/report";
-import { type AppLocale, routing } from "@/i18n/routing";
 import { cn } from "@/lib/class-names";
+import { type AppLocale, routing } from "@/lib/i18n/routing";
 import { C } from "./classes";
 import { JOINED_AR } from "./copy";
 

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { routing } from "@/i18n/routing";
 import { blobStoreHost, createNonce, dealerPolicy } from "@/lib/csp/policy";
 import { isDeployment } from "@/lib/deployment";
+import { routing } from "@/lib/i18n/routing";
 
 // Any one locale, as a group
 const LOCALE = `(?:${routing.locales.join("|")})`;

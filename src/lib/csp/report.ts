@@ -1,5 +1,5 @@
 import "server-only";
-import { routing } from "@/i18n/routing";
+import { routing } from "@/lib/i18n/routing";
 import { readCapped } from "@/lib/storage/stream";
 import { CSP_REPORT_PATH } from "./policy";
 

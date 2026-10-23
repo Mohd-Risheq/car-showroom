@@ -14,5 +14,8 @@
   },
   "inventory": {
     "count": "{count, plural, zero {لا توجد سيارات} one {سيارة واحدة} two {سيارتان} few {# سيارات} many {# سيارة} other {# سيارة}}"
+  },
+  "race": {
+    "title": "مقارنة {count, plural, zero {# سيارة} one {سيارة واحدة} two {سيارتين} few {# سيارات} many {# سيارة} other {# سيارة}}"
   }
 }

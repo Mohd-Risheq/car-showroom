@@ -27,6 +27,31 @@ const RESTRICTED_IMPORTS = [
   },
 ];
 
+// next-intl's own locale is the formatting locale, such as ar-JO-u-nu-latn (D-040), and its
+// navigation helpers build links with it. The URL's locale, ar or en, comes from getAppLocale,
+// which src/lib/i18n/server.ts alone builds on next-intl's.
+const APP_LOCALE_MESSAGE = "next-intl's locale is the formatting locale (D-040)";
+const NEXT_INTL_LOCALE = [
+  {
+    name: "next-intl/server",
+    importNames: ["getLocale"],
+    message: `${APP_LOCALE_MESSAGE}: read the URL's with getAppLocale from @/lib/i18n/server.`,
+  },
+  {
+    name: "next-intl",
+    importNames: ["useLocale"],
+    message: `${APP_LOCALE_MESSAGE}: pass a Client Component the URL's from getAppLocale.`,
+  },
+  {
+    name: "next-intl/navigation",
+    message: `${APP_LOCALE_MESSAGE}, and its links carry it: link with next/link and the URL's locale.`,
+  },
+];
+const APP_LOCALE_READER = "src/lib/i18n/server.ts";
+// An import() of next-intl would take its locale past no-restricted-imports
+const NEXT_INTL_SOURCE = "^next-intl(?:/.*)?$";
+const NEXT_INTL_IMPORT_MESSAGE = `${APP_LOCALE_MESSAGE}: import next-intl statically, where ESLint sees the names a file takes.`;
+
 // Development-only code stays out of what ships
 const DEV_IMPORTS = {
   group: ["@/app/_dev", "@/app/_dev/**", "**/_dev", "**/_dev/**"],
@@ -45,16 +70,13 @@ const GSAP_IMPORTS = { regex: GSAP_SOURCE, allowTypeImports: true, message: GSAP
 
 /**
  * An import() of a source matching the pattern, as a string or as a template literal with no
- * expressions. A slash would end esquery's regex, so it is escaped.
+ * expressions, refused with the message. A slash would end esquery's regex, so it is escaped.
  */
-function importExpressions(source) {
+function importExpressions(source, message) {
   const pattern = `/${source.replaceAll("/", "\\x2F")}/`;
   return [
-    { selector: `ImportExpression[source.value=${pattern}]`, message: GSAP_MESSAGE },
-    {
-      selector: `ImportExpression[source.quasis.length=1][source.quasis.0.value.cooked=${pattern}]`,
-      message: GSAP_MESSAGE,
-    },
+    { selector: `ImportExpression[source.value=${pattern}]`, message },
+    { selector: `ImportExpression[source.quasis.length=1][source.quasis.0.value.cooked=${pattern}]`, message },
   ];
 }
 
@@ -113,30 +135,71 @@ export default defineConfig([
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: DEV_ONLY,
-    rules: { "no-restricted-imports": ["error", { paths: RESTRICTED_IMPORTS, patterns: [DEV_IMPORTS, GSAP_IMPORTS] }] },
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE], patterns: [DEV_IMPORTS, GSAP_IMPORTS] },
+      ],
+    },
   },
   {
     files: DEV_ONLY,
-    rules: { "no-restricted-imports": ["error", { paths: RESTRICTED_IMPORTS, patterns: [GSAP_IMPORTS] }] },
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE], patterns: [GSAP_IMPORTS] },
+      ],
+    },
   },
   {
     files: [GSAP_CHUNK],
-    rules: { "no-restricted-imports": ["error", { paths: RESTRICTED_IMPORTS, patterns: [DEV_IMPORTS] }] },
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE], patterns: [DEV_IMPORTS] },
+      ],
+    },
   },
   {
-    // No barrel files, and no import() of GSAP or of its chunk, which no-restricted-imports doesn't see
+    files: [APP_LOCALE_READER],
+    rules: { "no-restricted-imports": ["error", { paths: RESTRICTED_IMPORTS, patterns: [DEV_IMPORTS, GSAP_IMPORTS] }] },
+  },
+  {
+    // No barrel files, and no import() of GSAP, of its chunk or of next-intl, which
+    // no-restricted-imports doesn't see. A config that sets no-restricted-syntax replaces an earlier
+    // one's options, so every config that sets the rule lists next-intl's.
     files: ["src/**/*.{ts,tsx}"],
-    rules: { "no-restricted-syntax": ["error", ...BARREL_SELECTORS, ...importExpressions(GSAP_SOURCE)] },
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...BARREL_SELECTORS,
+        ...importExpressions(GSAP_SOURCE, GSAP_MESSAGE),
+        ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
+      ],
+    },
   },
   {
     // The spin engine's lazy-chunk entry re-exports it, until T-41 builds the viewer into the car page
     files: ["src/features/spin/index.ts"],
-    rules: { "no-restricted-syntax": ["error", ...importExpressions(GSAP_SOURCE)] },
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...importExpressions(GSAP_SOURCE, GSAP_MESSAGE),
+        ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
+      ],
+    },
   },
   {
     // Scrub loads the chunk, and still not GSAP's packages themselves
     files: [GSAP_LOADER],
-    rules: { "no-restricted-syntax": ["error", ...BARREL_SELECTORS, ...importExpressions("^@?gsap(?:/.*)?$")] },
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...BARREL_SELECTORS,
+        ...importExpressions("^@?gsap(?:/.*)?$", GSAP_MESSAGE),
+        ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
+      ],
+    },
   },
   {
     // Node runs the scripts and the modules they import by stripping types (tsconfig's
