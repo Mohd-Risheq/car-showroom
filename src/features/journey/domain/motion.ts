@@ -1,4 +1,5 @@
 // The globe's motion (DESIGN §4.2, §4.3), small enough to keep Motion out of the globe's chunk
+import { CURVES, SPRINGS, springPhysics } from "@/lib/motion-tokens";
 
 /** CSS cubic-bezier() as a function of progress, solved by bisection */
 export function cubicBezier(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
@@ -17,13 +18,10 @@ export function cubicBezier(x1: number, y1: number, x2: number, y2: number): (x:
 }
 
 /** --ease-out */
-export const easeOut = cubicBezier(0.23, 1, 0.32, 1);
+export const easeOut = cubicBezier(...CURVES.out);
 
-/**
- * The `move` spring (bounce 0, 0.4 s) as Motion resolves it: critically damped, with the natural
- * frequency that brings it within 0.1% of the target at 0.4 s, so √stiffness with a mass of 1
- */
-export const MOVE_OMEGA = 23.08;
+/** The `move` spring (bounce 0, 0.4 s) as Motion resolves it: critically damped, at this natural frequency */
+export const MOVE_OMEGA = Math.sqrt(springPhysics(SPRINGS.move).stiffness);
 
 /** The `move` spring on one value. It never overshoots, and keeps its velocity when the target moves */
 export class Spring {

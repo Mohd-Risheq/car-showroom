@@ -1,0 +1,371 @@
+/* The design tokens of DESIGN §3 and §4: colour, type, space, shape, depth and motion. Components
+   take every value from here, through the Tailwind theme at the end of this file or through var(),
+   never as a raw value (D-038).
+   - pnpm check:contrast recomputes every colour pair in scripts/contrast-pairs.json from these
+     blocks, so each block keeps the selector named there. Every block has the same specificity, so
+     a later block wins over an earlier one: the order below is the order the pairs file layers.
+   - The theme and accent attributes go on <html>, where all the blocks meet (D-037).
+   - src/lib/motion-tokens.ts is the source of the motion values. A unit test fails when this
+     file's copy of them differs (SRS §11.8). */
+
+/* DESIGN §3.1: the public site, dark only. It is also the workspace's dark theme (§3.2). */
+:root {
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --surface-1: #12161b;
+  --surface-2: #1a1f26;
+  --surface-3: #232a33;
+  --line: #66778e;
+  --ink: #eef2f6;
+  --muted: #a9b4c2;
+  --meta: #8592a3;
+  --scan: #5cc8db;
+  --on-scan: #0b0d10;
+  --warn: #e2a447;
+  --fail: #e87470;
+  /* What shared components fill and ring with: the scan accent here, Daylight's accent there */
+  --accent: var(--scan);
+  --on-accent: var(--on-scan);
+}
+
+/* The dealer accent presets (DESIGN §3.1, SRS accent_preset). Each replaces --scan, the public
+   accent; scan_cyan is the one :root sets. Text on any of them is --on-scan. */
+[data-accent="electric_blue"] {
+  --scan: #7aa7ff;
+}
+
+[data-accent="mint"] {
+  --scan: #5fd3a6;
+}
+
+[data-accent="ivory"] {
+  --scan: #e8e2d0;
+}
+
+[data-accent="violet"] {
+  --scan: #b59cff;
+}
+
+/* DESIGN §3.2: Daylight, the workspace's default theme, for sunlit lots. data-theme goes on
+   <html> in the dealer layout only. --surface-3 and --meta are the owner's choices
+   (D-038). Data lines never sit on --surface-3, where they would show at 2.91:1, so a selected row
+   shows by its tone. --scan follows Daylight's accent, so the dark theme's cyan, or a preset placed
+   above this block, never shows on this light ground. */
+[data-theme="daylight"] {
+  color-scheme: light;
+  --bg: #f3f5f7;
+  --surface-1: #ffffff;
+  --surface-2: #e9edf1;
+  --surface-3: #dfe5eb;
+  --line: #7a8696;
+  --ink: #0e1217;
+  --muted: #4a5565;
+  --meta: var(--muted);
+  --accent: #1a6e7e;
+  --on-accent: #ffffff;
+  --scan: var(--accent);
+  --on-scan: var(--on-accent);
+  --warn: #8f5a12;
+  --fail: #a8403a;
+}
+
+/* DESIGN §4.5: increased contrast. Text takes --ink everywhere, data lines gain contrast, and
+   surfaces get an edge (the surface-edge utility). The lines lighten on the dark theme and darken
+   on Daylight, where the lighter line would fall to 2.62:1 (D-038). */
+@media (prefers-contrast: more) {
+  :root {
+    --line: #8a9ab0;
+    --muted: var(--ink);
+    --meta: var(--ink);
+  }
+
+  [data-theme="daylight"] {
+    --line: #5e6a7a;
+  }
+}
+
+/* DESIGN §4.5 and §7.2.1: the hero placard is the one translucent surface. It turns opaque when
+   transparency is reduced. A percentage, as an opacity modifier takes it: bg-surface-1/(--placard-opacity). */
+:root {
+  --placard-opacity: 92%;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --placard-opacity: 100%;
+  }
+}
+
+/* DESIGN §3.3: the public type scale, five steps, each set by one type-* utility below */
+:root {
+  --display-size: clamp(3.5rem, 2rem + 6vw, 6rem);
+  --display-weight: 600;
+  --display-hexp: 100;
+  --head-size: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --head-weight: 600;
+  --head-hexp: 60;
+  --lead-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --lead-weight: 400;
+  --lead-hexp: 20;
+  --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --body-weight: 400;
+  --body-hexp: 0;
+  /* 13 px on a 360 px phone, 14 px from about 1100 px; never below 13 px */
+  --small-size: clamp(0.8125rem, 0.775rem + 0.15vw, 0.875rem);
+  --small-weight: 400;
+  --small-hexp: 0;
+}
+
+/* Each script's line heights, tracking and body size. The blocks name the lang attribute rather
+   than :lang(), so only an element that changes language sets them again, and a Latin phrase inside
+   Arabic text takes the Latin values. */
+:root,
+[lang|="en"] {
+  --display-leading: 1;
+  --display-tracking: -0.02em;
+  --head-leading: 1.1;
+  --lead-leading: 1.35;
+  --body-scale: 1;
+  --body-leading: 1.5;
+  --small-leading: 1.4;
+}
+
+/* Arabic sets its own line heights, drops the tracking and sets body text 6 % larger
+   (DESIGN §3.3, NFR-I18N-06) */
+[lang|="ar"] {
+  --display-leading: 1.25;
+  --display-tracking: 0;
+  --head-leading: 1.35;
+  --lead-leading: 1.6;
+  --body-scale: 1.06;
+  --body-leading: 1.8;
+  --small-leading: 1.6;
+}
+
+/* D-038: on phones the display step narrows its letters rather than its size, so every seed model
+   name fits its column */
+@media (width < 33.75rem) {
+  :root {
+    --display-hexp: 80;
+  }
+}
+
+@media (width < 26.875rem) {
+  :root {
+    --display-hexp: 60;
+  }
+}
+
+@media (width < 24.375rem) {
+  :root {
+    --display-hexp: 40;
+  }
+}
+
+@media (width < 22.5rem) {
+  :root {
+    --display-hexp: 20;
+  }
+}
+
+/* DESIGN §3.5: the focus ring, never removed, on keyboard focus (globals.css) */
+:root {
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
+
+/* DESIGN §4.2: durations, mirrored from src/lib/motion-tokens.ts. Tailwind reads them as
+   duration-(--dur-press) and delay-(--delay-shift-in). */
+:root {
+  --dur-instant: 0ms;
+  --dur-press: 120ms;
+  --press-scale: 0.97;
+  --dur-tip: 125ms;
+  --dur-hover: 150ms;
+  --dur-pop: 200ms;
+  --dur-modal: 250ms;
+  --dur-media-hover: 300ms;
+  --dur-sheet: 500ms;
+  --dur-reveal: 600ms;
+  --stagger: 60ms;
+  --stagger-tight: 30ms;
+  /* The loading spinner's turn, Tailwind's own, as DESIGN §6.4 sets none */
+  --dur-spin: 1000ms;
+  /* The signature tokens, each used only by the moment DESIGN §5 names */
+  --dur-shift-out: 120ms;
+  --dur-shift-in: 180ms;
+  --delay-shift-in: 70ms;
+  --dur-ignition: 280ms;
+  --dur-odometer: 800ms;
+  --dur-lap: 900ms;
+  --dur-nudge: 900ms;
+  --dur-showcase: 1000ms;
+  --dur-pulse: 1200ms;
+  --pulse-cycles: 2;
+  --dur-scan-auto: 2400ms;
+  --dur-sweep: 2500ms;
+}
+
+/* DESIGN §4.2: the three curves, which replace Tailwind's own ease-out and ease-in-out (D-029).
+   Static, so they are CSS variables on every page for var() and the Web Animations API. */
+@theme static {
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The Tailwind theme. Each namespace starts empty, so only DESIGN's values exist: a class such as
+   bg-white or rounded-md produces nothing. The font families are the type steps' (font-fallbacks.css)
+   and Tailwind's system monospace, which the development pages use. */
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-meta: var(--meta);
+  --color-scan: var(--scan);
+  --color-on-scan: var(--on-scan);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-warn: var(--warn);
+  --color-fail: var(--fail);
+}
+
+@theme {
+  /* DESIGN §3.3: the dealer workspace's fixed scale, ratio 1.2 on a 16 px base. Line heights come
+     from the page: 1.5, and 1.8 in Arabic (globals.css). */
+  --text-*: initial;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.1875rem;
+  --text-xl: 1.4375rem;
+  --text-2xl: 1.75rem;
+  --tracking-*: initial;
+  --leading-*: initial;
+  /* The weights the steps use: body 400, small up to 500, head and display 600. Figures take 450
+     through the figures utility. */
+  --font-serif: initial;
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* DESIGN §3.4: the 4 px spacing base, and the page's own measures. Section gaps run from 64 px on
+     a 390 px phone to 120 px at 1024 px, and on to 220 px. */
+  --spacing: 0.25rem;
+  --spacing-page: clamp(1rem, 2.2vw, 2rem);
+  --spacing-gutter: clamp(1rem, 2vw, 2rem);
+  --spacing-section: clamp(4rem, 1.85rem + 8.83vw, 13.75rem);
+  /* DESIGN §3.6: icons at 20 or 24 px */
+  --spacing-icon: 1.25rem;
+  --spacing-icon-lg: 1.5rem;
+  /* Content stops at 1760 px, with no 1200 px container, and body text at its measure */
+  --container-*: initial;
+  --container-content: 110rem;
+  --container-measure: 65ch;
+  /* Tailwind's older max-w-prose, outside the container namespace */
+  --max-width-prose: initial;
+  /* DESIGN §3.4's breakpoints: the base styles from 320 px, then sm at 360 px, the reference phone,
+     md at 768, lg at 1024 and xl at 1440 */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 22.5rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 90rem;
+
+  /* DESIGN §3.5 and §3.7: inputs are 2 px round, buttons and chips fully round (rounded-full),
+     media, panels and cards square (rounded-none). Cards are 4:3, the car page's hero 3:2 on
+     desktop and 4:3 on phones. */
+  --radius-*: initial;
+  --radius-input: 0.125rem;
+  --aspect-*: initial;
+  --aspect-card: 4 / 3;
+  --aspect-hero: 3 / 2;
+
+  /* DESIGN §3.5 and §10.1: overlays alone cast a shadow, and nothing glows or blurs */
+  --shadow-*: initial;
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.45), 0 2px 6px rgb(0 0 0 / 0.35);
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
+  --perspective-*: initial;
+
+  /* DESIGN §4.2: hover colour and opacity take 150 ms with ease. Every other move names its token. */
+  --default-transition-duration: var(--dur-hover);
+  --default-transition-timing-function: ease;
+
+  /* DESIGN §6.4: the loading button's spinner, with Tailwind's own spin keyframes, and the
+     skeleton's pulse, twice, then still */
+  --animate-*: initial;
+  --animate-spin: spin var(--dur-spin) linear infinite;
+  --animate-skeleton: skeleton var(--dur-pulse) ease-in-out var(--pulse-cycles);
+
+  @keyframes skeleton {
+    50% {
+      opacity: 0.6;
+    }
+  }
+}
+
+/* DESIGN §3.3's five public steps. Each sets the family, size, line height, weight and HEXP
+   together, so a step can't be half applied. */
+@utility type-display {
+  font-family: var(--font-display);
+  font-size: var(--display-size);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
+  font-weight: var(--display-weight);
+  font-variation-settings: "HEXP" var(--display-hexp);
+  text-wrap: balance;
+}
+
+@utility type-head {
+  font-family: var(--font-head);
+  font-size: var(--head-size);
+  line-height: var(--head-leading);
+  font-weight: var(--head-weight);
+  font-variation-settings: "HEXP" var(--head-hexp);
+  text-wrap: balance;
+}
+
+@utility type-lead {
+  font-family: var(--font-lead);
+  font-size: var(--lead-size);
+  line-height: var(--lead-leading);
+  font-weight: var(--lead-weight);
+  font-variation-settings: "HEXP" var(--lead-hexp);
+  text-wrap: pretty;
+}
+
+@utility type-body {
+  font-family: var(--font-sans);
+  font-size: calc(var(--body-size) * var(--body-scale));
+  line-height: var(--body-leading);
+  font-weight: var(--body-weight);
+  font-variation-settings: "HEXP" var(--body-hexp);
+  text-wrap: pretty;
+}
+
+@utility type-small {
+  font-family: var(--font-sans);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+  font-weight: var(--small-weight);
+  font-variation-settings: "HEXP" var(--small-hexp);
+  text-wrap: pretty;
+}
+
+/* DESIGN §3.3: figures in Martian Mono at wdth 87.5, wght 450, tabular, at the size around them */
+@utility figures {
+  font-family: var(--font-figures);
+  font-stretch: 87.5%;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+}

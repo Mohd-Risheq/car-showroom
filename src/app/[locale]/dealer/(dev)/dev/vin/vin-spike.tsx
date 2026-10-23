@@ -348,7 +348,7 @@ export function VinSpike() {
   const band = frame ? scanRegion(frame.width, frame.height) : null;
 
   return (
-    <section className="grid max-w-2xl gap-3" data-state={phase}>
+    <section className="grid max-w-168 gap-3" data-state={phase}>
       <p>
         {results?.native.present
           ? `This browser has its own detector (${results.native.formats?.join(", ") ?? "formats unknown"})`
@@ -359,7 +359,7 @@ export function VinSpike() {
       <label className="grid gap-1">
         <span>VIN</span>
         <input
-          className="border border-(--ink) px-3 py-2 uppercase"
+          className="border border-ink px-3 py-2 uppercase"
           dir="ltr"
           value={vin}
           onChange={(event) => setVin(event.target.value.toUpperCase())}
@@ -376,18 +376,13 @@ export function VinSpike() {
       <div className="flex flex-wrap gap-3">
         {results?.camera ? (
           cameraOn ? (
-            <button
-              type="button"
-              className="border border-(--ink) px-4 py-3"
-              onClick={() => stopScan("stopped")}
-              data-stop
-            >
+            <button type="button" className="border border-ink px-4 py-3" onClick={() => stopScan("stopped")} data-stop>
               Stop
             </button>
           ) : (
             <button
               type="button"
-              className="border border-(--ink) px-4 py-3"
+              className="border border-ink px-4 py-3"
               disabled={phase !== "ready"}
               onClick={() => void scan()}
               data-scan
@@ -396,7 +391,7 @@ export function VinSpike() {
             </button>
           )
         ) : null}
-        <label className="border border-(--ink) px-4 py-3">
+        <label className="border border-ink px-4 py-3">
           Read a photo
           <input
             type="file"
@@ -414,7 +409,7 @@ export function VinSpike() {
       </div>
       <p>{results?.camera === false ? "No camera here, so Scan VIN is not offered." : ""}</p>
       <div
-        className={cameraOn ? "relative overflow-hidden bg-black" : "hidden"}
+        className={cameraOn ? "relative overflow-hidden bg-bg" : "hidden"}
         style={
           frame
             ? {
@@ -434,7 +429,7 @@ export function VinSpike() {
         />
         {frame && band ? (
           <div
-            className="absolute border-2 border-white"
+            className="absolute border-2 border-scan"
             style={{
               left: `${(band.x / frame.width) * 100}%`,
               top: `${(band.y / frame.height) * 100}%`,
@@ -451,8 +446,8 @@ export function VinSpike() {
           Test codes to scan
         </a>
       </p>
-      <p className="text-[0.8rem]">{sent}</p>
-      <pre className="max-h-96 overflow-auto text-[0.7rem] break-all whitespace-pre-wrap" data-results>
+      <p className="text-xs">{sent}</p>
+      <pre className="max-h-96 overflow-auto text-xs break-all whitespace-pre-wrap" data-results>
         {json}
       </pre>
     </section>

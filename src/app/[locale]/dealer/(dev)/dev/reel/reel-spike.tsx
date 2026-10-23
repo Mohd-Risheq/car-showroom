@@ -653,7 +653,7 @@ export function ReelSpike() {
       (phase === "ready" && (resultsRef.current?.crossPlay.length ?? 0) > 0));
 
   return (
-    <section className="grid max-w-2xl gap-3" data-state={phase}>
+    <section className="grid max-w-168 gap-3" data-state={phase}>
       {phase === "unsupported" ? <p data-unsupported>{MESSAGE_UNSUPPORTED}</p> : null}
       {support ? (
         <p>
@@ -670,7 +670,7 @@ export function ReelSpike() {
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          className="border border-(--ink) px-4 py-3"
+          className="border border-ink px-4 py-3"
           disabled={busy || sending || !support?.offered}
           onClick={() => void make()}
           data-make
@@ -678,7 +678,7 @@ export function ReelSpike() {
           Make the test video
         </button>
         {phase === "encoding" ? (
-          <button type="button" className="border border-(--ink) px-4 py-3" onClick={cancel} data-cancel>
+          <button type="button" className="border border-ink px-4 py-3" onClick={cancel} data-cancel>
             Cancel
           </button>
         ) : null}
@@ -689,7 +689,7 @@ export function ReelSpike() {
         </span>
         <progress max={REEL.frames} value={frames} data-progress={frames} />
       </label>
-      <video ref={videoRef} className="w-48 border border-(--line)" muted playsInline />
+      <video ref={videoRef} className="w-48 border border-line" muted playsInline />
       {downloadUrl ? (
         <a href={downloadUrl} download="muftah-t08-test.mp4" className="underline" data-download>
           Download the MP4
@@ -711,14 +711,14 @@ export function ReelSpike() {
         />
       </label>
       {phase === "done" ? (
-        <div className="grid gap-2 border border-(--line) p-3">
+        <div className="grid gap-2 border border-line p-3">
           <p>Play the preview with the sound on. What happened?</p>
           <div className="flex flex-wrap gap-3">
             {["Played with sound", "Played, no sound", "Didn't play"].map((answer) => (
               <button
                 key={answer}
                 type="button"
-                className="border border-(--ink) px-4 py-3"
+                className="border border-ink px-4 py-3"
                 disabled={sending}
                 onClick={() => void report(answer)}
               >
@@ -731,7 +731,7 @@ export function ReelSpike() {
       {sendable ? (
         <button
           type="button"
-          className="justify-self-start border border-(--ink) px-4 py-3"
+          className="justify-self-start border border-ink px-4 py-3"
           disabled={sending}
           onClick={() => void report(null)}
           data-send
@@ -739,8 +739,8 @@ export function ReelSpike() {
           Send results
         </button>
       ) : null}
-      <p className="text-[0.8rem]">{sent}</p>
-      <pre className="max-h-96 overflow-auto text-[0.7rem] break-all whitespace-pre-wrap" data-results>
+      <p className="text-xs">{sent}</p>
+      <pre className="max-h-96 overflow-auto text-xs break-all whitespace-pre-wrap" data-results>
         {json}
       </pre>
     </section>

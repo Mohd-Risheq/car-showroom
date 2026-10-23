@@ -1,11 +1,9 @@
-import { spring } from "motion";
 import { describe, expect, it } from "vitest";
 import {
   backingSize,
   bitmapBytes,
   containRect,
   dragPosition,
-  FLICK_SPRING,
   fitInside,
   frameAt,
   keyStep,
@@ -71,17 +69,6 @@ describe("release", () => {
     expect(releaseTarget(10.2, 0)).toBe(10);
     expect(releaseTarget(10.2, 60)).toBe(40);
     expect(releaseTarget(-3.4, -10)).toBe(-8);
-  });
-
-  it("uses the physics of the flick spring (bounce 0.2, 0.4 s), which keeps the velocity", () => {
-    const timed = spring({ keyframes: [0, 1], bounce: 0.2, duration: 400 });
-    const physics = spring({ keyframes: [0, 1], ...FLICK_SPRING });
-    for (let t = 0; t <= 1000; t += 10) {
-      expect(Math.abs(physics.next(t).value - timed.next(t).value)).toBeLessThan(1e-3);
-    }
-    const thrown = spring({ keyframes: [0, 10], ...FLICK_SPRING, velocity: 60 });
-    const still = spring({ keyframes: [0, 10], ...FLICK_SPRING, velocity: 0 });
-    expect(thrown.next(16).value).toBeGreaterThan(still.next(16).value + 0.5);
   });
 });
 

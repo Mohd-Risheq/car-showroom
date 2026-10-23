@@ -1,19 +1,50 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { getLocale } from "next-intl/server";
 import { type CSSProperties, Fragment } from "react";
+import { LanguageLink } from "@/app/_dev/specimen/language-link";
 import { type AppLocale, directionOf } from "@/i18n/routing";
+import { cn } from "@/lib/class-names";
 import { notFoundOnDeployments } from "@/lib/deployment";
 import { martianMono, readexPro } from "@/styles/fonts";
+import { readTypeScale, type ScriptValues, type StepTokens, type TypeStep } from "@/styles/type-scale";
 import { C } from "./classes";
-import { COPY, DIGITS, HEXP_VALUES, JOINED_AR, STEPS } from "./copy";
+import { COPY, DIGITS, HEXP_VALUES, JOINED_AR } from "./copy";
 import { TypeChecks } from "./type-checks";
 
 // Spike T-11: Readex Pro and Martian Mono through next/font (DESIGN §3.3, NFR-PERF-08). The type
-// scale in this page's language, then fixtures in both scripts that type-checks.tsx measures. T-13
-// turns the scale into tokens.
+// scale in this page's language, each step labelled with its tokens as tokens.css sets them, then
+// fixtures in both scripts that type-checks.tsx measures.
 
 const SCRIPTS: AppLocale[] = ["ar", "en"];
 
-const sampleClass = { display: C.display, head: C.head, lead: C.lead, body: C.body, small: C.small };
+/** The stylesheet the labels are read from, on the server. Deployments never render this page, so the build never traces the file. */
+const TOKENS_CSS = path.join(/*turbopackIgnore: true*/ process.cwd(), "src/styles/tokens.css");
+
+const sampleClass = {
+  display: C.display,
+  head: C.head,
+  lead: C.lead,
+  body: C.body,
+  small: C.small,
+} satisfies Record<TypeStep, string>;
+
+/** A step's tokens as its label shows them, Arabic's value beside Latin's where the two differ */
+function stepLabel({ size, scale, leading, tracking, weight, hexp, narrower }: StepTokens): string {
+  const scripts = ({ latin, arabic }: ScriptValues) => (latin === arabic ? latin : `${latin}, Arabic ${arabic}`);
+  return [
+    size,
+    scale && `scale ${scripts(scale)}`,
+    `lh ${scripts(leading)}`,
+    tracking && `tracking ${scripts(tracking)}`,
+    `wght ${weight}`,
+    narrower.length > 0
+      ? `HEXP ${hexp}, on narrower screens ${narrower.map((step) => step.hexp).join(", ")}`
+      : `HEXP ${hexp}`,
+  ]
+    .filter((part) => typeof part === "string")
+    .join(" · ");
+}
 
 function DigitRow({
   id,
@@ -33,7 +64,7 @@ function DigitRow({
       </span>
       <span
         dir="ltr"
-        className={`${C.sample} ${className ?? ""}`}
+        className={cn(C.sample, className)}
         style={{ ...style, fontVariantNumeric: numeric }}
         data-digits={id}
         data-numeric={numeric}
@@ -52,7 +83,7 @@ export default async function TypeSpikePage() {
   notFoundOnDeployments();
   const locale = await getLocale();
   const copy = COPY[locale];
-  const other: AppLocale = locale === "ar" ? "en" : "ar";
+  const scale = readTypeScale(readFileSync(TOKENS_CSS, "utf8"));
 
   return (
     <main className={C.page}>
@@ -61,20 +92,18 @@ export default async function TypeSpikePage() {
           <h1 lang="en" dir="ltr">
             Muftah dev: fonts and type scale (T-11)
           </h1>
-          <a className={C.link} href={`/${other}/dev/type`} lang={other} dir={directionOf(other)}>
-            {other === "ar" ? "العربية" : "English"}
-          </a>
+          <LanguageLink locale={locale} path="/dev/type" className={C.link} />
         </header>
 
         <section className={C.section} aria-labelledby="scale">
           <h2 id="scale" className={C.sectionTitle} lang="en" dir="ltr">
             Type scale, DESIGN §3.3
           </h2>
-          {STEPS.map((step) => (
+          {scale.map((step) => (
             <div key={step.id} className={C.step}>
               <p className={C.label} lang="en" dir="ltr">
                 <b className={C.labelName}>{step.id}</b>
-                {step.spec}
+                {stepLabel(step)}
               </p>
               <div className={C.slot} data-slot>
                 <p className={sampleClass[step.id]} data-sample={step.id}>
@@ -100,7 +129,7 @@ export default async function TypeSpikePage() {
               <b className={C.labelName}>figures</b>at the body step, with the labels in Readex Pro
             </p>
             <div className={C.slot} data-slot>
-              <dl className={`${C.facts} ${C.body}`} data-sample="figures" data-figures>
+              <dl className={cn(C.facts, C.body)} data-sample="figures" data-figures>
                 {copy.figures.map((figure) => (
                   <Fragment key={figure.label}>
                     <dt className={C.factTerm}>{figure.label}</dt>
@@ -117,6 +146,8 @@ export default async function TypeSpikePage() {
           </div>
         </section>
 
+        {/* eslint-disable muftah/no-raw-style-values -- the fixtures measure the fonts at fixed sizes (T-11,
+            D-033), not at the type steps */}
         <section className={C.section} aria-labelledby="checks">
           <h2 id="checks" className={C.sectionTitle} lang="en" dir="ltr">
             Fixtures in both scripts, measured under Results
@@ -216,7 +247,7 @@ export default async function TypeSpikePage() {
                   </span>
                   <span
                     dir="ltr"
-                    className={`${C.sample} ${C.figure}`}
+                    className={cn(C.sample, C.figure)}
                     style={{ fontSize: "1.125rem", fontStretch: "100%" }}
                     data-stretch="100"
                   >
@@ -229,7 +260,7 @@ export default async function TypeSpikePage() {
                   </span>
                   <span
                     dir="ltr"
-                    className={`${C.sample} ${C.figure}`}
+                    className={cn(C.sample, C.figure)}
                     style={{ fontSize: "1.125rem" }}
                     data-stretch="87.5"
                   >
@@ -240,8 +271,12 @@ export default async function TypeSpikePage() {
             </div>
           </div>
         </section>
+        {/* eslint-enable muftah/no-raw-style-values */}
 
-        <TypeChecks families={{ readex: readexPro.style.fontFamily, martian: martianMono.style.fontFamily }} />
+        <TypeChecks
+          locale={locale}
+          families={{ readex: readexPro.style.fontFamily, martian: martianMono.style.fontFamily }}
+        />
       </div>
     </main>
   );

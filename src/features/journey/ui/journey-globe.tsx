@@ -76,7 +76,7 @@ export function JourneyGlobe({ places, active, children, onFrame, onSettle, onSh
             globe.current = view;
           } catch {
             // A globe that fails to start cleans up after itself and leaves the static map in place
-            // (FR-17 error states). T-42 logs it once T-16's lib/log exists.
+            // (FR-17 error states). T-42 reports it as T-20's client_error event (NFR-OBS-02).
             globe.current = null;
           }
           show(globe.current !== null);

@@ -165,7 +165,7 @@ export function CanvasSpike({ locale }: { locale: AppLocale }) {
               dir={locale === "ar" ? "rtl" : "ltr"}
               width={CARD_WIDTH}
               height={CARD_HEIGHT}
-              className="w-[min(540px,100%)] border border-neutral-700"
+              className="w-full max-w-135 border border-line"
             />
             <figcaption>canvas, {locale}</figcaption>
           </figure>
@@ -178,7 +178,7 @@ export function CanvasSpike({ locale }: { locale: AppLocale }) {
             data-card="worker-ar"
             width={CARD_WIDTH}
             height={CARD_HEIGHT}
-            className="w-[min(540px,100%)] border border-neutral-700"
+            className="w-full max-w-135 border border-line"
           />
           <figcaption>OffscreenCanvas in a worker, ar</figcaption>
         </figure>
@@ -193,7 +193,7 @@ export function CanvasSpike({ locale }: { locale: AppLocale }) {
               key={locale}
               lang={locale}
               dir={locale === "ar" ? "rtl" : "ltr"}
-              className="max-w-[540px]"
+              className="max-w-135"
               style={{ fontFamily: FAMILY }}
             >
               <p className="text-2xl font-semibold">{text.title}</p>

@@ -1,11 +1,38 @@
-@import "tailwindcss";
+/* Tailwind looks for class names in src only. Left to itself it reads every file .gitignore
+   doesn't exclude, so a class or variable named in the docs or a test would join the stylesheet,
+   and the public repository, which has no docs, would build a different one. */
+@import "tailwindcss" source("..");
+/* The design tokens and the Tailwind theme built on them (DESIGN §3 and §4) */
+@import "./tokens.css";
 /* Readex Pro sets all text (DESIGN §3.3). next/font declares --font-readex-pro and
    --font-martian-mono on <html> (src/styles/fonts.ts), and font-fallbacks.css builds each type
    step's font stack from them: font-sans (body and small), font-lead, font-head, font-display and
    font-figures. font-mono stays the system monospace of the development pages. */
 @import "./font-fallbacks.css";
 
+/* Public pages, whose <html> has no data-theme: the dealer layout's always has one (Daylight or
+   dark). A shared component takes the public type steps under it, and the workspace's fixed scale
+   (DESIGN §3.3) elsewhere. */
+@custom-variant public (&:where(:root:not([data-theme]) *));
+
+/* Hover styles exist only for a fine pointer (DESIGN §6.1). A tap on a phone would otherwise leave
+   the hover style on until the next tap elsewhere. This replaces Tailwind's own hover variant, which
+   checks (hover: hover) alone. The query is one condition in parentheses, so not-hover: can negate
+   it. */
+@custom-variant hover {
+  @media ((hover: hover) and (pointer: fine)) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 @layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+  }
+
   /* Arabic body text at line-height 1.8; Latin keeps 1.5 (NFR-I18N-06) */
   html:lang(ar) {
     line-height: 1.8;
@@ -26,6 +53,21 @@
   p {
     text-wrap: pretty;
   }
+
+  /* DESIGN §6.4: form text at the size around it, never below 16 px, so iOS Safari doesn't zoom in
+     on focus */
+  input,
+  select,
+  textarea {
+    font-size: max(1rem, 1em);
+  }
+
+  /* DESIGN §3.5: the focus ring, in the accent, on keyboard focus. Sonner's toasts take it back
+     below, from Sonner's own unlayered outline: 0. */
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--accent);
+    outline-offset: var(--focus-ring-offset);
+  }
 }
 
 /* Arabic is never letter-spaced, italic, transformed or given faux bold (NFR-I18N-06, DESIGN §9.4).
@@ -36,4 +78,59 @@
   font-style: normal !important;
   text-transform: none !important;
   font-synthesis: none !important;
+}
+
+/* DESIGN §4.5: under reduced motion Sonner stops every toast transition. A toast crossfades over
+   200 ms instead, without sliding: two attribute selectors outrank Sonner's own important rule. */
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toaster] [data-sonner-toast] {
+    transition: opacity var(--dur-pop) ease !important;
+  }
+}
+
+/* DESIGN §3.5: Sonner's stylesheet, injected outside any layer, sets outline: 0 on the toast list,
+   which its hotkey focuses, and on each toast, which Tab reaches, so the ring in @layer base never
+   shows there. The list's toasts are positioned, leaving it no height, so while it has focus the
+   ring goes round its front toast. These selectors outrank Sonner's. */
+[data-sonner-toaster]:focus-visible [data-sonner-toast][data-front="true"],
+[data-sonner-toaster] [data-sonner-toast]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--accent);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* DESIGN §4.2 and §6.1: every pressable control. It answers on press with a 0.97 scale, its colours
+   change over the hover duration (a filled button brightens with a filter), and a tap neither zooms
+   the page nor flashes the system highlight. */
+@utility pressable {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    color var(--dur-hover) ease,
+    background-color var(--dur-hover) ease,
+    border-color var(--dur-hover) ease,
+    opacity var(--dur-hover) ease,
+    filter var(--dur-hover) ease;
+
+  &:active:not(:disabled, [aria-disabled="true"]) {
+    transform: scale(var(--press-scale));
+  }
+
+  /* DESIGN §4.1: the workspace has no motion on keyboard-triggered actions, so a button held down
+     with the space bar, which :active matches too, keeps its size there */
+  :root[data-theme] &:active:focus-visible {
+    transform: none;
+  }
+}
+
+/* DESIGN §3.5 and §4.5: surfaces are told apart by tone alone, and under increased contrast they
+   also get an edge in --line. An outline drawn inside the box, so nothing moves; a surface with
+   keyboard focus keeps the focus ring instead. */
+@utility surface-edge {
+  @media (prefers-contrast: more) {
+    &:not(:focus-visible) {
+      outline: 1px solid var(--line);
+      outline-offset: -1px;
+    }
+  }
 }

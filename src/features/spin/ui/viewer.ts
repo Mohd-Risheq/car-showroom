@@ -1,10 +1,10 @@
 import { spring } from "motion";
+import { SPRINGS, springPhysics } from "@/lib/motion-tokens";
 import {
   backingSize,
   containRect,
   DRAG_HYSTERESIS_PX,
   dragPosition,
-  FLICK_SPRING,
   frameAt,
   keyStep,
   releaseTarget,
@@ -21,6 +21,12 @@ import type { FrameStore } from "./store";
 
 /** FR-16.5: how long a frame rests before its high-resolution version loads */
 export const REST_BEFORE_HIGH_RES_MS = 300;
+
+/**
+ * The `flick` spring (DESIGN §4.3) as stiffness and damping, which keep the release velocity that
+ * Motion 14 drops on springs defined by duration (DECISIONS.md D-027)
+ */
+const FLICK_SPRING = springPhysics(SPRINGS.flick);
 
 export type DrawInfo = { index: number; highRes: boolean; ms: number; first: boolean };
 export type ViewerOptions = {

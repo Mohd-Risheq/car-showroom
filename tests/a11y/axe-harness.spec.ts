@@ -8,10 +8,12 @@ import { harnessPage } from "../support/harness-pages.ts";
 test("the axe check names every serious or critical issue on the planted page", async ({ page }) => {
   await page.setContent(harnessPage("axe", "planted"));
   expect((await seriousA11yIssues(page)).toSorted()).toStrictEqual([
+    expect.stringMatching(/^aria-command-name \(serious\): .+, at span$/),
     expect.stringMatching(/^button-name \(critical\): .+, at button$/),
     expect.stringMatching(/^color-contrast \(serious\): .+, at p$/),
     expect.stringMatching(/^image-alt \(critical\): .+, at img$/),
     expect.stringMatching(/^label \(critical\): .+, at input$/),
+    expect.stringMatching(/^link-name \(serious\): .+, at a$/),
   ]);
 });
 

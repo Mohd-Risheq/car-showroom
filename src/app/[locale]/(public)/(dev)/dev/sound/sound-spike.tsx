@@ -160,15 +160,15 @@ function DialFace({ dial }: { dial: Dial }) {
     <svg className="absolute inset-0 size-full" viewBox="0 0 240 240" aria-hidden="true">
       <defs>
         <pattern id={hatch} width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <line x1="0" y1="0" x2="0" y2="4" className="stroke-(--fail) [stroke-width:1.5]" />
+          <line x1="0" y1="0" x2="0" y2="4" className="stroke-fail [stroke-width:1.5]" />
         </pattern>
       </defs>
       <path
-        className="fill-none stroke-(--line) [stroke-width:1]"
+        className="fill-none stroke-line [stroke-width:1]"
         d={`M ${start.x} ${start.y} A ${radius} ${radius} 0 ${large(0, dial.max)} 1 ${end.x} ${end.y}`}
       />
       <path
-        className="stroke-(--fail) [stroke-width:1]"
+        className="stroke-fail [stroke-width:1]"
         fill={`url(#${hatch})`}
         d={`M ${outerFrom.x} ${outerFrom.y} A ${radius} ${radius} 0 ${large(dial.redline, dial.max)} 1 ${end.x} ${end.y} L ${innerTo.x} ${innerTo.y} A ${radius - 10} ${radius - 10} 0 ${large(dial.redline, dial.max)} 0 ${innerFrom.x} ${innerFrom.y} Z`}
       />
@@ -178,7 +178,7 @@ function DialFace({ dial }: { dial: Dial }) {
         return (
           <line
             key={value}
-            className="stroke-(--line)"
+            className="stroke-line"
             x1={outer.x}
             y1={outer.y}
             x2={inner.x}
@@ -194,7 +194,7 @@ function DialFace({ dial }: { dial: Dial }) {
           return (
             <text
               key={value}
-              className="fill-(--ink) text-[13px]"
+              className="fill-ink text-xs"
               x={at.x}
               y={at.y}
               textAnchor="middle"
@@ -498,25 +498,22 @@ export function SoundSpike() {
   const fixed = run === null ? null : RUNS[run - 1];
 
   return (
-    <section
-      className="grid gap-4 bg-(--bg) p-4 text-(--ink) [--bg:#0b0d10] [--dur-pop:200ms] [--dur-press:120ms] [--ease-out:cubic-bezier(0.23,1,0.32,1)] [--fail:#e87470] [--ink:#eef2f6] [--line:#66778e] [--scan:#5cc8db]"
-      data-state={phase}
-    >
+    <section className="grid gap-4 bg-bg p-4 text-ink" data-state={phase}>
       {fixed && run !== null ? (
-        <div className="grid gap-2 border border-(--line) p-3">
+        <div className="grid gap-2 border border-line p-3">
           <p>
             Run {run} of {RUNS.length}: {fixed.mode === "element" ? "<audio> element" : "decoded buffer"}
             {fixed.session ? `, audio session "${fixed.session}"` : ""}
           </p>
           <p className="text-xl">Silent mode {fixed.switchOn ? "ON" : "OFF"}</p>
-          <p className="text-[0.8rem] text-(--line)">
+          <p className="text-xs text-meta">
             Use the side switch, or the Action button on newer iPhones. Volume at least halfway. Tap play once and
             listen to the end.
           </p>
         </div>
       ) : null}
       <div className="flex flex-wrap items-center gap-6">
-        <div className="relative aspect-square w-[min(100%,280px)]" dir="ltr" data-dial>
+        <div className="relative aspect-square w-full max-w-70" dir="ltr" data-dial>
           <DialFace dial={dial} />
           <svg
             ref={needleRef}
@@ -525,20 +522,14 @@ export function SoundSpike() {
             aria-hidden="true"
             data-needle
           >
-            <line
-              className="stroke-(--ink) [stroke-linecap:round] [stroke-width:2.5]"
-              x1="120"
-              y1="120"
-              x2="120"
-              y2="34"
-            />
-            <circle className="fill-(--scan)" cx="120" cy="120" r="6" />
+            <line className="stroke-ink [stroke-linecap:round] [stroke-width:2.5]" x1="120" y1="120" x2="120" y2="34" />
+            <circle className="fill-scan" cx="120" cy="120" r="6" />
           </svg>
         </div>
         <div className="grid justify-items-start gap-2">
           <button
             type="button"
-            className="grid size-[72px] place-items-center rounded-full border-[1.5px] border-(--ink) bg-transparent text-(--ink) [transition:scale_var(--dur-press)_ease-out] hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--scan) data-pressed:scale-[0.97]"
+            className="grid size-18 place-items-center rounded-full border-2 border-ink bg-transparent text-ink [transition:scale_var(--dur-press)_var(--ease-out)] hover:bg-ink/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-scan data-pressed:scale-(--press-scale)"
             data-play
             aria-label={playing ? copy.pause : copy.play}
             onClick={onPlay}
@@ -553,30 +544,30 @@ export function SoundSpike() {
             {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
           {hint ? (
-            <p className="text-[0.8rem] text-(--line)" data-hint>
+            <p className="text-xs text-meta" data-hint>
               {copy.silentHint}
             </p>
           ) : null}
-          <time ref={timeRef} className="text-[0.8rem] text-(--line)" dir="ltr">
+          <time ref={timeRef} className="text-xs text-meta" dir="ltr">
             0:00 / {clock(ENGINE_CLIPS[setup?.clip ?? "steps-8s"].seconds)}
           </time>
         </div>
       </div>
-      <p className="text-[0.8rem] text-(--line)">{copy.needleNote}</p>
+      <p className="text-xs text-meta">{copy.needleNote}</p>
       {asking ? (
-        <div className="grid gap-2 border border-(--line) p-3">
+        <div className="grid gap-2 border border-line p-3">
           <p>Did you hear the engine?</p>
           <div className="flex gap-3">
             <button
               type="button"
-              className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)"
+              className="border border-ink bg-transparent px-4 py-3 text-ink"
               onClick={() => void answer(true)}
             >
               Heard it
             </button>
             <button
               type="button"
-              className="border border-(--ink) bg-transparent px-4 py-3 text-(--ink)"
+              className="border border-ink bg-transparent px-4 py-3 text-ink"
               onClick={() => void answer(false)}
             >
               Didn&apos;t hear it
@@ -585,8 +576,8 @@ export function SoundSpike() {
         </div>
       ) : null}
       {phase === "answered" && run === RUNS.length ? <p>All {RUNS.length} runs are done.</p> : null}
-      <p className="text-[0.8rem] text-(--line)">{sent}</p>
-      <pre className="max-h-96 overflow-auto text-[0.7rem] break-all whitespace-pre-wrap" data-results>
+      <p className="text-xs text-meta">{sent}</p>
+      <pre className="max-h-96 overflow-auto text-xs break-all whitespace-pre-wrap" data-results>
         {json}
       </pre>
     </section>

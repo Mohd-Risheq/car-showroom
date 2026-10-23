@@ -1,8 +1,11 @@
 "use client";
 
+import { hasLocale } from "next-intl";
 import { useEffect, useState } from "react";
-import { describeError, round } from "@/app/_dev/harness";
+import { describeError, reportRequested, round } from "@/app/_dev/harness";
 import { postDevReport } from "@/app/_dev/report";
+import { type AppLocale, routing } from "@/i18n/routing";
+import { cn } from "@/lib/class-names";
 import { C } from "./classes";
 import { JOINED_AR } from "./copy";
 
@@ -20,7 +23,6 @@ import { JOINED_AR } from "./copy";
 // Query: report=1 sends the results to the Mac running the server (BUILD-PLAN §4).
 
 type Families = { readex: string; martian: string };
-type Script = "ar" | "en";
 
 type Results = {
   kind: "t11-type";
@@ -37,7 +39,7 @@ type Results = {
     startMs: number;
     ms: number;
   }[];
-  hexp: { script: Script; wght: number; widths: Record<string, number>; gain: number }[];
+  hexp: { script: AppLocale; wght: number; widths: Record<string, number>; gain: number }[];
   digits: { row: string; numeric: string; widths: number[]; spread: number }[];
   stretch: { wdth100: number; wdth875: number; ratio: number } | null;
   fallbacks: { family: string; loaded: number; failed: number; drawsArabic: boolean | null }[];
@@ -74,9 +76,10 @@ function lineHeight(element: Element): number {
 }
 
 function measureHexp(): Results["hexp"] {
-  const rows = new Map<string, { script: Script; wght: number; widths: Record<string, number> }>();
+  const rows = new Map<string, { script: AppLocale; wght: number; widths: Record<string, number> }>();
   for (const element of document.querySelectorAll<HTMLElement>("[data-hexp]")) {
-    const script = element.dataset.script === "ar" ? "ar" : "en";
+    const script = element.dataset.script;
+    if (!hasLocale(routing.locales, script)) throw new Error(`A HEXP fixture names no script: ${script}`);
     const wght = Number(element.dataset.wght);
     const key = `${script}-${wght}`;
     const row = rows.get(key) ?? { script, wght, widths: {} };
@@ -161,7 +164,8 @@ function measureSwap(): Results["swap"] {
     const figures = sample.hasAttribute("data-figures");
     const box = document.createElement("div");
     box.style.cssText = "position:absolute;inset-inline:0;inset-block-start:0;visibility:hidden;pointer-events:none";
-    const clone = sample.cloneNode(true) as HTMLElement;
+    const clone = sample.cloneNode(true);
+    if (!(clone instanceof HTMLElement)) throw new Error("A sample's copy is no element");
     clone.removeAttribute("data-sample");
     // The stacks are read from the sample, whose elements line up with the clone's
     const originals = [sample, ...sample.querySelectorAll<HTMLElement>("*")];
@@ -210,15 +214,7 @@ function measureFit(): Results["fit"] {
   });
 }
 
-function setupFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    locale: window.location.pathname.split("/")[1] === "ar" ? "ar" : "en",
-    report: params.get("report") === "1",
-  };
-}
-
-export function TypeChecks({ families }: { families: Families }) {
+export function TypeChecks({ locale, families }: { locale: AppLocale; families: Families }) {
   const [state, setState] = useState<"measuring" | "done" | "failed">("measuring");
   const [results, setResults] = useState<Results | null>(null);
   const [failure, setFailure] = useState("");
@@ -226,7 +222,7 @@ export function TypeChecks({ families }: { families: Families }) {
 
   useEffect(() => {
     let cancelled = false;
-    const setup = setupFromUrl();
+    const report = reportRequested(window.location.search);
     const errors: string[] = [];
 
     const run = async () => {
@@ -247,7 +243,9 @@ export function TypeChecks({ families }: { families: Families }) {
           unicodeRange: face.unicodeRange.slice(0, 48),
         });
       });
-      const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
+      const resources = performance
+        .getEntriesByType("resource")
+        .filter((entry) => entry instanceof PerformanceResourceTiming);
       const fontFiles = resources
         .filter((entry) => entry.name.endsWith(".woff2"))
         .map((entry) => ({
@@ -266,7 +264,7 @@ export function TypeChecks({ families }: { families: Families }) {
       const display = document.querySelector<HTMLElement>('[data-sample="display"]');
       const arabicStyle = display?.closest('[lang="ar"]') ? getComputedStyle(display) : null;
 
-      const gainOf = (script: Script, wght: number) =>
+      const gainOf = (script: AppLocale, wght: number) =>
         hexp.find((row) => row.script === script && row.wght === wght)?.gain ?? 0;
       const hexpArabic = [600, 400].every(
         (wght) => gainOf("ar", wght) >= 0.05 && gainOf("ar", wght) >= 0.5 * gainOf("en", wght),
@@ -314,8 +312,8 @@ export function TypeChecks({ families }: { families: Families }) {
       setResults(measured);
       setState("done");
 
-      if (!setup.report) return;
-      const { message } = await postDevReport(setup.locale, measured);
+      if (!report) return;
+      const { message } = await postDevReport(locale, measured);
       if (!cancelled) setSent(message);
     };
 
@@ -327,12 +325,10 @@ export function TypeChecks({ families }: { families: Families }) {
     return () => {
       cancelled = true;
     };
-  }, [families]);
+  }, [families, locale]);
 
-  const verdict = (pass: boolean) => (
-    <td className={`${C.cell} ${pass ? C.pass : C.fail}`}>{pass ? "pass" : "fail"}</td>
-  );
-  const gain = (script: Script, wght: number) => {
+  const verdict = (pass: boolean) => <td className={cn(C.cell, pass ? C.pass : C.fail)}>{pass ? "pass" : "fail"}</td>;
+  const gain = (script: AppLocale, wght: number) => {
     const row = results?.hexp.find((entry) => entry.script === script && entry.wght === wght);
     return row ? `${row.gain >= 0 ? "+" : ""}${round(row.gain * 100, 1)} %` : "none";
   };
@@ -402,7 +398,7 @@ export function TypeChecks({ families }: { families: Families }) {
                     <td className={C.cell}>
                       widest line {entry.widestLine} px in a {entry.column} px column
                     </td>
-                    <td className={`${C.cell} ${C.fail}`}>{`overflows by ${entry.over} px`}</td>
+                    <td className={cn(C.cell, C.fail)}>{`overflows by ${entry.over} px`}</td>
                   </tr>
                 ))}
               <tr>

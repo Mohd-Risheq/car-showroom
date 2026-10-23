@@ -3,8 +3,13 @@
    src/styles/fonts.ts). Each type step has fallback faces scaled to that step's HEXP and weight,
    so most lines break the same way in both fonts and little moves when the web font swaps in.
    In each stack: Geeza Pro for Arabic on Apple devices, then Arial (Windows, and Latin on Apple),
-   then Roboto and Noto Naskh Arabic for Android. */
+   then Roboto and Noto Naskh Arabic for Android, measured on these files from Google Fonts:
+   - Roboto (latin), SHA-256 0a44e0bb6ba5c8537e8814c148ef7755f1bce12112361231f595ecc584a18d7a:
+     https://fonts.gstatic.com/s/roboto/v51/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2
+   - Noto Naskh Arabic (arabic), SHA-256 bb07eddbc50a85b3357b1eb06189d2e3012d40e488b2d891d678a93ed520b5e1:
+     https://fonts.gstatic.com/s/notonaskharabic/v44/RrQKbpV-9Dd1b1OAGA6M9PkyDuVBeN2DHV2mLXgzTrc.woff2 */
 
+/* body and small (--font-sans): HEXP 0, wght 400 and 600, measured on the copy */
 @font-face {
   font-family: "Readex Pro Body Fallback Geeza";
   src: local("Geeza Pro Regular"), local("GeezaPro");
@@ -30,8 +35,8 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial"), local("ArialMT");
   font-weight: 100 549;
-  size-adjust: 136.92%;
-  ascent-override: 73.04%;
+  size-adjust: 136.93%;
+  ascent-override: 73.03%;
   descent-override: 18.26%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
@@ -41,7 +46,7 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Roboto"), local("Roboto Regular"), local("Roboto-Regular");
   font-weight: 100 549;
-  size-adjust: 108.28%;
+  size-adjust: 108.27%;
   ascent-override: 92.36%;
   descent-override: 23.09%;
   line-gap-override: 0%;
@@ -51,7 +56,7 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Noto Naskh Arabic"), local("NotoNaskhArabic-Regular"), local("Noto Naskh Arabic UI"), local("NotoNaskhArabicUI-Regular");
   font-weight: 100 549;
-  size-adjust: 122.52%;
+  size-adjust: 122.53%;
   ascent-override: 81.62%;
   descent-override: 20.4%;
   line-gap-override: 0%;
@@ -63,7 +68,7 @@
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 550 900;
   size-adjust: 112.45%;
-  ascent-override: 88.93%;
+  ascent-override: 88.92%;
   descent-override: 22.23%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
@@ -73,8 +78,8 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 550 900;
-  size-adjust: 104.33%;
-  ascent-override: 95.85%;
+  size-adjust: 104.34%;
+  ascent-override: 95.84%;
   descent-override: 23.96%;
   line-gap-override: 0%;
 }
@@ -83,8 +88,8 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 550 900;
-  size-adjust: 141.05%;
-  ascent-override: 70.9%;
+  size-adjust: 141.06%;
+  ascent-override: 70.89%;
   descent-override: 17.72%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
@@ -104,13 +109,14 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 550 900;
-  size-adjust: 123.94%;
+  size-adjust: 123.95%;
   ascent-override: 80.68%;
   descent-override: 20.17%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
+/* lead (--font-lead): HEXP 20, wght 400, measured on the copy */
 @font-face {
   font-family: "Readex Pro Lead Fallback Geeza";
   src: local("Geeza Pro Regular"), local("GeezaPro");
@@ -126,7 +132,7 @@
   font-family: "Readex Pro Lead Fallback Arial";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
   font-weight: 100 900;
-  size-adjust: 122.11%;
+  size-adjust: 122.12%;
   ascent-override: 81.89%;
   descent-override: 20.47%;
   line-gap-override: 0%;
@@ -136,8 +142,8 @@
   font-family: "Readex Pro Lead Fallback Arial";
   src: local("Arial"), local("ArialMT");
   font-weight: 100 900;
-  size-adjust: 156.7%;
-  ascent-override: 63.82%;
+  size-adjust: 156.71%;
+  ascent-override: 63.81%;
   descent-override: 15.95%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
@@ -147,8 +153,8 @@
   font-family: "Readex Pro Lead Fallback Android";
   src: local("Roboto"), local("Roboto Regular"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 122.82%;
-  ascent-override: 81.42%;
+  size-adjust: 122.81%;
+  ascent-override: 81.43%;
   descent-override: 20.36%;
   line-gap-override: 0%;
 }
@@ -164,11 +170,12 @@
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
+/* head (--font-head): HEXP 60, wght 600, measured on the copy */
 @font-face {
   font-family: "Readex Pro Head Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 161.2%;
+  size-adjust: 161.19%;
   ascent-override: 62.04%;
   descent-override: 15.51%;
   line-gap-override: 0%;
@@ -179,9 +186,9 @@
   font-family: "Readex Pro Head Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 143.46%;
-  ascent-override: 69.71%;
-  descent-override: 17.43%;
+  size-adjust: 143.47%;
+  ascent-override: 69.7%;
+  descent-override: 17.42%;
   line-gap-override: 0%;
 }
 
@@ -200,7 +207,7 @@
   font-family: "Readex Pro Head Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 153.03%;
+  size-adjust: 153.04%;
   ascent-override: 65.34%;
   descent-override: 16.34%;
   line-gap-override: 0%;
@@ -210,66 +217,284 @@
   font-family: "Readex Pro Head Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 177.65%;
+  size-adjust: 177.64%;
   ascent-override: 56.29%;
   descent-override: 14.07%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
+/* display (--font-display): HEXP 100, wght 600, measured on model names */
 @font-face {
-  font-family: "Readex Pro Display Fallback Geeza";
+  font-family: "Readex Pro Display 100 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 193.69%;
-  ascent-override: 51.63%;
-  descent-override: 12.91%;
+  size-adjust: 186.22%;
+  ascent-override: 53.7%;
+  descent-override: 13.42%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
 @font-face {
-  font-family: "Readex Pro Display Fallback Arial";
+  font-family: "Readex Pro Display 100 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 169.55%;
-  ascent-override: 58.98%;
-  descent-override: 14.74%;
+  size-adjust: 162.6%;
+  ascent-override: 61.5%;
+  descent-override: 15.37%;
   line-gap-override: 0%;
 }
 
 @font-face {
-  font-family: "Readex Pro Display Fallback Arial";
+  font-family: "Readex Pro Display 100 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 242.95%;
-  ascent-override: 41.16%;
-  descent-override: 10.29%;
+  size-adjust: 234.75%;
+  ascent-override: 42.6%;
+  descent-override: 10.65%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
 @font-face {
-  font-family: "Readex Pro Display Fallback Android";
+  font-family: "Readex Pro Display 100 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 180.87%;
-  ascent-override: 55.29%;
-  descent-override: 13.82%;
+  size-adjust: 172.51%;
+  ascent-override: 57.97%;
+  descent-override: 14.49%;
   line-gap-override: 0%;
 }
 
 @font-face {
-  font-family: "Readex Pro Display Fallback Android";
+  font-family: "Readex Pro Display 100 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 213.46%;
-  ascent-override: 46.85%;
-  descent-override: 11.71%;
+  size-adjust: 207.21%;
+  ascent-override: 48.26%;
+  descent-override: 12.06%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
+/* display (--font-display) under (width < 33.75rem): HEXP 80, wght 600, measured on model names */
+@font-face {
+  font-family: "Readex Pro Display 80 Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 170.75%;
+  ascent-override: 58.57%;
+  descent-override: 14.64%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 80 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 150.69%;
+  ascent-override: 66.36%;
+  descent-override: 16.59%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 80 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 215.24%;
+  ascent-override: 46.46%;
+  descent-override: 11.61%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 80 Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 159.87%;
+  ascent-override: 62.55%;
+  descent-override: 15.64%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 80 Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 190%;
+  ascent-override: 52.63%;
+  descent-override: 13.16%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* display (--font-display) under (width < 26.875rem): HEXP 60, wght 600, measured on model names */
+@font-face {
+  font-family: "Readex Pro Display 60 Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 155.28%;
+  ascent-override: 64.4%;
+  descent-override: 16.1%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 60 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 138.77%;
+  ascent-override: 72.06%;
+  descent-override: 18.01%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 60 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 195.74%;
+  ascent-override: 51.09%;
+  descent-override: 12.77%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 60 Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 147.23%;
+  ascent-override: 67.92%;
+  descent-override: 16.98%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 60 Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 172.78%;
+  ascent-override: 57.88%;
+  descent-override: 14.47%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* display (--font-display) under (width < 24.375rem): HEXP 40, wght 600, measured on model names */
+@font-face {
+  font-family: "Readex Pro Display 40 Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 139.81%;
+  ascent-override: 71.52%;
+  descent-override: 17.88%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 40 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 126.86%;
+  ascent-override: 78.83%;
+  descent-override: 19.71%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 40 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 176.24%;
+  ascent-override: 56.74%;
+  descent-override: 14.18%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 40 Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 134.6%;
+  ascent-override: 74.3%;
+  descent-override: 18.57%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 40 Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 155.57%;
+  ascent-override: 64.28%;
+  descent-override: 16.07%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* display (--font-display) under (width < 22.5rem): HEXP 20, wght 600, measured on model names */
+@font-face {
+  font-family: "Readex Pro Display 20 Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 124.34%;
+  ascent-override: 80.42%;
+  descent-override: 20.11%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 20 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 114.95%;
+  ascent-override: 86.99%;
+  descent-override: 21.75%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 20 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 156.74%;
+  ascent-override: 63.8%;
+  descent-override: 15.95%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 20 Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 121.96%;
+  ascent-override: 82%;
+  descent-override: 20.5%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 20 Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 138.36%;
+  ascent-override: 72.28%;
+  descent-override: 18.07%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* figures (--font-figures): wdth 87.5, wght 450, measured on the seed's figures */
 @font-face {
   font-family: "Martian Mono Fallback";
   src: local("Menlo-Regular"), local("Menlo"), local("Courier New"), local("CourierNewPSMT"), local("Droid Sans Mono"), local("DroidSansMono"), local("Liberation Mono"), local("LiberationMono");
@@ -280,12 +505,39 @@
   line-gap-override: 0%;
 }
 
-/* body and small: font-sans; lead, head and display: font-lead, font-head, font-display;
-   figures: font-figures */
+/* The first stacks, as Tailwind's font tokens: font-sans (body and small), font-lead, font-head,
+   font-display and font-figures */
 @theme inline {
   --font-sans: var(--font-readex-pro), "Readex Pro Body Fallback Geeza", "Readex Pro Body Fallback Arial", "Readex Pro Body Fallback Android";
   --font-lead: var(--font-readex-pro), "Readex Pro Lead Fallback Geeza", "Readex Pro Lead Fallback Arial", "Readex Pro Lead Fallback Android";
   --font-head: var(--font-readex-pro), "Readex Pro Head Fallback Geeza", "Readex Pro Head Fallback Arial", "Readex Pro Head Fallback Android";
-  --font-display: var(--font-readex-pro), "Readex Pro Display Fallback Geeza", "Readex Pro Display Fallback Arial", "Readex Pro Display Fallback Android";
+  --font-display: var(--font-readex-pro), "Readex Pro Display 100 Fallback Geeza", "Readex Pro Display 100 Fallback Arial", "Readex Pro Display 100 Fallback Android";
   --font-figures: var(--font-martian-mono), "Martian Mono Fallback";
+}
+
+/* A step whose HEXP narrows on phones (tokens.css, D-038) takes the stack of each narrower HEXP
+   under the same media condition. The type-* utilities read the stack through var(), so they
+   switch with it; a font-* class doesn't, as @theme inline writes the first stack into it. */
+@media (width < 33.75rem) {
+  :root {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 80 Fallback Geeza", "Readex Pro Display 80 Fallback Arial", "Readex Pro Display 80 Fallback Android";
+  }
+}
+
+@media (width < 26.875rem) {
+  :root {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 60 Fallback Geeza", "Readex Pro Display 60 Fallback Arial", "Readex Pro Display 60 Fallback Android";
+  }
+}
+
+@media (width < 24.375rem) {
+  :root {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 40 Fallback Geeza", "Readex Pro Display 40 Fallback Arial", "Readex Pro Display 40 Fallback Android";
+  }
+}
+
+@media (width < 22.5rem) {
+  :root {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 20 Fallback Geeza", "Readex Pro Display 20 Fallback Arial", "Readex Pro Display 20 Fallback Android";
+  }
 }

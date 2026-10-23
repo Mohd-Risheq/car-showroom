@@ -9,6 +9,8 @@ import { journeySteps } from "../domain/route";
 
 const LAND = "/maps/land-110m.svg";
 
+/* eslint-disable muftah/no-raw-style-values -- the dots' size and spacing draw the land as the globe
+   draws it; DESIGN §5.5 sets only their colour and opacity */
 const land: CSSProperties = {
   backgroundImage: "radial-gradient(circle, var(--line) 0.7px, transparent 0.9px)",
   backgroundSize: "3px 3px",
@@ -16,6 +18,7 @@ const land: CSSProperties = {
   maskSize: "100% 100%",
   maskRepeat: "no-repeat",
 };
+/* eslint-enable muftah/no-raw-style-values */
 
 const path = (points: MapPoint[]) => `M${points.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join("L")}`;
 

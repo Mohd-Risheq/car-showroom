@@ -1,8 +1,20 @@
 import { describe, expect, it, vi } from "vitest";
-import { describeError, round, watchViolations } from "@/app/_dev/harness";
+import { describeError, reportRequested, round, watchViolations } from "@/app/_dev/harness";
 
-// The helpers the spike pages share: the numbers and error lines their reports hold, and the
-// Content Security Policy violations they collect
+// The helpers the spike pages share: whether to send a report, the numbers and error lines their
+// reports hold, and the Content Security Policy violations they collect
+
+describe("reportRequested", () => {
+  it.each([
+    ["?report=1", true],
+    ["?run=2&report=1", true],
+    ["", false],
+    ["?report=0", false],
+    ["?report=true", false],
+  ])("reads %j as %s", (search, expected) => {
+    expect(reportRequested(search)).toBe(expected);
+  });
+});
 
 describe("round", () => {
   it("rounds to one place unless told otherwise", () => {

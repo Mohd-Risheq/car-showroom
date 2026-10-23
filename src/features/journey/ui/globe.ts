@@ -1,4 +1,5 @@
 import createGlobe, { type Globe, type Marker } from "cobe";
+import { DURATIONS } from "@/lib/motion-tokens";
 import { angleBetween, centreOn, greatCircle, nearestTurn, type LatLng, type Vec3, toVector } from "../domain/geo";
 import { easeOut, Spring } from "../domain/motion";
 import { type JourneyStep, journeySteps } from "../domain/route";
@@ -20,8 +21,8 @@ const ACTIVE_MARKER_SIZE = 0.04;
 const MAP_SAMPLES = 16_000;
 const DIFFUSE = 0.6;
 const MAX_DPR = 2;
-const REVEAL_MS = 200; // --dur-pop
-const PULSE_MS = 600; // --dur-reveal
+const REVEAL_MS = DURATIONS.pop;
+const PULSE_MS = DURATIONS.reveal;
 const ARC_POINTS = 64;
 const ARC_LIFT = 0.12; // per radian of the hop, so a short hop stays low
 const MAX_ARC_LIFT = 0.2;

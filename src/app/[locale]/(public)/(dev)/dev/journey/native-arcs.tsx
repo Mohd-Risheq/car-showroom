@@ -75,5 +75,5 @@ export function NativeArcs({ places, centre }: { places: LatLng[]; centre: numbe
     };
   }, [places, centre]);
 
-  return <div ref={host} className="aspect-square w-full max-w-[520px]" aria-hidden="true" />;
+  return <div ref={host} className="aspect-square w-full max-w-130" aria-hidden="true" />;
 }

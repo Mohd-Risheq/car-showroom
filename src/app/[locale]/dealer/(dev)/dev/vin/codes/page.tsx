@@ -3,10 +3,12 @@ import { TEST_CODES } from "../codes";
 
 // The VIN scan fixtures, large, to scan off this screen with a phone (BUILD-PLAN §4). Each code has
 // a screen of its own, so only one is in the camera's band at a time.
+/* eslint-disable muftah/no-raw-style-values -- a code scans best as pure black on pure white, as
+   printed codes are, which is no colour of the theme's */
 export default function VinCodesPage() {
   notFoundOnDeployments();
   return (
-    <main className="grid gap-6 bg-white p-6 font-mono text-sm text-black">
+    <main className="grid gap-6 bg-[#fff] p-6 font-mono text-sm text-[#000]">
       <h1 className="text-lg">Muftah dev: VIN test codes (T-10)</h1>
       <ol className="grid gap-1">
         {TEST_CODES.map((code) => (
@@ -26,7 +28,7 @@ export default function VinCodesPage() {
         >
           <svg
             viewBox={`0 0 ${code.width} ${code.height}`}
-            className={code.format === "code_39" || code.format === "code_128" ? "w-full max-w-4xl" : "w-72"}
+            className={code.format === "code_39" || code.format === "code_128" ? "w-full max-w-224" : "w-72"}
             shapeRendering="crispEdges"
             role="img"
             aria-label={code.label}

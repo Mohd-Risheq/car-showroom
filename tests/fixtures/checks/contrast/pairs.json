@@ -1,6 +1,6 @@
 {
   "$comment": [
-    "check:contrast's test pairs: every pair in the colour tables of DESIGN §3.1 and §3.2, the accent presets on each surface, and the increased-contrast line of DESIGN §4.5. T-13 starts scripts/contrast-pairs.json from this list once tokens.css sets its selectors.",
+    "check:contrast's test pairs: every pair in the colour tables of DESIGN §3.1 and §3.2, the accent presets on each surface, and the increased-contrast line of DESIGN §4.5. scripts/contrast-pairs.json grew from this list in T-13.",
     "min is 3 for UI (the --line data lines) and 4.5 for text. stated is the ratio as DESIGN writes it, checked at that precision.",
     "A scope layers blocks in order, a later block overriding an earlier one. A block is named by the at-rules around it and its selector.",
     "The workspace's dark theme is the public tokens (DESIGN §3.2), so the public pairs cover it.",

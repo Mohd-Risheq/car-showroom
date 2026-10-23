@@ -4,6 +4,14 @@
 /** Rounds to `digits` decimal places, for the numbers in a report */
 export const round = (value: number, digits = 1) => Math.round(value * 10 ** digits) / 10 ** digits;
 
+/** Whether a page's query asks for report=1, which sends its results to the Mac running the server (BUILD-PLAN §4) */
+export function reportRequested(search: string): boolean {
+  return new URLSearchParams(search).get("report") === "1";
+}
+
+/** A subscribe function for useSyncExternalStore, for a value read once the page has hydrated that never changes */
+export const noChanges = () => () => {};
+
 /** An error as one line: its name and message */
 export function describeError(error: unknown): string {
   return error instanceof Error ? `${error.name}: ${error.message}` : String(error);

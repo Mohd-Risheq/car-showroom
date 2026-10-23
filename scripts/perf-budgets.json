@@ -13,7 +13,7 @@
     { "routes": "/**", "name": "Public route", "maxKB": 170 }
   ],
   "lazy": [
-    { "name": "GSAP core and ScrollTrigger", "maxKB": 55, "shared": true, "triggers": [] },
+    { "name": "GSAP core and ScrollTrigger", "maxKB": 55, "shared": true, "triggers": ["src/lib/motion/gsap.ts"] },
     { "name": "Body Scan", "maxKB": 25, "triggers": [] },
     { "name": "Hear It", "maxKB": 15, "triggers": [] },
     { "name": "Spin", "maxKB": 20, "triggers": ["src/features/spin/index.ts"] },

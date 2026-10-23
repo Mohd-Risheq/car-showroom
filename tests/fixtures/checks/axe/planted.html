@@ -15,6 +15,11 @@
       <p style="color: #777777; background: #888888">Hard to read</p>
       <!-- Planted: a field with no label (label, critical) -->
       <input type="text" />
+      <!-- Planted: a command with no name (aria-command-name, serious), which no focus-guard exception covers -->
+      <span role="button" tabindex="0"></span>
+      <!-- Planted: a focus guard that breaks another rule, a link with no name (link-name, serious): the
+           exception covers aria-command-name alone -->
+      <a href="#" data-base-ui-focus-guard=""></a>
     </main>
   </body>
 </html>

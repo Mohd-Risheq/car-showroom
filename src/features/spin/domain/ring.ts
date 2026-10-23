@@ -1,6 +1,7 @@
 // The spin viewer's maths (FR-16, BR-17, DESIGN §5.4), with no DOM so the viewer and its tests
 // share it. Positions are in frames and unbounded: 37.25 is a quarter past frame 1 on the
 // second turn. Nothing here reads the page direction, so rotation is the same in both locales.
+// Node loads this module from scripts/fixtures/spin-dials.ts, so it has no imports.
 
 export type Size = { width: number; height: number };
 export type Rect = Size & { x: number; y: number };
@@ -62,11 +63,6 @@ export function projectRelease(position: number, velocity: number): number {
 export function releaseTarget(position: number, velocity: number): number {
   return Math.round(projectRelease(position, velocity));
 }
-
-/** The `flick` spring (DESIGN §4.3: bounce 0.2, duration 0.4 s) as the stiffness and damping
- * Motion resolves it to. Motion 14 drops the release velocity on springs defined by duration,
- * so the viewer passes these with the velocity instead (DECISIONS.md D-027). */
-export const FLICK_SPRING = { stiffness: 505.61, damping: 35.977, mass: 1 } as const;
 
 /** FR-16.1: the first pass loads at most this many evenly spaced low-resolution frames */
 export const FIRST_PASS_MAX = 36;

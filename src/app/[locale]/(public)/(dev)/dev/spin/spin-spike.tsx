@@ -475,7 +475,7 @@ export function SpinSpike() {
     `?set=${set}&format=${format}&decode=${decode}`;
 
   return (
-    <section data-state={state} className="grid max-w-[720px] gap-4">
+    <section data-state={state} className="grid max-w-180 gap-4">
       <nav className="flex flex-wrap gap-x-4 gap-y-1">
         {RUN_ALL.map(({ set, format, decode }) => (
           <a key={`${set}-${format}-${decode}`} href={link(set, format, decode)} className="underline">
@@ -490,7 +490,7 @@ export function SpinSpike() {
         role="img"
         aria-roledescription="360 degree viewer"
         aria-label="Synthetic spin fixture"
-        className="block aspect-[3/2] w-full bg-neutral-900"
+        className="block aspect-[3/2] w-full bg-surface-1"
       />
       {/* FR-16.4: physical sides in both directions, never mirrored (BR-17) */}
       <div dir="ltr" className="flex items-center justify-between gap-4">

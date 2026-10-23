@@ -2,7 +2,7 @@
 
 import { Dialog } from "@base-ui/react/dialog";
 import { Tabs } from "@base-ui/react/tabs";
-import { MotionConfig, motion } from "motion/react";
+import { domAnimation, LazyMotion, m, MotionConfig } from "motion/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
@@ -198,52 +198,55 @@ export function CspProbe({ side, nonce }: { side: Side; nonce?: string | undefin
 
   return (
     <MotionConfig {...(nonce ? { nonce } : {})}>
-      <section data-state={results ? "done" : "running"} className="grid max-w-xl gap-4">
-        <p>
-          {results
-            ? failed.length === 0
-              ? `All ${Object.keys(results.checks).length} checks passed on the ${side} policy.`
-              : `Failed: ${failed.map(([name]) => name).join(", ")}`
-            : "Running"}
-        </p>
-        <Image ref={image} src={sample} alt="Probe sample" placeholder="blur" loading="eager" />
-        <div ref={styled} style={{ width: 123, height: 8, background: "#5CC8DB" }} />
-        <motion.div
-          ref={moved}
-          className="size-4 bg-white"
-          initial={{ x: 0 }}
-          animate={{ x: 48 }}
-          transition={{ duration: 0.3 }}
-          onAnimationComplete={motionDone.resolve}
-        />
-        <Tabs.Root defaultValue="one">
-          <Tabs.List className="relative flex gap-4 pb-1">
-            <Tabs.Tab value="one">One</Tabs.Tab>
-            <Tabs.Tab value="two">Two</Tabs.Tab>
-            <Tabs.Indicator
-              ref={indicator}
-              renderBeforeHydration
-              className="absolute bottom-0 left-(--active-tab-left) h-0.5 w-(--active-tab-width) bg-white"
-            />
-          </Tabs.List>
-        </Tabs.Root>
-        <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
-          <Dialog.Portal>
-            <Dialog.Backdrop className="fixed inset-0 bg-black/50" />
-            <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-1/2 bg-neutral-900 p-6 text-white">
-              <Dialog.Title>Probe dialog</Dialog.Title>
-              <Dialog.Description>Locks the page scroll while open.</Dialog.Description>
-              <Dialog.Close>Close</Dialog.Close>
-            </Dialog.Popup>
-          </Dialog.Portal>
-        </Dialog.Root>
-        <Toaster />
-        <pre data-results className="text-xs whitespace-pre-wrap">
-          {results ? JSON.stringify(results, null, 2) : ""}
-        </pre>
-        {/* Makes the page scroll, so the dialog has a scroll to lock */}
-        <div aria-hidden style={{ height: "150vh" }} />
-      </section>
+      <LazyMotion features={domAnimation} strict>
+        <section data-state={results ? "done" : "running"} className="grid max-w-measure gap-4">
+          <p>
+            {results
+              ? failed.length === 0
+                ? `All ${Object.keys(results.checks).length} checks passed on the ${side} policy.`
+                : `Failed: ${failed.map(([name]) => name).join(", ")}`
+              : "Running"}
+          </p>
+          <Image ref={image} src={sample} alt="Probe sample" placeholder="blur" loading="eager" />
+          {/* eslint-disable-next-line muftah/no-raw-style-values -- the check reads back a width only this style attribute sets */}
+          <div ref={styled} style={{ width: 123, height: 8, background: "var(--scan)" }} />
+          <m.div
+            ref={moved}
+            className="size-4 bg-ink"
+            initial={{ x: 0 }}
+            animate={{ x: 48 }}
+            transition={{ duration: 0.3 }}
+            onAnimationComplete={motionDone.resolve}
+          />
+          <Tabs.Root defaultValue="one">
+            <Tabs.List className="relative flex gap-4 pb-1">
+              <Tabs.Tab value="one">One</Tabs.Tab>
+              <Tabs.Tab value="two">Two</Tabs.Tab>
+              <Tabs.Indicator
+                ref={indicator}
+                renderBeforeHydration
+                className="absolute bottom-0 left-(--active-tab-left) h-0.5 w-(--active-tab-width) bg-ink"
+              />
+            </Tabs.List>
+          </Tabs.Root>
+          <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
+            <Dialog.Portal>
+              <Dialog.Backdrop className="fixed inset-0 bg-bg/60" />
+              <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-1/2 bg-surface-1 p-6 text-ink shadow-overlay">
+                <Dialog.Title>Probe dialog</Dialog.Title>
+                <Dialog.Description>Locks the page scroll while open.</Dialog.Description>
+                <Dialog.Close>Close</Dialog.Close>
+              </Dialog.Popup>
+            </Dialog.Portal>
+          </Dialog.Root>
+          <Toaster />
+          <pre data-results className="text-xs whitespace-pre-wrap">
+            {results ? JSON.stringify(results, null, 2) : ""}
+          </pre>
+          {/* Makes the page scroll, so the dialog has a scroll to lock */}
+          <div aria-hidden style={{ height: "150vh" }} />
+        </section>
+      </LazyMotion>
     </MotionConfig>
   );
 }

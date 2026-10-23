@@ -48,15 +48,6 @@ export const COPY: Record<AppLocale, SpecimenCopy> = {
   },
 };
 
-/** The DESIGN §3.3 steps as the specimen labels them */
-export const STEPS = [
-  { id: "display", spec: "clamp(3.5rem, 2rem + 6vw, 6rem) · lh 1.0, Arabic 1.25 · wght 600 · HEXP 100" },
-  { id: "head", spec: "clamp(2rem, 1.3rem + 3.2vw, 4rem) · lh 1.1, Arabic 1.35 · wght 600 · HEXP 60" },
-  { id: "lead", spec: "clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem) · lh 1.35, Arabic 1.6 · wght 400 · HEXP 20" },
-  { id: "body", spec: "clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem), Arabic ×1.06 · lh 1.5, Arabic 1.8 · 65ch" },
-  { id: "small", spec: "13 to 14 px · lh 1.4, Arabic 1.6 · wght 400" },
-] as const;
-
 /** A fully joined Arabic word, every letter connected to the next, for the join check */
 export const JOINED_AR = "بسيطة";
 

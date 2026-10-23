@@ -217,14 +217,14 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
         <button type="button" className="underline" onClick={() => void run()} disabled={state === "running"}>
           Run the steps
         </button>
-        <span style={{ color: "var(--muted)" }}>
+        <span className="text-muted">
           Showing the {view === "globe" ? "globe" : "static map"}. Drag the globe to turn it.
         </span>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
-        <div className="sticky top-0 z-10 self-start py-2 md:top-[10vh]" style={{ background: "var(--bg)" }}>
-          <div className="mx-auto w-full max-w-[280px] md:max-w-[520px]">
+      <div className="grid gap-6 md:grid-cols-[minmax(0,--spacing(130))_minmax(0,1fr)]">
+        <div className="sticky top-0 z-10 self-start bg-bg py-2 md:top-[10vh]">
+          <div className="mx-auto w-full max-w-70 md:max-w-130">
             <JourneyGlobe
               key={route}
               places={places}
@@ -236,7 +236,7 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
               {maps[route]}
             </JourneyGlobe>
           </div>
-          <p className="mt-2 text-center" data-testid="caption" style={{ color: "var(--muted)" }}>
+          <p className="mt-2 text-center text-muted" data-testid="caption">
             {current ? `${current.type} · ${current.place} · ${current.month}` : "Choose a milestone"}
           </p>
         </div>
@@ -250,17 +250,14 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
             >
               <button
                 type="button"
-                className="w-full p-3 text-start"
+                className="w-full p-3 text-start aria-[current=step]:bg-surface-1"
                 aria-current={index === active ? "step" : undefined}
-                style={{ background: index === active ? "var(--surface-1)" : "transparent" }}
                 onClick={() => setActive(index)}
                 onFocus={() => setActive(index)}
               >
                 {index + 1}. {milestone.type} · {milestone.place} · {milestone.month}
                 {milestone.note ? ` · ${milestone.note}` : ""}
-                <span className="block" style={{ color: "var(--muted)" }}>
-                  step: {steps[index]?.kind}
-                </span>
+                <span className="block text-muted">step: {steps[index]?.kind}</span>
               </button>
             </li>
           ))}
@@ -271,13 +268,13 @@ export function JourneySpike({ maps }: { maps: Record<RouteKey, ReactNode> }) {
         <div className="grid gap-4 md:grid-cols-2" data-testid="compare">
           <figure className="grid gap-2">
             <NativeArcs places={places} centre={places.length - 1} />
-            <figcaption style={{ color: "var(--muted)" }}>
+            <figcaption className="text-muted">
               cobe&apos;s own arcs (arcHeight 0.25), centred on the last place
             </figcaption>
           </figure>
           <figure className="grid gap-2">
             <NativeArcs places={places} centre={1} />
-            <figcaption style={{ color: "var(--muted)" }}>
+            <figcaption className="text-muted">
               cobe&apos;s own arcs (arcHeight 0.25), centred on the second place
             </figcaption>
           </figure>

@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
   experimental: {
     // Subresource Integrity on every framework script file (SRS §12.5)
     sri: { algorithm: "sha256" },
+    // Turbopack's build cache sometimes kept the stylesheet from before an edit to globals.css,
+    // so each build starts cold (D-039)
+    turbopackFileSystemCacheForBuild: false,
   },
   turbopack: {
     rules: {

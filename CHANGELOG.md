@@ -11,6 +11,8 @@ Notable changes to Muftah, in the [Keep a Changelog](https://keepachangelog.com/
 - Better Auth on the same database, behind `/api/auth`, and storage on Vercel Blob, with a local adapter for development and tests that refuses to run on a deployment.
 - Content security policies for the showroom and for the dealer workspace, which takes a fresh nonce on every response.
 - Readex Pro and Martian Mono through `next/font`, with fallback faces sized to match them.
+- The design tokens, in one stylesheet: the showroom's dark theme, the workspace's Daylight and dark themes, the accents, type, space, shape and motion, with what changes under reduced motion, increased contrast and reduced transparency. Tailwind's theme is built on these values, and a lint rule keeps raw colours, lengths and timings out of the code.
+- The components every screen is built from: buttons, fields, skeletons, empty states, inline errors, a draggable bottom sheet and toasts, each with the focus ring. GSAP loads only on desktop screens, once a scroll-driven section comes near.
 - Development pages from the technical spikes: the 360-degree spin viewer, the engine-sound player, the journey globe, the reel encoder, VIN scanning, Arabic canvas text and a type specimen. Every deployment answers them with 404.
 - Code quality: ESLint with `jsx-a11y` and a rule against hard-coded copy, Prettier, and strict TypeScript.
 - Tests: Vitest unit tests with coverage thresholds, integration tests against the local database, and Playwright journeys with axe accessibility checks and visual comparison, on Chromium, WebKit and Firefox.

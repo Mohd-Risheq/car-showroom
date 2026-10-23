@@ -2,14 +2,15 @@
 // ratio of every colour pair in scripts/contrast-pairs.json from the tokens in src/styles/tokens.css,
 // across both workspace themes, the accent presets and the increased-contrast tokens. A pair fails
 // below its minimum, or when it no longer has the ratio DESIGN states for it. Each problem names the
-// tokens file, the scope, the two colours and the DESIGN reference, and the check exits 1. T-13
-// writes both files; until then T-12 proves the check on tests/fixtures/checks/contrast.
+// tokens file, the scope, the two colours and the DESIGN reference, and the check exits 1. It runs
+// in pnpm verify; its tests prove it on tests/fixtures/checks/contrast.
 //
 // Usage: pnpm check:contrast [tokens.css] [--pairs pairs.json]
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { checkPairs, type PairList, type PairResult, parsePairs, tokenBlocks } from "./checks/contrast.ts";
+import { tokenBlocks } from "../src/styles/token-blocks.ts";
+import { checkPairs, type PairList, type PairResult, parsePairs } from "./checks/contrast.ts";
 import { readJson, ROOT, shown } from "./checks/files.ts";
 
 const { positionals, values } = parseArgs({ allowPositionals: true, options: { pairs: { type: "string" } } });

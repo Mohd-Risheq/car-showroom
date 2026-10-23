@@ -11,6 +11,8 @@
       <button type="button">Save</button>
       <p style="color: #111111; background: #ffffff">Easy to read</p>
       <label>Name <input type="text" /></label>
+      <!-- Base UI's focus guard as Safari gets it: role="button" with no name, left out by the owner's choice (D-038) -->
+      <span tabindex="0" role="button" data-base-ui-focus-guard=""></span>
     </main>
   </body>
 </html>
