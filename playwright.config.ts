@@ -58,7 +58,14 @@ export default defineConfig({
     ["json", { outputFile: "reports/playwright.json" }],
     ["html", { open: "never", outputFolder: "playwright-report" }],
   ],
-  use: { baseURL: `http://localhost:${PORT}`, trace: "retain-on-failure", screenshot: "only-on-failure" },
+  use: {
+    baseURL: `http://localhost:${PORT}`,
+    // Browsers whose first language is Arabic, so Arabic pages don't offer English (FR-01.2a); a test of
+    // that offer sets its own
+    locale: "ar-JO",
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
+  },
   // Approved baselines per screen and project (SRS §16.2 step 6). CI never writes one; a local run
   // writes a missing one but fails, so it is looked at before it is committed.
   snapshotPathTemplate: "{testDir}/visual/__screenshots__/{projectName}/{testFileName}/{arg}{ext}",

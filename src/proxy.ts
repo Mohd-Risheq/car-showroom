@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { blobStoreHost, createNonce, dealerPolicy } from "@/lib/csp/policy";
 import { isDeployment } from "@/lib/deployment";
+import { chosenLocale, LOCALE_COOKIE } from "@/lib/i18n/locale-cookie";
+import { localePrefixOf, pathInLocale } from "@/lib/i18n/locale-path";
 import { routing } from "@/lib/i18n/routing";
 
 // Any one locale, as a group
@@ -27,15 +29,23 @@ export function proxy(request: NextRequest) {
   if (DEALER_PATH.test(pathname)) return withDealerPolicy(request, devPathOnDeployment);
   if (devPathOnDeployment) return new NextResponse(null, { status: 404 });
 
-  const hasLocalePrefix = routing.locales.some(
-    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
-  );
-  if (hasLocalePrefix) return NextResponse.next();
+  const prefix = localePrefixOf(pathname);
+  if (prefix.kind === "site") return NextResponse.next();
 
-  // Unprefixed path: redirect (307) to the same path under the default locale.
-  // T-15 completes FR-01.2 with the NEXT_LOCALE cookie (BR-01).
   const url = request.nextUrl.clone();
-  url.pathname = `/${routing.defaultLocale}${pathname === "/" ? "" : pathname}`;
+  if (prefix.kind === "other") {
+    // Another locale's prefix, such as /fr/cars, is a 404 in the default locale (FR-01's edge cases):
+    // the default locale's pages answer it as they answer any path they have no page for. Passed on,
+    // it would get Next.js's own 404, which has no language (DECISIONS.md D-041).
+    url.pathname = pathInLocale(pathname, "", routing.defaultLocale);
+    return NextResponse.rewrite(url);
+  }
+
+  // An unprefixed path is redirected (307), with its query, to the visitor's chosen locale, or the
+  // default one (FR-01.2, BR-01). Never by the browser's language, and storing no choice, so the
+  // English prompt can still offer itself (FR-01.2a).
+  const locale = chosenLocale(request.cookies.get(LOCALE_COOKIE)?.value) ?? routing.defaultLocale;
+  url.pathname = pathInLocale(pathname, "", locale);
   return NextResponse.redirect(url, 307);
 }
 

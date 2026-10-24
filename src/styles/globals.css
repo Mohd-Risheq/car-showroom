@@ -27,10 +27,27 @@
   }
 }
 
+/* A screen under 480 px tall, as a phone held sideways, where DESIGN §8.4 trims the sticky chrome so
+   it stays within a quarter of the height */
+@custom-variant short (@media (max-height: 30rem));
+
 @layer base {
+  /* A word wider than its box, as a long Arabic word in a narrow card, breaks rather than overflows
+     (FR-01 edge cases). anywhere rather than break-word, so a flex or grid item shrinks below its
+     longest word too, instead of growing past its box. A number stays whole only where its markup
+     adds whitespace-nowrap, as Quantity's wrapper and the format table's isolates do. A number placed
+     in a message's text, through isolate() or formatQuantity, has no such guard. */
   body {
     background-color: var(--bg);
     color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  /* A table sizes each column to at least its longest word, where anywhere would squeeze a column to
+     a few letters a line. A table wider than its box scrolls in a frame of its own, as DESIGN
+     §7.2.3's panel table does on a phone. */
+  :where(th, td) {
+    overflow-wrap: break-word;
   }
 
   /* Arabic body text at line-height 1.8; Latin keeps 1.5 (NFR-I18N-06) */
@@ -60,6 +77,14 @@
   select,
   textarea {
     font-size: max(1rem, 1em);
+  }
+
+  /* NFR-I18N-04 (D-041): what a visitor types reads in the direction of its first letter, a paragraph
+     at a time, and an empty field keeps the page's, its caret and placeholder at the page's start.
+     Not while the placeholder shows, which Firefox doesn't paint in plaintext. A field with its own
+     dir, such as a VIN's, keeps it. */
+  :is(input:is(:not([type]), [type="text"], [type="search"]), textarea):not([dir], :placeholder-shown) {
+    unicode-bidi: plaintext;
   }
 
   /* DESIGN §3.5: the focus ring, in the accent, on keyboard focus. Sonner's toasts take it back

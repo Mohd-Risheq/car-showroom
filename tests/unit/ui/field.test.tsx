@@ -66,4 +66,13 @@ describe("Field", () => {
     expect(attribute(markup, "input", "id")).toBeTruthy();
     expect(attribute(markup, "label", "for")).toBe(attribute(markup, "input", "id"));
   });
+
+  it("gives the control the direction it fixes, which then doesn't follow what is typed (NFR-I18N-04)", () => {
+    expect(attribute(render({ label: "VIN", dir: "ltr" }), "input", "dir")).toBe("ltr");
+    // Over the input's own, so the check and the room for it stay at the same end
+    expect(attribute(render({ label: "VIN", dir: "ltr" }, { dir: "rtl" }), "input", "dir")).toBe("ltr");
+    // Free text sets none, and follows what is typed (globals.css)
+    expect(attribute(render({ label: "Search" }), "input", "dir")).toBeUndefined();
+    expect(attribute(render({ label: "Search" }, { dir: "ltr" }), "input", "dir")).toBe("ltr");
+  });
 });

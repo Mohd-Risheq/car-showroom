@@ -1,4 +1,4 @@
-import type { AppLocale } from "@/lib/i18n/routing";
+import type { AppLocale } from "@/lib/i18n/locales";
 
 // The specimen's copy, in both languages: the DESIGN §9.2 copy deck and the S01 seed record
 // (05-SEED-DATA §5.4). Figures keep their unit outside the Martian Mono span, which has no Arabic.

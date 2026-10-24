@@ -28,7 +28,7 @@ export default async function PublicTokensPage() {
   const copy = SPECIMEN_COPY[locale];
 
   return (
-    <SpecimenPage title="Muftah dev: tokens, public site (T-13)" locale={locale} path="/dev/tokens">
+    <SpecimenPage title="Muftah dev: tokens, public site (T-13)" locale={locale}>
       <Section id="colour" title="Colour and the accent presets, DESIGN §3.1">
         <Swatches />
         <Accents />

@@ -14,6 +14,8 @@ type FieldControl = {
   "aria-invalid"?: true;
   /** The field shows a check at the end of the control, which leaves it room */
   valid: boolean;
+  /** The direction the field fixes, which the control takes as its own */
+  dir?: "ltr" | "rtl";
 };
 
 const FieldContext = createContext<FieldControl | null>(null);
@@ -37,8 +39,10 @@ type FieldProps = {
    */
   valid?: ReactNode;
   /**
-   * The control's direction when it differs from the page's, as a VIN or a plate reads left to right
-   * in Arabic too. The check then sits at the end of the value, where the control leaves it room.
+   * The control's direction when it differs from the page's, as a VIN, a plate, a code or a phone
+   * number reads left to right in Arabic too (NFR-I18N-04). The control takes it as its own, so it
+   * doesn't follow what is typed, and the check sits at the end of the value, where the control
+   * leaves it room.
    */
   dir?: "ltr" | "rtl";
   className?: string;
@@ -63,6 +67,7 @@ export function Field({ id: givenId, label, description, error, valid, dir, clas
     ...(describedBy ? { "aria-describedby": describedBy } : {}),
     ...(invalid ? { "aria-invalid": true } : {}),
     valid: checked,
+    ...(dir ? { dir } : {}),
   };
 
   return (

@@ -37,19 +37,19 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 
 ## Architecture
 
-| Path                         | What it holds                                                                                                                 |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/[locale]/(public)`  | the showroom, in Arabic at `/ar` and English at `/en`                                                                         |
-| `src/app/[locale]/dealer`    | the dealer workspace, a second root layout with its own content security policy                                               |
-| `src/app/api`                | route handlers                                                                                                                |
-| `src/proxy.ts`               | the locale redirect, the dealer workspace's nonce and policy, and the 404 that keeps development pages off deployments        |
-| `src/features/`              | one folder per feature, with its components and logic                                                                         |
-| `src/lib/`                   | the database (Drizzle on Neon's serverless driver), auth, storage, the content security policies, HTTP helpers and validation |
-| `src/lib/i18n/`, `messages/` | next-intl's routing and formatting locale, and the Arabic and English message catalogs                                        |
-| `(dev)` route groups         | development pages from the technical spikes, under `/{locale}/dev` and `/{locale}/dealer/dev`                                 |
-| `drizzle/`                   | database migrations                                                                                                           |
-| `scripts/`                   | the scripts behind the `pnpm` commands; `scripts/checks/` holds the custom checks' logic                                      |
-| `tests/`                     | unit, integration, end-to-end, accessibility and visual tests, with their fixtures                                            |
+| Path                         | What it holds                                                                                                                                                                                                     |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/[locale]/(public)`  | the showroom, in Arabic at `/ar` and English at `/en`                                                                                                                                                             |
+| `src/app/[locale]/dealer`    | the dealer workspace, a second root layout with its own content security policy                                                                                                                                   |
+| `src/app/api`                | route handlers                                                                                                                                                                                                    |
+| `src/proxy.ts`               | the locale redirect, the dealer workspace's nonce and policy, and the 404 that keeps development pages off deployments                                                                                            |
+| `src/features/`              | one folder per feature, with its components and logic                                                                                                                                                             |
+| `src/lib/`                   | the database (Drizzle on Neon's serverless driver), auth, storage, the content security policies, HTTP helpers, validation, and `format/`, which writes numbers, dates, units and phone numbers in both languages |
+| `src/lib/i18n/`, `messages/` | next-intl's routing and formatting locale, the visitor's stored language, and the Arabic and English message catalogs                                                                                             |
+| `(dev)` route groups         | development pages from the technical spikes, under `/{locale}/dev` and `/{locale}/dealer/dev`                                                                                                                     |
+| `drizzle/`                   | database migrations                                                                                                                                                                                               |
+| `scripts/`                   | the scripts behind the `pnpm` commands; `scripts/checks/` holds the custom checks' logic, and `scripts/eslint/` the project's own lint rules                                                                      |
+| `tests/`                     | unit, integration, end-to-end, accessibility and visual tests, with their fixtures                                                                                                                                |
 
 Comments cite sections of the project's specification, which lives in a private repository: SRS for behaviour, DESIGN for visuals and BUILD-PLAN for process. [CHANGELOG.md](CHANGELOG.md) lists the changes so far.
 

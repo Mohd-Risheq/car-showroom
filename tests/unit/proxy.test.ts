@@ -1,10 +1,17 @@
-import { getRedirectUrl, unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
+import {
+  getRedirectUrl,
+  getRewrittenUrl,
+  isRewrite,
+  unstable_doesMiddlewareMatch,
+} from "next/experimental/testing/server";
 import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
+import { LOCALE_COOKIE } from "@/lib/i18n/locale-cookie";
 import { routing } from "@/lib/i18n/routing";
 
 // src/proxy.ts (SRS §11.5 rule 1, §12.5, FR-01.2, BUILD-PLAN §9.1): which paths run it, the dev
-// pages' hard 404 on deployments, the dealer nonce policy and the locale redirect.
+// pages' hard 404 on deployments, the dealer nonce policy, the locale redirect and other locales'
+// prefixes.
 
 const ORIGIN = "https://muftah.test";
 const DEV_PATHS = routing.locales.flatMap((locale) => [
@@ -33,6 +40,8 @@ describe("which paths run the proxy", () => {
     "/",
     "/cars",
     "/cars/toyota",
+    "/fr/cars",
+    "/ar-JO/cars",
     "/ar/dealer",
     "/en/dealer/cars",
     "/ar/dev",
@@ -113,15 +122,52 @@ describe("dealer pages", () => {
   });
 });
 
-describe("unprefixed paths (FR-01.2)", () => {
+describe("unprefixed paths (FR-01.2, BR-01)", () => {
   it.each([
     ["/", `${ORIGIN}/ar`],
     ["/cars", `${ORIGIN}/ar/cars`],
     ["/cars/toyota?sort=price", `${ORIGIN}/ar/cars/toyota?sort=price`],
+    ["/c/MU-24Q7", `${ORIGIN}/ar/c/MU-24Q7`],
   ])("redirect %s to the default locale", async (path, target) => {
     const { proxy } = await loadProxy();
     const response = proxy(request(path));
     expect(response.status).toBe(307);
     expect(getRedirectUrl(response)).toBe(target);
   });
+
+  it("redirect to the locale the visitor chose, with the query", async () => {
+    const { proxy } = await loadProxy();
+    expect(getRedirectUrl(proxy(request("/", { cookie: `${LOCALE_COOKIE}=en` })))).toBe(`${ORIGIN}/en`);
+    expect(getRedirectUrl(proxy(request("/cars?fuel=hybrid", { cookie: `a=1; ${LOCALE_COOKIE}=en` })))).toBe(
+      `${ORIGIN}/en/cars?fuel=hybrid`,
+    );
+    expect(getRedirectUrl(proxy(request("/cars", { cookie: `${LOCALE_COOKIE}=ar` })))).toBe(`${ORIGIN}/ar/cars`);
+  });
+
+  it("take the default locale when the stored choice names none of the site's", async () => {
+    const { proxy } = await loadProxy();
+    for (const value of ["fr", "EN", "en-US", ""]) {
+      expect(getRedirectUrl(proxy(request("/", { cookie: `${LOCALE_COOKIE}=${value}` }))), value).toBe(`${ORIGIN}/ar`);
+    }
+  });
+
+  // Google's guidance against redirects that guess the language (FR-01.2a)
+  it("never follow the browser's language, and never store a choice", async () => {
+    const { proxy } = await loadProxy();
+    const response = proxy(request("/", { "accept-language": "en-US,en;q=0.9" }));
+    expect(getRedirectUrl(response)).toBe(`${ORIGIN}/ar`);
+    expect(response.headers.get("set-cookie")).toBeNull();
+  });
+});
+
+describe("other locales' prefixes (FR-01's edge cases)", () => {
+  it.each(["/fr/cars", "/fr", "/de-AT/cars?sort=price", "/en_GB", "/AR/cars"])(
+    "answer %s from the default locale's pages, which have no page for it: a 404 in Arabic",
+    async (path) => {
+      const { proxy } = await loadProxy();
+      const response = proxy(request(path, { cookie: `${LOCALE_COOKIE}=en` }));
+      expect(isRewrite(response)).toBe(true);
+      expect(getRewrittenUrl(response)).toBe(`${ORIGIN}/ar${path}`);
+    },
+  );
 });

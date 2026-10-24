@@ -1,18 +1,10 @@
 import "server-only";
+import { ERROR_STATUS, type ErrorCode, errorResponse } from "@/lib/errors/envelope";
 
 // Typed storage failures with the SRS §8.1 codes. T-16's lib/errors (AppError, with the
 // catalog message) takes these over.
 
-const STATUS = {
-  VALIDATION_ERROR: 400,
-  UNAUTHENTICATED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  CAP_REACHED: 409,
-  METADATA_PRESENT: 422,
-} as const;
-
-export type StorageErrorCode = keyof typeof STATUS;
+export type StorageErrorCode = ErrorCode;
 
 export class StorageError extends Error {
   readonly code: StorageErrorCode;
@@ -23,13 +15,11 @@ export class StorageError extends Error {
     super(reason);
     this.name = "StorageError";
     this.code = code;
-    this.status = STATUS[code];
+    this.status = ERROR_STATUS[code];
   }
 }
 
-// The Route Handler error envelope (SRS §8.1). The request ID is the platform's x-vercel-id,
-// or a new UUID locally (SRS §13.4).
+/** A storage failure in the Route Handler error envelope (SRS §8.1) */
 export function storageErrorResponse(request: Request, error: StorageError): Response {
-  const requestId = request.headers.get("x-vercel-id") ?? crypto.randomUUID();
-  return Response.json({ error: { code: error.code, requestId } }, { status: error.status });
+  return errorResponse(request, error.code);
 }

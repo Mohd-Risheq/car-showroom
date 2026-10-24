@@ -1,11 +1,10 @@
 "use client";
 
-import { hasLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import { describeError, reportRequested, round } from "@/app/_dev/harness";
 import { postDevReport } from "@/app/_dev/report";
 import { cn } from "@/lib/class-names";
-import { type AppLocale, routing } from "@/lib/i18n/routing";
+import { type AppLocale, isAppLocale } from "@/lib/i18n/locales";
 import { C } from "./classes";
 import { JOINED_AR } from "./copy";
 
@@ -79,7 +78,7 @@ function measureHexp(): Results["hexp"] {
   const rows = new Map<string, { script: AppLocale; wght: number; widths: Record<string, number> }>();
   for (const element of document.querySelectorAll<HTMLElement>("[data-hexp]")) {
     const script = element.dataset.script;
-    if (!hasLocale(routing.locales, script)) throw new Error(`A HEXP fixture names no script: ${script}`);
+    if (!isAppLocale(script)) throw new Error(`A HEXP fixture names no script: ${script}`);
     const wght = Number(element.dataset.wght);
     const key = `${script}-${wght}`;
     const row = rows.get(key) ?? { script, wght, widths: {} };

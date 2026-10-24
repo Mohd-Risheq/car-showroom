@@ -1,5 +1,5 @@
 import { notFoundOnDeployments } from "@/lib/deployment";
-import { directionOf } from "@/lib/i18n/routing";
+import { directionOf } from "@/lib/i18n/locales";
 import { getAppLocale } from "@/lib/i18n/server";
 
 // Scaffold diagnostics (T-01): locale and direction under the public root layout

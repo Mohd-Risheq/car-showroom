@@ -1,7 +1,12 @@
 // An HTTPS front for the local production server, for WebKit: it applies upgrade-insecure-requests to
-// http://localhost, so over plain HTTP every subresource fails (D-028). The certificate is a
-// throwaway self-signed one for localhost, made with openssl in a temporary folder that is removed
-// as soon as the key is read. Playwright starts this as a webServer (playwright.config.ts).
+// http://localhost, so over plain HTTP every subresource fails (D-028). Like Vercel's edge, it tells
+// the server the request came over HTTPS (X-Forwarded-Proto), so the URL a route handler reads is
+// https: and a cookie the server sets is Secure, as the page's own are (API-34). A path proxy.ts
+// rewrites, such as /fr/cars, fails through it: Next.js takes the rewrite for another site's page, as
+// NextURL writes 127.0.0.1 as localhost, and fetches it from the server over HTTPS, which the server
+// doesn't speak (D-041). The certificate is a throwaway self-signed one for localhost, made with
+// openssl in a temporary folder that is removed as soon as the key is read. Playwright starts this as
+// a webServer (playwright.config.ts).
 //
 // Usage: node tests/support/https-proxy.ts <listen port> <target port>
 import { execFileSync } from "node:child_process";
@@ -40,7 +45,13 @@ function selfSigned(): { key: Buffer; cert: Buffer } {
 
 const server = https.createServer(selfSigned(), (request, response) => {
   const upstream = http.request(
-    { host: "127.0.0.1", port: Number(target), method: request.method, path: request.url, headers: request.headers },
+    {
+      host: "127.0.0.1",
+      port: Number(target),
+      method: request.method,
+      path: request.url,
+      headers: { ...request.headers, "x-forwarded-proto": "https" },
+    },
     (answer) => {
       response.writeHead(answer.statusCode ?? 502, answer.rawHeaders);
       // A response cut off upstream is cut off here too, rather than left open; pipeline does that

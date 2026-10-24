@@ -42,10 +42,13 @@ function get(port: number, path: string): Promise<{ status: number; body: string
   });
 }
 
-// An upstream that answers /ok whole and /drop not at all. After its headers and part of its body,
-// it closes /close and resets /reset, which also fails the proxy's request to it.
+// An upstream that answers /ok whole, /scheme with the scheme the proxy says the request came by,
+// and /drop not at all. After its headers and part of its body, it closes /close and resets /reset,
+// which also fails the proxy's request to it.
 const upstream = http.createServer((request, response) => {
-  if (request.url === "/drop") {
+  if (request.url === "/scheme") {
+    response.end(request.headers["x-forwarded-proto"] ?? "");
+  } else if (request.url === "/drop") {
     request.socket.destroy();
   } else if (request.url === "/close" || request.url === "/reset") {
     response.writeHead(200, { "content-type": "text/plain" });
@@ -80,6 +83,10 @@ describe("tests/support/https-proxy.ts", () => {
 
   it("passes a response through", async () => {
     await expect(get(port, "/ok")).resolves.toStrictEqual({ status: 200, body: "fine" });
+  });
+
+  it("tells the server the request came over HTTPS, as Vercel's edge does", async () => {
+    await expect(get(port, "/scheme")).resolves.toStrictEqual({ status: 200, body: "https" });
   });
 
   it("answers 502 when the upstream fails before its headers", async () => {

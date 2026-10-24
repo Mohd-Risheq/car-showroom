@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { DirectionProvider } from "@/components/ui/direction-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { WorkspaceTheme } from "@/components/ui/workspace-theme";
-import { directionOf, routing } from "@/lib/i18n/routing";
+import { directionOf, LOCALES } from "@/lib/i18n/locales";
 import { getAppLocale } from "@/lib/i18n/server";
 import { NO_ICON_YET } from "@/lib/metadata";
 import { fontVariables } from "@/styles/fonts";
@@ -22,7 +22,7 @@ export const metadata: Metadata = { icons: NO_ICON_YET };
 export const viewport: Viewport = { themeColor: THEME_COLOR.daylight, colorScheme: "light" };
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
+  return LOCALES.map((locale) => ({ locale }));
 }
 
 export default async function DealerRootLayout({ children }: LayoutProps<"/[locale]/dealer">) {

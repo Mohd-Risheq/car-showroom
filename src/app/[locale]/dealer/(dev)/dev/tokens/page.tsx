@@ -20,7 +20,7 @@ export default async function DealerTokensPage() {
   const copy = SPECIMEN_COPY[locale];
 
   return (
-    <SpecimenPage title="Muftah dev: tokens, dealer workspace (T-13)" locale={locale} path="/dealer/dev/tokens">
+    <SpecimenPage title="Muftah dev: tokens, dealer workspace (T-13)" locale={locale}>
       <ThemeSwitch label={copy.theme} names={{ daylight: copy.daylight, dark: copy.dark }} />
       <Section id="colour" title="Colour in the active theme, DESIGN §3.2">
         <Swatches />

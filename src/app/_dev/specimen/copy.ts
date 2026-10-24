@@ -1,4 +1,4 @@
-import type { AppLocale } from "@/lib/i18n/routing";
+import type { AppLocale } from "@/lib/i18n/locales";
 import type { TypeStep } from "@/styles/type-scale";
 
 // The words of the token specimens (T-13), in both locales. Development pages only: shipped copy

@@ -1,5 +1,5 @@
-import { hasLocale } from "next-intl";
-import { type AppLocale, routing } from "./routing";
+import { isAppLocale } from "./locales";
+import type { AppLocale } from "./locales";
 
 // The locale each language formats with (BR-02, BR-03), which next-intl takes as its own (D-040).
 // Arabic keeps Western digits and takes Levantine month names ("18 تشرين الأول 2026"). A bare "ar"
@@ -15,6 +15,6 @@ export const TIME_ZONE = "Asia/Amman";
 /** The URL's locale for a formatting locale: ar for ar-JO-u-nu-latn, en for en-GB */
 export function appLocaleOf(locale: string): AppLocale {
   const { language } = new Intl.Locale(locale);
-  if (!hasLocale(routing.locales, language)) throw new Error(`No locale of the site formats as ${locale}`);
+  if (!isAppLocale(language)) throw new Error(`No locale of the site formats as ${locale}`);
   return language;
 }
