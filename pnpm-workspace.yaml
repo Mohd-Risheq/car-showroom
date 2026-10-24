@@ -39,3 +39,9 @@ overrides:
   tmp@<0.2.6: 0.2.7
   basic-ftp@<6.2.1: 6.2.3
   uuid@<11.1.1: 11.1.1
+  # @vercel/cli-config pins zod 4.1.11 exactly, in every release to 0.3.3, under @vercel/blob. The
+  # app's own patched release replaces it (GHSA-mrhx-c7xc-m3w5, D-042)
+  "@vercel/cli-config>zod": 4.6.7
+  # A patched release inside express's ~1.20.5, which the lockfile held below it
+  # (GHSA-27r3-jxmh-p828, D-042)
+  body-parser@<1.20.9: 1.20.9

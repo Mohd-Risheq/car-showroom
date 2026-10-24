@@ -39,6 +39,15 @@ function acceptances(file: string): Acceptance[] {
   return list;
 }
 const accepted = () => acceptances(`${FIXTURES}/accepted-advisories.json`);
+/** An acceptance that names the one installed version it covers, as the live list's Zod entry does */
+const pinnedZod: Acceptance = {
+  id: "GHSA-mrhx-c7xc-m3w5",
+  package: "zod",
+  version: "3.25.76",
+  reviewBy: "2027-01-21",
+  decision: "D-042",
+  reason: "Only through Lighthouse CI",
+};
 const finding = (fields: Partial<Finding>): Finding => ({
   source: "OSV-Scanner",
   id: "GHSA-aaaa-bbbb-cccc",
@@ -200,6 +209,16 @@ describe("findingProblems", () => {
     const aliased = finding({ id: "CVE-2026-93687", aliases: ["GHSA-vfj7-8cjw-p6xm"], name: "braces" });
     expect(findingProblems([aliased], accepted(), NOW)).toStrictEqual([]);
   });
+
+  it("covers only the installed version an acceptance names, where it names one", () => {
+    const list = [pinnedZod];
+    expect(findingProblems([finding({ id: pinnedZod.id, name: "zod", version: "3.25.76" })], list, NOW)).toStrictEqual(
+      [],
+    );
+    expect(findingProblems([finding({ id: pinnedZod.id, name: "zod", version: "4.1.11" })], list, NOW)).toStrictEqual([
+      `OSV-Scanner: ${pinnedZod.id} in zod 4.1.11 is high, and no acceptance covers it`,
+    ]);
+  });
 });
 
 describe("staleAcceptances", () => {
@@ -211,15 +230,25 @@ describe("staleAcceptances", () => {
     ]);
     expect(staleAcceptances(findings("osv.json"), accepted(), ACCEPTED)).toStrictEqual([]);
   });
+
+  it("names an acceptance whose version no longer has the advisory, though another version does", () => {
+    const otherVersion = finding({ id: pinnedZod.id, name: "zod", version: "4.1.11" });
+    expect(staleAcceptances([otherVersion], [pinnedZod], ACCEPTED)).toStrictEqual([
+      `${ACCEPTED}: ${pinnedZod.id} in zod 3.25.76 matches no advisory any more (D-042)`,
+    ]);
+  });
 });
 
 describe("parseAccepted", () => {
-  it("holds exactly the owner's acceptances that an advisory still matches, until 2027-01-21 (D-037)", () => {
+  it("holds exactly the owner's acceptances that an advisory still matches, until 2027-01-21 (D-037, D-042)", () => {
     expect(
-      acceptances(ACCEPTED).map(({ id, package: name, reviewBy, decision }) => `${id} ${name} ${reviewBy} ${decision}`),
+      acceptances(ACCEPTED).map(({ id, package: name, version, reviewBy, decision }) =>
+        [id, name, version, reviewBy, decision].filter(Boolean).join(" "),
+      ),
     ).toStrictEqual([
       "GHSA-jmr9-qjv8-65gv extract-zip 2027-01-21 D-037",
       "GHSA-7pqw-9j4j-h8q3 extract-zip 2027-01-21 D-037",
+      "GHSA-mrhx-c7xc-m3w5 zod 3.25.76 2027-01-21 D-042",
     ]);
   });
 
@@ -235,6 +264,13 @@ describe("parseAccepted", () => {
       "the DECISIONS.md entry, such as D-037",
     ]) {
       expect(problem).toContain(issue);
+    }
+  });
+
+  it("refuses a version that isn't one exact installed version", () => {
+    for (const version of ["^3.25.0", "3.x", "3.25.76 || 4.1.11", ""]) {
+      const problem = parseAccepted({ accepted: [{ ...pinnedZod, version }] }, ACCEPTED);
+      expect(problem).toContain("an exact installed version, such as 3.25.76");
     }
   });
 });

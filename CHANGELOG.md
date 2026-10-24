@@ -22,3 +22,7 @@ Notable changes to Muftah, in the [Keep a Changelog](https://keepachangelog.com/
 - `pnpm verify` and `pnpm verify:full`, the gates every change passes.
 - Supply-chain checks: `pnpm audit`, OSV-Scanner, gitleaks and a minimum-version floor, with each accepted advisory listed by ID with a review date.
 - GitHub Actions workflows for the checks, CodeQL and a nightly supply-chain scan, and a Renovate configuration for weekly grouped updates that opens security fixes at once.
+
+### Security
+
+- Vercel Blob's copy of Zod runs the patched 4.6.7, and Lighthouse CI's body-parser the patched 1.20.9 (GHSA-mrhx-c7xc-m3w5, GHSA-27r3-jxmh-p828). Lighthouse CI's Zod 3, which no release fixes, is accepted for that one advisory until 2027-01-21, and an accepted advisory can now name the one installed version it covers.

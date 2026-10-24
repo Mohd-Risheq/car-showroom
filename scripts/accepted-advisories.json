@@ -1,6 +1,6 @@
 {
   "$comment": [
-    "Advisories the owner accepted by exact ID (SEC-11, D-037). pnpm audit:deps lets each one pass in pnpm audit and OSV-Scanner only for its package and only until reviewBy. After that date, or once no advisory matches an entry, the gate fails.",
+    "Advisories the owner accepted by exact ID (SEC-11, D-037). pnpm audit:deps lets each one pass in pnpm audit and OSV-Scanner only for its package, only for the installed version an entry names where it names one, and only until reviewBy. After that date, or once no advisory matches an entry, the gate fails.",
     "An entry is added only with the owner's yes, recorded in DECISIONS.md (the rule of D-011)."
   ],
   "accepted": [
@@ -17,6 +17,14 @@
       "reviewBy": "2027-01-21",
       "decision": "D-037",
       "reason": "Arbitrary file writes through symlink archive entries. extract-zip 2.0.1 comes only through Lighthouse CI (@lhci/cli, lighthouse, puppeteer-core, @puppeteer/browsers), which unpacks browser downloads, never an archive a user supplies. No patched release exists."
+    },
+    {
+      "id": "GHSA-mrhx-c7xc-m3w5",
+      "package": "zod",
+      "version": "3.25.76",
+      "reviewBy": "2027-01-21",
+      "decision": "D-042",
+      "reason": "Memory exhaustion while validating oversized constrained collections. zod 3.25.76 comes only through Lighthouse CI (@lhci/cli, lighthouse, puppeteer-core, chromium-bidi), which validates the protocol messages of the Chrome that Lighthouse starts, never site input. chromium-bidi asks for zod ^3.24.1, and only Zod 4.6.6 and later are fixed, so no patched 3.x release exists."
     }
   ]
 }

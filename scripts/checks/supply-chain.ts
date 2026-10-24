@@ -1,7 +1,8 @@
 // The rules of pnpm audit:deps (scripts/audit-deps.ts), SEC-11 and SEC-10: no high or critical
 // advisory from pnpm audit or OSV-Scanner, nor one with no severity score, apart from those the owner
-// accepted by exact ID in scripts/accepted-advisories.json, each only until its review date. An
-// acceptance that no advisory matches any more fails too, so the list never outlives its reason.
+// accepted by exact ID in scripts/accepted-advisories.json, each only for its package, only for the
+// installed version an entry names where it names one, and only until its review date. An acceptance
+// that no advisory matches any more fails too, so the list never outlives its reason.
 // gitleaks' findings are named by rule, file, line and commit, never by the secret. A scan that
 // didn't finish is a problem too, never a clean result.
 import { z } from "zod";
@@ -142,6 +143,10 @@ const acceptedSchema = z
         .object({
           id: z.string().regex(/^GHSA(?:-[0-9a-z]{4}){3}$/, "a GitHub advisory ID, such as GHSA-vfj7-8cjw-p6xm"),
           package: z.string().min(1),
+          version: z
+            .string()
+            .regex(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/, "an exact installed version, such as 3.25.76")
+            .optional(),
           reviewBy: z.iso.date("a date such as 2027-01-21"),
           decision: z.string().regex(/^D-\d{3}$/, "the DECISIONS.md entry, such as D-037"),
           reason: z.string().min(1),
@@ -160,7 +165,9 @@ export function parseAccepted(json: unknown, file: string): Acceptance[] | strin
 }
 
 const covers = (acceptance: Acceptance, finding: Finding) =>
-  acceptance.package === finding.name && [finding.id, ...finding.aliases].includes(acceptance.id);
+  acceptance.package === finding.name &&
+  (acceptance.version === undefined || acceptance.version === finding.version) &&
+  [finding.id, ...finding.aliases].includes(acceptance.id);
 
 /** The high, critical and unscored findings that no acceptance covers on this date (YYYY-MM-DD) */
 export function findingProblems(findings: Finding[], accepted: Acceptance[], today: string): string[] {
@@ -181,7 +188,10 @@ export function findingProblems(findings: Finding[], accepted: Acceptance[], tod
 export function staleAcceptances(findings: Finding[], accepted: Acceptance[], file: string): string[] {
   return accepted
     .filter((entry) => !findings.some((finding) => covers(entry, finding)))
-    .map((entry) => `${file}: ${entry.id} in ${entry.package} matches no advisory any more (${entry.decision})`);
+    .map(
+      (entry) =>
+        `${file}: ${entry.id} in ${[entry.package, entry.version].filter(Boolean).join(" ")} matches no advisory any more (${entry.decision})`,
+    );
 }
 
 /** How a source's findings stand once they pass: counts by severity, blocking ones accepted */
