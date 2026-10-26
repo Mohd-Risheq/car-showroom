@@ -11,6 +11,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: main
+      # The local proxy hashes the password three times a request, at the iteration count stored
+      # with it: at Postgres's default of 4,096 that took about 105 ms of each request on the
+      # development Mac. A new volume stores the same password at 1, so the tests time the app's
+      # work rather than the sign-in (D-044).
+      POSTGRES_INITDB_ARGS: -c scram_iterations=1
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
