@@ -1,11 +1,14 @@
 import "server-only";
+import { mediaTypeOf, readCapped } from "@/lib/http/body";
 import { routing } from "@/lib/i18n/routing";
-import { readCapped } from "@/lib/storage/stream";
+import { log } from "@/lib/log/logger";
+import { requestIdFrom } from "@/lib/log/request-id";
 import { CSP_REPORT_PATH } from "./policy";
 
 // API-30: CSP violation reports (SRS §8.2, §12.5). A first cut, which T-36 finishes. The limit of
-// 60 a minute per IP needs ipAddress() from @vercel/functions (SEC-12), which arrives with
-// lib/rate-limit in T-16. Until then, one cap per instance bounds the log volume.
+// 60 a minute per IP needs ipAddress() from @vercel/functions (SEC-12), which D-043 leaves to the
+// first route limited by network, and T-36 adds it with lib/rate-limit's MemoryLimiter (D-028).
+// Until then, one cap per instance bounds the log volume.
 
 export const MAX_REPORT_BYTES = 8 * 1024;
 const SAMPLE_RATE = 0.1;
@@ -29,7 +32,6 @@ const KEYWORDS = new Set(["inline", "eval", "wasm-eval", "trusted-types-policy",
 const NETWORK_SCHEMES = new Set(["http", "https", "ws", "wss"]);
 const SCHEME = /^([a-z][a-z0-9+.-]{0,31})(?::|$)/i;
 const DIRECTIVE = /^[a-z][a-z-]{0,39}$/;
-const VERCEL_ID = /^[a-z0-9:-]{1,128}$/i;
 
 const LOCALES: ReadonlySet<string> = new Set(routing.locales);
 // The sections under /[locale] (SRS §9.2), plus the local dev pages
@@ -116,12 +118,6 @@ export function routeTemplate(documentUrl: unknown): string {
   return `/[locale]/${section}${rest.length > 0 ? "/…" : ""}`;
 }
 
-// The platform's request ID, or a fresh one locally (SRS §13)
-function requestIdOf(request: Request): string {
-  const id = request.headers.get("x-vercel-id");
-  return id !== null && VERCEL_ID.test(id) ? id : crypto.randomUUID();
-}
-
 function noContent(): Response {
   return new Response(null, { status: 204 });
 }
@@ -129,22 +125,18 @@ function noContent(): Response {
 export type ReportHandlerOptions = {
   random?: () => number;
   now?: () => number;
-  log?: (line: string) => void;
 };
 
 /** POST /api/csp-report: always 204, stores nothing, and logs a sample at WARN (NFR-OBS-01) */
-export function createReportHandler({
-  random = Math.random,
-  now = Date.now,
-  log = (line) => console.warn(line),
-}: ReportHandlerOptions = {}): (request: Request) => Promise<Response> {
+export function createReportHandler({ random = Math.random, now = Date.now }: ReportHandlerOptions = {}): (
+  request: Request,
+) => Promise<Response> {
   let windowStart = Number.NEGATIVE_INFINITY;
   let lines = 0;
 
   return async function POST(request) {
     const started = performance.now();
-    const contentType = request.headers.get("content-type")?.split(";")[0]?.trim().toLowerCase() ?? "";
-    if (!CONTENT_TYPES.has(contentType)) return noContent();
+    if (!CONTENT_TYPES.has(mediaTypeOf(request.headers))) return noContent();
     const body = await readCapped(request.body, MAX_REPORT_BYTES);
     if (body === "too_large") return noContent();
     let data: unknown;
@@ -154,7 +146,7 @@ export function createReportHandler({
       return noContent();
     }
 
-    const requestId = requestIdOf(request);
+    const requestId = requestIdFrom(request.headers);
     for (const raw of rawReports(data)) {
       if (fromExtension(raw) || random() >= SAMPLE_RATE) continue;
       const time = now();
@@ -164,18 +156,14 @@ export function createReportHandler({
       }
       if (lines >= LINES_PER_MINUTE) break;
       lines += 1;
-      log(
-        JSON.stringify({
-          level: "warn",
-          code: "csp_violation",
-          requestId,
-          route: CSP_REPORT_PATH,
-          durationMs: Math.round(performance.now() - started),
-          directive: typeof raw.directive === "string" && DIRECTIVE.test(raw.directive) ? raw.directive : "unknown",
-          blocked: blockedSource(raw.blocked),
-          document: routeTemplate(raw.document),
-        }),
-      );
+      log("warn", "csp_violation", {
+        requestId,
+        route: CSP_REPORT_PATH,
+        durationMs: Math.round(performance.now() - started),
+        directive: typeof raw.directive === "string" && DIRECTIVE.test(raw.directive) ? raw.directive : "unknown",
+        blocked: blockedSource(raw.blocked),
+        document: routeTemplate(raw.document),
+      });
     }
     return noContent();
   };

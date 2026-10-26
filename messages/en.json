@@ -646,6 +646,7 @@
     "mapAlt": "Map of the area around the showroom",
     "mapCredit": "© OpenStreetMap contributors",
     "demoLocation": "Demo location",
+    "story": "Our story",
     "howWeDocument": "How we document every car",
     "hearEngine": "Hear the engine",
     "seeJourney": "See the journey"
@@ -1095,6 +1096,7 @@
     "brand": {
       "name": "Showroom name",
       "tagline": "Tagline",
+      "story": "Showroom story",
       "logo": "Logo",
       "logoUpload": "{hasLogo, select, yes {Replace logo} other {Upload logo}}",
       "accent": "Brand colour"

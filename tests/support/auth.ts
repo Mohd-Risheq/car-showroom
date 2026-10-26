@@ -4,6 +4,7 @@ import type { UserRole } from "@/lib/auth/roles";
 import { createPasswordUser } from "@/lib/auth/users";
 import { db } from "@/lib/db/client";
 import { user } from "@/lib/db/schema";
+import { testDealerId } from "./dealer";
 import { requireEnv } from "./env";
 
 // Users and sessions for the integration tests, made the way production makes them: through
@@ -16,11 +17,19 @@ export type TestUser = { id: string; email: string; password: string };
 
 const createdIds = new Set<string>();
 
-/** A password user with an email and a password of its own. deleteTestUsers removes it. */
+/** A password user of the test dealer, with an email and a password of its own. deleteTestUsers removes it. */
 export async function createTestUser(role: UserRole, { mustChangePassword = false } = {}): Promise<TestUser> {
   const email = `test-${role}-${crypto.randomUUID()}@example.test`;
   const password = `test-password-${crypto.randomUUID()}`;
-  const { id } = await createPasswordUser({ email, name: `Test ${role}`, password, role, mustChangePassword });
+  const dealerId = await testDealerId();
+  const { id } = await createPasswordUser({
+    email,
+    name: `Test ${role}`,
+    password,
+    role,
+    mustChangePassword,
+    dealerId,
+  });
   createdIds.add(id);
   return { id, email, password };
 }

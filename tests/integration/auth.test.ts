@@ -15,15 +15,17 @@ import {
   TEST_USER_AGENT,
   type TestUser,
 } from "../support/auth";
+import { testDealerId } from "../support/dealer";
 
 // Sign-in round trip through the API-05 route handler with database sessions (FR-29, SEC-01,
 // SEC-02). Runs unchanged on the local proxy (BUILD-PLAN §6.3) and on a Neon branch (T-37).
 
 const run = crypto.randomUUID();
+const V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const unlinkedEmail = `t02-unlinked-${run}@example.test`;
 const unhashedEmail = `t02-unhashed-${run}@example.test`;
 
-type SessionBody = { user: { id: string; email: string; role: string } } | null;
+type SessionBody = { user: { id: string; email: string; role: string; dealerId: string } } | null;
 type ErrorBody = { code?: string };
 
 const sessionsOf = (userId: string) => db.select().from(session).where(eq(session.userId, userId));
@@ -58,10 +60,16 @@ describe("createPasswordUser", () => {
     mustChangePassword: false,
   } as const;
 
+  it("stores the user under a UUIDv7 id, with the dealer it belongs to (SRS §6)", async () => {
+    const [row] = await db.select({ id: user.id, dealerId: user.dealerId }).from(user).where(eq(user.id, active.id));
+    expect(row).toEqual({ id: expect.stringMatching(V7), dealerId: await testDealerId() });
+  });
+
   it("removes the user again when its password can't be linked", async () => {
     const { internalAdapter } = await auth.$context;
     const link = vi.spyOn(internalAdapter, "linkAccount").mockRejectedValueOnce(new Error("link failed"));
-    await expect(createPasswordUser({ ...input, email: unlinkedEmail })).rejects.toThrow("link failed");
+    const dealerId = await testDealerId();
+    await expect(createPasswordUser({ ...input, dealerId, email: unlinkedEmail })).rejects.toThrow("link failed");
     link.mockRestore();
     expect(await usersWith(unlinkedEmail)).toEqual([]);
   });
@@ -69,7 +77,8 @@ describe("createPasswordUser", () => {
   it("writes nothing when the password can't be hashed", async () => {
     const { password: hasher } = await auth.$context;
     const hash = vi.spyOn(hasher, "hash").mockRejectedValueOnce(new Error("hash failed"));
-    await expect(createPasswordUser({ ...input, email: unhashedEmail })).rejects.toThrow("hash failed");
+    const dealerId = await testDealerId();
+    await expect(createPasswordUser({ ...input, dealerId, email: unhashedEmail })).rejects.toThrow("hash failed");
     hash.mockRestore();
     expect(await usersWith(unhashedEmail)).toEqual([]);
   });
@@ -99,13 +108,20 @@ describe("sign-in round trip", () => {
 
     const [stored, ...others] = await sessionsOf(active.id);
     expect(others).toEqual([]);
+    expect(stored?.id).toMatch(V7);
     expect(stored?.ipAddress).toBeNull();
     expect(stored?.userAgent).toBe(TEST_USER_AGENT);
 
     const current = await authRequest("GET", "/get-session", { cookie });
     expect(current.status).toBe(200);
     const body = (await current.json()) as SessionBody;
-    expect(body?.user).toMatchObject({ id: active.id, email: active.email, role: "staff" });
+    // The guard reads the role and the dealer from the session, with no query of its own
+    expect(body?.user).toMatchObject({
+      id: active.id,
+      email: active.email,
+      role: "staff",
+      dealerId: await testDealerId(),
+    });
 
     const signOut = await authRequest("POST", "/sign-out", { cookie, body: {} });
     expect(signOut.status).toBe(200);

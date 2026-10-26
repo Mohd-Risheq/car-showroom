@@ -1,7 +1,8 @@
 import "server-only";
 import { neon, neonConfig, Pool } from "@neondatabase/serverless";
-import { drizzle as drizzleHttp } from "drizzle-orm/neon-http";
+import { drizzle as drizzleHttp, type NeonHttpDatabase } from "drizzle-orm/neon-http";
 import { drizzle as drizzlePool, type NeonDatabase } from "drizzle-orm/neon-serverless";
+import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import * as schema from "./schema";
 
 // Local Postgres runs behind Neon's local proxy on this host (BUILD-PLAN §6.3, compose.yaml).
@@ -23,10 +24,31 @@ if (new URL(url).hostname === LOCAL_PROXY_HOST) {
   neonConfig.useSecureWebSocket = false;
 }
 
+export type Database = NeonHttpDatabase<typeof schema>;
+
+/** A database over HTTP, for single queries and batches: the app's own, or a test's throwaway one */
+export function httpDatabase(databaseUrl: string): Database {
+  return drizzleHttp({ client: neon(databaseUrl), schema });
+}
+
 // Single queries go over HTTP (SRS §11.4)
-export const db = drizzleHttp({ client: neon(url), schema });
+export const db = httpDatabase(url);
+
+/**
+ * A database for the cached public reads (SRS §11.4). Each batch runs as one read-only REPEATABLE
+ * READ transaction, so its statements read one snapshot and can't write. The options reach batches
+ * alone, so the public reads run in batches, of one statement too.
+ */
+export function publicDatabase(databaseUrl: string): Database {
+  return drizzleHttp({ client: neon(databaseUrl, { isolationLevel: "RepeatableRead", readOnly: true }), schema });
+}
+
+export const publicDb = publicDatabase(url);
 
 export type PoolTransaction = Parameters<Parameters<NeonDatabase<typeof schema>["transaction"]>[0]>[0];
+
+/** The HTTP database or a Pool transaction: what a repository runs its queries on */
+export type AnyDatabase = PgDatabase<PgQueryResultHKT, typeof schema>;
 
 // Multi-statement writes run in one transaction on a per-request Pool, closed when it ends (SRS §11.4)
 export async function withTransaction<T>(work: (tx: PoolTransaction) => Promise<T>): Promise<T> {

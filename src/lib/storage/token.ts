@@ -1,6 +1,6 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { z } from "zod";
+import { z } from "@/lib/validation/zod";
 
 // Verifies a client token the way the storage service does, for the local store only.
 // Format (@vercel/blob 2.8.2, generateClientTokenFromReadWriteToken):

@@ -50,6 +50,7 @@ export const RULE_MESSAGES = {
     "validation.passwordBreached",
   ],
   "VR-31": ["validation.dimension", "validation.wheelbaseShorter"],
+  "VR-32": ["validation.maxChars"],
 } as const satisfies Record<`VR-${number}`, readonly ValidationKey[]>;
 
 export type ValidationRule = keyof typeof RULE_MESSAGES;

@@ -1,0 +1,1 @@
+ALTER TABLE "rate_limit" ADD CONSTRAINT "rate_limit_key_format" CHECK ("rate_limit"."key" ~ '^[A-Za-z0-9_-]{43}$');

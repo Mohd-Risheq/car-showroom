@@ -646,6 +646,7 @@
     "mapAlt": "خريطة المنطقة المحيطة بالمعرض",
     "mapCredit": "© مساهمو OpenStreetMap",
     "demoLocation": "موقع تجريبي",
+    "story": "قصتنا",
     "howWeDocument": "كيف نوثّق كل سيارة",
     "hearEngine": "الاستماع إلى صوت المحرك",
     "seeJourney": "عرض رحلة السيارة"
@@ -1095,6 +1096,7 @@
     "brand": {
       "name": "اسم المعرض",
       "tagline": "العبارة التعريفية",
+      "story": "قصة المعرض",
       "logo": "الشعار",
       "logoUpload": "{hasLogo, select, yes {استبدال الشعار} other {رفع الشعار}}",
       "accent": "لون الهوية"

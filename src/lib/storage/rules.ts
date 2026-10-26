@@ -84,6 +84,11 @@ const KIND_RULES: Readonly<Record<MediaKind, KindRule>> = {
 
 const REPORT_PDF_MAX_BYTES = 10 * MB;
 
+/** The kinds whose every file is an image, which a ready row gives its pixel size (D-043) */
+export const IMAGE_KINDS = MEDIA_KINDS.filter((kind) =>
+  KIND_RULES[kind].extensions.every((ext) => MEDIA_TYPES[ext].startsWith("image/")),
+);
+
 // Client upload tokens live 10 minutes (API-16)
 export const UPLOAD_TOKEN_TTL_MS = 10 * 60 * 1000;
 

@@ -38,6 +38,16 @@ const RESTRICTED_IMPORTS = [
 // muftah/mirror-directional-icons reads them all, so this ban isn't what keeps an arrow mirrored.
 const PHOSPHOR_ENTRIES = { regex: "^@phosphor-icons/react/(?!ssr$)", message: PHOSPHOR_MESSAGE };
 
+// Unless told not to, Zod checks whether it may compile a parser with new Function, which a Content
+// Security Policy without unsafe-eval reports (SRS §12.5). src takes z from the entry that tells it,
+// so the setting is in place before any schema is built (D-043). A type import loads nothing.
+const ZOD_ENTRIES = {
+  regex: "^zod(?:/.*)?$",
+  allowTypeImports: true,
+  message: "Import z from @/lib/validation/zod, which builds every schema without new Function (D-043).",
+};
+const ZOD_ENTRY = "src/lib/validation/zod.ts";
+
 // next-intl's own locale is the formatting locale, such as ar-JO-u-nu-latn (D-040), and its
 // navigation helpers build links with it. The URL's locale, ar or en, comes from getAppLocale,
 // which src/lib/i18n/server.ts alone builds on next-intl's.
@@ -128,10 +138,58 @@ const NEXT_INTL_FORMATTER = [
   { name: "next-intl", importNames: ["useFormatter", "createFormatter"], message: FORMAT_MESSAGE },
 ];
 
+// defineAction updates the cache once an action's transaction commits (SRS §11.9), so neither a
+// handler nor a helper it calls updates it first, which would let a reader refill an entry with the
+// old row. next/cache is a CommonJS module, so its default import is all of it. cacheTag and
+// cacheLife, which the cached functions set, stay open.
+const CACHE_UPDATES = {
+  name: "next/cache",
+  importNames: ["default", "updateTag", "revalidateTag", "revalidatePath", "refresh"],
+  message: "defineAction updates the cache once an action's change commits (SRS §11.9): return the tags instead.",
+};
+const DEFINE_ACTION = "src/lib/actions/define-action.ts";
+// The Server Action modules, each a "use server" file of actions built with defineAction
+const ACTION_MODULES = "src/**/actions.ts";
+// Each of these throws, and an action's handler runs inside its transaction, which would roll back
+const NAVIGATION_ENDINGS = {
+  name: "next/navigation",
+  importNames: ["redirect", "permanentRedirect", "notFound", "forbidden", "unauthorized"],
+  message: "This throws, which rolls the action's change back: refuse with an AppError, which defineAction returns.",
+};
+// A function marked "use server" is a Server Action that defineAction never guards
+const INLINE_ACTION = {
+  selector: ':function > BlockStatement > ExpressionStatement[directive="use server"]',
+  message:
+    'Export the action from an actions.ts module, built with defineAction (SRS §11.9), never an inline "use server".',
+};
+
+// Next.js's internals and its entries' .js files reach the same functions under names the bans above
+// don't match. Its types may come from anywhere.
+const NEXT_INTERNALS = {
+  regex: "^next/(?:dist/|[^/]+\\.js$)",
+  allowTypeImports: true,
+  message: "Import Next.js from its public entries, which lint checks (SRS §11.9).",
+};
+// An import() of next/cache or next/navigation would take their functions past no-restricted-imports
+const NEXT_ENDINGS_IMPORT = [
+  ...importExpressions(
+    "^next/(?:cache|navigation)$",
+    "Import next/cache and next/navigation statically, where ESLint sees the names a file takes (SRS §11.9).",
+  ),
+  ...importExpressions(NEXT_INTERNALS.regex, NEXT_INTERNALS.message),
+];
+
+// An import() of Zod would take z past no-restricted-imports, without the entry's setting (D-043).
+// The entry imports Zod statically, so src has no import() of it at all.
+const ZOD_IMPORT = importExpressions(ZOD_ENTRIES.regex, ZOD_ENTRIES.message);
+
 // What every config that sets no-restricted-syntax for src refuses, beside its own selectors
 const SRC_SYNTAX = [
   ...importExpressions(GSAP_SOURCE, GSAP_MESSAGE),
   ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
+  ...NEXT_ENDINGS_IMPORT,
+  ...ZOD_IMPORT,
+  INLINE_ACTION,
 ];
 
 export default defineConfig([
@@ -193,8 +251,21 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES],
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+        },
+      ],
+    },
+  },
+  {
+    // The entry itself, which loads Zod and sets it up
+    files: [ZOD_ENTRY],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, NEXT_INTERNALS],
         },
       ],
     },
@@ -205,8 +276,8 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES],
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, CACHE_UPDATES],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
         },
       ],
     },
@@ -216,7 +287,10 @@ export default defineConfig([
     rules: {
       "no-restricted-imports": [
         "error",
-        { paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, HAS_LOCALE], patterns: [GSAP_IMPORTS, PHOSPHOR_ENTRIES] },
+        {
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, HAS_LOCALE, CACHE_UPDATES],
+          patterns: [GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+        },
       ],
     },
   },
@@ -226,8 +300,8 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE],
-          patterns: [DEV_IMPORTS, PHOSPHOR_ENTRIES],
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
+          patterns: [DEV_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
         },
       ],
     },
@@ -238,17 +312,51 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_FORMATTER, HAS_LOCALE],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES],
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
         },
       ],
     },
   },
   {
-    // No barrel files, no import() of GSAP, of its chunk or of next-intl, which no-restricted-imports
-    // doesn't see, and no number or date written outside src/lib/format. A config that sets
-    // no-restricted-syntax replaces an earlier one's options, so every config that sets the rule
-    // lists next-intl's and the formatters.
+    // defineAction, which updates the cache once an action's change commits
+    files: [DEFINE_ACTION],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+        },
+      ],
+    },
+  },
+  {
+    // The action modules, whose handlers run inside their transaction
+    files: [ACTION_MODULES],
+    ignores: DEV_ONLY,
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            ...RESTRICTED_IMPORTS,
+            ...NEXT_INTL_LOCALE,
+            ...NEXT_INTL_FORMATTER,
+            HAS_LOCALE,
+            CACHE_UPDATES,
+            NAVIGATION_ENDINGS,
+          ],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+        },
+      ],
+    },
+  },
+  {
+    // No barrel files, no import() of GSAP, of its chunk, of next-intl, of next/cache or
+    // next/navigation, which no-restricted-imports doesn't see, and no number or date written outside
+    // src/lib/format. A config that sets no-restricted-syntax replaces an earlier one's options, so
+    // every config that sets the rule lists next-intl's and the formatters.
     files: ["src/**/*.{ts,tsx}"],
     rules: { "no-restricted-syntax": ["error", ...BARREL_SELECTORS, ...SRC_SYNTAX, ...FORMATTING_SELECTORS] },
   },
@@ -271,9 +379,19 @@ export default defineConfig([
         ...BARREL_SELECTORS,
         ...importExpressions("^@?gsap(?:/.*)?$", GSAP_MESSAGE),
         ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
+        ...NEXT_ENDINGS_IMPORT,
+        ...ZOD_IMPORT,
+        INLINE_ACTION,
         ...FORMATTING_SELECTORS,
       ],
     },
+  },
+  {
+    // Server logs go through src/lib/log, one JSON line each with the request ID (NFR-OBS-01,
+    // SRS §13.4). The development pages are tools.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [...DEV_ONLY, "src/lib/log/**"],
+    rules: { "no-console": "error" },
   },
   {
     // Node runs the scripts and the modules they import by stripping types (tsconfig's

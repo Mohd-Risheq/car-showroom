@@ -8,6 +8,34 @@
       "when": 1792407091273,
       "tag": "0000_auth_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792850787691,
+      "tag": "0001_data_model",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792865343553,
+      "tag": "0002_media_upload_keys",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792876580229,
+      "tag": "0003_public_reads",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792901660975,
+      "tag": "0004_rate_limit_key_format",
+      "breakpoints": true
     }
   ]
 }

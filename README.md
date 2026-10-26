@@ -14,7 +14,7 @@ You need Node.js 22, Docker, and pnpm 10: `corepack enable` gives the version `p
 
 ```sh
 pnpm install
-cp .env.example .env.local   # then fill in the two empty secrets, as the file explains
+cp .env.example .env.local   # then fill in the three empty secrets, as the file explains
 pnpm db:up                   # Postgres 17 behind Neon's local proxy
 pnpm db:migrate
 pnpm dev                     # http://localhost:3000
@@ -28,7 +28,7 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `pnpm verify`                                                       | lint, typecheck, the migration check, unit and integration tests, the i18n, dash and contrast checks, the production build and the bundle budgets            |
 | `pnpm verify:full`                                                  | `verify`, then the Playwright suite (on this machine's browsers and in Playwright's Linux image), Lighthouse CI and the supply-chain audit                   |
-| `pnpm test` / `pnpm test:int`                                       | Vitest unit tests with coverage thresholds / integration tests against the local database                                                                    |
+| `pnpm test` / `pnpm test:int`                                       | Vitest unit tests with coverage thresholds / integration tests, then the index benchmark, against the local database                                         |
 | `pnpm e2e`                                                          | Playwright journeys and axe checks on the production build (`pnpm build` first)                                                                              |
 | `pnpm e2e:linux`                                                    | the same suite with its browsers in Playwright's pinned Linux image, which adds Firefox and the visual comparison; `--update-snapshots` writes new baselines |
 | `pnpm lhci`                                                         | Lighthouse CI on the production build, mobile, on Home, Inventory and the car page as each is built; the budget is in `lighthouserc.json`                    |

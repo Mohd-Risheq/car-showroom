@@ -91,6 +91,7 @@ const UNLABELLED_ENUMS: Readonly<Record<string, string>> = {
   place_kind: "a journey stop shows its place's name",
   media_kind: "the kind of a stored file",
   media_status: "an upload's state on the server",
+  spin_status: "a spin set's state on the server",
   consumption_source: "the wizard's EPA keys in the deck say where the figures came from",
   event_name: "analytics events (API-03)",
   user_role: "the deck's role keys name the roles",

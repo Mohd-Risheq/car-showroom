@@ -10,6 +10,7 @@ import { uploadVariant } from "@/lib/storage/client-upload";
 import { registerMedia } from "@/lib/storage/register";
 import { uploadRepository } from "@/lib/storage/repository";
 import { isStoredPathnameOf, type MediaExtension, uploadPathname } from "@/lib/storage/rules";
+import type { RegisterMediaInput } from "@/lib/validation/media";
 import { createTestUser, deleteTestUsers, signIn } from "../support/auth";
 import { requireEnv } from "../support/env";
 import { EXIF_WITH_GPS, image, solid } from "../support/media";
@@ -27,6 +28,8 @@ const storeRoot = requireEnv(
 const carId = crypto.randomUUID();
 const uncappedCarId = crypto.randomUUID(); // never written: the refused uploads use it
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+// What a registration's log lines carry, as its action passes it
+const REQUEST_ID = "fra1::upload-test";
 
 let server: Awaited<ReturnType<typeof startRouteServer>>;
 const users: Record<"owner" | "staff", { id: string; cookie: string }> = {
@@ -241,10 +244,14 @@ describe("upload tokens (API-16)", () => {
     expect(((await response.json()) as { error: { code: string } }).error.code).toBe("VALIDATION_ERROR");
   });
 
-  it("answers with the error envelope: a code and a request ID, nothing else (SRS §8.1)", async () => {
+  it("answers with the error envelope: a code, its catalog message and a request ID (SRS §8.1)", async () => {
     const response = await tokenRequest({}, { origin: siteOrigin });
     expect(await response.json()).toEqual({
-      error: { code: "UNAUTHENTICATED", requestId: expect.stringMatching(UUID) },
+      error: {
+        code: "UNAUTHENTICATED",
+        message: "errors.code.unauthenticated",
+        requestId: expect.stringMatching(UUID),
+      },
     });
   });
 
@@ -272,7 +279,11 @@ describe("upload tokens (API-16)", () => {
     vi.stubEnv("BLOB_READ_WRITE_TOKEN", undefined);
     const response = await tokenRequest(photoEvent(input), asOwner());
     expect(response.status).toBe(409);
-    expect(((await response.json()) as { error: { code: string } }).error.code).toBe("CAP_REACHED");
+    // The message says uploads are off on this deployment, not that a demo limit was reached
+    expect(((await response.json()) as { error: { code: string; message: string } }).error).toMatchObject({
+      code: "CAP_REACHED",
+      message: "errors.uploadsOff",
+    });
     expect(await uploadRepository.find(input.clientUploadId)).toBeUndefined();
   });
 });
@@ -462,10 +473,10 @@ describe("registration (API-17)", () => {
       "480": await solid(480, 320).jpeg().toBuffer(),
       "960": await solid(960, 640).jpeg().toBuffer(),
     });
-    const input = { carId, kind: "photo", clientUploadId, variants, width: 960, height: 640 };
-    const first = await registerMedia(input, { userId: users.owner.id });
+    const input: RegisterMediaInput = { carId, kind: "photo", clientUploadId, variants, width: 960, height: 640 };
+    const first = await registerMedia(input, { userId: users.owner.id }, REQUEST_ID);
     expect(first.mediaId).toMatch(UUID);
-    expect(await registerMedia(input, { userId: users.owner.id })).toEqual(first);
+    expect(await registerMedia(input, { userId: users.owner.id }, REQUEST_ID)).toEqual(first);
     expect((await uploadRepository.find(clientUploadId))?.status).toBe("ready");
   });
 
@@ -480,8 +491,8 @@ describe("registration (API-17)", () => {
     );
     for (const file of files) await expect(stat(file)).resolves.toBeTruthy();
 
-    const input = { carId, kind: "photo", clientUploadId, variants, width: 960, height: 640 };
-    await expect(registerMedia(input, { userId: users.owner.id })).rejects.toMatchObject({
+    const input: RegisterMediaInput = { carId, kind: "photo", clientUploadId, variants, width: 960, height: 640 };
+    await expect(registerMedia(input, { userId: users.owner.id }, REQUEST_ID)).rejects.toMatchObject({
       code: "METADATA_PRESENT",
       status: 422,
     });
@@ -497,8 +508,8 @@ describe("registration (API-17)", () => {
       { "480": await solid(480, 320).withXmp("<x:xmpmeta/>").webp().toBuffer() },
       "webp",
     );
-    const input = { carId, kind: "photo", clientUploadId, variants, width: 480, height: 320 };
-    await expect(registerMedia(input, { userId: users.owner.id })).rejects.toMatchObject({
+    const input: RegisterMediaInput = { carId, kind: "photo", clientUploadId, variants, width: 480, height: 320 };
+    await expect(registerMedia(input, { userId: users.owner.id }, REQUEST_ID)).rejects.toMatchObject({
       code: "METADATA_PRESENT",
       message: "480 webp.vp8x-metadata",
     });
@@ -509,10 +520,11 @@ describe("registration (API-17)", () => {
     const variants = await uploadPhoto(clientUploadId, { "480": await solid(480, 320).jpeg().toBuffer() });
     const url = variants["480"] ?? "";
     const stored = path.join(storeRoot, new URL(url).pathname.split("/files/")[1] ?? "");
-    const register = (urls: Record<string, string>, extra: Record<string, unknown> = {}, userId = users.owner.id) =>
+    const register = (urls: Record<string, string>, extra: Partial<RegisterMediaInput> = {}, userId = users.owner.id) =>
       registerMedia(
         { carId, kind: "photo", clientUploadId, variants: urls, width: 480, height: 320, ...extra },
         { userId },
+        REQUEST_ID,
       );
 
     const foreignUpload = photoPath({ clientUploadId: crypto.randomUUID(), variant: "480", ext: "jpg" });
@@ -538,7 +550,16 @@ describe("registration (API-17)", () => {
   });
 
   it("refuses an upload no token was issued for", async () => {
-    const input = { carId, kind: "photo", clientUploadId: crypto.randomUUID(), variants: {}, width: 1, height: 1 };
-    await expect(registerMedia(input, { userId: users.owner.id })).rejects.toMatchObject({ code: "NOT_FOUND" });
+    const input: RegisterMediaInput = {
+      carId,
+      kind: "photo",
+      clientUploadId: crypto.randomUUID(),
+      variants: {},
+      width: 1,
+      height: 1,
+    };
+    await expect(registerMedia(input, { userId: users.owner.id }, REQUEST_ID)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
   });
 });

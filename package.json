@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run --project unit --coverage --reporter=default --reporter=json --outputFile.json=reports/vitest-unit.json",
-    "test:int": "vitest run --project integration --reporter=default --reporter=json --outputFile.json=reports/vitest-integration.json",
+    "test:int": "vitest run --project integration --project scale --reporter=default --reporter=json --outputFile.json=reports/vitest-integration.json",
     "e2e": "playwright test",
     "e2e:linux": "node scripts/e2e-linux.ts",
     "check:i18n": "node scripts/check-i18n.ts",

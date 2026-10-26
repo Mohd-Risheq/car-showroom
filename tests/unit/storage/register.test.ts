@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { StorageDriver } from "@/lib/storage/driver";
 import { registerMedia } from "@/lib/storage/register";
 import { uploadRepository } from "@/lib/storage/repository";
-import { type MediaExtension, RANDOM_SUFFIX_LENGTH, uploadPathname } from "@/lib/storage/rules";
+import { type MediaExtension, type MediaKind, RANDOM_SUFFIX_LENGTH, uploadPathname } from "@/lib/storage/rules";
 import { EXIF_WITH_GPS, solid } from "../../support/media";
 
 // API-17's storage checks (SEC-08, FR-32.2a, DECISIONS.md D-023) on a fake store with the real
@@ -35,6 +35,7 @@ vi.mock("@/lib/storage/driver", () => ({ getStorageDriver: () => fake.driver }))
 
 const CAR_ID = "0190f5a0-1111-7000-8000-000000000001";
 const USER_ID = "0190f5a0-2222-7000-8000-000000000002";
+const REQUEST_ID = "fra1::abc-123";
 const SUFFIX = "N".repeat(RANDOM_SUFFIX_LENGTH);
 
 type Staged = {
@@ -67,10 +68,11 @@ async function stage(files: Record<string, Buffer>, ext: MediaExtension = "jpg")
   return staged;
 }
 
-const register = (staged: Staged, size: { width: number; height: number }, kind = "photo") =>
+const register = (staged: Staged, size: { width: number; height: number }, kind: MediaKind = "photo") =>
   registerMedia(
     { carId: CAR_ID, kind, clientUploadId: staged.clientUploadId, variants: staged.variants, ...size },
     { userId: USER_ID },
+    REQUEST_ID,
   );
 
 const jpeg = (width: number, height: number) => solid(width, height).jpeg().toBuffer();
@@ -130,7 +132,7 @@ describe("registerMedia's storage checks", () => {
     expect(isStored(staged, "480")).toBe(true);
   });
 
-  it("still rejects when a file can't be deleted, and logs it once with the signed pathname", async () => {
+  it("still rejects when a file can't be deleted, and logs it once with the signed pathname and the request ID", async () => {
     const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     const staged = await stage({
       "480": await solid(480, 320).withExif(EXIF_WITH_GPS).jpeg().toBuffer(),
@@ -147,6 +149,7 @@ describe("registerMedia's storage checks", () => {
       rejection: "METADATA_PRESENT",
       pathname: staged.signed["480"],
       error: "Error: store unavailable",
+      requestId: REQUEST_ID,
     });
   });
 });

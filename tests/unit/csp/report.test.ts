@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   blockedSource,
   createReportHandler,
@@ -40,10 +40,18 @@ function post(body: string, contentType = "application/reports+json", headers: R
   });
 }
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+// The handler logs through lib/log, which writes a warning with console.warn
 function setup(random: () => number = () => 0) {
   const lines: string[] = [];
+  vi.spyOn(console, "warn").mockImplementation((line: unknown) => {
+    lines.push(String(line));
+  });
   let time = 0;
-  const POST = createReportHandler({ random, now: () => time, log: (line) => lines.push(line) });
+  const POST = createReportHandler({ random, now: () => time });
   return {
     POST,
     lines,

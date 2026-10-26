@@ -2,9 +2,9 @@ import "server-only";
 import { createHash, randomInt } from "node:crypto";
 import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { readCapped } from "@/lib/http/body";
 import type { StorageDriver } from "./driver";
 import { extensionOf, MEDIA_TYPES, RANDOM_SUFFIX_LENGTH, splitExtension } from "./rules";
-import { readCapped } from "./stream";
 import { verifyLocalClientToken } from "./token";
 
 // The local stand-in for Vercel Blob (BUILD-PLAN §6.3). Files live in the git-ignored

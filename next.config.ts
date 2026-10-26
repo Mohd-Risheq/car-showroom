@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   typedRoutes: true,
+  // The cached public functions' profile (SRS §11.4): writes refresh entries through their tags
+  cacheLife: {
+    catalog: { stale: 60, revalidate: 86_400, expire: 2_592_000 },
+  },
   experimental: {
     // Subresource Integrity on every framework script file (SRS §12.5)
     sri: { algorithm: "sha256" },

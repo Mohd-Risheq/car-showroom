@@ -1,5 +1,5 @@
-import { isAppLocale } from "./locales";
-import type { AppLocale } from "./locales";
+import { isAppLocale } from "./locales.ts";
+import type { AppLocale } from "./locales.ts";
 
 // The locale each language formats with (BR-02, BR-03), which next-intl takes as its own (D-040).
 // Arabic keeps Western digits and takes Levantine month names ("18 تشرين الأول 2026"). A bare "ar"

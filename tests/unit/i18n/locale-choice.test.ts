@@ -1,9 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { storeLocaleChoice } from "@/lib/i18n/locale-choice";
 import { LOCALE_COOKIE } from "@/lib/i18n/locale-cookie";
 
 // API-34: the visitor's choice of language, stored from the server for 365 days (FR-01.4, D-041),
-// from the site's own pages only (SEC-14), and for exactly ar or en (SEC-13)
+// from the site's own pages only (SEC-14), and for exactly ar or en (SEC-13). It logs nothing.
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 const SAME_ORIGIN = { "sec-fetch-site": "same-origin", "content-type": "application/json" };
 
@@ -76,5 +80,15 @@ describe("storeLocaleChoice", () => {
   it("refuses a body that isn't sent as JSON", async () => {
     const response = await choice('{"locale":"en"}', { ...SAME_ORIGIN, "content-type": "text/plain" });
     expect(await refusal(response)).toStrictEqual({ status: 400, code: "VALIDATION_ERROR", cookie: null });
+  });
+
+  it("logs nothing, not even a refusal (D-041)", async () => {
+    const lines = ["debug", "info", "warn", "error"].map((level) =>
+      vi.spyOn(console, level as "debug" | "info" | "warn" | "error").mockImplementation(() => {}),
+    );
+    expect((await choice('{"locale":"en"}', { ...SAME_ORIGIN, "sec-fetch-site": "cross-site" })).status).toBe(403);
+    expect((await choice('{"locale":"fr"}')).status).toBe(400);
+    expect((await choice('{"locale":"en"}')).status).toBe(204);
+    for (const line of lines) expect(line).not.toHaveBeenCalled();
   });
 });

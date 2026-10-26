@@ -1,7 +1,7 @@
 import "server-only";
 import { del } from "@vercel/blob";
+import { readCapped } from "@/lib/http/body";
 import type { StorageDriver } from "./driver";
-import { readCapped } from "./stream";
 
 // Vercel Blob, the public store. T-37 runs the real check behind gates 3, 4 and 6.
 export function createBlobStore(readWriteToken: string): StorageDriver {

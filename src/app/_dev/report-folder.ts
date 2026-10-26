@@ -3,7 +3,7 @@ import { randomBytes } from "node:crypto";
 import { appendFile, mkdir, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { isSameOriginRequest } from "@/lib/auth/same-origin";
-import { readCapped } from "@/lib/storage/stream";
+import { readCapped } from "@/lib/http/body";
 import { isMp4Start, type Mp4Part, mp4PartOf } from "./mp4-parts";
 import { DEV_REPORT_KINDS, type DevReportKind, type SavedReply } from "./report";
 

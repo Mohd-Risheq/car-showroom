@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import * as rootParams from "next/root-params";
 import { hasLocale, type IntlError, IntlErrorCode } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
+import { log } from "@/lib/log/logger";
 import { INTL_LOCALE, TIME_ZONE } from "./intl-locale";
 import type { AppLocale } from "./locales";
 import { routing } from "./routing";
@@ -36,6 +37,5 @@ export default getRequestConfig(async ({ locale }) => {
  * states). check:i18n fails CI on it first (FR-01.9). Any other error stays an error.
  */
 function logIntlError(error: IntlError) {
-  if (error.code === IntlErrorCode.MISSING_MESSAGE) console.warn(error.message);
-  else console.error(error);
+  log(error.code === IntlErrorCode.MISSING_MESSAGE ? "warn" : "error", error.code, { message: error.message });
 }

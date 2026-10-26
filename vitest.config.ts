@@ -1,9 +1,19 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
-// Two projects (SRS §16.1, BUILD-PLAN §6.1): `pnpm test` runs the unit project with the coverage
+// Three projects (SRS §16.1, BUILD-PLAN §6.1): `pnpm test` runs the unit project with the coverage
 // thresholds of NFR-MAINT-02, and `pnpm test:int` the integration project against the test
-// database, which alone reads .env.test.local.
+// database, then the scale project's benchmark there alone, as its timing would count the other
+// files' work. Those two alone read .env.test.local.
+const DATABASE_PROJECT = {
+  // Database tests always run the local store (SRS §16.1), in a temporary folder
+  env: { STORAGE_DRIVER: "local" },
+  setupFiles: ["./tests/support/load-env.ts", "./tests/support/storage-root.ts"],
+  // A Neon branch answers slower than the local proxy (T-37)
+  hookTimeout: 30_000,
+  testTimeout: 30_000,
+};
+
 export default defineConfig({
   resolve: {
     tsconfigPaths: true,
@@ -25,15 +35,16 @@ export default defineConfig({
       },
       {
         extends: true,
+        test: { name: "integration", include: ["tests/integration/**/*.test.{ts,tsx}"], ...DATABASE_PROJECT },
+      },
+      {
+        extends: true,
+        // A group of its own, so no other file runs beside the benchmark (NFR-SCALE-02, T-16)
         test: {
-          name: "integration",
-          include: ["tests/integration/**/*.test.{ts,tsx}"],
-          // Integration tests always run the local store (SRS §16.1), in a temporary folder
-          env: { STORAGE_DRIVER: "local" },
-          setupFiles: ["./tests/support/load-env.ts", "./tests/support/storage-root.ts"],
-          // A Neon branch answers slower than the local proxy (T-37)
-          hookTimeout: 30_000,
-          testTimeout: 30_000,
+          name: "scale",
+          include: ["tests/scale/**/*.test.ts"],
+          sequence: { groupOrder: 1 },
+          ...DATABASE_PROJECT,
         },
       },
     ],
@@ -65,12 +76,19 @@ export default defineConfig({
         "src/features/spin/ui/viewer.ts",
         "src/features/vin/ui/scanner.ts",
         "src/features/vin/ui/zxing.ts",
-        // Sessions and repositories need the database: pnpm test:int
-        "src/lib/db/**",
+        // The client, sessions and repositories need the database: pnpm test:int. What in src/lib/db
+        // runs without one, the schema module among it, is counted.
+        "src/lib/db/client.ts",
+        "src/lib/db/users.ts",
         "src/lib/auth/auth.ts",
         "src/lib/auth/users.ts",
         "src/lib/storage/repository.ts",
         "src/lib/storage/upload-token.ts",
+        "src/lib/rate-limit/store.ts",
+        // The Server Actions, whose guard, limiter and handlers run on the database: pnpm test:int
+        "src/features/*/server/actions.ts",
+        // The public reads' statements, which run on the database: pnpm test:int
+        "src/features/*/server/*-queries.ts",
         // Runs only inside Next.js: next/font's build-time transform
         "src/styles/fonts.ts",
       ],

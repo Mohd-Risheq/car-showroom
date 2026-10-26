@@ -3,6 +3,7 @@ import { auth } from "./auth";
 import type { UserRole } from "./roles";
 
 type NewPasswordUser = {
+  dealerId: string;
   email: string;
   name: string;
   password: string;
@@ -26,6 +27,7 @@ export async function createPasswordUser(input: NewPasswordUser): Promise<Create
       email: input.email,
       name: input.name,
       emailVerified: false,
+      dealerId: input.dealerId,
       role: input.role,
       mustChangePassword: input.mustChangePassword,
       ...(input.tempPasswordExpiresAt ? { tempPasswordExpiresAt: input.tempPasswordExpiresAt } : {}),

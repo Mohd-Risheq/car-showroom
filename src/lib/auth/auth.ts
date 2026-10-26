@@ -2,9 +2,9 @@ import "server-only";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
-import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import * as schema from "@/lib/db/schema";
+import { findSessionUser } from "@/lib/db/users";
 import { hashPassword, verifyPassword } from "./password";
 import { USER_ROLES } from "./roles";
 
@@ -41,6 +41,8 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
+      // The guard reads the dealer and the role from the session, so both are returned (D-043)
+      dealerId: { type: "string", required: true, input: false },
       role: { type: [...USER_ROLES], required: true, defaultValue: "staff", input: false },
       mustChangePassword: { type: "boolean", required: true, defaultValue: true, input: false },
       disabledAt: { type: "date", required: false, input: false },
@@ -55,11 +57,7 @@ export const auth = betterAuth({
       create: {
         // No IP address is stored (SEC-02), and a disabled user gets no session (ENT-User)
         before: async (session) => {
-          const [sessionUser] = await db
-            .select({ disabledAt: schema.user.disabledAt })
-            .from(schema.user)
-            .where(eq(schema.user.id, session.userId))
-            .limit(1);
+          const sessionUser = await findSessionUser(session.userId);
           if (!sessionUser || sessionUser.disabledAt) return false;
           return { data: { ipAddress: null } };
         },
@@ -67,7 +65,8 @@ export const auth = betterAuth({
     },
   },
   advanced: {
-    database: { generateId: "uuid" }, // the database generates uuid ids (SRS §6)
+    // The library leaves ids to the database, and Drizzle makes each a UUIDv7 first (SRS §6, D-043)
+    database: { generateId: "uuid" },
     // The library skips its origin and CSRF checks when NODE_ENV is test; keep them on everywhere
     disableOriginCheck: false,
   },
