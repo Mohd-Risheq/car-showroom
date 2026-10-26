@@ -55,10 +55,11 @@ jobs:
       - run: pnpm check:contrast
       - run: pnpm db:check
 
-      # Step 3
+      # Step 3. The scripts name their reporters, which leaves out Vitest's GitHub one, so it's added
+      # here: a failed test then shows on the run as an annotation, with its file, line and message.
       - uses: ./.github/actions/local-services
-      - run: pnpm test
-      - run: pnpm test:int
+      - run: pnpm test --reporter=github-actions
+      - run: pnpm test:int --reporter=github-actions
 
       # Step 4
       - run: pnpm build
