@@ -113,11 +113,13 @@ describe("a car's slug", () => {
   });
 });
 
-// The docs stay in the private repository, so these checks run where they are
+// The docs stay in the private repository, so these checks run where they are. A skipped describe
+// still runs its body to collect its tests, so the docs are read inside each test.
 const SEED = "docs/05-SEED-DATA.md";
 const SRS = "docs/02-SRS.md";
 
-describe.skipIf(!existsSync(SEED) || !existsSync(SRS))("the seed's cars", () => {
+/** The seed's 29 cars, each with the slug BR-16 makes from its record, and the docs they come from */
+function seedCars() {
   const seed = readFileSync(SEED, "utf8");
   const srs = readFileSync(SRS, "utf8");
 
@@ -147,8 +149,12 @@ describe.skipIf(!existsSync(SEED) || !existsSync(SRS))("the seed's cars", () => 
       }),
     }),
   );
+  return { seed, srs, makeNames, cars };
+}
 
+describe.skipIf(!existsSync(SEED) || !existsSync(SRS))("the seed's cars", () => {
   it("reads all 29 records, each make and model with its English name", () => {
+    const { makeNames, cars } = seedCars();
     expect(cars.map(({ record }) => record)).toStrictEqual(
       Array.from({ length: 29 }, (_, index) => `S${String(index + 1).padStart(2, "0")}`),
     );
@@ -157,6 +163,7 @@ describe.skipIf(!existsSync(SEED) || !existsSync(SRS))("the seed's cars", () => 
   });
 
   it("gives each a well-formed, unique slug", () => {
+    const { cars } = seedCars();
     for (const { record, slug } of cars) {
       expect(slug, record).toMatch(SLUG_FORMAT);
       expect(slug.length, record).toBeLessThanOrEqual(SLUG_MAX_LENGTH);
@@ -165,6 +172,7 @@ describe.skipIf(!existsSync(SEED) || !existsSync(SRS))("the seed's cars", () => 
   });
 
   it("gives each car the slug the docs write for it", () => {
+    const { seed, srs, cars } = seedCars();
     const written = new Set(
       [seed, srs].flatMap((text) => text.match(/\b\d{4}-[a-z0-9-]+-[a-z]{2}-[2-9a-hjkmnp-z]{4}\b/g) ?? []),
     );
