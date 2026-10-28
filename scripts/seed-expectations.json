@@ -1,0 +1,398 @@
+{
+  "cars": {
+    "s01": {
+      "status": "published",
+      "published": -9,
+      "sold": null,
+      "mileageKm": 84000,
+      "priceJod": 47500,
+      "fuelType": "gasoline",
+      "regionalSpecs": "gcc",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s02": {
+      "status": "published",
+      "published": -14,
+      "sold": null,
+      "mileageKm": 71000,
+      "priceJod": 19800,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 4.5
+      }
+    },
+    "s03": {
+      "status": "published",
+      "published": -21,
+      "sold": null,
+      "mileageKm": 98000,
+      "priceJod": 14500,
+      "fuelType": "hybrid",
+      "regionalSpecs": "agency",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s04": {
+      "status": "published",
+      "published": -2,
+      "sold": null,
+      "mileageKm": 46000,
+      "priceJod": 29500,
+      "fuelType": "electric",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "kwhPer100km": 17.2
+      }
+    },
+    "s05": {
+      "status": "published",
+      "published": -33,
+      "sold": null,
+      "mileageKm": 118000,
+      "priceJod": 11900,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5.6
+      }
+    },
+    "s06": {
+      "status": "published",
+      "published": -47,
+      "sold": null,
+      "mileageKm": 135000,
+      "priceJod": 10900,
+      "fuelType": "hybrid",
+      "regionalSpecs": "korean",
+      "inspection": {
+        "filled": 9
+      },
+      "epa": null
+    },
+    "s07": {
+      "status": "published",
+      "published": -26,
+      "sold": null,
+      "mileageKm": 102000,
+      "priceJod": 12400,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 4.5
+      }
+    },
+    "s08": {
+      "status": "reserved",
+      "published": -38,
+      "sold": null,
+      "mileageKm": 126000,
+      "priceJod": 10200,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5.6
+      }
+    },
+    "s09": {
+      "status": "published",
+      "published": -19,
+      "sold": null,
+      "mileageKm": 88000,
+      "priceJod": 12600,
+      "fuelType": "plugin_hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5.6,
+        "kwhPer100km": 21.7
+      }
+    },
+    "s10": {
+      "status": "published",
+      "published": -11,
+      "sold": null,
+      "mileageKm": 58000,
+      "priceJod": 20900,
+      "fuelType": "electric",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "kwhPer100km": 14.8
+      }
+    },
+    "s11": {
+      "status": "sold",
+      "published": -40,
+      "sold": -5,
+      "mileageKm": 79000,
+      "priceJod": 22500,
+      "fuelType": "electric",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "kwhPer100km": 17.4
+      }
+    },
+    "s12": {
+      "status": "published",
+      "published": -5,
+      "sold": null,
+      "mileageKm": 39000,
+      "priceJod": 18900,
+      "fuelType": "electric",
+      "regionalSpecs": "chinese",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s13": {
+      "status": "published",
+      "published": -16,
+      "sold": null,
+      "mileageKm": 18000,
+      "priceJod": 21500,
+      "fuelType": "electric",
+      "regionalSpecs": "agency",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s14": {
+      "status": "published",
+      "published": -29,
+      "sold": null,
+      "mileageKm": 132000,
+      "priceJod": 18700,
+      "fuelType": "gasoline",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 11.2
+      }
+    },
+    "s15": {
+      "status": "published",
+      "published": -12,
+      "sold": null,
+      "mileageKm": 61000,
+      "priceJod": 16900,
+      "fuelType": "gasoline",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 9.8
+      }
+    },
+    "s16": {
+      "status": "reserved",
+      "published": -23,
+      "sold": null,
+      "mileageKm": 94000,
+      "priceJod": 17300,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5
+      }
+    },
+    "s17": {
+      "status": "published",
+      "published": -6,
+      "sold": null,
+      "mileageKm": 67000,
+      "priceJod": 24900,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5.9
+      }
+    },
+    "s18": {
+      "status": "published",
+      "published": -35,
+      "sold": null,
+      "mileageKm": 109000,
+      "priceJod": 19500,
+      "fuelType": "hybrid",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 5.9
+      }
+    },
+    "s19": {
+      "status": "published",
+      "published": -18,
+      "sold": null,
+      "mileageKm": 72000,
+      "priceJod": 23500,
+      "fuelType": "gasoline",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 9
+      }
+    },
+    "s20": {
+      "status": "sold",
+      "published": -63,
+      "sold": -12,
+      "mileageKm": 97000,
+      "priceJod": 11800,
+      "fuelType": "plugin_hybrid",
+      "regionalSpecs": "american",
+      "inspection": {
+        "filled": 13
+      },
+      "epa": {
+        "lPer100km": 5.6,
+        "kwhPer100km": 19.3
+      }
+    },
+    "s21": {
+      "status": "published",
+      "published": -24,
+      "sold": null,
+      "mileageKm": 86000,
+      "priceJod": 11600,
+      "fuelType": "gasoline",
+      "regionalSpecs": "american",
+      "inspection": "complete",
+      "epa": {
+        "lPer100km": 7.4
+      }
+    },
+    "s22": {
+      "status": "published",
+      "published": -52,
+      "sold": null,
+      "mileageKm": 178000,
+      "priceJod": 7900,
+      "fuelType": "gasoline",
+      "regionalSpecs": "korean",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s23": {
+      "status": "published",
+      "published": -41,
+      "sold": null,
+      "mileageKm": 95000,
+      "priceJod": 6400,
+      "fuelType": "gasoline",
+      "regionalSpecs": "agency",
+      "inspection": "none",
+      "epa": null
+    },
+    "s24": {
+      "status": "published",
+      "published": -58,
+      "sold": null,
+      "mileageKm": 168000,
+      "priceJod": 5900,
+      "fuelType": "gasoline",
+      "regionalSpecs": "agency",
+      "inspection": {
+        "filled": 3
+      },
+      "epa": null
+    },
+    "s25": {
+      "status": "published",
+      "published": -15,
+      "sold": null,
+      "mileageKm": 104000,
+      "priceJod": 17400,
+      "fuelType": "diesel",
+      "regionalSpecs": "korean",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s26": {
+      "status": "published",
+      "published": -31,
+      "sold": null,
+      "mileageKm": 121000,
+      "priceJod": 22900,
+      "fuelType": "diesel",
+      "regionalSpecs": "agency",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s27": {
+      "status": "published",
+      "published": -44,
+      "sold": null,
+      "mileageKm": 156000,
+      "priceJod": 15800,
+      "fuelType": "diesel",
+      "regionalSpecs": "agency",
+      "inspection": {
+        "filled": 13
+      },
+      "epa": null
+    },
+    "s28": {
+      "status": "published",
+      "published": -1,
+      "sold": null,
+      "mileageKm": 38000,
+      "priceJod": 10900,
+      "fuelType": "gasoline",
+      "regionalSpecs": "gcc",
+      "inspection": {
+        "filled": 13
+      },
+      "epa": null
+    },
+    "s29": {
+      "status": "draft",
+      "published": null,
+      "sold": null,
+      "mileageKm": 112000,
+      "priceJod": null,
+      "fuelType": "gasoline",
+      "regionalSpecs": "agency",
+      "inspection": "none",
+      "epa": null
+    }
+  },
+  "mix": {
+    "fuel": {
+      "hybrid": 9,
+      "electric": 5,
+      "plugin_hybrid": 2,
+      "gasoline": 10,
+      "diesel": 3
+    },
+    "body": {
+      "sedan": 15,
+      "suv": 8,
+      "hatchback": 3,
+      "pickup": 1,
+      "van": 1,
+      "coupe": 1
+    }
+  },
+  "publicWithCompleteInspection": 21,
+  "badges": {
+    "new": ["s04", "s12", "s17", "s28"],
+    "priceReduced": ["s05", "s08", "s18", "s22"],
+    "priceDropped": ["s08", "s18"]
+  },
+  "contradictions": [
+    {
+      "car": "s27",
+      "panel": "hood"
+    }
+  ],
+  "importRulesFrom": "2025-11-01",
+  "importException": "s28"
+}

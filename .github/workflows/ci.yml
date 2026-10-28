@@ -53,6 +53,7 @@ jobs:
       - run: pnpm check:i18n
       - run: pnpm check:dashes
       - run: pnpm check:contrast
+      - run: pnpm check:seed
       - run: pnpm db:check
 
       # Step 3. The scripts name their reporters, which leaves out Vitest's GitHub one, so it's added

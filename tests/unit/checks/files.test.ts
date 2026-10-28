@@ -2,10 +2,10 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
-import { errorMessage, readJson, ROOT, shown } from "../../../scripts/checks/files.ts";
+import { errorMessage, readJson, readText, ROOT, shown } from "../../../scripts/checks/files.ts";
 
-// How the check scripts read their JSON files: a value, or one line naming the file and what is
-// wrong with it, never a thrown error
+// How the check scripts read their files: a value, or one line naming the file and what is wrong
+// with it, never a thrown error
 
 const folder = mkdtempSync(path.join(tmpdir(), "muftah-check-files-"));
 afterAll(() => rmSync(folder, { recursive: true, force: true }));
@@ -15,6 +15,17 @@ function file(name: string, text: string): string {
   writeFileSync(full, text);
   return full;
 }
+
+describe("readText", () => {
+  it("gives a file's text, and names a file that is missing or can't be read", () => {
+    expect(readText(file("note.md", "| `amman` |\n"))).toStrictEqual({ text: "| `amman` |\n" });
+    const missing = path.join(folder, "missing.md");
+    expect(readText(missing)).toStrictEqual({ problem: `${shown(missing)} is missing` });
+    const inner = path.join(folder, "a-folder.md");
+    mkdirSync(inner);
+    expect(readText(inner)).toStrictEqual({ problem: expect.stringMatching(/^.*a-folder\.md can't be read \(EISDIR/) });
+  });
+});
 
 describe("readJson", () => {
   it("gives a file's value", () => {

@@ -88,9 +88,10 @@ const percent = integer({ ...PERCENT, issue: { key: "validation.percent" } });
 
 /**
  * The fields of steps 1 to 4, each of which a draft may leave empty, save the payment methods and
- * a field whose column can't be
+ * a field whose column can't be. The seed's records hold them all but the VIN and the licence expiry
+ * (src/lib/validation/seed.ts).
  */
-function carFields(now: Date) {
+export function carFields(now: Date) {
   return z.object({
     // Step 1: identity
     vin: orNull(vin),
@@ -198,8 +199,13 @@ export function carPairIssues(car: CarPairFields): FieldErrors {
 }
 
 // A seed car's ages, which the nightly job turns back into dates, and its price changes' prices,
-// each within VR-01 as a price change's row holds it (05-SEED-DATA §9.1, as written there)
-const daysAgo = z.int().max(0);
+// each within VR-01 as a price change's row holds it: 05-SEED-DATA §9.1's schema, with every offset
+// held within a century of today, as one much further off would give no date
+const SEED_OFFSET_DAYS_MAX = 36_525;
+const SEED_OFFSET_MONTHS_MAX = 1200;
+
+/** Days before today, as a seed car's ages are written */
+export const daysAgo = z.int().min(-SEED_OFFSET_DAYS_MAX).max(0);
 const changedPrice = z.int().min(PRICE_JOD.min).max(PRICE_JOD.max);
 
 export const seedOffsetsSchema = z.object({
@@ -207,7 +213,7 @@ export const seedOffsetsSchema = z.object({
   sold: daysAgo.optional(),
   priceChanges: z.array(z.object({ days: daysAgo, from: changedPrice, to: changedPrice })).default([]),
   inspectedOn: daysAgo.optional(),
-  licenseExpiryMonths: z.int().min(1).optional(),
+  licenseExpiryMonths: z.int().min(1).max(SEED_OFFSET_MONTHS_MAX).optional(),
   milestones: z
     .object({
       shipped: daysAgo.optional(),

@@ -1,0 +1,500 @@
+[
+  {
+    "seedKey": "s01",
+    "refCode": "MU-3HK8",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-land-cruiser",
+      "trim": "GXR",
+      "modelYear": 2019,
+      "bodyType": "suv",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "four_wd",
+      "engineCc": 3956,
+      "powerHp": 271,
+      "seats": 8,
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorNameEn": "White Pearl",
+      "exteriorColorHex": "#f2f1ec",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameAr": "قماش بيج",
+      "interiorColorNameEn": "Beige fabric",
+      "lengthMm": 4950,
+      "wheelbaseMm": 2850,
+      "regionalSpecs": "gcc",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": [
+        "cash",
+        "instalments"
+      ],
+      "condition": "used",
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "mileageKm": 84000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "front_sensors",
+        "rear_sensors",
+        "media_screen",
+        "abs",
+        "tpms",
+        "rear_camera",
+        "diff_lock",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 47500,
+      "descriptionAr": "سيارة للاختبار، محرك (ماتور) 4.0 V6، ممشى 84,000 كم. المحرك بحالة جيدة.",
+      "descriptionEn": "A test car with the 4.0 V6 and 84,000 km.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 13.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -9,
+      "inspectedOn": -11,
+      "licenseExpiryMonths": 5,
+      "priceChanges": [],
+      "milestones": {
+        "inspected": -11,
+        "in_showroom": -9
+      }
+    },
+    "inspection": {
+      "originalMicrons": [
+        98,
+        136
+      ],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound",
+          "noteEn": "Serviced at 80,000 km",
+          "noteAr": "تمت صيانته عند 80,000 كم"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "touch_up",
+          "microns": null,
+          "noteEn": "Scuff on the corner touched up",
+          "noteAr": "خدش على الزاوية تم تجميله"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 127,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "toyota_city",
+        "month": "2018-12"
+      },
+      {
+        "type": "first_sold",
+        "place": "dubai",
+        "month": "2019-02"
+      },
+      {
+        "type": "shipped",
+        "place": "dubai",
+        "month": "2024-01",
+        "noteEn": "By road",
+        "noteAr": "برًا"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2024-01"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2024-02"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s02",
+    "refCode": "MU-7KRA",
+    "status": "sold",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "tesla",
+      "modelKey": "tesla-model-3",
+      "trim": "Long Range",
+      "modelYear": 2020,
+      "bodyType": "sedan",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "awd",
+      "engineCc": null,
+      "powerHp": 346,
+      "seats": 5,
+      "exteriorColorNameAr": "أسود",
+      "exteriorColorNameEn": "Solid Black",
+      "exteriorColorHex": "#16171a",
+      "paintFinish": "solid",
+      "colorFamily": "black",
+      "interiorColorNameAr": "جلد أسود",
+      "interiorColorNameEn": "Black leather",
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": [
+        "cash",
+        "instalments"
+      ],
+      "condition": "used",
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "mileageKm": 79000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "media_screen",
+        "abs",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 22500,
+      "descriptionAr": "سيارة كهربائية للاختبار، ممشى 79,000 كم.",
+      "descriptionEn": "An electric test car with 79,000 km.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 16.2,
+      "consumptionSource": "epa",
+      "batterySohPct": 91,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -40,
+      "sold": -5,
+      "inspectedOn": -42,
+      "licenseExpiryMonths": 7,
+      "priceChanges": [
+        {
+          "days": -20,
+          "from": 23500,
+          "to": 22500
+        }
+      ],
+      "milestones": {
+        "inspected": -42,
+        "in_showroom": -40
+      }
+    },
+    "inspection": {
+      "originalMicrons": [
+        100,
+        130
+      ],
+      "mechanical": {
+        "chassis": {
+          "state": "unknown"
+        },
+        "engine": {
+          "state": "unknown"
+        },
+        "gearbox": {
+          "state": "unknown"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": null,
+          "glass": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "repainted",
+          "microns": 230,
+          "noteEn": "Repainted after a light scrape",
+          "noteAr": "مرشوش بعد خدش خفيف"
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "fremont_ca",
+        "month": "2020-03"
+      },
+      {
+        "type": "shipped",
+        "place": "baltimore",
+        "month": "2023-05"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2023-06"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2023-07"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s03",
+    "refCode": "MU-SP8D",
+    "status": "draft",
+    "platesConfirmed": false,
+    "createdOffset": -2,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-camry",
+      "trim": "LE",
+      "modelYear": 2018,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 2494,
+      "powerHp": 203,
+      "seats": 5,
+      "exteriorColorNameAr": "رمادي داكن",
+      "exteriorColorNameEn": "Dark Gray",
+      "exteriorColorHex": "#45484b",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameAr": "قماش أسود",
+      "interiorColorNameEn": "Black fabric",
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": [
+        "cash"
+      ],
+      "condition": "used",
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "mileageKm": 112000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "abs"
+      ],
+      "priceJod": null,
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "recommendedOctane": 90,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": null,
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "licenseExpiryMonths": 4,
+      "priceChanges": [],
+      "milestones": {}
+    },
+    "inspection": null,
+    "journey": []
+  }
+]

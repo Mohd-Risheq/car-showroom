@@ -1,4 +1,4 @@
-// The project's folder, and how the check scripts read their JSON files: a file that is missing,
+// The project's folder, and how the check scripts read their files: a file that is missing,
 // unreadable or not JSON comes back as one line naming it, for the script to print, never as a
 // thrown error.
 import { readFileSync } from "node:fs";
@@ -13,17 +13,22 @@ export const shown = (file: string) => path.relative(ROOT, path.resolve(file));
 /** An error's message, or what was thrown, as text */
 export const errorMessage = (error: unknown) => (error instanceof Error ? error.message : String(error));
 
-/** A JSON file's value, or the problem that keeps it from being read */
-export function readJson(file: string): { json: unknown } | { problem: string } {
-  let text: string;
+/** A text file's content, or the problem that keeps it from being read */
+export function readText(file: string): { text: string } | { problem: string } {
   try {
-    text = readFileSync(file, "utf8");
+    return { text: readFileSync(file, "utf8") };
   } catch (error) {
     const missing = error instanceof Error && "code" in error && error.code === "ENOENT";
     return { problem: missing ? `${shown(file)} is missing` : `${shown(file)} can't be read (${errorMessage(error)})` };
   }
+}
+
+/** A JSON file's value, or the problem that keeps it from being read */
+export function readJson(file: string): { json: unknown } | { problem: string } {
+  const read = readText(file);
+  if ("problem" in read) return read;
   try {
-    return { json: JSON.parse(text) };
+    return { json: JSON.parse(read.text) };
   } catch (error) {
     return { problem: `${shown(file)}: not valid JSON (${errorMessage(error)})` };
   }

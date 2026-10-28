@@ -1,0 +1,206 @@
+{
+  "dealer": {
+    "slug": "muftah",
+    "refPrefix": "MU"
+  },
+  "brand": {
+    "brandNameAr": "مفتاح للسيارات",
+    "brandNameEn": "Muftah Motors",
+    "taglineAr": "شوف الفحص قبل ما تشوف السيارة",
+    "taglineEn": "See the inspection before you see the car.",
+    "storyAr": "قصة للاختبار.",
+    "storyEn": "A test story.",
+    "accentPreset": "scan_cyan"
+  },
+  "contact": {
+    "whatsappE164": "+962790000000",
+    "phoneE164": "+962790000000",
+    "email": "hello@muftah.example",
+    "addressAr": "طريق المطار، عمّان، الأردن",
+    "addressEn": "Airport Road, Amman, Jordan",
+    "lat": 31.9184,
+    "lng": 35.8591,
+    "social": {}
+  },
+  "hours": {
+    "hours": {
+      "sat": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "sun": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "mon": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "tue": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "wed": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "thu": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "fri": [
+        {
+          "open": "14:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ]
+    },
+    "ramadan": {
+      "start": "2027-02-08",
+      "end": "2027-03-09",
+      "hours": {
+        "sat": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "sun": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "mon": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "tue": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "wed": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "thu": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "fri": "closed"
+      }
+    },
+    "closures": [
+      {
+        "date": "2027-01-01",
+        "note_ar": "رأس السنة الميلادية",
+        "note_en": "New Year"
+      },
+      {
+        "date": "2026-12-25",
+        "note_ar": "عيد الميلاد المجيد",
+        "note_en": "Christmas"
+      }
+    ]
+  },
+  "prices": {
+    "fuelPrice90": 1.05,
+    "fuelPrice95": 1.36,
+    "fuelPrice98": 1.51,
+    "fuelPriceDiesel": 0.9,
+    "elecHomeOffpeakKwh": 0.108,
+    "elecHomePeakKwh": 0.16,
+    "elecPublicKwh": 0.133,
+    "baselineLPer100km": {
+      "suv": 11,
+      "sedan": 8,
+      "hatchback": 7,
+      "pickup": 12,
+      "coupe": 9,
+      "convertible": 9.5,
+      "van": 12,
+      "truck": 16
+    }
+  },
+  "pricesUpdatedAt": "2026-10-01",
+  "showcase": {
+    "heroCar": "s01",
+    "featuredCars": [
+      "s01"
+    ]
+  },
+  "advanced": {
+    "soldVisibleDays": 30,
+    "mileageBands": {
+      "low": 12000,
+      "high": 25000
+    },
+    "micronBands": {
+      "factoryMax": 180,
+      "refinishMax": 300
+    }
+  }
+}

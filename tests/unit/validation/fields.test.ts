@@ -4,6 +4,7 @@ import {
   calendarMonth,
   choices,
   decimal,
+  emailAddress,
   fraction,
   integer,
   orNull,
@@ -148,6 +149,27 @@ describe("text", () => {
   it("calls an empty value required", () => {
     expect(check(trim, "   ")).toStrictEqual({ key: "validation.required" });
     expect(check(trim, 12)).toStrictEqual({ key: "validation.invalid" });
+  });
+});
+
+describe("emailAddress", () => {
+  const email = emailAddress();
+
+  it("takes an address, trimmed, as written", () => {
+    expect(check(email, "  hello@Muftah.example ")).toBe("hello@Muftah.example");
+  });
+
+  it("refuses text that isn't an address, and one longer than 254 characters (VR-22)", () => {
+    const longest = `${"a".repeat(64)}@${"b".repeat(63)}.${"c".repeat(63)}.${"d".repeat(61)}`;
+    expect(longest).toHaveLength(254);
+    expect(check(email, longest)).toBe(longest);
+    for (const wrong of ["hello", "hello@", "@muftah.example", "hello muftah@example.com", `${longest}e`]) {
+      expect(check(email, wrong), wrong).toStrictEqual({ key: "validation.email" });
+    }
+  });
+
+  it("keeps an address printable", () => {
+    expect(check(email, `hello${char(7)}@muftah.example`)).toStrictEqual({ key: "validation.invalid" });
   });
 });
 

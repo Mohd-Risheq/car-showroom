@@ -7,6 +7,7 @@ import {
   calendarDate,
   decimal,
   distinct,
+  emailAddress,
   fraction,
   kilometres,
   latitude,
@@ -58,9 +59,6 @@ const phone = z.preprocess(
     .regex(/^\+[1-9]\d{7,14}$/, { error: "validation.phone" })
     .nullable(),
 );
-
-// VR-22: Zod's own pattern, the usual subset of RFC 5322, without quoted names or IP addresses
-const email = text({ max: 254, issue: { key: "validation.email" } }).pipe(z.email({ error: "validation.email" }));
 
 const SOCIAL_HOSTS = { instagram: "instagram.com", facebook: "facebook.com", tiktok: "tiktok.com" } as const;
 
@@ -115,7 +113,7 @@ const contact = z
   .object({
     whatsappE164: phone,
     phoneE164: phone,
-    email: orNull(email),
+    email: orNull(emailAddress()),
     addressAr: orNull(text({ max: 200 })),
     addressEn: orNull(text({ max: 200 })),
     lat: orNull(latitude()),

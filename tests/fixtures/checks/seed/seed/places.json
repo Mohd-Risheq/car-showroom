@@ -1,0 +1,65 @@
+[
+  {
+    "key": "aqaba_port",
+    "nameEn": "Aqaba Port",
+    "nameAr": "ميناء العقبة",
+    "countryCode": "JO",
+    "kind": "port",
+    "lat": 29.4673,
+    "lng": 34.977
+  },
+  {
+    "key": "zarqa_free_zone",
+    "nameEn": "Zarqa Free Zone",
+    "nameAr": "المنطقة الحرة في الزرقاء",
+    "countryCode": "JO",
+    "kind": "free_zone",
+    "lat": 32.0972,
+    "lng": 36.2177
+  },
+  {
+    "key": "amman",
+    "nameEn": "Amman",
+    "nameAr": "عمّان",
+    "countryCode": "JO",
+    "kind": "city",
+    "lat": 31.9516,
+    "lng": 35.924
+  },
+  {
+    "key": "baltimore",
+    "nameEn": "Baltimore",
+    "nameAr": "بالتيمور",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 39.2566,
+    "lng": -76.5322
+  },
+  {
+    "key": "dubai",
+    "nameEn": "Dubai",
+    "nameAr": "دبي",
+    "countryCode": "AE",
+    "kind": "city",
+    "lat": 25.0743,
+    "lng": 55.1886
+  },
+  {
+    "key": "toyota_city",
+    "nameEn": "Toyota City",
+    "nameAr": "مدينة تويوتا",
+    "countryCode": "JP",
+    "kind": "plant",
+    "lat": 35.0835,
+    "lng": 137.1567
+  },
+  {
+    "key": "fremont_ca",
+    "nameEn": "Fremont, California",
+    "nameAr": "فريمونت، كاليفورنيا",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 37.5483,
+    "lng": -121.9886
+  }
+]

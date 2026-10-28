@@ -1,0 +1,5982 @@
+[
+  {
+    "seedKey": "s01",
+    "refCode": "MU-3HK8",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-land-cruiser",
+      "trim": "GXR",
+      "modelYear": 2019,
+      "bodyType": "suv",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "four_wd",
+      "engineCc": 3956,
+      "powerHp": 271,
+      "seats": 8,
+      "lengthMm": 4950,
+      "wheelbaseMm": 2850,
+      "exteriorColorNameEn": "White Pearl",
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorHex": "#f2f1ec",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Beige fabric",
+      "interiorColorNameAr": "قماش بيج",
+      "regionalSpecs": "gcc",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 84000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "folding_mirrors",
+        "electric_mirrors",
+        "spare_tyre",
+        "alloy_wheels",
+        "front_sensors",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "tpms",
+        "rear_camera",
+        "diff_lock",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 47500,
+      "descriptionEn": "GCC Land Cruiser GXR with the 4.0 V6 and 84,000 km. First owner in Dubai, then one owner in Amman since 2024. Every metal panel is in factory paint, and the rear bumper corner has a cosmetic touch-up. Viewing at the showroom on Airport Road, or ask for a walkaround video on WhatsApp.",
+      "descriptionAr": "لاندكروزر GXR مواصفات خليجية، محرك (ماتور) 4.0 V6، ممشى 84,000 كم. المالك الأول في دبي، ثم مالك واحد في عمّان منذ 2024. جميع القطع المعدنية دهان وكالة، وعلى زاوية الصدام الخلفي رشة تجميلية. المعاينة في المعرض على طريق المطار، ويمكن طلب فيديو للسيارة عبر واتساب.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 13.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -9,
+      "priceChanges": [],
+      "inspectedOn": -11,
+      "licenseExpiryMonths": 5,
+      "milestones": {
+        "inspected": -11,
+        "in_showroom": -9
+      }
+    },
+    "inspection": {
+      "originalMicrons": [98, 136],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "touch_up",
+          "microns": null,
+          "noteEn": "Scuff on the corner touched up",
+          "noteAr": "خدش على الزاوية تم تجميله"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 127,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "toyota_city",
+        "month": "2018-12"
+      },
+      {
+        "type": "first_sold",
+        "place": "dubai",
+        "month": "2019-02"
+      },
+      {
+        "type": "shipped",
+        "place": "dubai",
+        "month": "2024-01",
+        "noteEn": "By road through Saudi Arabia",
+        "noteAr": "برًا عبر السعودية"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2024-01",
+        "noteEn": "Entered Jordan at the Al-Omari crossing",
+        "noteAr": "دخلت الأردن عبر منفذ العمري"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2024-02"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s02",
+    "refCode": "MU-7MD4",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-camry",
+      "trim": "Hybrid LE",
+      "modelYear": 2019,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 2487,
+      "powerHp": 208,
+      "seats": 5,
+      "lengthMm": 4885,
+      "wheelbaseMm": 2825,
+      "exteriorColorNameEn": "Celestial Silver",
+      "exteriorColorNameAr": "فضي",
+      "exteriorColorHex": "#b9bcc0",
+      "paintFinish": "metallic",
+      "colorFamily": "silver",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 71000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "carplay",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 19800,
+      "descriptionEn": "Camry Hybrid LE with American specs and 71,000 km. Bought at an insurance auction in Houston with a clean title after a parking scrape on the front bumper, which was repainted. One small chip on the right front fender is touched up, and the rest is factory paint. Adaptive cruise control and lane departure alert.",
+      "descriptionAr": "كامري هايبرد LE مواصفات أمريكية، ممشى 71,000 كم. اشتُريت من مزاد تأمين في هيوستن بسجل نظيف بعد خدش في الصدام الأمامي تم رشه. على الرفرف الأمامي الأيمن رشة تجميلية صغيرة، وباقي السيارة دهان وكالة. مزودة بمثبت سرعة ذكي وتنبيه مغادرة المسار.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 4.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -14,
+      "priceChanges": [],
+      "inspectedOn": -16,
+      "licenseExpiryMonths": 9,
+      "milestones": {
+        "inspected": -16,
+        "in_showroom": -14
+      }
+    },
+    "inspection": {
+      "originalMicrons": [102, 131],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "repainted",
+          "microns": null,
+          "noteEn": "Parking scrape repainted",
+          "noteAr": "خدش اصطفاف تم رشه"
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 124,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "touch_up",
+          "microns": 210,
+          "noteEn": "Small chip touched up",
+          "noteAr": "رشة تجميلية لنقرة صغيرة"
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "georgetown_ky",
+        "month": "2018-11"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_tx",
+        "month": "2019-01"
+      },
+      {
+        "type": "auction",
+        "place": "us_tx",
+        "month": "2024-06",
+        "titleBrand": "clean",
+        "noteEn": "Insurance auction",
+        "noteAr": "مزاد تأمين",
+        "damageNoteEn": "Front bumper scrape",
+        "damageNoteAr": "خدش في الصدام الأمامي"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2024-07"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2024-08"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2024-08"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2024-09"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s03",
+    "refCode": "MU-24Q7",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-corolla",
+      "trim": "Hybrid",
+      "modelYear": 2021,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1798,
+      "powerHp": 121,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Gray",
+      "exteriorColorNameAr": "رمادي",
+      "exteriorColorHex": "#8a8d8f",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 98000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 14500,
+      "descriptionEn": "Corolla Hybrid from the local Toyota dealer, one owner, 98,000 km. All panels are in factory paint. Serviced at the agency; ask to see the service book.",
+      "descriptionAr": "كورولا هايبرد وارد وكالة، يد أولى، ممشى 98,000 كم. جميع القطع دهان وكالة. صيانة دورية في الوكالة، ويمكن الاطلاع على دفتر الصيانة.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 4.6,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -21,
+      "priceChanges": [],
+      "inspectedOn": -23,
+      "licenseExpiryMonths": 7,
+      "milestones": {
+        "inspected": -23,
+        "in_showroom": -21
+      }
+    },
+    "inspection": {
+      "originalMicrons": [95, 125],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 95,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "toyota_city",
+        "month": "2021-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2021-04"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2021-04"
+      },
+      {
+        "type": "first_sold",
+        "place": "amman",
+        "month": "2021-05"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s04",
+    "refCode": "MU-9TXE",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "tesla",
+      "modelKey": "tesla-model-y",
+      "trim": "Long Range",
+      "modelYear": 2022,
+      "bodyType": "suv",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "awd",
+      "engineCc": 0,
+      "powerHp": 384,
+      "seats": 5,
+      "lengthMm": 4751,
+      "wheelbaseMm": 2890,
+      "exteriorColorNameEn": "Pearl White",
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorHex": "#f2f3f2",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Black",
+      "interiorColorNameAr": "أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 46000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "memory_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "folding_mirrors",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "panoramic_roof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "blind_spot",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 29500,
+      "descriptionEn": "Model Y Long Range with dual motors and 46,000 km. Battery health 93% from a diagnostic scan. The rear left door was repaired after a small ding and repainted. Customs cleared in August 2025.",
+      "descriptionAr": "تسلا موديل Y لونج رينج، دفع كلي بمحركين، ممشى 46,000 كم. صحة البطارية 93% حسب فحص الكمبيوتر. الباب الخلفي الأيسر تم إصلاح طعجة صغيرة فيه ورشه. تم تخليصها جمركيًا في آب 2025.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 17.2,
+      "consumptionSource": "epa",
+      "batterySohPct": 93,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -2,
+      "priceChanges": [],
+      "inspectedOn": -4,
+      "licenseExpiryMonths": 11,
+      "milestones": {
+        "inspected": -4,
+        "in_showroom": -2
+      }
+    },
+    "inspection": {
+      "originalMicrons": [100, 130],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": null,
+          "glass": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 129,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 130,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "repainted",
+          "microns": 245,
+          "noteEn": "Door ding repaired and repainted",
+          "noteAr": "طعجة صغيرة تم إصلاحها ورشها"
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 100,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "fremont_ca",
+        "month": "2022-03"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ca",
+        "month": "2022-04"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2025-06"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2025-07"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2025-08"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s05",
+    "refCode": "MU-5C3R",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "hyundai",
+      "modelKey": "hyundai-sonata",
+      "trim": "Hybrid SE",
+      "modelYear": 2017,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 193,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "White",
+      "exteriorColorNameAr": "أبيض",
+      "exteriorColorHex": "#f3f3f1",
+      "paintFinish": "solid",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Gray fabric",
+      "interiorColorNameAr": "قماش رمادي",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 118000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 11900,
+      "descriptionEn": "Sonata Hybrid SE with a salvage history: a front end collision in the US in 2019, repaired before it was registered in Jordan. The hood and front bumper are new, both front fenders are repainted, and the front chassis rails were straightened and aligned within spec. Engine and gearbox sound. Priced for its history.",
+      "descriptionAr": "سوناتا هايبرد SE بسجل سالفج: حادث أمامي في أمريكا عام 2019، وتم إصلاحها قبل ترخيصها في الأردن. الكبوت والصدام الأمامي جديدان، والرفرفان الأماميان مرشوشان، وتم تعديل عوارض الهيكل الأمامية (الشاصيات الأمامية) ضمن المواصفات. المحرك (الماتور) وناقل الحركة (الجير) سليمان. السعر يراعي تاريخ السيارة.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.6,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -33,
+      "priceChanges": [
+        {
+          "days": -20,
+          "from": 12400,
+          "to": 11900
+        }
+      ],
+      "inspectedOn": -35,
+      "licenseExpiryMonths": 2,
+      "milestones": {
+        "inspected": -35,
+        "in_showroom": -33
+      }
+    },
+    "inspection": {
+      "originalMicrons": [104, 138],
+      "mechanical": {
+        "chassis": {
+          "state": "notes",
+          "noteEn": "Front chassis rails straightened and aligned within spec",
+          "noteAr": "تم تعديل عوارض الهيكل الأمامية (الشاصيات الأمامية) ضمن المواصفات"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "replaced",
+          "microns": null,
+          "noteEn": "New bumper after the 2019 collision",
+          "noteAr": "صدام جديد بعد حادث 2019"
+        },
+        {
+          "panelId": "hood",
+          "state": "replaced",
+          "microns": 190,
+          "noteEn": "New hood, painted to match",
+          "noteAr": "كبوت جديد مدهون بنفس اللون"
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "repainted",
+          "microns": 260
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "repainted",
+          "microns": 240
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 129,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 137,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 133,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "asan",
+        "month": "2017-01"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ga",
+        "month": "2017-03"
+      },
+      {
+        "type": "auction",
+        "place": "us_ga",
+        "month": "2019-04",
+        "titleBrand": "salvage",
+        "damageNoteEn": "Front end collision",
+        "damageNoteAr": "حادث أمامي"
+      },
+      {
+        "type": "shipped",
+        "place": "savannah",
+        "month": "2019-05"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2019-06"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2019-06"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2019-08"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s06",
+    "refCode": "MU-8HVN",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "kia",
+      "modelKey": "kia-optima",
+      "trim": "Hybrid",
+      "modelYear": 2016,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 193,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Silver",
+      "exteriorColorNameAr": "فضي",
+      "exteriorColorHex": "#bdc0c2",
+      "paintFinish": "metallic",
+      "colorFamily": "silver",
+      "interiorColorNameEn": "Black leather",
+      "interiorColorNameAr": "جلد أسود",
+      "regionalSpecs": "korean",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 135000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "navigation",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 10900,
+      "descriptionEn": "Optima Hybrid imported from Korea, where it was sold as the K5 Hybrid. 135,000 km. The inspection is partial so far: seven panels checked in factory paint, and the engine and gearbox are sound. Message us for the remaining panels.",
+      "descriptionAr": "أوبتيما هايبرد وارد كوريا، وتُباع هناك باسم K5 هايبرد. ممشى 135,000 كم. الفحص جزئي حتى الآن: سبع قطع مفحوصة دهان وكالة، والمحرك (الماتور) وناقل الحركة (الجير) سليمان. يمكن مراسلتنا لمعرفة نتيجة باقي القطع.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.9,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -47,
+      "priceChanges": [],
+      "inspectedOn": -49,
+      "licenseExpiryMonths": 4,
+      "milestones": {
+        "inspected": -49,
+        "in_showroom": -47
+      }
+    },
+    "inspection": {
+      "originalMicrons": [108, 140],
+      "mechanical": {
+        "chassis": {
+          "state": "unknown"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 129,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 131,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 117,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "unknown",
+          "microns": null
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "hwaseong",
+        "month": "2016-01"
+      },
+      {
+        "type": "first_sold",
+        "place": "seoul",
+        "month": "2016-03"
+      },
+      {
+        "type": "shipped",
+        "place": "incheon",
+        "month": "2020-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2020-03"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2020-03"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2020-04"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s07",
+    "refCode": "MU-3PRZ",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-prius",
+      "trim": null,
+      "modelYear": 2017,
+      "bodyType": "hatchback",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1798,
+      "powerHp": 121,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Blue",
+      "exteriorColorNameAr": "أزرق",
+      "exteriorColorHex": "#2e5b9a",
+      "paintFinish": "metallic",
+      "colorFamily": "blue",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 102000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 12400,
+      "descriptionEn": "Prius with American specs and 102,000 km. Hybrid battery health 88% from a diagnostic scan. The rear bumper was replaced and the hatch has a touch-up. Rated at 4.5 L/100 km by the EPA.",
+      "descriptionAr": "بريوس مواصفات أمريكية، ممشى 102,000 كم. صحة بطارية الهايبرد 88% حسب فحص الكمبيوتر. الصدام الخلفي مبدل وعلى الباب الخلفي رشة تجميلية. الاستهلاك 4.5 لتر لكل 100 كم حسب التصنيف الأمريكي الرسمي.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 4.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": 88,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -26,
+      "priceChanges": [],
+      "inspectedOn": -28,
+      "licenseExpiryMonths": 10,
+      "milestones": {
+        "inspected": -28,
+        "in_showroom": -26
+      }
+    },
+    "inspection": {
+      "originalMicrons": [96, 128],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "touch_up",
+          "microns": 205,
+          "noteEn": "Touch-up on the hatch edge",
+          "noteAr": "رشة تجميلية على طرف الباب الخلفي"
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "replaced",
+          "microns": null,
+          "noteEn": "Replaced with a new part",
+          "noteAr": "مبدل بقطعة جديدة"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 97,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "toyota_city",
+        "month": "2016-08"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_nj",
+        "month": "2016-10"
+      },
+      {
+        "type": "auction",
+        "place": "us_nj",
+        "month": "2021-12",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "newark",
+        "month": "2022-01"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2022-02"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2022-02"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2022-03"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s08",
+    "refCode": "MU-4FHE",
+    "status": "reserved",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "ford",
+      "modelKey": "ford-fusion",
+      "trim": "Hybrid SE",
+      "modelYear": 2017,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 188,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Magnetic Gray",
+      "exteriorColorNameAr": "رمادي داكن",
+      "exteriorColorHex": "#5e6266",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 126000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 10200,
+      "descriptionEn": "Fusion Hybrid SE with 126,000 km. Both left doors were repainted after a side scrape, and it was bought at an insurance auction with a clean title. There is a light fluid seep at the transmission pan gasket, with no warning lights.",
+      "descriptionAr": "فيوجن هايبرد SE، ممشى 126,000 كم. البابان الأيسران مرشوشان بعد خدش جانبي، واشتُريت من مزاد تأمين بسجل نظيف. يوجد تعريق خفيف في جوان كرتير ناقل الحركة (الجير)، ولا توجد إشارات تحذير.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.6,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -38,
+      "priceChanges": [
+        {
+          "days": -12,
+          "from": 10700,
+          "to": 10200
+        }
+      ],
+      "inspectedOn": -40,
+      "licenseExpiryMonths": 6,
+      "milestones": {
+        "inspected": -40,
+        "in_showroom": -38
+      }
+    },
+    "inspection": {
+      "originalMicrons": [101, 133],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "notes",
+          "noteEn": "Light fluid seep at the transmission pan gasket. No warning lights.",
+          "noteAr": "تعريق خفيف في جوان كرتير ناقل الحركة (الجير)، ولا توجد إشارات تحذير."
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 131,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "repainted",
+          "microns": 280,
+          "noteEn": "Side scrape repainted",
+          "noteAr": "خدش جانبي تم رشه"
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "repainted",
+          "microns": 265,
+          "noteEn": "Side scrape repainted",
+          "noteAr": "خدش جانبي تم رشه"
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 127,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "hermosillo",
+        "month": "2016-09"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_fl",
+        "month": "2016-12"
+      },
+      {
+        "type": "auction",
+        "place": "us_fl",
+        "month": "2021-03",
+        "titleBrand": "clean",
+        "noteEn": "Insurance auction",
+        "noteAr": "مزاد تأمين",
+        "damageNoteEn": "Left side doors scraped",
+        "damageNoteAr": "خدوش على البابين الأيسرين"
+      },
+      {
+        "type": "shipped",
+        "place": "jacksonville",
+        "month": "2021-04"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2021-05"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2021-05"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2021-06"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s09",
+    "refCode": "MU-6ENR",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "ford",
+      "modelKey": "ford-fusion",
+      "trim": "Energi Titanium",
+      "modelYear": 2018,
+      "bodyType": "sedan",
+      "fuelType": "plugin_hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 195,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "White Platinum",
+      "exteriorColorNameAr": "أبيض بلاتيني",
+      "exteriorColorHex": "#ecece7",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Black leather",
+      "interiorColorNameAr": "جلد أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 88000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "memory_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "folding_mirrors",
+        "electric_mirrors",
+        "alloy_wheels",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "navigation",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 12600,
+      "descriptionEn": "Fusion Energi Titanium plug-in hybrid with 88,000 km. It charges at home and drives about 30 km on electricity before the engine starts, in our own test. Battery health 82% from a diagnostic scan. All panels are in factory paint, with leather seats and navigation.",
+      "descriptionAr": "فيوجن إنرجي تيتانيوم هايبرد Plug-in، ممشى 88,000 كم. تُشحن في البيت وتسير نحو 30 كم على الكهرباء قبل تشغيل المحرك (الماتور) حسب تجربة المعرض. صحة البطارية 82% حسب فحص الكمبيوتر. جميع القطع دهان وكالة، مع فرش جلد ونظام ملاحة.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.6,
+      "consumptionKwhPer100km": 21.7,
+      "consumptionSource": "epa",
+      "batterySohPct": 82,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": 35
+    },
+    "seedOffsets": {
+      "published": -19,
+      "priceChanges": [],
+      "inspectedOn": -21,
+      "licenseExpiryMonths": 3,
+      "milestones": {
+        "inspected": -21,
+        "in_showroom": -19
+      }
+    },
+    "inspection": {
+      "originalMicrons": [99, 129],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 127,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "hermosillo",
+        "month": "2017-11"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_mi",
+        "month": "2018-01"
+      },
+      {
+        "type": "auction",
+        "place": "us_mi",
+        "month": "2023-07",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "baltimore",
+        "month": "2023-08"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2023-09"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2023-09"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2023-10"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s10",
+    "refCode": "MU-2M3S",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "tesla",
+      "modelKey": "tesla-model-3",
+      "trim": "Standard Range Plus",
+      "modelYear": 2021,
+      "bodyType": "sedan",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "rwd",
+      "engineCc": 0,
+      "powerHp": 263,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Midnight Silver",
+      "exteriorColorNameAr": "رمادي فضي داكن",
+      "exteriorColorHex": "#4b4e52",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black",
+      "interiorColorNameAr": "أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 58000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "panoramic_roof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "blind_spot",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 20900,
+      "descriptionEn": "Model 3 Standard Range Plus with rear-wheel drive and 58,000 km. Battery health 91% from a diagnostic scan. The right rear quarter panel was repainted. Rated at 14.8 kWh per 100 km by the EPA.",
+      "descriptionAr": "تسلا موديل 3 ستاندرد رينج بلس، دفع خلفي، ممشى 58,000 كم. صحة البطارية 91% حسب فحص الكمبيوتر. الرفرف الخلفي الأيمن مرشوش. الاستهلاك 14.8 كيلوواط ساعة لكل 100 كم حسب التصنيف الأمريكي الرسمي.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 14.8,
+      "consumptionSource": "epa",
+      "batterySohPct": 91,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -11,
+      "priceChanges": [],
+      "inspectedOn": -13,
+      "licenseExpiryMonths": 8,
+      "milestones": {
+        "inspected": -13,
+        "in_showroom": -11
+      }
+    },
+    "inspection": {
+      "originalMicrons": [97, 126],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": null,
+          "glass": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "repainted",
+          "microns": 230,
+          "noteEn": "Repainted after a light scrape",
+          "noteAr": "مرشوش بعد خدش خفيف"
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "fremont_ca",
+        "month": "2021-04"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ca",
+        "month": "2021-05"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2025-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2025-03"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2025-04"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s11",
+    "refCode": "MU-7KRA",
+    "status": "sold",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "tesla",
+      "modelKey": "tesla-model-3",
+      "trim": "Long Range",
+      "modelYear": 2020,
+      "bodyType": "sedan",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "awd",
+      "engineCc": 0,
+      "powerHp": 346,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Red",
+      "exteriorColorNameAr": "أحمر",
+      "exteriorColorHex": "#a2141e",
+      "paintFinish": "pearl",
+      "colorFamily": "red",
+      "interiorColorNameEn": "White",
+      "interiorColorNameAr": "أبيض",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 79000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "memory_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "panoramic_roof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "blind_spot",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 22500,
+      "descriptionEn": "Model 3 Long Range with dual motors, red with the white interior, 79,000 km. The front bumper was repainted, and every metal panel is in factory paint.",
+      "descriptionAr": "تسلا موديل 3 لونج رينج، دفع كلي بمحركين، لون أحمر مع فرش أبيض، ممشى 79,000 كم. الصدام الأمامي مرشوش، وجميع القطع المعدنية دهان وكالة.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 17.4,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -40,
+      "sold": -5,
+      "priceChanges": [],
+      "inspectedOn": -42,
+      "licenseExpiryMonths": 9,
+      "milestones": {
+        "inspected": -42,
+        "in_showroom": -40
+      }
+    },
+    "inspection": {
+      "originalMicrons": [100, 127],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "repainted",
+          "microns": null,
+          "noteEn": "Stone chips repainted",
+          "noteAr": "ضربات حصى تم رشها"
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": null,
+          "glass": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 100,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 124,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "fremont_ca",
+        "month": "2020-02"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_tx",
+        "month": "2020-03"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2023-12"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2024-01"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2024-01"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s12",
+    "refCode": "MU-8VWC",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "volkswagen",
+      "modelKey": "volkswagen-id4",
+      "trim": "Crozz Pure+",
+      "modelYear": 2022,
+      "bodyType": "suv",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "rwd",
+      "engineCc": 0,
+      "powerHp": 201,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Moonstone Gray",
+      "exteriorColorNameAr": "رمادي فاتح",
+      "exteriorColorHex": "#8c9093",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black",
+      "interiorColorNameAr": "أسود",
+      "regionalSpecs": "chinese",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 39000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 18900,
+      "descriptionEn": "ID.4 Crozz Pure+ with Chinese specs and 39,000 km. Battery health 95% from a diagnostic scan, and all panels are in factory paint. Note that Chinese-spec screens offer Chinese and English, not Arabic.",
+      "descriptionAr": "فولكس فاجن ID.4 كروز Pure+ مواصفات صينية، ممشى 39,000 كم. صحة البطارية 95% حسب فحص الكمبيوتر، وجميع القطع دهان وكالة. ملاحظة: لغة الشاشة في المواصفات الصينية صينية أو إنجليزية، ولا تتوفر العربية.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 17,
+      "consumptionSource": "dealer",
+      "batterySohPct": 95,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -5,
+      "priceChanges": [],
+      "inspectedOn": -7,
+      "licenseExpiryMonths": 6,
+      "milestones": {
+        "inspected": -7,
+        "in_showroom": -5
+      }
+    },
+    "inspection": {
+      "originalMicrons": [92, 121],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 97,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "foshan",
+        "month": "2022-01"
+      },
+      {
+        "type": "shipped",
+        "place": "shenzhen",
+        "month": "2023-05"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2023-06"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2023-06"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2023-07"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s13",
+    "refCode": "MU-AT3B",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "byd",
+      "modelKey": "byd-atto-3",
+      "trim": null,
+      "modelYear": 2024,
+      "bodyType": "suv",
+      "fuelType": "electric",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 0,
+      "powerHp": 201,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Surf Blue",
+      "exteriorColorNameAr": "أزرق",
+      "exteriorColorHex": "#2f6f9f",
+      "paintFinish": "metallic",
+      "colorFamily": "blue",
+      "interiorColorNameEn": "Black and blue",
+      "interiorColorNameAr": "أسود وأزرق",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 1,
+      "warrantyUntil": "2030-05-01",
+      "condition": "used",
+      "mileageKm": 18000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "panoramic_roof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "lane_departure",
+        "camera_360",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 21500,
+      "descriptionEn": "BYD Atto 3 from the local dealer, one owner, 18,000 km. Agency warranty until May 2030. Battery health 98% from the agency service report, and all panels are in factory paint.",
+      "descriptionAr": "بي واي دي أتو 3 وارد وكالة، يد أولى، ممشى 18,000 كم. كفالة الوكالة حتى أيار 2030. صحة البطارية 98% حسب تقرير الوكالة، وجميع القطع دهان وكالة.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": 16,
+      "consumptionSource": "dealer",
+      "batterySohPct": 98,
+      "batterySohSource": "service_report",
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -16,
+      "priceChanges": [],
+      "inspectedOn": -18,
+      "licenseExpiryMonths": 7,
+      "milestones": {
+        "inspected": -18,
+        "in_showroom": -16
+      }
+    },
+    "inspection": {
+      "originalMicrons": [105, 132],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 131,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "shenzhen",
+        "month": "2024-02"
+      },
+      {
+        "type": "shipped",
+        "place": "shenzhen",
+        "month": "2024-03"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2024-04"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2024-04"
+      },
+      {
+        "type": "first_sold",
+        "place": "amman",
+        "month": "2024-05"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s14",
+    "refCode": "MU-JGC7",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "jeep",
+      "modelKey": "jeep-grand-cherokee",
+      "trim": "Laredo",
+      "modelYear": 2017,
+      "bodyType": "suv",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "four_wd",
+      "engineCc": 3604,
+      "powerHp": 295,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Diamond Black",
+      "exteriorColorNameAr": "أسود",
+      "exteriorColorHex": "#111214",
+      "paintFinish": "pearl",
+      "colorFamily": "black",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 3,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 132000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "spare_tyre",
+        "alloy_wheels",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 18700,
+      "descriptionEn": "Grand Cherokee Laredo with the 3.6 V6, 4x4 and 132,000 km. The left rear quarter had a dent repaired and repainted, and the rear bumper has a touch-up. The oil filter housing was replaced in June 2026, a common repair on this engine.",
+      "descriptionAr": "جراند شيروكي لاريدو، محرك (ماتور) 3.6 V6، دفع رباعي، ممشى 132,000 كم. الرفرف الخلفي الأيسر تم إصلاح طعجة فيه ورشه، وعلى الصدام الخلفي رشة تجميلية. تم تبديل قاعدة فلتر الزيت في حزيران 2026، وهي تصليحة شائعة في هذا المحرك.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 11.2,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -29,
+      "priceChanges": [],
+      "inspectedOn": -31,
+      "licenseExpiryMonths": 1,
+      "milestones": {
+        "inspected": -31,
+        "in_showroom": -29
+      }
+    },
+    "inspection": {
+      "originalMicrons": [112, 145],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "notes",
+          "noteEn": "Oil filter housing replaced in June 2026, a common repair on this engine. No leaks now.",
+          "noteAr": "تم تبديل قاعدة فلتر الزيت في حزيران 2026، وهي تصليحة شائعة في هذا المحرك (الماتور). لا يوجد تهريب حاليًا."
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 144,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "touch_up",
+          "microns": null,
+          "noteEn": "Scuff touched up",
+          "noteAr": "خدش تم تجميله"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 133,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 142,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 130,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 143,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 133,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "repainted",
+          "microns": 310,
+          "noteEn": "Dent repaired and repainted",
+          "noteAr": "طعجة تم إصلاحها ورشها"
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 140,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "detroit",
+        "month": "2017-01"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_mi",
+        "month": "2017-03"
+      },
+      {
+        "type": "auction",
+        "place": "us_nj",
+        "month": "2022-01",
+        "titleBrand": "clean",
+        "damageNoteEn": "Rear left quarter dent",
+        "damageNoteAr": "طعجة في الرفرف الخلفي الأيسر"
+      },
+      {
+        "type": "shipped",
+        "place": "newark",
+        "month": "2022-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2022-03"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2022-03"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2022-05"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s15",
+    "refCode": "MU-MSTG",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "ford",
+      "modelKey": "ford-mustang",
+      "trim": "EcoBoost Premium",
+      "modelYear": 2017,
+      "bodyType": "coupe",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "rwd",
+      "engineCc": 2261,
+      "powerHp": 310,
+      "seats": 4,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Race Red",
+      "exteriorColorNameAr": "أحمر",
+      "exteriorColorHex": "#c8102e",
+      "paintFinish": "solid",
+      "colorFamily": "red",
+      "interiorColorNameEn": "Black leather",
+      "interiorColorNameAr": "جلد أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 61000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "sport_seats",
+        "steering_controls",
+        "heated_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "folding_mirrors",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 16900,
+      "descriptionEn": "Mustang EcoBoost Premium with a rebuilt title: a front end collision in 2021, repaired in the US before its auction sale. The hood and front bumper are new, both front fenders are repainted, and the front subframe was replaced with a new part. Engine and gearbox sound. 2.3 turbo with 310 hp.",
+      "descriptionAr": "موستنج إيكوبوست بريميوم مصنفة Rebuilt (معاد تأهيلها): حادث أمامي عام 2021 تم إصلاحه في أمريكا قبل بيعها في المزاد. الكبوت والصدام الأمامي جديدان، والرفرفان الأماميان مرشوشان، والسبفريم الأمامي مبدل بقطعة جديدة. المحرك (الماتور) وناقل الحركة (الجير) سليمان. محرك 2.3 تيربو بقوة 310 حصان.",
+      "recommendedOctane": 95,
+      "consumptionLPer100km": 9.8,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -12,
+      "priceChanges": [],
+      "inspectedOn": -14,
+      "licenseExpiryMonths": 4,
+      "milestones": {
+        "inspected": -14,
+        "in_showroom": -12
+      }
+    },
+    "inspection": {
+      "originalMicrons": [103, 134],
+      "mechanical": {
+        "chassis": {
+          "state": "notes",
+          "noteEn": "Front subframe replaced with a new part",
+          "noteAr": "السبفريم الأمامي مبدل بقطعة جديدة"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "replaced",
+          "microns": null,
+          "noteEn": "New parts after the 2021 collision",
+          "noteAr": "قطع جديدة بعد حادث 2021"
+        },
+        {
+          "panelId": "hood",
+          "state": "replaced",
+          "microns": 160,
+          "noteEn": "New parts after the 2021 collision",
+          "noteAr": "قطع جديدة بعد حادث 2021"
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "repainted",
+          "microns": 290
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "repainted",
+          "microns": 270
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 130,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "flat_rock",
+        "month": "2016-10"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_tx",
+        "month": "2016-12"
+      },
+      {
+        "type": "auction",
+        "place": "us_tx",
+        "month": "2021-12",
+        "titleBrand": "rebuilt",
+        "damageNoteEn": "Front end collision, repaired in the US before the sale",
+        "damageNoteAr": "حادث أمامي تم إصلاحه في أمريكا قبل البيع"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2022-01"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2022-02"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2022-02"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2022-03"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s16",
+    "refCode": "MU-ACH8",
+    "status": "reserved",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "honda",
+      "modelKey": "honda-accord",
+      "trim": "Hybrid",
+      "modelYear": 2018,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1993,
+      "powerHp": 212,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Platinum White",
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorHex": "#f0f0ec",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 94000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 17300,
+      "descriptionEn": "Accord Hybrid with American specs and 94,000 km. One touch-up on the right front door, and the rest is factory paint. Adaptive cruise control and lane departure alert.",
+      "descriptionAr": "أكورد هايبرد مواصفات أمريكية، ممشى 94,000 كم. رشة تجميلية واحدة على الباب الأمامي الأيمن، وباقي السيارة دهان وكالة. مزودة بمثبت سرعة ذكي وتنبيه مغادرة المسار.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -23,
+      "priceChanges": [],
+      "inspectedOn": -25,
+      "licenseExpiryMonths": 5,
+      "milestones": {
+        "inspected": -25,
+        "in_showroom": -23
+      }
+    },
+    "inspection": {
+      "originalMicrons": [98, 126],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "touch_up",
+          "microns": 195,
+          "noteEn": "Small scratch touched up",
+          "noteAr": "خدش صغير تم تجميله"
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "marysville_oh",
+        "month": "2018-02"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_oh",
+        "month": "2018-04"
+      },
+      {
+        "type": "auction",
+        "place": "us_oh",
+        "month": "2024-05",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "baltimore",
+        "month": "2024-06"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2024-07"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2024-07"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2024-08"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s17",
+    "refCode": "MU-RV4H",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-rav4",
+      "trim": "Hybrid XLE",
+      "modelYear": 2020,
+      "bodyType": "suv",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "awd",
+      "engineCc": 2487,
+      "powerHp": 219,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Magnetic Gray",
+      "exteriorColorNameAr": "رمادي",
+      "exteriorColorHex": "#6e7073",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black synthetic leather",
+      "interiorColorNameAr": "جلد صناعي أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 67000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "keyless_entry",
+        "sunroof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "blind_spot",
+        "lane_departure",
+        "carplay",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 24900,
+      "descriptionEn": "RAV4 Hybrid XLE with all-wheel drive and 67,000 km. All panels are in factory paint. Sunroof, blind spot alert and adaptive cruise control.",
+      "descriptionAr": "راف فور هايبرد XLE، دفع كلي، ممشى 67,000 كم. جميع القطع دهان وكالة. فتحة سقف، حساس النقطة العمياء، ومثبت سرعة ذكي.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.9,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -6,
+      "priceChanges": [],
+      "inspectedOn": -8,
+      "licenseExpiryMonths": 11,
+      "milestones": {
+        "inspected": -8,
+        "in_showroom": -6
+      }
+    },
+    "inspection": {
+      "originalMicrons": [94, 124],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 97,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 119,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 95,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 105,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 99,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "woodstock_on",
+        "month": "2019-09"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_va",
+        "month": "2019-11"
+      },
+      {
+        "type": "auction",
+        "place": "us_va",
+        "month": "2025-04",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "baltimore",
+        "month": "2025-05"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2025-06"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2025-06"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2025-07"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s18",
+    "refCode": "MU-XE5S",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "lexus",
+      "modelKey": "lexus-es",
+      "trim": "300h",
+      "modelYear": 2017,
+      "bodyType": "sedan",
+      "fuelType": "hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 2494,
+      "powerHp": 200,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Eminent White Pearl",
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorHex": "#efeee8",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Parchment leather",
+      "interiorColorNameAr": "جلد بيج",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 109000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "memory_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "folding_mirrors",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "rear_sensors",
+        "keyless_entry",
+        "sunroof",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 19500,
+      "descriptionEn": "Lexus ES 300h with 109,000 km. The hood was repainted for stone chips and the front bumper was repainted, and everything else is factory paint. Leather seats with memory, and a sunroof.",
+      "descriptionAr": "لكزس ES 300h، ممشى 109,000 كم. الكبوت مرشوش بسبب ضربات حصى، والصدام الأمامي مرشوش، وباقي السيارة دهان وكالة. فرش جلد مع ذاكرة للمقاعد، وفتحة سقف.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.9,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -35,
+      "priceChanges": [
+        {
+          "days": -6,
+          "from": 20500,
+          "to": 19500
+        }
+      ],
+      "inspectedOn": -37,
+      "licenseExpiryMonths": 2,
+      "milestones": {
+        "inspected": -37,
+        "in_showroom": -35
+      }
+    },
+    "inspection": {
+      "originalMicrons": [110, 142],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "repainted",
+          "microns": null,
+          "noteEn": "Stone chips repainted",
+          "noteAr": "ضربات حصى تم رشها"
+        },
+        {
+          "panelId": "hood",
+          "state": "repainted",
+          "microns": 225,
+          "noteEn": "Repainted for stone chips",
+          "noteAr": "مرشوش بسبب ضربات حصى"
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 138,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 139,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 139,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "miyawaka",
+        "month": "2016-06"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_fl",
+        "month": "2016-09"
+      },
+      {
+        "type": "auction",
+        "place": "us_fl",
+        "month": "2022-09",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "jacksonville",
+        "month": "2022-10"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2022-11"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2022-11"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2022-12"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s19",
+    "refCode": "MU-C3MB",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "mercedes-benz",
+      "modelKey": "mercedes-benz-c-class",
+      "trim": "C 300 4MATIC",
+      "modelYear": 2018,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "awd",
+      "engineCc": 1991,
+      "powerHp": 241,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Polar White",
+      "exteriorColorNameAr": "أبيض",
+      "exteriorColorHex": "#f4f4f4",
+      "paintFinish": "solid",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Black synthetic leather",
+      "interiorColorNameAr": "جلد صناعي أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 72000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "heated_seats",
+        "memory_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "folding_mirrors",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "rear_sensors",
+        "panoramic_roof",
+        "media_screen",
+        "abs",
+        "blind_spot",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 23500,
+      "descriptionEn": "C 300 4MATIC with American specs and 72,000 km. All panels are in factory paint. 2.0 turbo with all-wheel drive; it needs 95 octane.",
+      "descriptionAr": "مرسيدس C 300 فورماتيك مواصفات أمريكية، ممشى 72,000 كم. جميع القطع دهان وكالة. محرك (ماتور) 2.0 تيربو مع دفع كلي، ويحتاج بنزين 95.",
+      "recommendedOctane": 95,
+      "consumptionLPer100km": 9,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -18,
+      "priceChanges": [],
+      "inspectedOn": -20,
+      "licenseExpiryMonths": 8,
+      "milestones": {
+        "inspected": -20,
+        "in_showroom": -18
+      }
+    },
+    "inspection": {
+      "originalMicrons": [110, 150],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 130,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 144,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 118,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 133,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 140,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 147,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 130,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 146,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "vance_al",
+        "month": "2017-12"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ny",
+        "month": "2018-02"
+      },
+      {
+        "type": "auction",
+        "place": "us_ny",
+        "month": "2024-02",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "newark",
+        "month": "2024-03"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2024-04"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2024-04"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2024-05"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s20",
+    "refCode": "MU-V7TC",
+    "status": "sold",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "chevrolet",
+      "modelKey": "chevrolet-volt",
+      "trim": "LT",
+      "modelYear": 2017,
+      "bodyType": "hatchback",
+      "fuelType": "plugin_hybrid",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1490,
+      "powerHp": 149,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Silver Ice",
+      "exteriorColorNameAr": "فضي",
+      "exteriorColorHex": "#b5b8bb",
+      "paintFinish": "metallic",
+      "colorFamily": "silver",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 3,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 97000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "keyless_entry",
+        "media_screen",
+        "abs",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 11800,
+      "descriptionEn": "Volt LT plug-in hybrid with 97,000 km. Battery health 87% from a diagnostic scan. The panel check is complete; the mechanical check is not recorded.",
+      "descriptionAr": "شفروليه فولت LT هايبرد Plug-in، ممشى 97,000 كم. صحة البطارية 87% حسب فحص الكمبيوتر. تم فحص القطع، ولم يُسجل الفحص الميكانيكي.",
+      "recommendedOctane": 95,
+      "consumptionLPer100km": 5.6,
+      "consumptionKwhPer100km": 19.3,
+      "consumptionSource": "epa",
+      "batterySohPct": 87,
+      "batterySohSource": "diagnostic_scan",
+      "phevElectricSharePct": 70
+    },
+    "seedOffsets": {
+      "published": -63,
+      "sold": -12,
+      "priceChanges": [],
+      "inspectedOn": -65,
+      "licenseExpiryMonths": 3,
+      "milestones": {
+        "inspected": -65,
+        "in_showroom": -63
+      }
+    },
+    "inspection": {
+      "originalMicrons": [96, 124],
+      "mechanical": {
+        "chassis": {
+          "state": "unknown"
+        },
+        "engine": {
+          "state": "unknown"
+        },
+        "gearbox": {
+          "state": "unknown"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 103,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 106,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 99,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 120,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 98,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 110,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "detroit",
+        "month": "2016-07"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ca",
+        "month": "2016-09"
+      },
+      {
+        "type": "auction",
+        "place": "us_tx",
+        "month": "2021-07",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "houston",
+        "month": "2021-08"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2021-09"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2021-09"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2021-10"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s21",
+    "refCode": "MU-EN9T",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "hyundai",
+      "modelKey": "hyundai-elantra",
+      "trim": "SEL",
+      "modelYear": 2019,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 147,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Gray",
+      "exteriorColorNameAr": "رمادي",
+      "exteriorColorHex": "#7b7e80",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Gray fabric",
+      "interiorColorNameAr": "قماش رمادي",
+      "regionalSpecs": "american",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 86000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "media_screen",
+        "abs",
+        "blind_spot",
+        "carplay",
+        "android_auto",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 11600,
+      "descriptionEn": "Elantra SEL with American specs and 86,000 km. The right rear door was repainted. Apple CarPlay, Android Auto and blind spot alert.",
+      "descriptionAr": "هيونداي النترا SEL مواصفات أمريكية، ممشى 86,000 كم. الباب الخلفي الأيمن مرشوش. مزودة بـ Apple CarPlay وAndroid Auto وحساس النقطة العمياء.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 7.4,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "epa",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -24,
+      "priceChanges": [],
+      "inspectedOn": -26,
+      "licenseExpiryMonths": 6,
+      "milestones": {
+        "inspected": -26,
+        "in_showroom": -24
+      }
+    },
+    "inspection": {
+      "originalMicrons": [95, 127],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 96,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 102,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 101,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 115,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 121,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "repainted",
+          "microns": 255,
+          "noteEn": "Scratch repainted",
+          "noteAr": "خدش تم رشه"
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "montgomery_al",
+        "month": "2018-06"
+      },
+      {
+        "type": "first_sold",
+        "place": "us_ga",
+        "month": "2018-08"
+      },
+      {
+        "type": "auction",
+        "place": "us_ga",
+        "month": "2022-12",
+        "titleBrand": "clean",
+        "noteEn": "Dealer auction",
+        "noteAr": "مزاد التجار"
+      },
+      {
+        "type": "shipped",
+        "place": "savannah",
+        "month": "2023-01"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2023-02"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2023-02"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2023-03"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s22",
+    "refCode": "MU-AV6Z",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "hyundai",
+      "modelKey": "hyundai-avante",
+      "trim": null,
+      "modelYear": 2012,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1591,
+      "powerHp": 140,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "White",
+      "exteriorColorNameAr": "أبيض",
+      "exteriorColorHex": "#f5f5f2",
+      "paintFinish": "solid",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Beige fabric",
+      "interiorColorNameAr": "قماش بيج",
+      "regionalSpecs": "korean",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash"],
+      "ownersCount": 3,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 178000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "rear_sensors",
+        "abs",
+        "bluetooth"
+      ],
+      "priceJod": 7900,
+      "descriptionEn": "Avante imported from Korea in 2015, with 178,000 km and three owners. Two touch-ups on the right front fender and left front door, and the rear bumper is repainted. Shifts from first to second are slightly firm when cold; the gearbox oil was changed at 175,000 km.",
+      "descriptionAr": "هيونداي أفانتي وارد كوريا منذ 2015، ممشى 178,000 كم، ثلاثة مالكين. رشتان تجميليتان على الرفرف الأمامي الأيمن والباب الأمامي الأيسر، والصدام الخلفي مرشوش. التبديل من الأول إلى الثاني قاسٍ قليلًا والمحرك (الماتور) بارد، وتم تغيير زيت ناقل الحركة (الجير) عند 175,000 كم.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 7.4,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -52,
+      "priceChanges": [
+        {
+          "days": -27,
+          "from": 8300,
+          "to": 7900
+        }
+      ],
+      "inspectedOn": -54,
+      "licenseExpiryMonths": 1,
+      "milestones": {
+        "inspected": -54,
+        "in_showroom": -52
+      }
+    },
+    "inspection": {
+      "originalMicrons": [101, 139],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "notes",
+          "noteEn": "Shifts from first to second are slightly firm when cold. Gearbox oil changed at 175,000 km.",
+          "noteAr": "التبديل من الأول إلى الثاني قاسٍ قليلًا والمحرك (الماتور) بارد. تم تغيير زيت ناقل الحركة (الجير) عند 175,000 كم."
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 117,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "repainted",
+          "microns": null,
+          "noteEn": "Repainted",
+          "noteAr": "مرشوش"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 124,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "touch_up",
+          "microns": 200,
+          "noteEn": "Small scratches touched up",
+          "noteAr": "خدوش صغيرة تم تجميلها"
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "touch_up",
+          "microns": 190,
+          "noteEn": "Small scratches touched up",
+          "noteAr": "خدوش صغيرة تم تجميلها"
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 124,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 104,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "ulsan",
+        "month": "2012-03"
+      },
+      {
+        "type": "first_sold",
+        "place": "seoul",
+        "month": "2012-05"
+      },
+      {
+        "type": "shipped",
+        "place": "incheon",
+        "month": "2015-04"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2015-05"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2015-05"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2015-06"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s23",
+    "refCode": "MU-PCN6",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "kia",
+      "modelKey": "kia-picanto",
+      "trim": null,
+      "modelYear": 2016,
+      "bodyType": "hatchback",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1248,
+      "powerHp": 86,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Red",
+      "exteriorColorNameAr": "أحمر",
+      "exteriorColorHex": "#b3191e",
+      "paintFinish": "solid",
+      "colorFamily": "red",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash"],
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 95000,
+      "features": ["aux_usb", "airbags", "electric_windows", "central_lock", "air_conditioning", "abs"],
+      "priceJod": 6400,
+      "descriptionEn": "Picanto from the local dealer, one owner, 95,000 km. Automatic and easy to park in the city.",
+      "descriptionAr": "كيا بيكانتو وارد وكالة، يد أولى، ممشى 95,000 كم. ناقل حركة أوتوماتيكي (جير أوتوماتيك) وسهلة الاصطفاف داخل المدينة.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 5.6,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -41,
+      "priceChanges": [],
+      "licenseExpiryMonths": 9,
+      "milestones": {}
+    },
+    "inspection": null,
+    "journey": []
+  },
+  {
+    "seedKey": "s24",
+    "refCode": "MU-NC4G",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "mitsubishi",
+      "modelKey": "mitsubishi-lancer",
+      "trim": "GLX",
+      "modelYear": 2014,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1590,
+      "powerHp": 117,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Silver",
+      "exteriorColorNameAr": "فضي",
+      "exteriorColorHex": "#a9acae",
+      "paintFinish": "metallic",
+      "colorFamily": "silver",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 168000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "abs"
+      ],
+      "priceJod": 5900,
+      "descriptionEn": "Lancer GLX from the local dealer with 168,000 km. Mechanical check done: chassis and gearbox sound, with a minor oil seep at the valve cover. The body panels are not inspected yet.",
+      "descriptionAr": "ميتسوبيشي لانسر GLX وارد وكالة، ممشى 168,000 كم. تم الفحص الميكانيكي: الهيكل (الشاصي) وناقل الحركة (الجير) سليمان، مع تعريق زيت بسيط في غطاء البلوف. لم يتم فحص القطع بعد.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 7.8,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -58,
+      "priceChanges": [],
+      "inspectedOn": -60,
+      "licenseExpiryMonths": 2,
+      "milestones": {}
+    },
+    "inspection": {
+      "originalMicrons": null,
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "notes",
+          "noteEn": "Minor oil seep at the valve cover",
+          "noteAr": "تعريق زيت بسيط في غطاء البلوف"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "roof",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "trunk",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "unknown",
+          "microns": null
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "unknown",
+          "microns": null
+        }
+      ]
+    },
+    "journey": []
+  },
+  {
+    "seedKey": "s25",
+    "refCode": "MU-TCS9",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "hyundai",
+      "modelKey": "hyundai-tucson",
+      "trim": "2.0 CRDi",
+      "modelYear": 2019,
+      "bodyType": "suv",
+      "fuelType": "diesel",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1995,
+      "powerHp": 183,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Phantom Black",
+      "exteriorColorNameAr": "أسود",
+      "exteriorColorHex": "#1b1c1e",
+      "paintFinish": "pearl",
+      "colorFamily": "black",
+      "interiorColorNameEn": "Black leather",
+      "interiorColorNameAr": "جلد أسود",
+      "regionalSpecs": "korean",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 104000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "cooled_seats",
+        "heated_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "alloy_wheels",
+        "front_sensors",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 17400,
+      "descriptionEn": "Tucson 2.0 CRDi diesel imported from Korea, with 104,000 km and an 8-speed automatic. The tailgate was repainted, and the rest is factory paint. Leather seats, heated and cooled.",
+      "descriptionAr": "هيونداي توسان 2.0 ديزل وارد كوريا، ممشى 104,000 كم، ناقل حركة أوتوماتيكي (جير أوتوماتيك) 8 سرعات. باب الصندوق مرشوش، وباقي السيارة دهان وكالة. فرش جلد مع تدفئة وتبريد للمقاعد.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": 6.8,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -15,
+      "priceChanges": [],
+      "inspectedOn": -17,
+      "licenseExpiryMonths": 5,
+      "milestones": {
+        "inspected": -17,
+        "in_showroom": -15
+      }
+    },
+    "inspection": {
+      "originalMicrons": [104, 133],
+      "mechanical": {
+        "chassis": {
+          "state": "sound"
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "repainted",
+          "microns": 240,
+          "noteEn": "Tailgate repainted",
+          "noteAr": "باب الصندوق مرشوش"
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 122,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 127,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 131,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "ulsan",
+        "month": "2018-10"
+      },
+      {
+        "type": "first_sold",
+        "place": "seoul",
+        "month": "2018-11"
+      },
+      {
+        "type": "shipped",
+        "place": "incheon",
+        "month": "2020-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2020-03"
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": "2020-03"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "zarqa_free_zone",
+        "month": "2020-04"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s26",
+    "refCode": "MU-HX9P",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "toyota",
+      "modelKey": "toyota-hilux",
+      "trim": "Double Cab",
+      "modelYear": 2019,
+      "bodyType": "pickup",
+      "fuelType": "diesel",
+      "transmission": "automatic",
+      "drivetrain": "four_wd",
+      "engineCc": 2755,
+      "powerHp": 174,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Super White",
+      "exteriorColorNameAr": "أبيض",
+      "exteriorColorHex": "#f7f7f5",
+      "paintFinish": "solid",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Gray fabric",
+      "interiorColorNameAr": "قماش رمادي",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "comprehensive",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 121000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "spare_tyre",
+        "alloy_wheels",
+        "tow_hitch",
+        "abs",
+        "rear_camera",
+        "diff_lock",
+        "traction_control",
+        "cruise_control",
+        "bluetooth"
+      ],
+      "priceJod": 22900,
+      "descriptionEn": "Hilux Double Cab 2.8 diesel 4x4 from the local dealer, one owner, 121,000 km. The right rear door was repainted, and the steel rear bumper was replaced with a new genuine part. The rear leaf springs were replaced in 2025; the frame is straight with no rust through.",
+      "descriptionAr": "تويوتا هايلكس دبل كابين 2.8 ديزل دفع رباعي وارد وكالة، يد أولى، ممشى 121,000 كم. الباب الخلفي الأيمن مرشوش، والصدام الخلفي الحديد مبدل بقطعة أصلية جديدة. تم تبديل الريش الخلفية عام 2025، والهيكل (الشاصي) مستقيم دون صدأ نافذ.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": 8.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -31,
+      "priceChanges": [],
+      "inspectedOn": -33,
+      "licenseExpiryMonths": 10,
+      "milestones": {
+        "inspected": -33,
+        "in_showroom": -31
+      }
+    },
+    "inspection": {
+      "originalMicrons": [118, 152],
+      "mechanical": {
+        "chassis": {
+          "state": "notes",
+          "noteEn": "Rear leaf springs replaced in 2025 after heavy loads. Frame straight, no rust through.",
+          "noteAr": "تم تبديل الريش الخلفية عام 2025 بسبب الأحمال. الهيكل (الشاصي) مستقيم دون صدأ نافذ."
+        },
+        "engine": {
+          "state": "sound"
+        },
+        "gearbox": {
+          "state": "sound"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 138,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 145,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "replaced",
+          "microns": 145,
+          "steel": true,
+          "noteEn": "Steel step bumper replaced with a new genuine part",
+          "noteAr": "الصدام الخلفي الحديد مبدل بقطعة أصلية جديدة"
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 131,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 138,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 141,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 123,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 140,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "repainted",
+          "microns": 250,
+          "noteEn": "Scratch repainted",
+          "noteAr": "خدش تم رشه"
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 149,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 137,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "samut_prakan",
+        "month": "2019-01"
+      },
+      {
+        "type": "shipped",
+        "place": "laem_chabang",
+        "month": "2019-02"
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": "2019-03"
+      },
+      {
+        "type": "customs_cleared",
+        "place": "amman",
+        "month": "2019-03"
+      },
+      {
+        "type": "first_sold",
+        "place": "amman",
+        "month": "2019-04"
+      },
+      {
+        "type": "inspected",
+        "place": "amman",
+        "month": null
+      },
+      {
+        "type": "in_showroom",
+        "place": "amman",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s27",
+    "refCode": "MU-H7VN",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "hyundai",
+      "modelKey": "hyundai-h-1",
+      "trim": null,
+      "modelYear": 2018,
+      "bodyType": "van",
+      "fuelType": "diesel",
+      "transmission": "automatic",
+      "drivetrain": "rwd",
+      "engineCc": 2497,
+      "powerHp": 168,
+      "seats": 9,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Silver",
+      "exteriorColorNameAr": "فضي",
+      "exteriorColorHex": "#b4b6b8",
+      "paintFinish": "metallic",
+      "colorFamily": "silver",
+      "interiorColorNameEn": "Gray fabric",
+      "interiorColorNameAr": "قماش رمادي",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash", "instalments"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 156000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "steering_controls",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "electric_mirrors",
+        "abs",
+        "rear_camera"
+      ],
+      "priceJod": 15800,
+      "descriptionEn": "H-1 nine-seater with the 2.5 diesel, from the local dealer, 156,000 km. The panel check is complete, with one touch-up on the sliding door. The mechanical check is still pending.",
+      "descriptionAr": "هيونداي H-1 تسعة ركاب، محرك (ماتور) 2.5 ديزل، وارد وكالة، ممشى 156,000 كم. تم فحص القطع، وعلى الباب الجرار رشة تجميلية واحدة. الفحص الميكانيكي قيد الإنجاز.",
+      "recommendedOctane": null,
+      "consumptionLPer100km": 9.5,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -44,
+      "priceChanges": [],
+      "inspectedOn": -46,
+      "licenseExpiryMonths": 7,
+      "milestones": {}
+    },
+    "inspection": {
+      "originalMicrons": [108, 141],
+      "mechanical": {
+        "chassis": {
+          "state": "unknown"
+        },
+        "engine": {
+          "state": "unknown"
+        },
+        "gearbox": {
+          "state": "unknown"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 205
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 137,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 135,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 108,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 134,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 128,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 112,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "touch_up",
+          "microns": 215,
+          "noteEn": "Sliding door scratch touched up",
+          "noteAr": "خدش على الباب الجرار تم تجميله"
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 124,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 117,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": []
+  },
+  {
+    "seedKey": "s28",
+    "refCode": "MU-K5FZ",
+    "status": "published",
+    "platesConfirmed": true,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "kia",
+      "modelKey": "kia-k5",
+      "trim": null,
+      "modelYear": 2023,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 150,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Snow White Pearl",
+      "exteriorColorNameAr": "أبيض لؤلؤي",
+      "exteriorColorHex": "#f4f4f0",
+      "paintFinish": "pearl",
+      "colorFamily": "white",
+      "interiorColorNameEn": "Black leather",
+      "interiorColorNameAr": "جلد أسود",
+      "regionalSpecs": "gcc",
+      "customsStatus": "not_cleared",
+      "licenseStatus": "unlicensed",
+      "insuranceType": "none",
+      "paymentMethods": ["cash"],
+      "ownersCount": 1,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 38000,
+      "features": [
+        "aux_usb",
+        "airbags",
+        "leather_seats",
+        "electric_seats",
+        "steering_controls",
+        "cooled_seats",
+        "heated_seats",
+        "electric_windows",
+        "central_lock",
+        "air_conditioning",
+        "drl",
+        "electric_mirrors",
+        "alloy_wheels",
+        "led_lights",
+        "front_sensors",
+        "rear_sensors",
+        "keyless_entry",
+        "media_screen",
+        "forward_collision",
+        "abs",
+        "navigation",
+        "blind_spot",
+        "lane_departure",
+        "tpms",
+        "rear_camera",
+        "traction_control",
+        "adaptive_cruise",
+        "cruise_control",
+        "bluetooth",
+        "touch_screen"
+      ],
+      "priceJod": 10900,
+      "descriptionEn": "K5 2.0 in GCC specs, imported from the UAE, with 38,000 km. The car is in the Zarqa Free Zone, and the price does not include customs or registration; message us for an estimate. The panel check is complete and all in factory paint; the mechanical check is still pending.",
+      "descriptionAr": "كيا K5 محرك (ماتور) 2.0 مواصفات خليجية، وارد الإمارات، ممشى 38,000 كم. السيارة في المنطقة الحرة بالزرقاء، والسعر لا يشمل الجمرك والترخيص، ويمكن مراسلتنا لتقديرهما. تم فحص القطع وجميعها دهان وكالة، والفحص الميكانيكي قيد الإنجاز.",
+      "recommendedOctane": 90,
+      "consumptionLPer100km": 7.6,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": "dealer",
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "published": -1,
+      "priceChanges": [],
+      "inspectedOn": -3,
+      "milestones": {
+        "shipped": -45,
+        "arrived_port": -35,
+        "free_zone": -33,
+        "inspected": -3
+      }
+    },
+    "inspection": {
+      "originalMicrons": [99, 128],
+      "mechanical": {
+        "chassis": {
+          "state": "unknown"
+        },
+        "engine": {
+          "state": "unknown"
+        },
+        "gearbox": {
+          "state": "unknown"
+        }
+      },
+      "panels": [
+        {
+          "panelId": "front_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "hood",
+          "state": "original",
+          "microns": 109,
+          "drawn": true
+        },
+        {
+          "panelId": "roof",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "trunk",
+          "state": "original",
+          "microns": 114,
+          "drawn": true
+        },
+        {
+          "panelId": "rear_bumper",
+          "state": "original",
+          "microns": null
+        },
+        {
+          "panelId": "fender_front_left",
+          "state": "original",
+          "microns": 113,
+          "drawn": true
+        },
+        {
+          "panelId": "fender_front_right",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_left",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_front_right",
+          "state": "original",
+          "microns": 116,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_left",
+          "state": "original",
+          "microns": 125,
+          "drawn": true
+        },
+        {
+          "panelId": "door_rear_right",
+          "state": "original",
+          "microns": 107,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_left",
+          "state": "original",
+          "microns": 111,
+          "drawn": true
+        },
+        {
+          "panelId": "quarter_rear_right",
+          "state": "original",
+          "microns": 126,
+          "drawn": true
+        }
+      ]
+    },
+    "journey": [
+      {
+        "type": "built",
+        "place": "hwaseong",
+        "month": "2022-10"
+      },
+      {
+        "type": "first_sold",
+        "place": "dubai",
+        "month": "2023-01"
+      },
+      {
+        "type": "shipped",
+        "place": "jebel_ali",
+        "month": null
+      },
+      {
+        "type": "arrived_port",
+        "place": "aqaba_port",
+        "month": null
+      },
+      {
+        "type": "free_zone",
+        "place": "zarqa_free_zone",
+        "month": null
+      },
+      {
+        "type": "inspected",
+        "place": "zarqa_free_zone",
+        "month": null
+      }
+    ]
+  },
+  {
+    "seedKey": "s29",
+    "refCode": "MU-SP8D",
+    "status": "draft",
+    "platesConfirmed": false,
+    "createdOffset": -2,
+    "car": {
+      "vinPublic": false,
+      "makeKey": "kia",
+      "modelKey": "kia-sportage",
+      "trim": null,
+      "modelYear": 2018,
+      "bodyType": "suv",
+      "fuelType": "gasoline",
+      "transmission": "automatic",
+      "drivetrain": "fwd",
+      "engineCc": 1999,
+      "powerHp": 155,
+      "seats": 5,
+      "lengthMm": null,
+      "wheelbaseMm": null,
+      "exteriorColorNameEn": "Dark Gun Metal",
+      "exteriorColorNameAr": "رمادي داكن",
+      "exteriorColorHex": "#45484b",
+      "paintFinish": "metallic",
+      "colorFamily": "gray",
+      "interiorColorNameEn": "Black fabric",
+      "interiorColorNameAr": "قماش أسود",
+      "regionalSpecs": "agency",
+      "customsStatus": "cleared",
+      "licenseStatus": "licensed",
+      "insuranceType": "compulsory",
+      "paymentMethods": ["cash"],
+      "ownersCount": 2,
+      "warrantyUntil": null,
+      "condition": "used",
+      "mileageKm": 112000,
+      "features": ["aux_usb", "airbags", "electric_windows", "central_lock", "air_conditioning", "abs"],
+      "priceJod": null,
+      "descriptionEn": null,
+      "descriptionAr": null,
+      "recommendedOctane": 90,
+      "consumptionLPer100km": null,
+      "consumptionKwhPer100km": null,
+      "consumptionSource": null,
+      "batterySohPct": null,
+      "batterySohSource": null,
+      "phevElectricSharePct": null
+    },
+    "seedOffsets": {
+      "priceChanges": [],
+      "licenseExpiryMonths": 4,
+      "milestones": {}
+    },
+    "inspection": null,
+    "journey": []
+  }
+]

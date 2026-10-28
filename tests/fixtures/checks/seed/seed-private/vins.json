@@ -1,0 +1,23 @@
+{
+  "s03": {
+    "vin": "4T1B11HK2JU128781",
+    "decoded": "Toyota Camry LE 2018, 2.5, Georgetown KY",
+    "payload": {
+      "make": "Toyota",
+      "makeKey": "toyota",
+      "model": "Camry",
+      "modelKey": "toyota-camry",
+      "year": 2018,
+      "bodyType": "sedan",
+      "fuelType": "gasoline",
+      "engineCc": 2500,
+      "driveType": null,
+      "transmission": null,
+      "plant": {
+        "city": "Georgetown",
+        "state": "KY",
+        "country": null
+      }
+    }
+  }
+}

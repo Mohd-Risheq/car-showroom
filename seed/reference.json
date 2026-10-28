@@ -1,0 +1,1390 @@
+{
+  "makes": [
+    {
+      "key": "toyota",
+      "nameEn": "Toyota",
+      "nameAr": "تويوتا"
+    },
+    {
+      "key": "hyundai",
+      "nameEn": "Hyundai",
+      "nameAr": "هيونداي"
+    },
+    {
+      "key": "kia",
+      "nameEn": "Kia",
+      "nameAr": "كيا"
+    },
+    {
+      "key": "nissan",
+      "nameEn": "Nissan",
+      "nameAr": "نيسان"
+    },
+    {
+      "key": "mitsubishi",
+      "nameEn": "Mitsubishi",
+      "nameAr": "ميتسوبيشي"
+    },
+    {
+      "key": "honda",
+      "nameEn": "Honda",
+      "nameAr": "هوندا"
+    },
+    {
+      "key": "lexus",
+      "nameEn": "Lexus",
+      "nameAr": "لكزس"
+    },
+    {
+      "key": "mercedes-benz",
+      "nameEn": "Mercedes-Benz",
+      "nameAr": "مرسيدس بنز"
+    },
+    {
+      "key": "bmw",
+      "nameEn": "BMW",
+      "nameAr": "بي ام دبليو"
+    },
+    {
+      "key": "audi",
+      "nameEn": "Audi",
+      "nameAr": "أودي"
+    },
+    {
+      "key": "volkswagen",
+      "nameEn": "Volkswagen",
+      "nameAr": "فولكس فاجن"
+    },
+    {
+      "key": "ford",
+      "nameEn": "Ford",
+      "nameAr": "فورد"
+    },
+    {
+      "key": "chevrolet",
+      "nameEn": "Chevrolet",
+      "nameAr": "شفروليه"
+    },
+    {
+      "key": "gmc",
+      "nameEn": "GMC",
+      "nameAr": "جي ام سي"
+    },
+    {
+      "key": "jeep",
+      "nameEn": "Jeep",
+      "nameAr": "جيب"
+    },
+    {
+      "key": "land-rover",
+      "nameEn": "Land Rover",
+      "nameAr": "لاند روفر"
+    },
+    {
+      "key": "mazda",
+      "nameEn": "Mazda",
+      "nameAr": "مازدا"
+    },
+    {
+      "key": "suzuki",
+      "nameEn": "Suzuki",
+      "nameAr": "سوزوكي"
+    },
+    {
+      "key": "changan",
+      "nameEn": "Changan",
+      "nameAr": "شانجان"
+    },
+    {
+      "key": "byd",
+      "nameEn": "BYD",
+      "nameAr": "بي واي دي"
+    },
+    {
+      "key": "geely",
+      "nameEn": "Geely",
+      "nameAr": "جيلي"
+    },
+    {
+      "key": "chery",
+      "nameEn": "Chery",
+      "nameAr": "شيري"
+    },
+    {
+      "key": "mg",
+      "nameEn": "MG",
+      "nameAr": "ام جي"
+    },
+    {
+      "key": "tesla",
+      "nameEn": "Tesla",
+      "nameAr": "تسلا"
+    }
+  ],
+  "models": [
+    {
+      "key": "toyota-land-cruiser",
+      "makeKey": "toyota",
+      "nameEn": "Land Cruiser",
+      "nameAr": "لاندكروزر",
+      "defaultBodyType": "suv",
+      "aliases": ["لاند كروزر", "landcruiser"]
+    },
+    {
+      "key": "toyota-camry",
+      "makeKey": "toyota",
+      "nameEn": "Camry",
+      "nameAr": "كامري",
+      "defaultBodyType": "sedan",
+      "aliases": ["camri"]
+    },
+    {
+      "key": "toyota-corolla",
+      "makeKey": "toyota",
+      "nameEn": "Corolla",
+      "nameAr": "كورولا",
+      "defaultBodyType": "sedan",
+      "aliases": ["كرولا", "corola"]
+    },
+    {
+      "key": "toyota-prius",
+      "makeKey": "toyota",
+      "nameEn": "Prius",
+      "nameAr": "بريوس",
+      "defaultBodyType": "hatchback",
+      "aliases": ["بريس"]
+    },
+    {
+      "key": "toyota-rav4",
+      "makeKey": "toyota",
+      "nameEn": "RAV4",
+      "nameAr": "راف فور",
+      "defaultBodyType": "suv",
+      "aliases": ["راف 4", "rav 4"]
+    },
+    {
+      "key": "toyota-hilux",
+      "makeKey": "toyota",
+      "nameEn": "Hilux",
+      "nameAr": "هايلكس",
+      "defaultBodyType": "pickup",
+      "aliases": ["هيلوكس", "hilox"]
+    },
+    {
+      "key": "tesla-model-y",
+      "makeKey": "tesla",
+      "nameEn": "Model Y",
+      "nameAr": "موديل Y",
+      "defaultBodyType": "suv",
+      "aliases": ["موديل واي", "model y"]
+    },
+    {
+      "key": "tesla-model-3",
+      "makeKey": "tesla",
+      "nameEn": "Model 3",
+      "nameAr": "موديل 3",
+      "defaultBodyType": "sedan",
+      "aliases": ["موديل ثري", "model3"]
+    },
+    {
+      "key": "hyundai-sonata",
+      "makeKey": "hyundai",
+      "nameEn": "Sonata",
+      "nameAr": "سوناتا",
+      "defaultBodyType": "sedan",
+      "aliases": ["سوناته"]
+    },
+    {
+      "key": "hyundai-elantra",
+      "makeKey": "hyundai",
+      "nameEn": "Elantra",
+      "nameAr": "النترا",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "hyundai-avante",
+      "makeKey": "hyundai",
+      "nameEn": "Avante",
+      "nameAr": "أفانتي",
+      "defaultBodyType": "sedan",
+      "aliases": ["avante", "elantra"]
+    },
+    {
+      "key": "hyundai-tucson",
+      "makeKey": "hyundai",
+      "nameEn": "Tucson",
+      "nameAr": "توسان",
+      "defaultBodyType": "suv",
+      "aliases": ["توسون", "tuscon"]
+    },
+    {
+      "key": "hyundai-h-1",
+      "makeKey": "hyundai",
+      "nameEn": "H-1",
+      "nameAr": "H-1",
+      "defaultBodyType": "van",
+      "aliases": ["h1", "اتش 1", "starex", "ستاركس"]
+    },
+    {
+      "key": "kia-optima",
+      "makeKey": "kia",
+      "nameEn": "Optima",
+      "nameAr": "أوبتيما",
+      "defaultBodyType": "sedan",
+      "aliases": ["k5 hybrid"]
+    },
+    {
+      "key": "kia-k5",
+      "makeKey": "kia",
+      "nameEn": "K5",
+      "nameAr": "K5",
+      "defaultBodyType": "sedan",
+      "aliases": ["كي 5", "k 5"]
+    },
+    {
+      "key": "kia-picanto",
+      "makeKey": "kia",
+      "nameEn": "Picanto",
+      "nameAr": "بيكانتو",
+      "defaultBodyType": "hatchback",
+      "aliases": ["picanto"]
+    },
+    {
+      "key": "kia-sportage",
+      "makeKey": "kia",
+      "nameEn": "Sportage",
+      "nameAr": "سبورتاج",
+      "defaultBodyType": "suv",
+      "aliases": ["سبورتج", "sportege"]
+    },
+    {
+      "key": "ford-fusion",
+      "makeKey": "ford",
+      "nameEn": "Fusion",
+      "nameAr": "فيوجن",
+      "defaultBodyType": "sedan",
+      "aliases": ["فيوجين"]
+    },
+    {
+      "key": "ford-mustang",
+      "makeKey": "ford",
+      "nameEn": "Mustang",
+      "nameAr": "موستنج",
+      "defaultBodyType": "coupe",
+      "aliases": ["موستانج"]
+    },
+    {
+      "key": "jeep-grand-cherokee",
+      "makeKey": "jeep",
+      "nameEn": "Grand Cherokee",
+      "nameAr": "جراند شيروكي",
+      "defaultBodyType": "suv",
+      "aliases": ["شيروكي"]
+    },
+    {
+      "key": "honda-accord",
+      "makeKey": "honda",
+      "nameEn": "Accord",
+      "nameAr": "أكورد",
+      "defaultBodyType": "sedan",
+      "aliases": ["accord"]
+    },
+    {
+      "key": "lexus-es",
+      "makeKey": "lexus",
+      "nameEn": "ES",
+      "nameAr": "ES",
+      "defaultBodyType": "sedan",
+      "aliases": ["es300", "اي اس"]
+    },
+    {
+      "key": "mercedes-benz-c-class",
+      "makeKey": "mercedes-benz",
+      "nameEn": "C-Class",
+      "nameAr": "الفئة C",
+      "defaultBodyType": "sedan",
+      "aliases": ["c300", "سي كلاس"]
+    },
+    {
+      "key": "chevrolet-volt",
+      "makeKey": "chevrolet",
+      "nameEn": "Volt",
+      "nameAr": "فولت",
+      "defaultBodyType": "hatchback",
+      "aliases": ["volt"]
+    },
+    {
+      "key": "volkswagen-id4",
+      "makeKey": "volkswagen",
+      "nameEn": "ID.4",
+      "nameAr": "ID.4",
+      "defaultBodyType": "suv",
+      "aliases": ["id4", "اي دي 4"]
+    },
+    {
+      "key": "byd-atto-3",
+      "makeKey": "byd",
+      "nameEn": "Atto 3",
+      "nameAr": "أتو 3",
+      "defaultBodyType": "suv",
+      "aliases": ["yuan plus", "يوان بلس"]
+    },
+    {
+      "key": "mitsubishi-lancer",
+      "makeKey": "mitsubishi",
+      "nameEn": "Lancer",
+      "nameAr": "لانسر",
+      "defaultBodyType": "sedan",
+      "aliases": ["lancer"]
+    },
+    {
+      "key": "nissan-altima",
+      "makeKey": "nissan",
+      "nameEn": "Altima",
+      "nameAr": "ألتيما",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "honda-civic",
+      "makeKey": "honda",
+      "nameEn": "Civic",
+      "nameAr": "سيفيك",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-malibu",
+      "makeKey": "chevrolet",
+      "nameEn": "Malibu",
+      "nameAr": "ماليبو",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "nissan-rogue",
+      "makeKey": "nissan",
+      "nameEn": "Rogue",
+      "nameAr": "روج",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "toyota-yaris",
+      "makeKey": "toyota",
+      "nameEn": "Yaris",
+      "nameAr": "يارس",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "toyota-highlander",
+      "makeKey": "toyota",
+      "nameEn": "Highlander",
+      "nameAr": "هايلاندر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "hyundai-accent",
+      "makeKey": "hyundai",
+      "nameEn": "Accent",
+      "nameAr": "أكسنت",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "hyundai-ioniq",
+      "makeKey": "hyundai",
+      "nameEn": "Ioniq",
+      "nameAr": "أيونيك",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "hyundai-kona",
+      "makeKey": "hyundai",
+      "nameEn": "Kona",
+      "nameAr": "كونا",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "kia-sephia",
+      "makeKey": "kia",
+      "nameEn": "Sephia",
+      "nameAr": "سيفيا",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "kia-niro",
+      "makeKey": "kia",
+      "nameEn": "Niro",
+      "nameAr": "نيرو",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "kia-cerato",
+      "makeKey": "kia",
+      "nameEn": "Cerato",
+      "nameAr": "سيراتو",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "kia-rio",
+      "makeKey": "kia",
+      "nameEn": "Rio",
+      "nameAr": "ريو",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "kia-morning",
+      "makeKey": "kia",
+      "nameEn": "Morning",
+      "nameAr": "مورنينج",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "nissan-sunny",
+      "makeKey": "nissan",
+      "nameEn": "Sunny",
+      "nameAr": "صني",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "nissan-navara",
+      "makeKey": "nissan",
+      "nameEn": "Navara",
+      "nameAr": "نافارا",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "nissan-leaf",
+      "makeKey": "nissan",
+      "nameEn": "Leaf",
+      "nameAr": "ليف",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "nissan-x-trail",
+      "makeKey": "nissan",
+      "nameEn": "X-Trail",
+      "nameAr": "X-تريل",
+      "defaultBodyType": "suv",
+      "aliases": ["اكس تريل"]
+    },
+    {
+      "key": "nissan-pathfinder",
+      "makeKey": "nissan",
+      "nameEn": "Pathfinder",
+      "nameAr": "باثفايندر",
+      "defaultBodyType": "suv",
+      "aliases": ["باثفندر"]
+    },
+    {
+      "key": "mitsubishi-pajero",
+      "makeKey": "mitsubishi",
+      "nameEn": "Pajero",
+      "nameAr": "باجيرو",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mitsubishi-l200",
+      "makeKey": "mitsubishi",
+      "nameEn": "L200",
+      "nameAr": "L200",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "mitsubishi-outlander",
+      "makeKey": "mitsubishi",
+      "nameEn": "Outlander",
+      "nameAr": "أوتلاندر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mitsubishi-asx",
+      "makeKey": "mitsubishi",
+      "nameEn": "ASX",
+      "nameAr": "ASX",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mitsubishi-galant",
+      "makeKey": "mitsubishi",
+      "nameEn": "Galant",
+      "nameAr": "جالنت",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "honda-cr-v",
+      "makeKey": "honda",
+      "nameEn": "CR-V",
+      "nameAr": "CR-V",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "honda-insight",
+      "makeKey": "honda",
+      "nameEn": "Insight",
+      "nameAr": "إنسايت",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "honda-ens1",
+      "makeKey": "honda",
+      "nameEn": "e:NS1",
+      "nameAr": "e:NS1",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "honda-city",
+      "makeKey": "honda",
+      "nameEn": "City",
+      "nameAr": "سيتي",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "lexus-rx",
+      "makeKey": "lexus",
+      "nameEn": "RX",
+      "nameAr": "RX",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "lexus-ct",
+      "makeKey": "lexus",
+      "nameEn": "CT",
+      "nameAr": "CT",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "lexus-nx",
+      "makeKey": "lexus",
+      "nameEn": "NX",
+      "nameAr": "NX",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "lexus-lx",
+      "makeKey": "lexus",
+      "nameEn": "LX",
+      "nameAr": "LX",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "lexus-hs",
+      "makeKey": "lexus",
+      "nameEn": "HS",
+      "nameAr": "HS",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "mercedes-benz-e-class",
+      "makeKey": "mercedes-benz",
+      "nameEn": "E-Class",
+      "nameAr": "الفئة E",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "mercedes-benz-vito",
+      "makeKey": "mercedes-benz",
+      "nameEn": "Vito",
+      "nameAr": "فيتو",
+      "defaultBodyType": "van",
+      "aliases": []
+    },
+    {
+      "key": "mercedes-benz-s-class",
+      "makeKey": "mercedes-benz",
+      "nameEn": "S-Class",
+      "nameAr": "الفئة S",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "mercedes-benz-glc",
+      "makeKey": "mercedes-benz",
+      "nameEn": "GLC",
+      "nameAr": "GLC",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mercedes-benz-g-class",
+      "makeKey": "mercedes-benz",
+      "nameEn": "G-Class",
+      "nameAr": "الفئة G",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "bmw-5-series",
+      "makeKey": "bmw",
+      "nameEn": "5 Series",
+      "nameAr": "الفئة 5",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "bmw-3-series",
+      "makeKey": "bmw",
+      "nameEn": "3 Series",
+      "nameAr": "الفئة 3",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "bmw-x5",
+      "makeKey": "bmw",
+      "nameEn": "X5",
+      "nameAr": "X5",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "bmw-ix",
+      "makeKey": "bmw",
+      "nameEn": "iX",
+      "nameAr": "iX",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "bmw-4-series",
+      "makeKey": "bmw",
+      "nameEn": "4 Series",
+      "nameAr": "الفئة 4",
+      "defaultBodyType": "coupe",
+      "aliases": []
+    },
+    {
+      "key": "bmw-7-series",
+      "makeKey": "bmw",
+      "nameEn": "7 Series",
+      "nameAr": "الفئة 7",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "bmw-i3",
+      "makeKey": "bmw",
+      "nameEn": "i3",
+      "nameAr": "i3",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "bmw-ix3",
+      "makeKey": "bmw",
+      "nameEn": "iX3",
+      "nameAr": "iX3",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "audi-q5",
+      "makeKey": "audi",
+      "nameEn": "Q5",
+      "nameAr": "Q5",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "audi-a6",
+      "makeKey": "audi",
+      "nameEn": "A6",
+      "nameAr": "A6",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "audi-a4",
+      "makeKey": "audi",
+      "nameEn": "A4",
+      "nameAr": "A4",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "audi-q7",
+      "makeKey": "audi",
+      "nameEn": "Q7",
+      "nameAr": "Q7",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "audi-e-tron",
+      "makeKey": "audi",
+      "nameEn": "e-tron",
+      "nameAr": "e-ترون",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "volkswagen-golf",
+      "makeKey": "volkswagen",
+      "nameEn": "Golf",
+      "nameAr": "جولف",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "volkswagen-id6",
+      "makeKey": "volkswagen",
+      "nameEn": "ID.6",
+      "nameAr": "ID.6",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "volkswagen-caddy",
+      "makeKey": "volkswagen",
+      "nameEn": "Caddy",
+      "nameAr": "كادي",
+      "defaultBodyType": "van",
+      "aliases": []
+    },
+    {
+      "key": "volkswagen-passat",
+      "makeKey": "volkswagen",
+      "nameEn": "Passat",
+      "nameAr": "باسات",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "volkswagen-touareg",
+      "makeKey": "volkswagen",
+      "nameEn": "Touareg",
+      "nameAr": "طوارق",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "ford-f-150",
+      "makeKey": "ford",
+      "nameEn": "F-150",
+      "nameAr": "F-150",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "ford-escape",
+      "makeKey": "ford",
+      "nameEn": "Escape",
+      "nameAr": "إسكايب",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "ford-c-max",
+      "makeKey": "ford",
+      "nameEn": "C-MAX",
+      "nameAr": "C-ماكس",
+      "defaultBodyType": "hatchback",
+      "aliases": ["سي ماكس"]
+    },
+    {
+      "key": "ford-explorer",
+      "makeKey": "ford",
+      "nameEn": "Explorer",
+      "nameAr": "إكسبلورر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "ford-focus",
+      "makeKey": "ford",
+      "nameEn": "Focus",
+      "nameAr": "فوكس",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-aveo",
+      "makeKey": "chevrolet",
+      "nameEn": "Aveo",
+      "nameAr": "أفيو",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-spark",
+      "makeKey": "chevrolet",
+      "nameEn": "Spark",
+      "nameAr": "سبارك",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-captiva",
+      "makeKey": "chevrolet",
+      "nameEn": "Captiva",
+      "nameAr": "كابتيفا",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-bolt",
+      "makeKey": "chevrolet",
+      "nameEn": "Bolt",
+      "nameAr": "بولت",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-optra",
+      "makeKey": "chevrolet",
+      "nameEn": "Optra",
+      "nameAr": "أوبترا",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-cruze",
+      "makeKey": "chevrolet",
+      "nameEn": "Cruze",
+      "nameAr": "كروز",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-tahoe",
+      "makeKey": "chevrolet",
+      "nameEn": "Tahoe",
+      "nameAr": "تاهو",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-silverado",
+      "makeKey": "chevrolet",
+      "nameEn": "Silverado",
+      "nameAr": "سيلفرادو",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "chevrolet-trailblazer",
+      "makeKey": "chevrolet",
+      "nameEn": "Trailblazer",
+      "nameAr": "تريل بليزر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "gmc-sierra",
+      "makeKey": "gmc",
+      "nameEn": "Sierra",
+      "nameAr": "سييرا",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "gmc-acadia",
+      "makeKey": "gmc",
+      "nameEn": "Acadia",
+      "nameAr": "أكاديا",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "gmc-yukon",
+      "makeKey": "gmc",
+      "nameEn": "Yukon",
+      "nameAr": "يوكن",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "gmc-envoy",
+      "makeKey": "gmc",
+      "nameEn": "Envoy",
+      "nameAr": "إنفوي",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "gmc-terrain",
+      "makeKey": "gmc",
+      "nameEn": "Terrain",
+      "nameAr": "تيرين",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "jeep-wrangler",
+      "makeKey": "jeep",
+      "nameEn": "Wrangler",
+      "nameAr": "رانجلر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "jeep-gladiator",
+      "makeKey": "jeep",
+      "nameEn": "Gladiator",
+      "nameAr": "جلادياتور",
+      "defaultBodyType": "pickup",
+      "aliases": []
+    },
+    {
+      "key": "jeep-compass",
+      "makeKey": "jeep",
+      "nameEn": "Compass",
+      "nameAr": "كومباس",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "jeep-cherokee",
+      "makeKey": "jeep",
+      "nameEn": "Cherokee",
+      "nameAr": "شيروكي",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "jeep-liberty",
+      "makeKey": "jeep",
+      "nameEn": "Liberty",
+      "nameAr": "ليبرتي",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "jeep-commander",
+      "makeKey": "jeep",
+      "nameEn": "Commander",
+      "nameAr": "كوماندر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-range-rover-sport",
+      "makeKey": "land-rover",
+      "nameEn": "Range Rover Sport",
+      "nameAr": "رينج روفر سبورت",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-range-rover",
+      "makeKey": "land-rover",
+      "nameEn": "Range Rover",
+      "nameAr": "رينج روفر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-defender",
+      "makeKey": "land-rover",
+      "nameEn": "Defender",
+      "nameAr": "ديفندر",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-range-rover-evoque",
+      "makeKey": "land-rover",
+      "nameEn": "Range Rover Evoque",
+      "nameAr": "رينج روفر إيفوك",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-range-rover-velar",
+      "makeKey": "land-rover",
+      "nameEn": "Range Rover Velar",
+      "nameAr": "رينج روفر فيلار",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "land-rover-discovery",
+      "makeKey": "land-rover",
+      "nameEn": "Discovery",
+      "nameAr": "ديسكوفري",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mazda-3",
+      "makeKey": "mazda",
+      "nameEn": "3",
+      "nameAr": "3",
+      "defaultBodyType": "sedan",
+      "aliases": ["mazda3"]
+    },
+    {
+      "key": "mazda-6",
+      "makeKey": "mazda",
+      "nameEn": "6",
+      "nameAr": "6",
+      "defaultBodyType": "sedan",
+      "aliases": ["mazda6"]
+    },
+    {
+      "key": "mazda-2",
+      "makeKey": "mazda",
+      "nameEn": "2",
+      "nameAr": "2",
+      "defaultBodyType": "hatchback",
+      "aliases": ["mazda2"]
+    },
+    {
+      "key": "mazda-cx-9",
+      "makeKey": "mazda",
+      "nameEn": "CX-9",
+      "nameAr": "CX-9",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mazda-323",
+      "makeKey": "mazda",
+      "nameEn": "323",
+      "nameAr": "323",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "mazda-cx-30",
+      "makeKey": "mazda",
+      "nameEn": "CX-30",
+      "nameAr": "CX-30",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mazda-cx-3",
+      "makeKey": "mazda",
+      "nameEn": "CX-3",
+      "nameAr": "CX-3",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "suzuki-grand-vitara",
+      "makeKey": "suzuki",
+      "nameEn": "Grand Vitara",
+      "nameAr": "جراند فيتارا",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "suzuki-alto",
+      "makeKey": "suzuki",
+      "nameEn": "Alto",
+      "nameAr": "ألتو",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "suzuki-ciaz",
+      "makeKey": "suzuki",
+      "nameEn": "Ciaz",
+      "nameAr": "سياز",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "suzuki-baleno",
+      "makeKey": "suzuki",
+      "nameEn": "Baleno",
+      "nameAr": "بالينو",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "suzuki-swift",
+      "makeKey": "suzuki",
+      "nameEn": "Swift",
+      "nameAr": "سويفت",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "changan-eado",
+      "makeKey": "changan",
+      "nameEn": "Eado",
+      "nameAr": "إيدو",
+      "defaultBodyType": "sedan",
+      "aliases": ["eado plus", "ايدو بلس", "eado ev", "ev460"]
+    },
+    {
+      "key": "changan-e-star",
+      "makeKey": "changan",
+      "nameEn": "E-Star",
+      "nameAr": "E-ستار",
+      "defaultBodyType": "hatchback",
+      "aliases": ["اي ستار", "e star", "benni"]
+    },
+    {
+      "key": "changan-deepal-sl03",
+      "makeKey": "changan",
+      "nameEn": "Deepal SL03",
+      "nameAr": "ديبال SL03",
+      "defaultBodyType": "sedan",
+      "aliases": ["sl03"]
+    },
+    {
+      "key": "changan-deepal-s07",
+      "makeKey": "changan",
+      "nameEn": "Deepal S07",
+      "nameAr": "ديبال S07",
+      "defaultBodyType": "suv",
+      "aliases": ["deepal s7", "ديبال S7"]
+    },
+    {
+      "key": "changan-cs35",
+      "makeKey": "changan",
+      "nameEn": "CS35",
+      "nameAr": "CS35",
+      "defaultBodyType": "suv",
+      "aliases": ["cs35 plus"]
+    },
+    {
+      "key": "changan-deepal-s05",
+      "makeKey": "changan",
+      "nameEn": "Deepal S05",
+      "nameAr": "ديبال S05",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "changan-deepal-g318",
+      "makeKey": "changan",
+      "nameEn": "Deepal G318",
+      "nameAr": "ديبال G318",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "byd-song-plus",
+      "makeKey": "byd",
+      "nameEn": "Song Plus",
+      "nameAr": "سونج بلس",
+      "defaultBodyType": "suv",
+      "aliases": ["seal u", "سيل يو"]
+    },
+    {
+      "key": "byd-qin",
+      "makeKey": "byd",
+      "nameEn": "Qin",
+      "nameAr": "شين",
+      "defaultBodyType": "sedan",
+      "aliases": ["كين"]
+    },
+    {
+      "key": "byd-seal",
+      "makeKey": "byd",
+      "nameEn": "Seal",
+      "nameAr": "سيل",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "byd-sealion",
+      "makeKey": "byd",
+      "nameEn": "Sealion",
+      "nameAr": "سيليون",
+      "defaultBodyType": "suv",
+      "aliases": ["sealion 7", "sealion 6", "سيليون 7"]
+    },
+    {
+      "key": "byd-seagull",
+      "makeKey": "byd",
+      "nameEn": "Seagull",
+      "nameAr": "سيجول",
+      "defaultBodyType": "hatchback",
+      "aliases": ["dolphin surf", "دولفين سيرف"]
+    },
+    {
+      "key": "byd-qin-plus",
+      "makeKey": "byd",
+      "nameEn": "Qin Plus",
+      "nameAr": "شين بلس",
+      "defaultBodyType": "sedan",
+      "aliases": ["كين بلس"]
+    },
+    {
+      "key": "byd-dolphin",
+      "makeKey": "byd",
+      "nameEn": "Dolphin",
+      "nameAr": "دولفين",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "geely-azkarra",
+      "makeKey": "geely",
+      "nameEn": "Azkarra",
+      "nameAr": "أزكارا",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "geely-radar-rd6",
+      "makeKey": "geely",
+      "nameEn": "Radar RD6",
+      "nameAr": "رادار RD6",
+      "defaultBodyType": "pickup",
+      "aliases": ["riddara rd6", "rd6"]
+    },
+    {
+      "key": "geely-geometry-e",
+      "makeKey": "geely",
+      "nameEn": "Geometry E",
+      "nameAr": "جيوماتري E",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "geely-geometry-c",
+      "makeKey": "geely",
+      "nameEn": "Geometry C",
+      "nameAr": "جيوماتري C",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "geely-ex2",
+      "makeKey": "geely",
+      "nameEn": "EX2",
+      "nameAr": "EX2",
+      "defaultBodyType": "hatchback",
+      "aliases": ["xingyuan", "e2"]
+    },
+    {
+      "key": "chery-qq",
+      "makeKey": "chery",
+      "nameEn": "QQ",
+      "nameAr": "QQ",
+      "defaultBodyType": "hatchback",
+      "aliases": []
+    },
+    {
+      "key": "chery-tiggo",
+      "makeKey": "chery",
+      "nameEn": "Tiggo",
+      "nameAr": "تيجو",
+      "defaultBodyType": "suv",
+      "aliases": ["tiggo 2", "tiggo 4 pro", "tiggo 7 pro", "tiggo 8 pro", "تيجو 7", "تيجو 8"]
+    },
+    {
+      "key": "chery-icar",
+      "makeKey": "chery",
+      "nameEn": "iCar",
+      "nameAr": "iCar",
+      "defaultBodyType": "suv",
+      "aliases": ["icaur", "v23", "v27"]
+    },
+    {
+      "key": "chery-arrizo",
+      "makeKey": "chery",
+      "nameEn": "Arrizo",
+      "nameAr": "أريزو",
+      "defaultBodyType": "sedan",
+      "aliases": ["arrizo 5", "اريزو 5"]
+    },
+    {
+      "key": "mg-5",
+      "makeKey": "mg",
+      "nameEn": "5",
+      "nameAr": "5",
+      "defaultBodyType": "sedan",
+      "aliases": ["mg5"]
+    },
+    {
+      "key": "mg-zs",
+      "makeKey": "mg",
+      "nameEn": "ZS",
+      "nameAr": "ZS",
+      "defaultBodyType": "suv",
+      "aliases": ["zs ev"]
+    },
+    {
+      "key": "mg-rx5",
+      "makeKey": "mg",
+      "nameEn": "RX5",
+      "nameAr": "RX5",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mg-hs",
+      "makeKey": "mg",
+      "nameEn": "HS",
+      "nameAr": "HS",
+      "defaultBodyType": "suv",
+      "aliases": []
+    },
+    {
+      "key": "mg-gt",
+      "makeKey": "mg",
+      "nameEn": "GT",
+      "nameAr": "GT",
+      "defaultBodyType": "sedan",
+      "aliases": []
+    },
+    {
+      "key": "mg-3",
+      "makeKey": "mg",
+      "nameEn": "3",
+      "nameAr": "3",
+      "defaultBodyType": "hatchback",
+      "aliases": ["mg3"]
+    },
+    {
+      "key": "mg-4",
+      "makeKey": "mg",
+      "nameEn": "4",
+      "nameAr": "4",
+      "defaultBodyType": "hatchback",
+      "aliases": ["mg4", "mg 4 ev"]
+    },
+    {
+      "key": "tesla-model-s",
+      "makeKey": "tesla",
+      "nameEn": "Model S",
+      "nameAr": "موديل S",
+      "defaultBodyType": "sedan",
+      "aliases": ["موديل اس"]
+    },
+    {
+      "key": "tesla-model-x",
+      "makeKey": "tesla",
+      "nameEn": "Model X",
+      "nameAr": "موديل X",
+      "defaultBodyType": "suv",
+      "aliases": ["موديل اكس"]
+    }
+  ]
+}

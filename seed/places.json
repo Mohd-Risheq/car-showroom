@@ -1,0 +1,371 @@
+[
+  {
+    "key": "aqaba_port",
+    "nameEn": "Aqaba Port",
+    "nameAr": "ميناء العقبة",
+    "countryCode": "JO",
+    "kind": "port",
+    "lat": 29.4673,
+    "lng": 34.977
+  },
+  {
+    "key": "zarqa_free_zone",
+    "nameEn": "Zarqa Free Zone",
+    "nameAr": "المنطقة الحرة في الزرقاء",
+    "countryCode": "JO",
+    "kind": "free_zone",
+    "lat": 32.0972,
+    "lng": 36.2177
+  },
+  {
+    "key": "amman",
+    "nameEn": "Amman",
+    "nameAr": "عمّان",
+    "countryCode": "JO",
+    "kind": "city",
+    "lat": 31.9516,
+    "lng": 35.924
+  },
+  {
+    "key": "irbid",
+    "nameEn": "Irbid",
+    "nameAr": "إربد",
+    "countryCode": "JO",
+    "kind": "city",
+    "lat": 32.5556,
+    "lng": 35.8493
+  },
+  {
+    "key": "baltimore",
+    "nameEn": "Baltimore",
+    "nameAr": "بالتيمور",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 39.2566,
+    "lng": -76.5322
+  },
+  {
+    "key": "newark",
+    "nameEn": "Newark",
+    "nameAr": "نيوارك",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 40.6943,
+    "lng": -74.1324
+  },
+  {
+    "key": "savannah",
+    "nameEn": "Savannah",
+    "nameAr": "سافانا",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 32.1118,
+    "lng": -81.1454
+  },
+  {
+    "key": "houston",
+    "nameEn": "Houston",
+    "nameAr": "هيوستن",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 29.673,
+    "lng": -95.0346
+  },
+  {
+    "key": "jacksonville",
+    "nameEn": "Jacksonville",
+    "nameAr": "جاكسونفيل",
+    "countryCode": "US",
+    "kind": "port",
+    "lat": 30.4003,
+    "lng": -81.5362
+  },
+  {
+    "key": "jebel_ali",
+    "nameEn": "Jebel Ali Port",
+    "nameAr": "ميناء جبل علي",
+    "countryCode": "AE",
+    "kind": "port",
+    "lat": 24.9805,
+    "lng": 55.0599
+  },
+  {
+    "key": "dubai",
+    "nameEn": "Dubai",
+    "nameAr": "دبي",
+    "countryCode": "AE",
+    "kind": "city",
+    "lat": 25.0743,
+    "lng": 55.1886
+  },
+  {
+    "key": "incheon",
+    "nameEn": "Incheon",
+    "nameAr": "إنتشون",
+    "countryCode": "KR",
+    "kind": "port",
+    "lat": 37.4677,
+    "lng": 126.6117
+  },
+  {
+    "key": "seoul",
+    "nameEn": "Seoul",
+    "nameAr": "سيول",
+    "countryCode": "KR",
+    "kind": "city",
+    "lat": 37.5667,
+    "lng": 126.9783
+  },
+  {
+    "key": "ulsan",
+    "nameEn": "Ulsan",
+    "nameAr": "أولسان",
+    "countryCode": "KR",
+    "kind": "plant",
+    "lat": 35.5392,
+    "lng": 129.3119
+  },
+  {
+    "key": "hwaseong",
+    "nameEn": "Hwaseong",
+    "nameAr": "هواسونغ",
+    "countryCode": "KR",
+    "kind": "plant",
+    "lat": 37.1995,
+    "lng": 126.8313
+  },
+  {
+    "key": "asan",
+    "nameEn": "Asan",
+    "nameAr": "آسان",
+    "countryCode": "KR",
+    "kind": "plant",
+    "lat": 36.7899,
+    "lng": 127.0027
+  },
+  {
+    "key": "shanghai",
+    "nameEn": "Shanghai",
+    "nameAr": "شنغهاي",
+    "countryCode": "CN",
+    "kind": "port",
+    "lat": 31.2313,
+    "lng": 121.47
+  },
+  {
+    "key": "shenzhen",
+    "nameEn": "Shenzhen",
+    "nameAr": "شنجن",
+    "countryCode": "CN",
+    "kind": "city",
+    "lat": 22.5446,
+    "lng": 114.0545
+  },
+  {
+    "key": "foshan",
+    "nameEn": "Foshan",
+    "nameAr": "فوشان",
+    "countryCode": "CN",
+    "kind": "plant",
+    "lat": 23.024,
+    "lng": 113.116
+  },
+  {
+    "key": "toyota_city",
+    "nameEn": "Toyota City",
+    "nameAr": "مدينة تويوتا",
+    "countryCode": "JP",
+    "kind": "plant",
+    "lat": 35.0835,
+    "lng": 137.1567
+  },
+  {
+    "key": "miyawaka",
+    "nameEn": "Miyawaka",
+    "nameAr": "مياواكا",
+    "countryCode": "JP",
+    "kind": "plant",
+    "lat": 33.7236,
+    "lng": 130.6668
+  },
+  {
+    "key": "samut_prakan",
+    "nameEn": "Samut Prakan",
+    "nameAr": "ساموت براكان",
+    "countryCode": "TH",
+    "kind": "plant",
+    "lat": 13.6532,
+    "lng": 100.8183
+  },
+  {
+    "key": "laem_chabang",
+    "nameEn": "Laem Chabang",
+    "nameAr": "ليم تشابانغ",
+    "countryCode": "TH",
+    "kind": "port",
+    "lat": 13.0734,
+    "lng": 100.8994
+  },
+  {
+    "key": "georgetown_ky",
+    "nameEn": "Georgetown, Kentucky",
+    "nameAr": "جورج تاون، كنتاكي",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 38.21,
+    "lng": -84.5597
+  },
+  {
+    "key": "hermosillo",
+    "nameEn": "Hermosillo",
+    "nameAr": "إرموسيو",
+    "countryCode": "MX",
+    "kind": "plant",
+    "lat": 29.0948,
+    "lng": -110.9692
+  },
+  {
+    "key": "fremont_ca",
+    "nameEn": "Fremont, California",
+    "nameAr": "فريمونت، كاليفورنيا",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 37.5483,
+    "lng": -121.9886
+  },
+  {
+    "key": "detroit",
+    "nameEn": "Detroit",
+    "nameAr": "ديترويت",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 42.3316,
+    "lng": -83.0466
+  },
+  {
+    "key": "flat_rock",
+    "nameEn": "Flat Rock, Michigan",
+    "nameAr": "فلات روك، ميشيغان",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 42.0964,
+    "lng": -83.2919
+  },
+  {
+    "key": "marysville_oh",
+    "nameEn": "Marysville, Ohio",
+    "nameAr": "ماريسفيل، أوهايو",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 40.2364,
+    "lng": -83.3671
+  },
+  {
+    "key": "woodstock_on",
+    "nameEn": "Woodstock, Ontario",
+    "nameAr": "وودستوك، أونتاريو",
+    "countryCode": "CA",
+    "kind": "plant",
+    "lat": 43.1301,
+    "lng": -80.7563
+  },
+  {
+    "key": "vance_al",
+    "nameEn": "Vance, Alabama",
+    "nameAr": "فانس، ألاباما",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 33.1743,
+    "lng": -87.2336
+  },
+  {
+    "key": "montgomery_al",
+    "nameEn": "Montgomery, Alabama",
+    "nameAr": "مونتغمري، ألاباما",
+    "countryCode": "US",
+    "kind": "plant",
+    "lat": 32.3777,
+    "lng": -86.3091
+  },
+  {
+    "key": "us_tx",
+    "nameEn": "Texas",
+    "nameAr": "تكساس",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 31.2639,
+    "lng": -98.5456
+  },
+  {
+    "key": "us_ga",
+    "nameEn": "Georgia",
+    "nameAr": "جورجيا",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 32.3294,
+    "lng": -83.1137
+  },
+  {
+    "key": "us_fl",
+    "nameEn": "Florida",
+    "nameAr": "فلوريدا",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 27.7568,
+    "lng": -81.464
+  },
+  {
+    "key": "us_ca",
+    "nameEn": "California",
+    "nameAr": "كاليفورنيا",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 36.7015,
+    "lng": -118.756
+  },
+  {
+    "key": "us_mi",
+    "nameEn": "Michigan",
+    "nameAr": "ميشيغان",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 43.6212,
+    "lng": -84.6824
+  },
+  {
+    "key": "us_nj",
+    "nameEn": "New Jersey",
+    "nameAr": "نيوجيرسي",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 40.0757,
+    "lng": -74.4042
+  },
+  {
+    "key": "us_oh",
+    "nameEn": "Ohio",
+    "nameAr": "أوهايو",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 40.2254,
+    "lng": -82.6881
+  },
+  {
+    "key": "us_va",
+    "nameEn": "Virginia",
+    "nameAr": "فرجينيا",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 37.1232,
+    "lng": -78.4928
+  },
+  {
+    "key": "us_ny",
+    "nameEn": "New York",
+    "nameAr": "نيويورك",
+    "countryCode": "US",
+    "kind": "region",
+    "lat": 43.1562,
+    "lng": -75.845
+  }
+]

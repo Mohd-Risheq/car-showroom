@@ -106,6 +106,11 @@ export function text(rule: TextRule) {
   );
 }
 
+/** VR-22: Zod's own pattern, the usual subset of RFC 5322, without quoted names or IP addresses */
+export function emailAddress() {
+  return text({ max: 254, issue: { key: "validation.email" } }).pipe(z.email({ error: "validation.email" }));
+}
+
 // Postgres's date type has no year 0000, which the engine's calendar reads as real
 const DATE = /^(?!0000)\d{4}-\d{2}-\d{2}$/;
 const MONTH = /^((?!0000)\d{4}-(?:0[1-9]|1[0-2]))(?:-01)?$/;

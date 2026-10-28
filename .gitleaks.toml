@@ -1,0 +1,17 @@
+# gitleaks' own rules, with one allowance. A model key (SRS §6.4) is a slug that starts with its
+# make's key, such as changan-deepal-sl03, and the digits in some give it the entropy of an API key.
+# Only the generic rule's findings pass, and only on a line holding nothing but a "key" that starts
+# with one of the seed's makes and a hyphen, in a file whose path ends in seed/reference.json: the
+# reference data, or the seed check's fixture under tests/. Both the line and the path must match.
+# Each make added to the reference data joins the list here. Until it does, its models' keys have no
+# allowance, and the generic rule reports any of them that has a key's entropy.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "A model key on its own line in the reference data"
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "line"
+regexes = ['''^\s*"key": "(?:toyota|hyundai|kia|nissan|mitsubishi|honda|lexus|mercedes-benz|bmw|audi|volkswagen|ford|chevrolet|gmc|jeep|land-rover|mazda|suzuki|changan|byd|geely|chery|mg|tesla)(?:-[a-z0-9]+)+",?$''']
+paths = ['''(?:^|/)seed/reference\.json$''']

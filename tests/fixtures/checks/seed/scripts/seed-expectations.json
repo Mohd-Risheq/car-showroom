@@ -1,0 +1,62 @@
+{
+  "cars": {
+    "s01": {
+      "status": "published",
+      "published": -9,
+      "sold": null,
+      "mileageKm": 84000,
+      "priceJod": 47500,
+      "fuelType": "gasoline",
+      "regionalSpecs": "gcc",
+      "inspection": "complete",
+      "epa": null
+    },
+    "s02": {
+      "status": "sold",
+      "published": -40,
+      "sold": -5,
+      "mileageKm": 79000,
+      "priceJod": 22500,
+      "fuelType": "electric",
+      "regionalSpecs": "american",
+      "inspection": {
+        "filled": 13
+      },
+      "epa": {
+        "kwhPer100km": 16.2
+      }
+    },
+    "s03": {
+      "status": "draft",
+      "published": null,
+      "sold": null,
+      "mileageKm": 112000,
+      "priceJod": null,
+      "fuelType": "gasoline",
+      "regionalSpecs": "agency",
+      "inspection": "none",
+      "epa": null
+    }
+  },
+  "mix": {
+    "fuel": {
+      "gasoline": 2,
+      "electric": 1
+    },
+    "body": {
+      "suv": 1,
+      "sedan": 2
+    }
+  },
+  "publicWithCompleteInspection": 1,
+  "badges": {
+    "new": [],
+    "priceReduced": [
+      "s02"
+    ],
+    "priceDropped": []
+  },
+  "contradictions": [],
+  "importRulesFrom": "2025-11-01",
+  "importException": null
+}

@@ -1,0 +1,48 @@
+{
+  "makes": [
+    {
+      "key": "toyota",
+      "nameEn": "Toyota",
+      "nameAr": "تويوتا"
+    },
+    {
+      "key": "tesla",
+      "nameEn": "Tesla",
+      "nameAr": "تسلا"
+    }
+  ],
+  "models": [
+    {
+      "key": "toyota-land-cruiser",
+      "makeKey": "toyota",
+      "nameEn": "Land Cruiser",
+      "nameAr": "لاند كروزر",
+      "defaultBodyType": "suv",
+      "aliases": [
+        "landcruiser",
+        "لاندكروزر"
+      ]
+    },
+    {
+      "key": "toyota-camry",
+      "makeKey": "toyota",
+      "nameEn": "Camry",
+      "nameAr": "كامري",
+      "defaultBodyType": "sedan",
+      "aliases": [
+        "camri",
+        "كامري"
+      ]
+    },
+    {
+      "key": "tesla-model-3",
+      "makeKey": "tesla",
+      "nameEn": "Model 3",
+      "nameAr": "موديل 3",
+      "defaultBodyType": "sedan",
+      "aliases": [
+        "model3"
+      ]
+    }
+  ]
+}

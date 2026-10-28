@@ -1,4 +1,5 @@
 import { normalizeDigits } from "../../../lib/i18n/normalize.ts";
+import { cryptoBytes, drawSymbols, type RandomBytes } from "../../../lib/random-symbols.ts";
 
 // BR-15: a car's reference code is the dealer's two-letter prefix (dealer.ref_prefix), a hyphen and
 // four symbols, chosen so none can be read as another. BR-33 matches a typed code whatever its case.
@@ -12,30 +13,14 @@ const PREFIX = /^[A-Z]{2}$/;
 // The database's car_ref_code_format
 const REF_CODE = /^[A-Z]{2}-[2-9A-HJKMNP-Z]{4}$/;
 
-// 248 is 8 × 31: a byte below it maps onto the 31 symbols evenly, and a byte from 248 up, which
-// would favour the first eight, is drawn again. Sixteen rounds without a usable byte only happen
-// when the source is broken.
-const EVEN_BELOW = 256 - (256 % REF_SYMBOLS.length);
-const MAX_ROUNDS = 16;
 // A collision takes one code in 923,521 per car already listed, so eight in a row never happen
 // at a dealer's scale
 const CLAIM_ATTEMPTS = 8;
 
-export type RandomBytes = (count: number) => Uint8Array;
-
-const cryptoBytes: RandomBytes = (count) => crypto.getRandomValues(new Uint8Array(count));
-
 /** A new code with the dealer's prefix. Whether another car has it is the caller's question. */
 export function drawRefCode(prefix: string, randomBytes: RandomBytes = cryptoBytes): string {
   if (!PREFIX.test(prefix)) throw new RangeError(`Not a reference prefix: ${JSON.stringify(prefix)}`);
-  let symbols = "";
-  for (let round = 0; round < MAX_ROUNDS && symbols.length < SYMBOL_COUNT; round += 1) {
-    for (const byte of randomBytes(SYMBOL_COUNT - symbols.length)) {
-      if (byte < EVEN_BELOW) symbols += REF_SYMBOLS.charAt(byte % REF_SYMBOLS.length);
-    }
-  }
-  if (symbols.length < SYMBOL_COUNT) throw new Error("The random source gave no usable bytes");
-  return `${prefix}-${symbols}`;
+  return `${prefix}-${drawSymbols(REF_SYMBOLS, SYMBOL_COUNT, randomBytes)}`;
 }
 
 /**

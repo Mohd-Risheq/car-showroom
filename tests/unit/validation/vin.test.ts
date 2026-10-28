@@ -3,9 +3,9 @@ import { checkVin, isNorthAmerican, normalizeVin, vinCheckDigit } from "@/lib/va
 
 // VR-04 and BR-23, TC-36-1: the VIN's form, and its check digit in and outside North America
 
-// Every VIN in 05-SEED-DATA §6: seed cars (§6.2), bench cars (§6.3) and the demo rotation (§6.4).
-// vPIC reported each one's check digit as correct.
-const SEED_VINS = [
+// Synthetic VINs whose check digit NHTSA vPIC reported as correct. The last six are the demo
+// rotation's (05-SEED-DATA §6.4), and none of the others is a seed or bench car's.
+const SAMPLE_VINS = [
   "4T1B31HK3KU190069",
   "7SAYGDEE5NF207554",
   "KMHE24L16HA998152",
@@ -37,8 +37,8 @@ const SEED_VINS = [
 ];
 
 describe("VIN check digit", () => {
-  it("matches position 9 of every seed VIN", () => {
-    for (const vin of SEED_VINS) expect(vinCheckDigit(vin), vin).toBe(vin.charAt(8));
+  it("matches position 9 of every sample VIN", () => {
+    for (const vin of SAMPLE_VINS) expect(vinCheckDigit(vin), vin).toBe(vin.charAt(8));
   });
 
   it("writes a remainder of 10 as X", () => {
@@ -48,8 +48,8 @@ describe("VIN check digit", () => {
 });
 
 describe("VIN validation", () => {
-  it("accepts every seed VIN with no warning", () => {
-    for (const vin of SEED_VINS) expect(checkVin(vin), vin).toEqual({ ok: true, warning: null });
+  it("accepts every sample VIN with no warning", () => {
+    for (const vin of SAMPLE_VINS) expect(checkVin(vin), vin).toEqual({ ok: true, warning: null });
   });
 
   it("treats a World Manufacturer Identifier starting 1 to 5 as North American (BR-23)", () => {
@@ -73,7 +73,8 @@ describe("VIN validation", () => {
   it("only warns about a check digit mismatch outside North America, where it may not be used", () => {
     expect(checkVin("WVWZZZ1KZAW000001")).toEqual({ ok: true, warning: "validation.vinCheckDigitWarn" });
     expect(checkVin("JTDKARFU1H3503077")).toEqual({ ok: true, warning: "validation.vinCheckDigitWarn" });
-    // BR-23 names 1 to 5, so a 7 is outside North America for this rule, though S04 was built in Fremont
+    // BR-23 names 1 to 5, so a 7 is outside North America for this rule, though some Teslas
+    // built in Fremont have one
     expect(checkVin("7SAYGDEE4NF207554")).toEqual({ ok: true, warning: "validation.vinCheckDigitWarn" });
   });
 

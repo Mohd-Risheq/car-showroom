@@ -1,0 +1,249 @@
+{
+  "dealer": {
+    "slug": "muftah",
+    "refPrefix": "MU"
+  },
+  "brand": {
+    "brandNameEn": "Muftah Motors",
+    "brandNameAr": "مفتاح للسيارات",
+    "taglineEn": "See the inspection before you see the car.",
+    "taglineAr": "شوف الفحص قبل ما تشوف السيارة",
+    "storyEn": "Our name, Muftah, means key: we think the key to buying a used car is knowing it before you visit. So we record what we find: the paint on each panel, close-up photos of any marks, and where the car came from. Each car's page says what we checked, and also what we didn't.",
+    "storyAr": "اسمنا مفتاح، لأننا نرى أن مفتاح شراء سيارة مستعملة أن تعرفها قبل أن تزورنا. لذلك نسجّل ما نجده: دهان كل قطعة، وصورًا مقرّبة لأي أثر، ومن أين جاءت السيارة. وصفحة كل سيارة تذكر ما فحصناه، وتذكر أيضًا ما لم نفحصه.",
+    "accentPreset": "scan_cyan"
+  },
+  "contact": {
+    "whatsappE164": "+962790000000",
+    "phoneE164": "+962790000000",
+    "email": "hello@muftah.example",
+    "addressEn": "Airport Road, Amman, Jordan",
+    "addressAr": "طريق المطار، عمّان، الأردن",
+    "lat": 31.9184,
+    "lng": 35.8591,
+    "social": {}
+  },
+  "hours": {
+    "hours": {
+      "sat": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "sun": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "mon": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "tue": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "wed": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "thu": [
+        {
+          "open": "09:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ],
+      "fri": [
+        {
+          "open": "14:00",
+          "close": "21:00",
+          "overnight": false
+        }
+      ]
+    },
+    "ramadan": {
+      "start": "2027-02-08",
+      "end": "2027-03-09",
+      "hours": {
+        "sat": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "sun": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "mon": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "tue": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "wed": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "thu": [
+          {
+            "open": "10:00",
+            "close": "15:00",
+            "overnight": false
+          },
+          {
+            "open": "20:30",
+            "close": "23:30",
+            "overnight": false
+          }
+        ],
+        "fri": "closed"
+      }
+    },
+    "closures": [
+      {
+        "date": "2026-12-25",
+        "note_en": "Christmas",
+        "note_ar": "عيد الميلاد المجيد"
+      },
+      {
+        "date": "2027-01-01",
+        "note_en": "New Year",
+        "note_ar": "رأس السنة الميلادية"
+      },
+      {
+        "date": "2027-03-10",
+        "note_en": "Eid al-Fitr",
+        "note_ar": "عيد الفطر"
+      },
+      {
+        "date": "2027-03-11",
+        "note_en": "Eid al-Fitr",
+        "note_ar": "عيد الفطر"
+      },
+      {
+        "date": "2027-03-12",
+        "note_en": "Eid al-Fitr",
+        "note_ar": "عيد الفطر"
+      },
+      {
+        "date": "2027-05-01",
+        "note_en": "Labour Day",
+        "note_ar": "عيد العمال"
+      },
+      {
+        "date": "2027-05-16",
+        "note_en": "Eid al-Adha",
+        "note_ar": "عيد الأضحى"
+      },
+      {
+        "date": "2027-05-17",
+        "note_en": "Eid al-Adha",
+        "note_ar": "عيد الأضحى"
+      },
+      {
+        "date": "2027-05-18",
+        "note_en": "Eid al-Adha",
+        "note_ar": "عيد الأضحى"
+      },
+      {
+        "date": "2027-05-19",
+        "note_en": "Eid al-Adha",
+        "note_ar": "عيد الأضحى"
+      },
+      {
+        "date": "2027-05-25",
+        "note_en": "Independence Day",
+        "note_ar": "عيد الاستقلال"
+      }
+    ]
+  },
+  "prices": {
+    "fuelPrice90": 1.05,
+    "fuelPrice95": 1.36,
+    "fuelPrice98": 1.51,
+    "fuelPriceDiesel": 0.9,
+    "elecHomeOffpeakKwh": 0.108,
+    "elecHomePeakKwh": 0.16,
+    "elecPublicKwh": 0.133,
+    "baselineLPer100km": {
+      "sedan": 8,
+      "suv": 11,
+      "hatchback": 7,
+      "pickup": 12,
+      "coupe": 9,
+      "convertible": 9.5,
+      "van": 12,
+      "truck": 16
+    }
+  },
+  "pricesUpdatedAt": "2026-10-01",
+  "showcase": {
+    "heroCar": "s01",
+    "featuredCars": ["s02", "s04", "s15", "s25", "s12", "s17"]
+  },
+  "advanced": {
+    "soldVisibleDays": 30,
+    "mileageBands": {
+      "low": 12000,
+      "high": 25000
+    },
+    "micronBands": {
+      "factoryMax": 180,
+      "refinishMax": 300
+    }
+  }
+}

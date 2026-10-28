@@ -335,4 +335,16 @@ describe("the seed's offsets (05-SEED-DATA §9.1)", () => {
     expect(validate(seedOffsetsSchema, { milestones: { shipped: 2 } })).toMatchObject({ ok: false });
     expect(validate(seedOffsetsSchema, { licenseExpiryMonths: 0 })).toMatchObject({ ok: false });
   });
+
+  it("reach no further than a century from today, back for an age and ahead for a licence", () => {
+    // 36,525 days and 1,200 months
+    expect(validate(seedOffsetsSchema, { published: -36_525, licenseExpiryMonths: 1200 })).toMatchObject({
+      ok: true,
+    });
+    expect(validate(seedOffsetsSchema, { published: -36_526 })).toMatchObject({ ok: false });
+    const change = { days: -36_526, from: 15000, to: 14500 };
+    expect(validate(seedOffsetsSchema, { priceChanges: [change] })).toMatchObject({ ok: false });
+    expect(validate(seedOffsetsSchema, { milestones: { shipped: -36_526 } })).toMatchObject({ ok: false });
+    expect(validate(seedOffsetsSchema, { licenseExpiryMonths: 1201 })).toMatchObject({ ok: false });
+  });
 });

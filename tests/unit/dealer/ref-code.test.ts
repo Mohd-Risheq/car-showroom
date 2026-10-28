@@ -1,14 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { claimRefCode, drawRefCode, isRefCode, parseRefCode, REF_SYMBOLS } from "@/features/dealer/domain/ref-code";
+import { scripted } from "../../support/random";
 
 // BR-15: the dealer's two-letter prefix, a hyphen and four symbols that can't be mistaken for one
 // another. BR-33 matches a typed code whatever its case.
-
-/** A random source that hands out the given bytes in order, and nothing once they run out */
-function scripted(...bytes: number[]) {
-  const queue = [...bytes];
-  return (count: number) => Uint8Array.from(queue.splice(0, count));
-}
 
 afterEach(() => {
   vi.restoreAllMocks();

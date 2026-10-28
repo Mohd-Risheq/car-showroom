@@ -27,7 +27,7 @@
     "metrics": "node scripts/metrics.ts",
     "lhci": "node scripts/lhci.ts",
     "audit:deps": "node scripts/audit-deps.ts",
-    "verify": "pnpm lint && pnpm typecheck && pnpm db:check && pnpm test && pnpm test:int && pnpm check:i18n && pnpm check:dashes && pnpm check:contrast && pnpm build && pnpm check:bundle",
+    "verify": "pnpm lint && pnpm typecheck && pnpm db:check && pnpm test && pnpm test:int && pnpm check:i18n && pnpm check:dashes && pnpm check:contrast && pnpm check:seed && pnpm build && pnpm check:bundle",
     "verify:full": "pnpm verify && pnpm e2e && pnpm e2e:linux && pnpm lhci && pnpm audit:deps",
     "i18n:deck-keys": "node scripts/deck-keys.ts",
     "i18n:messages": "node scripts/deck-to-messages.ts && node scripts/deck-keys.ts",
