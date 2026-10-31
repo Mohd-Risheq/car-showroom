@@ -2,6 +2,7 @@
 // them. A page lists its paths once it is built and paints. Until then it is pending, because
 // Lighthouse can't score a page that paints nothing (NO_FCP). After the runs, what each page's runs
 // measured, as Lighthouse CI's filesystem upload left them, or why there is nothing to read.
+import { stripVTControlCharacters } from "node:util";
 import { z } from "zod";
 
 /** The URLs to measure, and the pages with no paths yet */
@@ -107,4 +108,17 @@ export function lighthouseResults(urls: string[], manifestFile: string, read: Re
     runs.sort((a, b) => Date.parse(a.fetchTime) - Date.parse(b.fetchTime));
     return { url, note: note(runs, median) };
   });
+}
+
+/**
+ * The last lines a command printed, without colour codes, blank lines or trailing spaces: for LHCI
+ * or the build it measures, why a run stopped, which on GitHub Actions only the job's log holds
+ */
+export function lastLines(output: string, count: number): string {
+  return stripVTControlCharacters(output)
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter(Boolean)
+    .slice(-count)
+    .join("\n");
 }

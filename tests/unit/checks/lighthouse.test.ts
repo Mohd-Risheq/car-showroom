@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { lighthousePlan, lighthouseResults } from "../../../scripts/checks/lighthouse.ts";
+import { lastLines, lighthousePlan, lighthouseResults } from "../../../scripts/checks/lighthouse.ts";
 
 // The pages pnpm lhci measures (NFR-PERF-02): the listed paths on the build's origin, with the pages
 // not built yet named as pending, never measured
@@ -156,5 +156,34 @@ describe("lighthouseResults", () => {
       url: `${ORIGIN}/en/visit`,
       problem: expect.stringMatching(/^visit-1\.json no longer has the fields pnpm lhci reads:\n/),
     });
+  });
+});
+
+describe("lastLines", () => {
+  // As LHCI prints an assertion that failed: coloured, with blank lines and a Windows line end among them
+  const ESC = String.fromCharCode(27);
+  const output = [
+    "Checking assertions against 2 URL(s), 6 total run(s)",
+    "",
+    `  ${ESC}[31m✘${ESC}[0m  ${ESC}[1mcategories${ESC}[0m.performance failure for ${ESC}[1mminScore${ESC}[0m assertion   `,
+    `        expected: >=${ESC}[32m0.9${ESC}[0m\r`,
+    "",
+    "Assertion failed. Exiting with status code 1.",
+    "",
+  ].join("\n");
+
+  it("keeps the last lines a command printed, without colour codes, blank lines or trailing spaces", () => {
+    expect(lastLines(output, 3)).toBe(
+      [
+        "  ✘  categories.performance failure for minScore assertion",
+        "        expected: >=0.9",
+        "Assertion failed. Exiting with status code 1.",
+      ].join("\n"),
+    );
+  });
+
+  it("keeps every line of an output shorter than the count", () => {
+    expect(lastLines(output, 10).split("\n")).toHaveLength(4);
+    expect(lastLines("", 10)).toBe("");
   });
 });
