@@ -4,10 +4,11 @@
 // build itself and refuses a port already in use: when LHCI's own server start fails it only warns,
 // then measures whatever answers there, such as an older build or next dev. Chrome is Playwright's
 // Chromium with a throwaway profile, never this machine's own Chrome, and the flags every Chromium
-// here gets (scripts/checks/chromium.ts). After the runs, passed or failed, it prints what each
-// page's runs measured, or why there is no report, and for a failed run the last lines LHCI, or the
-// build that didn't start, printed; on GitHub Actions each is an annotation on the run, whose page
-// anyone can read, while its log is closed to readers without admin rights.
+// here gets, without its sandbox on Linux (scripts/checks/chromium.ts). After the runs, passed or
+// failed, it prints what each page's runs measured, or why there is no report, and for a failed run
+// the last lines LHCI, or the build that didn't start, printed; on GitHub Actions each is an
+// annotation on the run, whose page anyone can read, while its log is closed to readers without
+// admin rights.
 //
 // Usage: pnpm lhci [lhci autorun options], after pnpm build; --collect.url=<url> adds a page
 import { type ChildProcess, spawn } from "node:child_process";
@@ -16,7 +17,7 @@ import { createRequire } from "node:module";
 import net from "node:net";
 import path from "node:path";
 import { chromium } from "@playwright/test";
-import { CHROMIUM_FLAGS } from "./checks/chromium.ts";
+import { lighthouseChromeFlags } from "./checks/chromium.ts";
 import { readJson, ROOT } from "./checks/files.ts";
 import { workflowCommand } from "./checks/github.ts";
 import { lastLines, lighthousePlan, lighthouseResults } from "./checks/lighthouse.ts";
@@ -129,7 +130,7 @@ async function measure(): Promise<{ status: number; failure?: string }> {
     };
   }
   const pages = urls.map((url) => `--collect.url=${url}`);
-  const flags = `--collect.settings.chromeFlags=${CHROMIUM_FLAGS.join(" ")}`;
+  const flags = `--collect.settings.chromeFlags=${lighthouseChromeFlags(process.platform).join(" ")}`;
   const lhci = spawn("pnpm", ["exec", "lhci", "autorun", "--failOnUploadFailure", flags, ...pages, ...options], {
     cwd: ROOT,
     stdio: ["ignore", "pipe", "pipe"],
