@@ -81,16 +81,21 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup
       - uses: ./.github/actions/local-services
-      - run: pnpm build
+      - id: build
+        run: pnpm build
 
       # Steps 5 and 6: journeys, axe and the visual comparison, with the browsers in Playwright's
       # image pinned by digest, where the approved baselines come from (D-037)
       - run: pnpm e2e:linux
 
       # Step 7: Lighthouse drives Playwright's own Chromium on the runner, and each page's runs show
-      # on the run as annotations (scripts/lhci.ts)
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm lhci
+      # on the run as annotations (scripts/lhci.ts). It runs after a failed step 5 or 6 too, once
+      # the build has passed, so one run reports every gate; the job fails all the same.
+      - id: chromium
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: pnpm exec playwright install --with-deps chromium
+      - if: ${{ !cancelled() && steps.chromium.outcome == 'success' }}
+        run: pnpm lhci
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}

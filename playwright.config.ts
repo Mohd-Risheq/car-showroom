@@ -57,6 +57,9 @@ export default defineConfig({
     ["list"],
     ["json", { outputFile: "reports/playwright.json" }],
     ["html", { open: "never", outputFolder: "playwright-report" }],
+    // On GitHub Actions each failed or flaky test, and the run's summary, also show as annotations
+    // on the run, which anyone can read, while its log needs admin rights
+    ...(process.env.GITHUB_ACTIONS === "true" ? [["github"] as const] : []),
   ],
   use: {
     baseURL: `http://localhost:${PORT}`,
