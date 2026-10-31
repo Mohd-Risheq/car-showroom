@@ -1,5 +1,5 @@
 import { CSPProvider } from "@base-ui/react/csp-provider";
-import type { Metadata, Viewport } from "next";
+import type { Viewport } from "next";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { DirectionProvider } from "@/components/ui/direction-provider";
@@ -7,19 +7,17 @@ import { Toaster } from "@/components/ui/toaster";
 import { WorkspaceTheme } from "@/components/ui/workspace-theme";
 import { directionOf, LOCALES } from "@/lib/i18n/locales";
 import { getAppLocale } from "@/lib/i18n/server";
-import { NO_ICON_YET } from "@/lib/metadata";
 import { fontVariables } from "@/styles/fonts";
 import { THEME_COLOR } from "@/styles/theme-color";
+import { PAGE_VIEWPORT } from "@/styles/viewport";
 import "@/styles/globals.css";
 
 // Root layout 2 of 2: the dealer workspace renders per request and may block, with no
 // <Suspense> above it (SRS §11.5 rule 13)
 export const instant = false;
 
-export const metadata: Metadata = { icons: NO_ICON_YET };
-
 // Daylight until the dealer's stored theme says otherwise (DESIGN §3.2)
-export const viewport: Viewport = { themeColor: THEME_COLOR.daylight, colorScheme: "light" };
+export const viewport: Viewport = { ...PAGE_VIEWPORT, themeColor: THEME_COLOR.daylight, colorScheme: "light" };
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));

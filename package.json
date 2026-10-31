@@ -38,7 +38,8 @@
     "db:check": "drizzle-kit check",
     "fixtures:spin": "node scripts/fixtures/spin-dials.ts",
     "fixtures:sound": "node scripts/fixtures/engine-clips.ts",
-    "fonts:fallbacks": "node scripts/font-fallbacks.ts"
+    "fonts:fallbacks": "node scripts/font-fallbacks.ts",
+    "icons": "node scripts/icons.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
@@ -67,6 +68,7 @@
     "sonner": "2.0.8",
     "tailwind-merge": "3.7.0",
     "topojson-client": "3.1.0",
+    "uqr": "0.1.3",
     "world-atlas": "2.0.2",
     "zod": "4.6.7"
   },
@@ -91,6 +93,7 @@
     "sharp": "0.35.5",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "zxing-wasm": "3.1.3"
   }
 }

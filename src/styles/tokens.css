@@ -168,10 +168,72 @@
   }
 }
 
+/* DESIGN §3.7: the blueprint lines, which data regions draw: data lines 1 px in --line, and the
+   scan line 1.5 px in --scan */
+:root {
+  --line-data: 1px;
+  --line-scan: 1.5px;
+}
+
 /* DESIGN §3.5: the focus ring, never removed, on keyboard focus (globals.css) */
 :root {
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
+}
+
+/* DESIGN §7.1.1 and §8.4: the public shell's bands. The header is 56 px on phones and 64 px from
+   768 px, where it compacts to 52 px after a scroll by moving up 12 px. The demo banner is 40 px,
+   and a car page's action bar 64 px, 48 px on a screen under 480 px tall. globals.css pads the page
+   and its scrolling by them, so the sticky chrome never covers the focus. */
+:root {
+  --header-height: 3.5rem;
+  --header-compact-shift: 0.75rem;
+  --header-compact-row: calc(var(--header-compact-shift) / 2);
+  --banner-height: 2.5rem;
+  --bar-height: 4rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --header-height: 4rem;
+  }
+}
+
+@media (max-height: 30rem) {
+  :root {
+    --bar-height: 3rem;
+  }
+}
+
+/* DESIGN §2 and §10.3: the header's wordmark, the dealer's name, steps down in size as the name
+   grows and as the screen narrows, and the header never wraps. Measured in both scripts in Chromium
+   and WebKit (D-047): the seed's names, of 13 and 14 characters, fit whole from 320 px, sample
+   names of 24 and 30 characters from 768 px, and one of 60 only at 1440 px of the six widths tried,
+   below which the ellipsis cuts it. Its face, weight and HEXP are the display step's, which narrow
+   on phones. */
+:root {
+  --wordmark-size: 1rem;
+  --wordmark-size-long: 0.875rem;
+  --wordmark-size-longest: 0.8125rem;
+}
+
+@media (width >= 22.5rem) {
+  :root {
+    --wordmark-size: 1.125rem;
+  }
+}
+
+@media (width >= 48rem) {
+  :root {
+    --wordmark-size: 1.375rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --wordmark-size-long: 1.125rem;
+    --wordmark-size-longest: 0.9375rem;
+  }
 }
 
 /* DESIGN §4.2: durations, mirrored from src/lib/motion-tokens.ts. Tailwind reads them as
@@ -306,10 +368,19 @@
   --animate-*: initial;
   --animate-spin: spin var(--dur-spin) linear infinite;
   --animate-skeleton: skeleton var(--dur-pulse) ease-in-out var(--pulse-cycles);
+  /* DESIGN §7.2.11: the 404's scan line crosses the empty bay once, from where --scan-from places it
+     to where it rests */
+  --animate-scan-cross: scan-cross var(--dur-reveal) var(--ease-in-out) both;
 
   @keyframes skeleton {
     50% {
       opacity: 0.6;
+    }
+  }
+
+  @keyframes scan-cross {
+    from {
+      transform: translateY(var(--scan-from, 0));
     }
   }
 }
@@ -360,6 +431,26 @@
   font-weight: var(--small-weight);
   font-variation-settings: "HEXP" var(--small-hexp);
   text-wrap: pretty;
+}
+
+/* DESIGN §2: the wordmark, set as the display step is but at its own size, on one line. A longer
+   name takes a smaller step (data-length, src/features/shell/domain/wordmark.ts). */
+@utility wordmark {
+  font-family: var(--font-display);
+  font-size: var(--wordmark-size);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
+  font-weight: var(--display-weight);
+  font-variation-settings: "HEXP" var(--display-hexp);
+  white-space: nowrap;
+
+  &[data-length="long"] {
+    font-size: var(--wordmark-size-long);
+  }
+
+  &[data-length="longest"] {
+    font-size: var(--wordmark-size-longest);
+  }
 }
 
 /* DESIGN §3.3: figures in Martian Mono at wdth 87.5, wght 450, tabular, at the size around them */

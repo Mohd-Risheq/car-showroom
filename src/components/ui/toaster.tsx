@@ -1,78 +1,70 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { Toaster as Sonner, toast } from "sonner";
-import { Button } from "./button";
+import { type ComponentType, type ReactNode, useEffect, useState } from "react";
+import type * as Sonner from "./sonner-toaster";
 
-// DESIGN §6.1: Sonner at the bottom centre, in the page's direction, clear of the safe areas.
-// Sonner keeps the stacking, swiping and timing; each toast is our own card on the tokens (a raised
-// --surface-2 with the overlay shadow, square like every panel), so none of Sonner's own colours,
-// radius or system font shows. Sonner announces toasts in a polite live region (SRS §10.4, 4.1.3),
-// and under reduced motion globals.css turns its slide into a 200 ms crossfade (DESIGN §4.5).
+// DESIGN §6.1's toaster. Sonner (sonner-toaster.tsx) weighs about 10 KB, more than the public pages'
+// first load has room for (NFR-PERF-03), so it loads once the page has hydrated (D-047). Not at the
+// first toast: the offline toast (DESIGN §7.2.11) comes when nothing can load any more, and the
+// toast region should be on the page before a toast is. A toast asked for sooner shows as the toaster
+// mounts, as Sonner shows the toasts made before its toaster. Offline before Sonner has loaded, it
+// loads when the connection is back, or with the next toast.
 
-/** The page margin, plus the notch or home indicator's safe area on that side */
-const EDGE = {
-  bottom: "calc(var(--spacing-page) + env(safe-area-inset-bottom))",
-  left: "calc(var(--spacing-page) + env(safe-area-inset-left))",
-  right: "calc(var(--spacing-page) + env(safe-area-inset-right))",
-};
+/** The toasters still waiting for Sonner, each told when it loads, whichever call loaded it */
+const waiting = new Set<(sonner: typeof Sonner) => void>();
 
-type ToasterProps = {
-  dir: "rtl" | "ltr";
-  /** The toast region's accessible name, from the catalogs */
-  label: string;
-};
+async function loadSonner(): Promise<typeof Sonner> {
+  const sonner = await import("./sonner-toaster");
+  for (const mount of waiting) mount(sonner);
+  return sonner;
+}
 
 /** Mounted once, in a root layout */
-export function Toaster({ dir, label }: ToasterProps) {
-  return (
-    <Sonner
-      dir={dir}
-      position="bottom-center"
-      customAriaLabel={label}
-      offset={EDGE}
-      mobileOffset={EDGE}
-      // Sonner sets a system font on its list, which only an inline style outranks
-      style={{ fontFamily: "inherit" }}
-      // Sonner sizes its own cards; ours take its width on desktop (on phones its rule wins)
-      toastOptions={{ className: "w-(--width)" }}
-    />
-  );
+export function Toaster(props: Sonner.ToasterProps) {
+  const [SonnerToaster, setSonnerToaster] = useState<ComponentType<Sonner.ToasterProps> | null>(null);
+
+  useEffect(() => {
+    if (SonnerToaster !== null) return;
+    const mount = (sonner: typeof Sonner) => setSonnerToaster(() => sonner.SonnerToaster);
+    const load = () => {
+      loadSonner().catch(() => {
+        // Offline: it loads when the connection is back, or with the next toast
+      });
+    };
+    waiting.add(mount);
+    load();
+    window.addEventListener("online", load);
+    return () => {
+      waiting.delete(mount);
+      window.removeEventListener("online", load);
+    };
+  }, [SonnerToaster]);
+
+  return SonnerToaster === null ? null : <SonnerToaster {...props} />;
 }
 
-type ToastAction = { label: string; onClick: () => void };
+/** The toast calls so far, each run after the one before, so a toast closed as it opens stays closed */
+let calls: Promise<void> = Promise.resolve();
+let made = 0;
 
-type ToastOptions = {
-  /** One action, such as trying again after a server error (FR-31's error states) */
-  action?: ToastAction;
-  /** Milliseconds before it closes; Sonner's 4 s when not given */
-  duration?: number;
-};
+function withSonner(call: (sonner: typeof Sonner) => void): void {
+  calls = calls
+    .then(loadSonner)
+    .then(call)
+    .catch(() => {
+      // Sonner couldn't load, as offline: this call is dropped, and the next one loads it again
+    });
+}
 
 /** Shows a toast: one short message, from the catalogs, and at most one action */
-export function showToast(message: ReactNode, { action, duration }: ToastOptions = {}): string | number {
-  return toast.custom((id) => <ToastCard id={id} message={message} action={action} />, {
-    ...(duration === undefined ? {} : { duration }),
-  });
+export function showToast(message: ReactNode, options: Sonner.ToastOptions = {}): string {
+  made += 1;
+  const id = `toast-${made}`;
+  withSonner((sonner) => sonner.openToast(id, message, options));
+  return id;
 }
 
-type ToastCardProps = { id: string | number; message: ReactNode; action: ToastAction | undefined };
-
-function ToastCard({ id, message, action }: ToastCardProps) {
-  return (
-    <div className="flex w-full items-center gap-3 bg-surface-2 px-4 py-3 text-ink shadow-overlay surface-edge">
-      <p className="flex-1">{message}</p>
-      {action ? (
-        <Button
-          variant="quiet"
-          onClick={() => {
-            action.onClick();
-            toast.dismiss(id);
-          }}
-        >
-          {action.label}
-        </Button>
-      ) : null}
-    </div>
-  );
+/** Closes a toast showToast opened */
+export function dismissToast(id: string): void {
+  withSonner((sonner) => sonner.closeToast(id));
 }

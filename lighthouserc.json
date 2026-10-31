@@ -4,7 +4,7 @@
     "pages: NFR-PERF-02's pages. The task that builds a page adds its paths, in both locales, once it paints. Until then the page is pending, because Lighthouse can't score a page that paints nothing (D-037)."
   ],
   "pages": [
-    { "name": "Home", "paths": [] },
+    { "name": "Home", "paths": ["/ar", "/en"] },
     { "name": "Inventory", "paths": [] },
     { "name": "Car page", "paths": [] }
   ],

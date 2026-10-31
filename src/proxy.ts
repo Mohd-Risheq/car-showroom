@@ -69,12 +69,15 @@ function withDealerPolicy(request: NextRequest, notFound: boolean): NextResponse
 }
 
 // Only unprefixed paths, the dealer workspace and the dev pages run the proxy, so cached
-// public pages, /api, Next internals and files are served without it (SRS §11.5 rule 1).
-// Next.js reads the matcher at build time, so its values must be literals and the locales are
-// spelled out here; tests/unit/proxy.test.ts checks them against routing.locales.
+// public pages, /api, Next internals and files are served without it (SRS §11.5 rule 1). A file is
+// a path ending in an extension the app serves files with, now or as the spec plans (seed media,
+// robots.txt, sitemap.xml): anything else with a dot, as /cars. or /fr/x.y, is a page's path and
+// runs the proxy, which sends it on to its locale's 404 (D-047). Next.js reads the matcher at build
+// time, so its values must be literals, and the locales and extensions are spelled out here;
+// tests/unit/proxy.test.ts checks them against routing.locales and the files the app serves.
 export const config = {
   matcher: [
-    "/((?!ar(?:/|$)|en(?:/|$)|api(?:/|$)|_next/|_vercel(?:/|$)|.*\\..*).*)",
+    "/((?!ar(?:/|$)|en(?:/|$)|api(?:/|$)|_next/|_vercel(?:/|$)|.*\\.(?:ico|jpeg|jpg|json|png|svg|txt|wasm|wav|webp|xml)$).*)",
     "/:locale(ar|en)/dealer/:path*",
     "/:locale(ar|en)/dev/:path*",
   ],

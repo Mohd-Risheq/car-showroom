@@ -18,11 +18,12 @@ import { Button } from "./button";
 import { releaseVelocity, rubberBand, type Sample, shouldDismiss } from "./sheet-gesture";
 import { type Input, inputOf, SheetMotion } from "./sheet-motion";
 
-// DESIGN §6.1's draggable bottom sheet. Base UI's Dialog traps focus, locks the page's scroll, makes
-// the page behind inert, and closes the sheet on Escape and on a tap outside it. A drag of the header
-// moves the sheet, even mid-flight, and a flick down or a drag past half its height closes it
-// (sheet-gesture.ts); sheet-motion.ts moves it. Its visible title takes focus on open, and its close
-// button lets a screen reader on a touch screen leave it (DESIGN §8.1 and §8.4).
+// DESIGN §6.1's draggable bottom sheet. Base UI's Dialog traps focus, locks the page's scroll,
+// hides the page behind from assistive technology with aria-hidden, and closes the sheet on Escape
+// and on a tap outside it. A drag of the header moves the sheet, even mid-flight, and a flick down
+// or a drag past half its height closes it (sheet-gesture.ts); sheet-motion.ts moves it. Its
+// visible title takes focus on open, and its close button lets a screen reader on a touch screen
+// leave it (DESIGN §8.1 and §8.4).
 
 /** The page margin plus the home indicator's safe area, under the sheet's last block */
 const SAFE_BOTTOM = "pb-[calc(var(--spacing-page)+env(safe-area-inset-bottom))]";
@@ -41,12 +42,26 @@ type BottomSheetProps = {
   closeLabel: string;
   /** Pinned under the content, as the filter sheet's "Show N cars" */
   footer?: ReactNode;
+  /**
+   * Where the focus goes when the sheet closes, as Base UI's Dialog.Popup takes it: by default the
+   * element that had it before the sheet opened
+   */
+  finalFocus?: Dialog.Popup.Props["finalFocus"];
   children: ReactNode;
 };
 
 type Drag = { pointer: number; start: number; origin: number; height: number; samples: Sample[] };
 
-export function BottomSheet({ open, onOpenChange, trigger, title, closeLabel, footer, children }: BottomSheetProps) {
+export function BottomSheet({
+  open,
+  onOpenChange,
+  trigger,
+  title,
+  closeLabel,
+  footer,
+  finalFocus,
+  children,
+}: BottomSheetProps) {
   const actions = useRef<Dialog.Root.Actions>(null);
   const backdrop = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -130,6 +145,7 @@ export function BottomSheet({ open, onOpenChange, trigger, title, closeLabel, fo
           // DESIGN §8.1: sheets are modal dialogs, which Base UI doesn't announce on its own
           aria-modal="true"
           initialFocus={heading}
+          finalFocus={finalFocus}
           // The sheet's colour continues below it, for the overshoot and the pull above its place
           className="fixed inset-x-0 bottom-0 z-50 flex max-h-[calc(100dvh-(--spacing(12)))] flex-col bg-surface-2 shadow-overlay surface-edge after:absolute after:inset-x-0 after:top-full after:h-dvh after:bg-inherit data-closed:pointer-events-none"
         >

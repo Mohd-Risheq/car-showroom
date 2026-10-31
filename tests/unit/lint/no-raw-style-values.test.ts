@@ -4,7 +4,8 @@ import rule from "../../../scripts/eslint/no-raw-style-values.mjs";
 
 // T-13's Done when, held by the tokens-only check: a colour, a length, a time or a curve written
 // into a class, a style or a colour attribute fails, and so does a line height that bypasses the type
-// steps; tokens, var(), layout values and values computed at run time pass.
+// steps, or spacing off the 4 px base; tokens, var(), layout values and values computed at run time
+// pass.
 
 RuleTester.describe = describe;
 RuleTester.it = it;
@@ -13,6 +14,7 @@ const tester = new RuleTester({ languageOptions: { parserOptions: { ecmaFeatures
 const raw = (kind: string, value: string) => ({ messageId: "raw", data: { kind, value } });
 const number = (value: number) => ({ messageId: "number", data: { value: String(value) } });
 const leading = (value: string) => ({ messageId: "leading", data: { value } });
+const offBase = (value: string) => ({ messageId: "offBase", data: { value } });
 
 tester.run("no-raw-style-values", rule, {
   valid: [
@@ -37,6 +39,10 @@ tester.run("no-raw-style-values", rule, {
     "const theme = { '--accent': 'var(--scan)' };",
     "element.style.setProperty('--x', 'var(--spacing-page)');",
     "const canvasFallback = '#000';",
+    // Whole steps of spacing, and sizes, which may take a fraction or 1 px, as a thin line does
+    "<div className='p-1 -mt-1 gap-x-2 md:py-2 inset-x-0 translate-y-1/2 h-0.5 w-px size-3.5 min-h-0.5' />",
+    "<div className='px-4 pbs-2 mbe-4 inset-s-0 inset-be-1 translate-x-full translate-z-2 scroll-pbs-2 h-px max-w-px' />",
+    "<table className='border-spacing-2 border-spacing-y-1 -indent-4' />",
   ],
   invalid: [
     {
@@ -108,6 +114,109 @@ tester.run("no-raw-style-values", rule, {
     },
     // A line height on the spacing scale, which ignores the type steps and Arabic's own
     { code: "<p className='leading-6 md:leading-7' />", errors: [leading("leading-6"), leading("md:leading-7")] },
+    // Spacing a fraction of a step, off the 4 px base, with any variant, sign or importance
+    {
+      code: "<div className='p-1.5 md:py-1.5 -mt-0.5 gap-x-2.5 space-y-0.5 translate-y-0.5 scroll-mt-1.5' />",
+      errors: [
+        offBase("p-1.5"),
+        offBase("md:py-1.5"),
+        offBase("-mt-0.5"),
+        offBase("gap-x-2.5"),
+        offBase("space-y-0.5"),
+        offBase("translate-y-0.5"),
+        offBase("scroll-mt-1.5"),
+      ],
+    },
+    {
+      code: "const C = `inset-0.25 data-[open]:ps-1.5 !me-2.5 top-0.5!`;",
+      errors: [offBase("inset-0.25"), offBase("data-[open]:ps-1.5"), offBase("!me-2.5"), offBase("top-0.5!")],
+    },
+    // Every side and axis of padding and margin, physical and logical (DESIGN §3.4)
+    {
+      code: "<div className='px-0.5 pt-0.5 pr-0.5 pb-0.5 pl-0.5 pe-0.5 pbs-1.5 pbe-0.5 mx-0.5 my-0.5 mr-0.5 mb-0.5 ml-0.5 ms-0.5 mbs-1.5 mbe-0.5' />",
+      errors: [
+        offBase("px-0.5"),
+        offBase("pt-0.5"),
+        offBase("pr-0.5"),
+        offBase("pb-0.5"),
+        offBase("pl-0.5"),
+        offBase("pe-0.5"),
+        offBase("pbs-1.5"),
+        offBase("pbe-0.5"),
+        offBase("mx-0.5"),
+        offBase("my-0.5"),
+        offBase("mr-0.5"),
+        offBase("mb-0.5"),
+        offBase("ml-0.5"),
+        offBase("ms-0.5"),
+        offBase("mbs-1.5"),
+        offBase("mbe-0.5"),
+      ],
+    },
+    // Every side of a position and of inset, physical and logical, and inset's axes
+    {
+      code: "<div className='start-0.5 -end-1.5 bottom-0.5 left-0.5 right-0.5 inset-x-0.5 inset-y-0.5 inset-s-0.5 inset-e-1.5 inset-bs-0.5 inset-be-2.5' />",
+      errors: [
+        offBase("start-0.5"),
+        offBase("-end-1.5"),
+        offBase("bottom-0.5"),
+        offBase("left-0.5"),
+        offBase("right-0.5"),
+        offBase("inset-x-0.5"),
+        offBase("inset-y-0.5"),
+        offBase("inset-s-0.5"),
+        offBase("inset-e-1.5"),
+        offBase("inset-bs-0.5"),
+        offBase("inset-be-2.5"),
+      ],
+    },
+    // Gap, space, translate and scroll spacing on each axis and side, translate's z axis among them, and
+    // translate on both at once
+    {
+      code: "<div className='gap-0.5 gap-y-0.5 space-x-0.5 translate-0.5 -translate-1.5 translate-x-0.5 translate-z-0.5 -translate-z-1.5 scroll-m-0.5 scroll-p-0.5 scroll-px-0.5 scroll-mb-0.5 scroll-pbs-1.5 scroll-mbe-0.5' />",
+      errors: [
+        offBase("gap-0.5"),
+        offBase("gap-y-0.5"),
+        offBase("space-x-0.5"),
+        offBase("translate-0.5"),
+        offBase("-translate-1.5"),
+        offBase("translate-x-0.5"),
+        offBase("translate-z-0.5"),
+        offBase("-translate-z-1.5"),
+        offBase("scroll-m-0.5"),
+        offBase("scroll-p-0.5"),
+        offBase("scroll-px-0.5"),
+        offBase("scroll-mb-0.5"),
+        offBase("scroll-pbs-1.5"),
+        offBase("scroll-mbe-0.5"),
+      ],
+    },
+    // Border spacing, bare and on each axis, and text indent, which Tailwind 4 puts on the spacing
+    // scale too
+    {
+      code: "<table className='border-spacing-1.5 border-spacing-x-0.5 border-spacing-y-px indent-0.5 -indent-px' />",
+      errors: [
+        offBase("border-spacing-1.5"),
+        offBase("border-spacing-x-0.5"),
+        offBase("border-spacing-y-px"),
+        offBase("indent-0.5"),
+        offBase("-indent-px"),
+      ],
+    },
+    // 1 px, the px keyword, is off the base too
+    {
+      code: "<div className='p-px -mt-px gap-px top-px translate-y-px space-x-px inset-px scroll-mt-px' />",
+      errors: [
+        offBase("p-px"),
+        offBase("-mt-px"),
+        offBase("gap-px"),
+        offBase("top-px"),
+        offBase("translate-y-px"),
+        offBase("space-x-px"),
+        offBase("inset-px"),
+        offBase("scroll-mt-px"),
+      ],
+    },
   ],
 });
 

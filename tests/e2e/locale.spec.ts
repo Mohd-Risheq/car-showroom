@@ -19,7 +19,8 @@ const YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 // --spacing-page, the page margin, from 16 px on a phone to 32 px, give or take a pixel's rounding
 const MARGIN = { min: 15, max: 33 };
 // DESIGN §8.4: all sticky chrome together, the prompt included, covers at most a quarter of the
-// screen's height
+// screen's height. /dev/locale has no header, so these tests measure the card alone; shell.spec.ts
+// measures it with the shell's header.
 const STICKY_BUDGET = 0.25;
 const NO_BREAK_SPACE = String.fromCodePoint(0xa0);
 

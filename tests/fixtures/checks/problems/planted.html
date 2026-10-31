@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>Planted problems</title>
+  </head>
+  <body>
+    <main>
+      <h1>Planted problems</h1>
+      <p>The notice WebKit's Linux port gives for SRS §9.4's viewport key, which is let through, then a notice about another key, a notice about a bad value for the same key, a console error and a page error, which count.</p>
+    </main>
+    <script>
+      console.error('Viewport argument key "interactive-widget" not recognized and ignored.');
+      console.error('Viewport argument key "made-up-key" not recognized and ignored.');
+      console.error('Viewport argument value "overlays-everything" for key "interactive-widget" is invalid, and has been ignored.');
+      console.error("A planted console error");
+      setTimeout(() => {
+        throw new Error("A planted page error");
+      });
+    </script>
+  </body>
+</html>

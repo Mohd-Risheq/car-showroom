@@ -7,6 +7,9 @@ import { branchesOf, isStyleObject, nameOf, textsOf, unwrap } from "./ast.mjs";
 //   max-[600px]:flex;
 // - line heights on the spacing scale in any string (leading-6), which bypass the type steps and
 //   Arabic's own line heights (NFR-I18N-06);
+// - spacing off DESIGN §3.4's 4 px base in any string, a fraction of a step (p-1.5, -mt-0.5) or
+//   1 px (gap-px), on any side or axis, physical or logical (pbs-0.5, inset-s-px), while a size may
+//   take one, as a line thinner than a step does (h-0.5, w-px, D-047);
 // - the values of a style object, written in a JSX style attribute (in either branch of a choice) or
 //   typed as CSSProperties, of any object key that names a custom property ("--bg": "#0b0d10"), and
 //   of a custom property set with style.setProperty();
@@ -55,6 +58,14 @@ const RAW = [
 
 /** A line height on the spacing scale, with any variants: leading-6, md:leading-7 */
 const SPACING_LEADING = /^(?:\S+:)?!?leading-\d/;
+
+/**
+ * Padding, margin, gap, space, inset, a position, translate, scroll spacing, border spacing or text
+ * indent a fraction of a step or 1 px, on any side or axis, the block's start and end among them:
+ * p-1.5, md:-mt-0.5, pbs-0.5, inset-s-px, border-spacing-x-0.5
+ */
+const OFF_BASE_SPACING =
+  /^(?:\S+:)?!?-?(?:p(?:[xytrblse]|b[se])?|m(?:[xytrblse]|b[se])?|gap(?:-[xy])?|space-[xy]|inset(?:-(?:[xyse]|b[se]))?|top|right|bottom|left|start|end|translate(?:-[xyz])?|scroll-[mp](?:[xytrblse]|b[se])?|border-spacing(?:-[xy])?|indent)-(?:\d*\.\d+|px)!?$/;
 
 /** The attributes whose values are colours */
 const COLOUR_ATTRIBUTES = new Set(["fill", "stroke", "color", "stopColor", "floodColor", "lightingColor"]);
@@ -109,6 +120,11 @@ function spacingLeadings(text) {
   return text.split(/\s+/).filter((token) => SPACING_LEADING.test(token));
 }
 
+/** The class names in a string that space things off the 4 px base */
+function offBaseSpacings(text) {
+  return text.split(/\s+/).filter((token) => OFF_BASE_SPACING.test(token));
+}
+
 /** Whether an object property sets a custom property, as "--bg" */
 function isCustomProperty(property) {
   return property.key.type === "Literal" && nameOf(property)?.startsWith("--") === true;
@@ -128,6 +144,7 @@ const rule = {
         "Raw number {{value}} in a style: take it from a token in src/styles/tokens.css through var(), or from data (D-038)",
       leading:
         'Line height "{{value}}" bypasses the type steps: set the step with a type-* class, which sets Arabic\'s own (NFR-I18N-06)',
+      offBase: 'Spacing "{{value}}" is off the 4 px base (DESIGN §3.4): use a whole step, or a token (D-047)',
     },
   },
   create(context) {
@@ -135,10 +152,11 @@ const rule = {
       for (const { kind, value } of values) context.report({ node, messageId: "raw", data: { kind, value } });
     }
 
-    /** The raw values and the line heights on the spacing scale in a string that may hold classes */
+    /** The raw values, the line heights on the spacing scale and the spacing off the base in a string of classes */
     function checkClasses(node, text) {
       report(node, arbitraryValues(text).flatMap(rawValues));
       for (const value of spacingLeadings(text)) context.report({ node, messageId: "leading", data: { value } });
+      for (const value of offBaseSpacings(text)) context.report({ node, messageId: "offBase", data: { value } });
     }
 
     /**

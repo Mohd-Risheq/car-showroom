@@ -80,7 +80,8 @@
     "privacy": "الخصوصية",
     "credits": "المصادر",
     "copyright": "© {year} {dealer}",
-    "builtBy": "تصميم وتطوير {author}"
+    "builtBy": "تصميم وتطوير {author}",
+    "author": "محمد الرشق"
   },
   "howBuilt": {
     "metrics": {

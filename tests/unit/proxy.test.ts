@@ -1,3 +1,5 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
 import {
   getRedirectUrl,
   getRewrittenUrl,
@@ -32,6 +34,24 @@ function request(path: string, headers: Record<string, string> = {}): NextReques
   return new NextRequest(`${ORIGIN}${path}`, { headers });
 }
 
+/**
+ * The files the app serves outside the locales, by path: public/'s, the app's icons, and route
+ * handlers named as files, as /maps/land-110m.svg. A folder's placeholder (.gitkeep) is no file a
+ * visitor asks for.
+ */
+function servedFiles(): string[] {
+  const publicFiles = readdirSync("public", { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile() && !entry.name.startsWith("."))
+    .map((entry) => path.relative("public", path.join(entry.parentPath, entry.name)));
+  const appFiles = readdirSync("src/app", { recursive: true, encoding: "utf8" })
+    .filter((file) => !file.startsWith("[locale]") && !file.startsWith("_dev") && !file.startsWith("api"))
+    .flatMap((file) => {
+      if (path.basename(file) === "route.ts") return [path.dirname(file)];
+      return /^[^/]+\.(?:ico|png|svg)$/.test(file) ? [file] : [];
+    });
+  return [...publicFiles, ...appFiles].map((file) => `/${file.split(path.sep).join("/")}`);
+}
+
 const passedOn = (response: Response) => response.headers.get("x-middleware-next") === "1";
 const nonceOf = (policy: string | null) => policy?.match(/'nonce-([^']+)'/)?.[1];
 
@@ -42,6 +62,11 @@ describe("which paths run the proxy", () => {
     "/cars/toyota",
     "/fr/cars",
     "/ar-JO/cars",
+    // A dot outside a file's extension is a page's path (D-047)
+    "/cars.",
+    "/x.y",
+    "/fr/x.y",
+    "/cars/toyota.rav4",
     "/ar/dealer",
     "/en/dealer/cars",
     "/ar/dev",
@@ -60,7 +85,21 @@ describe("which paths run the proxy", () => {
     "/api/auth/get-session",
     "/_next/static/chunk.js",
     "/favicon.ico",
+    "/icon.svg",
+    "/apple-icon.png",
     "/maps/land-110m.svg",
+    "/wasm/zxing_reader.wasm",
+    "/seed/s05/front.webp",
+    "/robots.txt",
+    "/sitemap.xml",
+    // What the spec plans to serve: the seed's link-preview images in JPEG, by either spelling
+    // (SRS §11.6), its engine clips (05-SEED-DATA §3.5) and its credits (§3.7)
+    "/seed/cars/s05/preview.jpg",
+    "/seed/cars/s05/preview.jpeg",
+    "/seed/cars/s15/engine.wav",
+    "/seed/credits.json",
+    // A missing file gets Next.js's own 404, not a page
+    "/x.png",
   ])("leaves %s alone", async (url) => {
     const { config } = await loadProxy();
     expect(unstable_doesMiddlewareMatch({ config, url })).toBe(false);
@@ -72,12 +111,37 @@ describe("which paths run the proxy", () => {
     const locales = routing.locales.join("|");
     const unprefixed = routing.locales.map((locale) => `${locale}(?:/|$)`).join("|");
     expect(config.matcher).toEqual([
-      `/((?!${unprefixed}|api(?:/|$)|_next/|_vercel(?:/|$)|.*\\..*).*)`,
+      expect.stringMatching(/^\/\(\(\?!/),
       `/:locale(${locales})/dealer/:path*`,
       `/:locale(${locales})/dev/:path*`,
     ]);
+    expect(config.matcher[0]).toBe(
+      `/((?!${unprefixed}|api(?:/|$)|_next/|_vercel(?:/|$)|.*\\.(?:${fileExtensions(config.matcher[0]).join("|")})$).*)`,
+    );
+  });
+
+  // A file whose extension the matcher misses would be sent on to a locale, where no page has it
+  it("leaves every file the app serves alone", async () => {
+    const { config } = await loadProxy();
+    const files = servedFiles();
+    expect(files).toEqual(expect.arrayContaining(["/wasm/zxing_reader.wasm", "/favicon.ico", "/maps/land-110m.svg"]));
+    for (const url of files) expect(unstable_doesMiddlewareMatch({ config, url }), url).toBe(false);
+  });
+
+  it("lists its file extensions once each, in order", async () => {
+    const { config } = await loadProxy();
+    const extensions = fileExtensions(config.matcher[0]);
+    expect(extensions.length).toBeGreaterThan(0);
+    expect(extensions).toEqual([...new Set(extensions)].toSorted());
   });
 });
+
+/** The extensions the matcher takes for files */
+function fileExtensions(matcher: string | undefined): string[] {
+  const list = matcher?.match(/\\\.\(\?:([a-z0-9|]+)\)\$/)?.[1];
+  if (list === undefined) throw new Error("The matcher has no list of file extensions");
+  return list.split("|");
+}
 
 describe("dev pages", () => {
   it.each(["production", "preview"])("answer 404 on a %s deployment", async (env) => {

@@ -21,6 +21,8 @@ node scripts/seed.ts         # the reference data, and with DEMO_MODE=true the d
 pnpm dev                     # http://localhost:3000
 ```
 
+The site shows the dealer `DEALER_SLUG` names, so `pnpm dev` and `pnpm build` need that dealer in the database first: with the values in `.env.example`, the seed's demo dealer.
+
 `node scripts/create-owner.ts` creates the dealer's first owner from `OWNER_EMAIL` and `OWNER_NAME`, and leaves the password in `.owner-password`, which only you can read: sign in with it, change it, then delete the file.
 
 Local work never touches a real service: the database runs in Docker, and `STORAGE_DRIVER=local` keeps uploads in `.storage-local/`.

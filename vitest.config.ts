@@ -60,9 +60,8 @@ export default defineConfig({
         // React components, pages and layouts among them, render in a browser or through Next.js:
         // Playwright journeys, axe and visual tests
         "src/**/*.tsx",
-        // Route handlers and the layouts' metadata: integration tests and Playwright journeys
+        // Route handlers: integration tests and Playwright journeys
         "src/app/**/route.ts",
-        "src/lib/metadata.ts",
         // Dev-only code, even where it has unit tests, so the figure is the product's: no deployment
         // serves the (dev) routes, and no code that ships imports src/app/_dev
         "src/app/_dev/**",

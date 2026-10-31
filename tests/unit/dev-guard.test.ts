@@ -6,7 +6,16 @@ import { describe, expect, it, vi } from "vitest";
 // 404 first (tests/unit/proxy.test.ts). Behind it, every page and layout in a (dev) group calls
 // notFoundOnDeployments() before anything else, and every route handler answers 404 itself.
 
-const DEV_GROUPS = ["src/app/[locale]/(public)/(dev)", "src/app/[locale]/dealer/(dev)"];
+/** Every (dev) group under a folder, wherever a task puts one */
+function devGroups(dir: string): string[] {
+  return readdirSync(dir).flatMap((entry) => {
+    const full = path.join(dir, entry);
+    if (!statSync(full).isDirectory()) return [];
+    return entry === "(dev)" ? [full] : devGroups(full);
+  });
+}
+
+const DEV_GROUPS = devGroups("src/app").sort();
 const METHODS = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"] as const;
 
 function filesNamed(name: string): string[] {
@@ -25,6 +34,9 @@ const routes = filesNamed("route.ts");
 
 describe("dev pages and routes on deployments", () => {
   it("finds every kind of file it checks", () => {
+    expect(DEV_GROUPS).toEqual(
+      expect.arrayContaining(["src/app/[locale]/(public)/(dev)", "src/app/[locale]/dealer/(dev)"]),
+    );
     expect(pages.length).toBeGreaterThan(0);
     expect(layouts).toHaveLength(DEV_GROUPS.length);
     expect(routes.length).toBeGreaterThan(0);

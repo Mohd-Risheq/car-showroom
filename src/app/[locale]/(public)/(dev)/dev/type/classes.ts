@@ -27,8 +27,8 @@ export const C = {
   figure: "figures",
 
   facts: "m-0 grid gap-x-8 gap-y-1 md:grid-cols-[max-content_max-content]",
-  factTerm: "pt-2 text-muted md:py-1.5",
-  factValue: "m-0 md:py-1.5",
+  factTerm: "pt-2 text-muted md:py-2",
+  factValue: "m-0 md:py-2",
 
   // Checks: measured by type-checks.tsx, on a tone step so they read as fixtures
   checks: "grid grid-cols-[minmax(0,1fr)] gap-10 bg-surface-1 px-4 py-6 md:p-8",
@@ -41,8 +41,8 @@ export const C = {
 
   results: "grid grid-cols-[minmax(0,1fr)] gap-4 font-mono text-xs text-muted",
   table: "border-collapse text-start",
-  cell: "border-b border-line/45 py-1.5 pe-6 text-start align-baseline",
-  headCell: "border-b border-line/45 py-1.5 pe-6 text-start align-baseline font-normal text-meta",
+  cell: "border-b border-line/45 py-2 pe-6 text-start align-baseline",
+  headCell: "border-b border-line/45 py-2 pe-6 text-start align-baseline font-normal text-meta",
   pass: "text-scan",
   fail: "text-fail",
   json: "max-h-96 overflow-x-auto bg-bg p-4 text-xs whitespace-pre",

@@ -17,9 +17,10 @@ export default getRequestConfig(async ({ locale }) => {
   // An explicit locale wins: Server Actions and Route Handlers can't read root params (SRS §11.5 rule 8)
   const requested = locale ?? (await rootParams.locale());
 
-  // A locale the site doesn't have, passed explicitly or from a path the proxy skips, such as
-  // /wp-login.php, is a 404. Another locale's prefix, such as /fr/cars, gets here only on a path with
-  // a dot, which the proxy skips. Otherwise proxy.ts rewrites it under /ar (D-041).
+  // A locale the site doesn't have, passed explicitly or as the first segment of a path the proxy
+  // skips, a file's such as /fr/x.png or one under /api, is Next.js's plain 404. Any other path
+  // under another locale's prefix, with a dot or without, proxy.ts rewrites under /ar, which gives
+  // the localized 404 (D-041, D-047).
   if (!hasLocale(routing.locales, requested)) notFound();
 
   return {

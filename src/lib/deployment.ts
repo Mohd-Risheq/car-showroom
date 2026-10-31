@@ -10,3 +10,11 @@ export function isDeployment(): boolean {
 export function notFoundOnDeployments(): void {
   if (isDeployment()) notFound();
 }
+
+/**
+ * Whether the deployment runs as the demo (SRS §15.1 DEMO_MODE): exactly "true", as the seed reads it
+ * (D-045), so a "1" or "TRUE" never turns the demo banner on while the database holds a client's cars
+ */
+export function isDemoMode(): boolean {
+  return process.env.DEMO_MODE === "true";
+}

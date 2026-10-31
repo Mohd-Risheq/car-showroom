@@ -93,6 +93,107 @@
     outline: var(--focus-ring-width) solid var(--accent);
     outline-offset: var(--focus-ring-offset);
   }
+
+  /* FR-02.4 moves focus to the new page's heading, or its main, after a navigation, and the skip
+     link to main. Neither is a control, so neither shows the ring a control's focus does (D-047). */
+  :is(main, h1)[tabindex="-1"]:focus-visible {
+    outline: none;
+  }
+}
+
+/* DESIGN §8.4: what holds the bottom of the screen, so the page, its scrolling and the toasts stay
+   clear of it. A car page's action bar below 1024 px (FR-02.2) or the language prompt (FR-01.2a),
+   never both: the prompt waits while a bar shows (D-047). The compare tray joins them (FR-19). Each
+   counts the safe area under it, and --page-end is at least the home indicator's safe area. A bar
+   or the prompt hidden while the keyboard is open holds nothing, and the prompt waits for the bar
+   even then. */
+:root {
+  --bar-block: 0px;
+  --prompt-block: 0px;
+  --chrome-bottom: max(var(--bar-block), var(--prompt-block));
+  --page-end: max(env(safe-area-inset-bottom), var(--chrome-bottom));
+}
+
+@media (width < 64rem) {
+  :root:has([data-action-bar]:not([hidden])) {
+    --bar-block: calc(var(--bar-height) + env(safe-area-inset-bottom));
+  }
+
+  :root:has([data-action-bar]) [data-locale-prompt] {
+    display: none;
+  }
+}
+
+/* The prompt's card sits a page margin above the safe area. locale-prompt.tsx measures its height,
+   which is 0 while the card is hidden. Dismissed, or hidden while the keyboard is open, it holds
+   nothing. */
+:root:has([data-locale-prompt]:not([data-dismissed], [hidden])) {
+  --prompt-block: calc(var(--spacing-page) + env(safe-area-inset-bottom) + var(--prompt-height, 0px));
+}
+
+/* The public shell's pages, the ones with its main (src/features/shell). The development pages keep
+   the browser's defaults. */
+:root:has(#content) {
+  /* DESIGN §8.4: a scroll to a target, or to the focus, stops clear of the sticky header and of
+     whatever holds the bottom of the screen (WCAG 2.4.11) */
+  scroll-padding-top: var(--header-height);
+  scroll-padding-bottom: var(--page-end);
+
+  /* The header is always in view, so the focus moving into it moves nothing. Under the padding, its
+     own links and buttons would count as covered by it, and the browser would scroll to show them. */
+  &:has([data-site-header]:focus-within) {
+    scroll-padding-top: 0;
+  }
+
+  /* FR-02.4: the shell announces a new page's title itself (route-arrival.tsx). Next.js's announcer
+     reads the page's h1 in its place when the title streams in after the page, so it is hidden here,
+     from screen readers too. */
+  & next-route-announcer {
+    display: none;
+  }
+
+  /* FR-02.6: native scrolling, with in-page jumps that glide unless motion is reduced. The html
+     element's data-scroll-behavior="smooth" tells Next.js to jump instantly on a navigation. */
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+
+  /* DESIGN §8.4: on a screen under 480 px tall the header scrolls away with the page */
+  @media (max-height: 30rem) {
+    scroll-padding-top: 0;
+  }
+
+  /* DESIGN §8.4: while the English offer shows on a screen too short for the header and the offer
+     together within a quarter of its height, the header scrolls away with the page, and it holds again
+     once the offer is dismissed (D-047). The offer is about 95 px tall, and the header 56 px, 64 px
+     from 768 px wide: under 600 px tall, or under 640 px from 768 px wide. Below 1024 px the offer
+     waits while a car page's action bar shows, and the header holds then, as it does while the offer
+     steps aside for the keyboard. */
+  @media (width < 48rem) and (height < 37.5rem), (48rem <= width < 64rem) and (height < 40rem) {
+    &:has([data-locale-prompt]:not([data-dismissed], [hidden])):not(:has([data-action-bar])) {
+      scroll-padding-top: 0;
+
+      & [data-site-header] {
+        position: static;
+      }
+    }
+  }
+
+  @media (width >= 64rem) and (height < 40rem) {
+    &:has([data-locale-prompt]:not([data-dismissed], [hidden])) {
+      scroll-padding-top: 0;
+
+      & [data-site-header] {
+        position: static;
+      }
+    }
+  }
+}
+
+/* FR-02.3: a demo banner the visitor hid this session, hidden by the head script before the first
+   paint, so it never flashes or moves the page */
+html[data-demo-banner="hidden"] [data-demo-banner] {
+  display: none;
 }
 
 /* Arabic is never letter-spaced, italic, transformed or given faux bold (NFR-I18N-06, DESIGN §9.4).
@@ -158,4 +259,12 @@
       outline-offset: -1px;
     }
   }
+}
+
+/* DESIGN §7.1.1: a band that runs from edge to edge, as the header, the banner and the footer, keeps
+   its content clear of the notch on a phone held sideways (viewport-fit=cover): the page margin, or
+   the safe area where that is wider. The safe areas are physical sides, so this pads left and right. */
+@utility px-band {
+  padding-left: max(var(--spacing-page), env(safe-area-inset-left));
+  padding-right: max(var(--spacing-page), env(safe-area-inset-right));
 }

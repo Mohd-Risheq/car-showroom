@@ -8,6 +8,7 @@ import { soldCutoff } from "@/features/inventory/domain/listing";
 import { buildIndex } from "@/features/inventory/server/build-index";
 import { indexStatements, loadIndexRows } from "@/features/inventory/server/index-queries";
 import { buildSettings } from "@/features/settings/server/build-settings";
+import { loadDealerId } from "@/features/settings/server/dealer-queries";
 import { loadSettingsRows, settingsStatement } from "@/features/settings/server/settings-queries";
 import { type Database, publicDatabase } from "@/lib/db/client";
 import { uuidv7 } from "@/lib/db/id";
@@ -579,6 +580,14 @@ describe("getCarPage's rows", () => {
     ]) {
       expect(await carPage(slug)).toStrictEqual(miss);
     }
+  });
+});
+
+describe("getDealerId's row", () => {
+  it("is the id of the dealer a slug names, in lower case, and none for a slug no dealer has", async () => {
+    expect(await loadDealerId(reader, "public-reads")).toBe(dealerId.toLowerCase());
+    expect(await loadDealerId(reader, "public-reads-other")).toBe(otherDealerId.toLowerCase());
+    expect(await loadDealerId(reader, "no-dealer-has-this")).toBeNull();
   });
 });
 

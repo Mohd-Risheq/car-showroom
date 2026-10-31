@@ -18,7 +18,9 @@ concurrency:
 
 # The local services of BUILD-PLAN §6.3, never a real one: Postgres behind Neon's local proxy, whose
 # credentials are compose.yaml's, and the local storage adapter. The secrets are made per run
-# (.github/actions/local-services).
+# (.github/actions/local-services). The site's dealer is the seed's demo dealer: the public pages
+# read theirs by DEALER_SLUG, so the build and the journeys need its row, which the local services
+# seed (D-047).
 env:
   DATABASE_URL: postgres://postgres:postgres@db.localtest.me:5432/main
   DATABASE_URL_UNPOOLED: postgres://postgres:postgres@db.localtest.me:5432/main
@@ -26,6 +28,8 @@ env:
   NEXT_PUBLIC_SITE_URL: http://localhost:3000
   STORAGE_DRIVER: local
   NEXT_PUBLIC_VERCEL_BLOB_API_URL: http://localhost:3000/api/storage-local?
+  DEMO_MODE: "true"
+  DEALER_SLUG: muftah
 
 jobs:
   gates:

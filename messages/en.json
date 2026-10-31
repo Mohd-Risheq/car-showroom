@@ -80,7 +80,8 @@
     "privacy": "Privacy",
     "credits": "Credits",
     "copyright": "© {year} {dealer}",
-    "builtBy": "Built by {author}"
+    "builtBy": "Built by {author}",
+    "author": "Mohammad Al-Risheq"
   },
   "howBuilt": {
     "metrics": {

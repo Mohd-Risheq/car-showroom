@@ -1,9 +1,9 @@
 # The local services of BUILD-PLAN §6.3 on the runner: Postgres 17 behind Neon's local proxy
-# (compose.yaml, pinned by digest), migrated, and this run's own secrets for Better Auth, the
-# rate-limit keys and the local store. The secrets are random and masked, and nothing here
-# reaches a real service.
+# (compose.yaml, pinned by digest), migrated and seeded, with the demo dealer as ci.yml's
+# DEMO_MODE and DEALER_SLUG ask, and this run's own secrets for Better Auth, the rate-limit keys
+# and the local store. The secrets are random and masked, and nothing here reaches a real service.
 name: Local services
-description: The local database, migrated, and secrets made for this run
+description: The local database, migrated and seeded, and secrets made for this run
 runs:
   using: composite
   steps:
@@ -24,4 +24,4 @@ runs:
         } >> "$GITHUB_ENV"
     - name: Database
       shell: bash
-      run: pnpm db:up && pnpm db:migrate
+      run: pnpm db:up && pnpm db:migrate && node scripts/seed.ts

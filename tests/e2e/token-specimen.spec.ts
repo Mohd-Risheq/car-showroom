@@ -94,9 +94,15 @@ for (const path of PAGES) {
     expect(await page.evaluate(() => window.policyViolations)).toStrictEqual([]);
   });
 
-  test(`${path} has no serious or critical axe issue, with its sheet closed and open`, async ({ page }) => {
+  // A scan a test: in WebKit in the Linux image, the page's load and its two scans took 25 s of the
+  // test's 30 in T-17's full run, and went past 30 in T-19's (D-047)
+  test(`${path} has no serious or critical axe issue, with its sheet closed`, async ({ page }) => {
     await page.goto(path);
     expect(await seriousA11yIssues(page)).toStrictEqual([]);
+  });
+
+  test(`${path} has no serious or critical axe issue, with its sheet open`, async ({ page }) => {
+    await page.goto(path);
     await page.getByRole("button", { name: path.startsWith("/en/") ? "Filters" : "الفلاتر", exact: true }).click();
     await expect(page.getByRole("dialog")).toBeVisible();
     expect(await seriousA11yIssues(page)).toStrictEqual([]);

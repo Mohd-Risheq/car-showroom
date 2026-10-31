@@ -368,6 +368,7 @@
     "filters.sound",
     "filters.spin",
     "filters.title",
+    "footer.author",
     "footer.builtBy",
     "footer.contact",
     "footer.copyright",

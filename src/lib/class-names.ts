@@ -9,7 +9,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const mergeClasses = extendTailwindMerge<"type-step" | "figures">({
   override: {
     theme: {
-      animate: ["spin", "skeleton"],
+      animate: ["spin", "skeleton", "scan-cross"],
       aspect: ["card", "hero"],
       blur: [],
       breakpoint: ["sm", "md", "lg", "xl"],
