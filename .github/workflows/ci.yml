@@ -87,7 +87,8 @@ jobs:
       # image pinned by digest, where the approved baselines come from (D-037)
       - run: pnpm e2e:linux
 
-      # Step 7: Lighthouse drives Playwright's own Chromium on the runner
+      # Step 7: Lighthouse drives Playwright's own Chromium on the runner, and each page's runs show
+      # on the run as annotations (scripts/lhci.ts)
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm lhci
 
@@ -99,4 +100,6 @@ jobs:
             playwright-report/
             test-results/
             .lighthouseci/reports/
+          # .lighthouseci is a hidden folder, which the action leaves out unless told otherwise
+          include-hidden-files: true
           retention-days: 14

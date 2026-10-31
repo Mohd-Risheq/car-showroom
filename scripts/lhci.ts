@@ -4,18 +4,21 @@
 // build itself and refuses a port already in use: when LHCI's own server start fails it only warns,
 // then measures whatever answers there, such as an older build or next dev. Chrome is Playwright's
 // Chromium with a throwaway profile, never this machine's own Chrome, and the flags every Chromium
-// here gets (scripts/checks/chromium.ts).
+// here gets (scripts/checks/chromium.ts). After the runs, passed or failed, it prints what each
+// page's runs measured, or why there is no report; on GitHub Actions each is an annotation on the
+// run, whose page anyone can read, while its log is closed to readers without admin rights.
 //
 // Usage: pnpm lhci [lhci autorun options], after pnpm build; --collect.url=<url> adds a page
 import { spawn } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import net from "node:net";
 import path from "node:path";
 import { chromium } from "@playwright/test";
 import { CHROMIUM_FLAGS } from "./checks/chromium.ts";
 import { readJson, ROOT } from "./checks/files.ts";
-import { lighthousePlan } from "./checks/lighthouse.ts";
+import { workflowCommand } from "./checks/github.ts";
+import { lighthousePlan, lighthouseResults } from "./checks/lighthouse.ts";
 import { exitStatus } from "./checks/processes.ts";
 
 const PORT = 3000;
@@ -23,7 +26,11 @@ const PORT = 3000;
 const START_TIMEOUT_MS = 60_000;
 const POLL_MS = 500;
 const NEXT = createRequire(import.meta.url).resolve("next/dist/bin/next");
+// Where the filesystem upload (lighthouserc.json's upload.outputDir) lists each run's report
+const MANIFEST = path.join(ROOT, ".lighthouseci", "reports", "manifest.json");
 const options = process.argv.slice(2);
+// The option that adds a page to the plan's
+const ADD_URL = "--collect.url=";
 
 /** Whether something already accepts connections on the port at this address */
 function answers(host: string): Promise<boolean> {
@@ -58,6 +65,9 @@ if (!existsSync(path.join(ROOT, ".next", "BUILD_ID"))) fail("there is no product
 if ((await answers("127.0.0.1")) || (await answers("::1"))) {
   fail(`something already answers on port ${PORT}; stop it, so that LHCI measures this build`);
 }
+
+// A run that stops before the upload writes no manifest, so an older one can't pass for its results
+rmSync(MANIFEST, { force: true });
 
 // The local storage adapter, as in every test run (SRS §16.1), so no run touches the real store
 const server = spawn(process.execPath, [NEXT, "start", "-H", "127.0.0.1", "-p", String(PORT)], {
@@ -101,8 +111,20 @@ async function measure(): Promise<number> {
   return exitStatus(lhci, "lhci: LHCI");
 }
 
+/** Prints what each page's runs measured, or why there is no report, as an annotation on Actions */
+function report(): void {
+  const added = options.filter((option) => option.startsWith(ADD_URL)).map((option) => option.slice(ADD_URL.length));
+  const annotate = process.env.GITHUB_ACTIONS === "true";
+  for (const result of lighthouseResults([...urls, ...added], MANIFEST, readJson)) {
+    const page = URL.parse(result.url)?.pathname ?? result.url;
+    const [level, text] = "note" in result ? (["notice", result.note] as const) : (["error", result.problem] as const);
+    console.log(annotate ? workflowCommand(level, `Lighthouse ${page}`, text) : `lhci: ${page}: ${text}`);
+  }
+}
+
 try {
   process.exitCode = await measure();
+  report();
 } finally {
   server.kill("SIGTERM");
 }
