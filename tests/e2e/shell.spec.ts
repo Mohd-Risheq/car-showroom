@@ -137,22 +137,28 @@ async function recordArrivals(page: Page) {
 const headingFocuses = (page: Page) => page.evaluate(() => window.focused.filter(({ name }) => name === "h1"));
 
 /**
- * Loads a page at each width in turn, then checks it there: a visit at the first width and a reload at
+ * Loads a page at each size in turn, then checks it there: a visit at the first size and a reload at
  * each after. A second visit to an address in Firefox comes from its cache while the cache revalidates
  * it, as next start's pages allow, and Playwright can wait on that request for good (D-047).
  */
-async function atEachWidth(
+async function atEachSize(
   page: Page,
   url: string,
-  widths: readonly number[],
-  check: (width: number) => Promise<void>,
+  sizes: readonly (readonly [width: number, height: number])[],
+  check: (width: number, height: number) => Promise<void>,
 ) {
-  for (const [index, width] of widths.entries()) {
-    await page.setViewportSize({ width, height: 800 });
+  for (const [index, [width, height]] of sizes.entries()) {
+    await page.setViewportSize({ width, height });
     if (index === 0) await page.goto(url);
     else await page.reload();
-    await check(width);
+    await check(width, height);
   }
+}
+
+/** atEachSize at each width, 800 px tall */
+function atEachWidth(page: Page, url: string, widths: readonly number[], check: (width: number) => Promise<void>) {
+  const sizes = widths.map((width) => [width, 800] as const);
+  return atEachSize(page, url, sizes, check);
 }
 
 /** The bottom edge of an element, in viewport pixels */
@@ -191,18 +197,21 @@ async function jumpLandsAtTop(page: Page) {
   await expect.poll(async () => Math.abs((await heading.boundingBox())?.y ?? Infinity)).toBeLessThanOrEqual(0.5);
 }
 
-/** The page's layout shifts so far, summed; Chromium alone reports them */
-async function layoutShift(page: Page): Promise<number> {
+/** The page's layout shifts summed, from an instant on its clock or from its load; Chromium alone reports them */
+async function layoutShift(page: Page, since = 0): Promise<number> {
   return page.evaluate(
-    () =>
+    (from) =>
       new Promise<number>((resolve) => {
         let total = 0;
         new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) total += (entry as PerformanceEntry & { value: number }).value;
+          for (const entry of list.getEntries()) {
+            if (entry.startTime >= from) total += (entry as PerformanceEntry & { value: number }).value;
+          }
         }).observe({ type: "layout-shift", buffered: true });
         // The buffered entries arrive in a task of their own
         setTimeout(() => resolve(total), 250);
       }),
+    since,
   );
 }
 
@@ -946,6 +955,12 @@ test.describe("the header", () => {
         if (propertyName === "translate") window.moved.push(target === node ? "band" : "row");
       });
     });
+    // The page's shifts count from the scroll on, once its fonts are in: a web font that arrives
+    // late, as on a busy runner, moves the text as it swaps in, which is the load's shift
+    const scrolled = await page.evaluate(async () => {
+      await document.fonts.ready;
+      return performance.now();
+    });
     await page.evaluate(() => window.scrollTo({ top: 400, behavior: "instant" }));
     await expect(band).toHaveAttribute("data-compact", "true");
     // From 768 px the band glides up as its row glides down, the two together
@@ -954,7 +969,7 @@ test.describe("the header", () => {
     // Its box keeps its height: from 768 px it moves up by a transform alone
     expect(await band.evaluate((node: HTMLElement) => node.offsetHeight)).toBe(height);
     expect(await band.evaluate((node) => getComputedStyle(node).position)).toBe("sticky");
-    if (browserName === "chromium") expect(await layoutShift(page)).toBe(0);
+    if (browserName === "chromium") expect(await layoutShift(page, scrolled)).toBe(0);
     // It turns --surface-1, and from 768 px reads as 52 px tall, where a phone's stays 56 px
     const surface = await computed(page, "color", "var(--surface-1)");
     await expect.poll(() => band.evaluate((node) => getComputedStyle(node).backgroundColor)).toBe(surface);
@@ -1017,21 +1032,19 @@ test.describe("a car page's action bar, on the shell lab (FR-02.2, TC-02-2)", ()
   test("is 64 px tall, and 48 px on a phone held sideways, with the page's last line clear of it (FR-02, DESIGN §8.4)", async ({
     page,
   }) => {
-    for (const [width, height, barHeight] of [
-      [360, 780, 64],
-      [844, 390, 48],
-    ] as const) {
-      await page.setViewportSize({ width, height });
-      await page.goto(`/en${LAB}`);
+    const sizes = [
+      [360, 780],
+      [844, 390],
+    ] as const;
+    await atEachSize(page, `/en${LAB}`, sizes, async (width, height) => {
+      const size = `${width} by ${height} px`;
       await expect(bar(page)).toBeVisible();
-      expect((await bar(page).boundingBox())?.height, `${width} by ${height} px`).toBe(barHeight);
+      // 48 px on a screen under 480 px tall
+      expect((await bar(page).boundingBox())?.height, size).toBe(height < 480 ? 48 : 64);
       await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
       const barTop = (await bar(page).boundingBox())?.y ?? 0;
-      expect(
-        await bottomOf(page.locator("footer").getByRole("link").last()),
-        `${width} by ${height} px`,
-      ).toBeLessThanOrEqual(barTop);
-    }
+      expect(await bottomOf(page.locator("footer").getByRole("link").last()), size).toBeLessThanOrEqual(barTop);
+    });
   });
 
   test("isn't there from 1024 px", async ({ page }) => {
