@@ -7,8 +7,8 @@ import * as schema from "@/lib/db/schema";
 import { findSessionUser } from "@/lib/db/users";
 import { hashPassword, verifyPassword } from "./password";
 import { USER_ROLES } from "./roles";
+import { SESSION_EXPIRES_SECONDS, SESSION_UPDATE_AGE_SECONDS } from "./session-policy";
 
-const DAY_SECONDS = 60 * 60 * 24;
 const BASE_PATH = "/api/auth";
 
 // Sign-up, profile update, email change and password reset return 404 (API-05, FR-29.11)
@@ -32,8 +32,8 @@ export const auth = betterAuth({
     password: { hash: hashPassword, verify: verifyPassword }, // SEC-02
   },
   session: {
-    expiresIn: 7 * DAY_SECONDS, // SEC-01: 7 days, sliding
-    updateAge: DAY_SECONDS,
+    expiresIn: SESSION_EXPIRES_SECONDS, // SEC-01: 7 days, sliding
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
     cookieCache: { enabled: false }, // SEC-01: a revoked session stops at the next request
     additionalFields: {
       stepUpAt: { type: "date", required: false, input: false }, // BR-41

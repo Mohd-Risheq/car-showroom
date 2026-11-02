@@ -82,6 +82,46 @@ const CONFIGS = [
   ACTIONS,
 ];
 
+describe("the beacon's imports", () => {
+  // Events go through track() and reportClientError() in src/lib/analytics/track.ts, which check
+  // Global Privacy Control and load the beacon's chunk only once there is something to send (FR-47.3)
+  it("are refused outside track.ts, as modules and as import()", async () => {
+    for (const filePath of CONFIGS) {
+      for (const specifier of ["@/lib/analytics/beacon", "@/lib/analytics/beacon.ts", "../analytics/beacon"]) {
+        expect(
+          await broken(filePath, `import { sendError } from "${specifier}";\nexport const report = sendError;\n`),
+          `${filePath}: ${specifier}`,
+        ).toStrictEqual(["no-restricted-imports"]);
+      }
+    }
+    // Each config that sets no-restricted-syntax lists the selectors again, so each is tried
+    const files = [...CONFIGS, "src/lib/format/calendar.ts", "src/features/spin/index.ts", "src/lib/motion/scrub.tsx"];
+    for (const filePath of files) {
+      for (const source of ['"@/lib/analytics/beacon"', "`@/lib/analytics/beacon`"]) {
+        expect(
+          await broken(filePath, `export const load = () => import(${source});\n`),
+          `${filePath}: ${source}`,
+        ).toStrictEqual(["no-restricted-syntax"]);
+      }
+    }
+    expect(await broken("src/lib/analytics/other.ts", 'export const load = () => import("./beacon");\n')).toStrictEqual(
+      ["no-restricted-syntax"],
+    );
+  });
+
+  it("are track.ts's own, and the beacon's types come from anywhere", async () => {
+    expect(
+      await broken(
+        "src/lib/analytics/track.ts",
+        'import type * as Beacon from "./beacon";\nexport const load = (): Promise<typeof Beacon> => import("./beacon");\n',
+      ),
+    ).toStrictEqual([]);
+    expect(
+      await broken(FEATURE, 'import type { Happened } from "@/lib/analytics/beacon";\nexport type Sent = Happened;\n'),
+    ).toStrictEqual([]);
+  });
+});
+
 describe("Zod's imports", () => {
   // z comes from the entry that sets Zod up to build schemas without new Function (SRS §12.5,
   // D-043), so the setting is in place before any schema is built

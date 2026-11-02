@@ -2,12 +2,12 @@ import { cacheLife, cacheTag } from "next/cache";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { buildIndex, type IndexRows } from "@/features/inventory/server/build-index";
 import { loadIndexRows } from "@/features/inventory/server/index-queries";
-import { getInventoryIndex } from "@/features/inventory/server/inventory-index";
+import { getInventoryIndex, getPublicCarIds } from "@/features/inventory/server/inventory-index";
 import { publicDb } from "@/lib/db/client";
 
 // getInventoryIndex (SRS §11.4): the catalog profile and the index's tags, the cars read for BR-04's
 // longest window on the read-only client, the cards built at the time it runs, and the index back
-// from its stored form
+// from its stored form. getPublicCarIds: the ids of the same cards, from an entry of their own.
 
 vi.mock("next/cache", () => ({ cacheLife: vi.fn(), cacheTag: vi.fn() }));
 vi.mock("@/lib/db/client", () => ({ publicDb: { name: "publicDb" } }));
@@ -26,6 +26,47 @@ const MODELS = [
     makeNameEn: "Toyota",
   },
 ];
+
+const tenDaysAgo = new Date(NOW.getTime() - 10 * DAY);
+
+/** A car published ten days ago, which the public sees */
+function carRow(overrides: Partial<IndexRows["cars"][number]> = {}): IndexRows["cars"][number] {
+  return {
+    id: "01923456-7890-7abc-8def-00000000000a",
+    slug: "2021-toyota-land-cruiser-gxr-mu-7k3p",
+    refCode: "MU-7K3P",
+    status: "published",
+    makeKey: "toyota",
+    modelKey: "toyota-land-cruiser",
+    trim: "GXR",
+    modelYear: 2021,
+    mileageKm: 64_000,
+    priceJod: 48_500,
+    fuelType: "gasoline",
+    regionalSpecs: "gcc",
+    customsStatus: "cleared",
+    bodyType: "suv",
+    transmission: "automatic",
+    licenseStatus: "licensed",
+    insuranceType: "comprehensive",
+    paymentMethods: ["cash"],
+    seats: 7,
+    colorFamily: "white",
+    ownersCount: 1,
+    features: [],
+    publishedAt: tenDaysAgo,
+    updatedAt: tenDaysAgo,
+    soldAt: null,
+    hasSpin: false,
+    hasClip: false,
+    ...overrides,
+  };
+}
+
+/** The rows the index is built from, for a dealer that shows a sold car for 14 days */
+function rowsOf(cars: IndexRows["cars"]): IndexRows {
+  return { rules: [{ soldVisibleDays: 14 }], cars, covers: [], inspections: [], prices: [], models: MODELS };
+}
 
 afterEach(() => {
   vi.useRealTimers();
@@ -54,49 +95,37 @@ describe("getInventoryIndex", () => {
 
   it("builds the cards at the time it runs, and gives back the index it built", async () => {
     vi.useFakeTimers({ now: NOW });
-    const tenDaysAgo = new Date(NOW.getTime() - 10 * DAY);
-    const rows: IndexRows = {
-      rules: [{ soldVisibleDays: 14 }],
-      cars: [
-        {
-          id: "01923456-7890-7abc-8def-00000000000a",
-          slug: "2021-toyota-land-cruiser-gxr-mu-7k3p",
-          refCode: "MU-7K3P",
-          status: "published",
-          makeKey: "toyota",
-          modelKey: "toyota-land-cruiser",
-          trim: "GXR",
-          modelYear: 2021,
-          mileageKm: 64_000,
-          priceJod: 48_500,
-          fuelType: "gasoline",
-          regionalSpecs: "gcc",
-          customsStatus: "cleared",
-          bodyType: "suv",
-          transmission: "automatic",
-          licenseStatus: "licensed",
-          insuranceType: "comprehensive",
-          paymentMethods: ["cash"],
-          seats: 7,
-          colorFamily: "white",
-          ownersCount: 1,
-          features: [],
-          publishedAt: tenDaysAgo,
-          updatedAt: tenDaysAgo,
-          soldAt: null,
-          hasSpin: false,
-          hasClip: false,
-        },
-      ],
-      covers: [],
-      inspections: [],
-      prices: [],
-      models: MODELS,
-    };
+    const rows = rowsOf([carRow()]);
     vi.mocked(loadIndexRows).mockResolvedValue(rows);
     const index = await getInventoryIndex(DEALER);
     // Ten days old is past FR-06.7's seven, which an earlier clock would not see
     expect(index.cards[0]?.isNew).toBe(false);
     expect(index).toStrictEqual(buildIndex(rows, NOW));
+  });
+});
+
+describe("getPublicCarIds", () => {
+  it("gives the ids of the cars the public sees, from an entry with the catalog profile and the index's tags", async () => {
+    vi.useFakeTimers({ now: NOW });
+    const shown = "01923456-7890-7abc-8def-00000000000b";
+    const soldTooLongAgo = new Date(NOW.getTime() - 15 * DAY);
+    vi.mocked(loadIndexRows).mockResolvedValue(
+      rowsOf([
+        carRow(),
+        carRow({ id: shown, slug: "2021-toyota-land-cruiser-gxr-mu-7k3q", refCode: "MU-7K3Q", status: "reserved" }),
+        carRow({
+          id: "01923456-7890-7abc-8def-00000000000c",
+          slug: "2021-toyota-land-cruiser-gxr-mu-7k3r",
+          refCode: "MU-7K3R",
+          status: "sold",
+          soldAt: soldTooLongAgo,
+        }),
+      ]),
+    );
+    expect(await getPublicCarIds(DEALER)).toStrictEqual(new Set(["01923456-7890-7abc-8def-00000000000a", shown]));
+    // Its own entry, and the index's under it
+    const tags = [`cars:${DEALER}`, `dealer:${DEALER}`];
+    expect(vi.mocked(cacheLife).mock.calls).toStrictEqual([["catalog"], ["catalog"]]);
+    expect(vi.mocked(cacheTag).mock.calls).toStrictEqual([tags, tags]);
   });
 });

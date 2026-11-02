@@ -97,6 +97,15 @@ const GSAP_MESSAGE = `GSAP loads only as its lazy desktop chunk: build a scroll 
 const GSAP_SOURCE = "^(?:@?gsap(?:/.*)?|.*/gsap(?:\\.[cm]?[jt]sx?)?)$";
 const GSAP_IMPORTS = { regex: GSAP_SOURCE, allowTypeImports: true, message: GSAP_MESSAGE };
 
+// FR-47's beacon is a chunk that only src/lib/analytics/track.ts loads, with import(), once it has
+// an event to send and the visitor hasn't turned Global Privacy Control on (FR-47.3). Types may be
+// imported anywhere.
+const BEACON_LOADER = "src/lib/analytics/track.ts";
+const BEACON_MESSAGE = `Events go through track() or reportClientError() (${BEACON_LOADER}), which check Global Privacy Control and load the beacon only to send.`;
+// A path to the beacon, with or without its extension
+const BEACON_SOURCE = "^(?:.*/analytics/beacon|\\./beacon)(?:\\.[cm]?[jt]sx?)?$";
+const BEACON_IMPORTS = { regex: BEACON_SOURCE, allowTypeImports: true, message: BEACON_MESSAGE };
+
 /**
  * An import() of a source matching the pattern, as a string or as a template literal with no
  * expressions, refused with the message. A slash would end esquery's regex, so it is escaped.
@@ -182,6 +191,7 @@ const NEXT_ENDINGS_IMPORT = [
 // An import() of Zod would take z past no-restricted-imports, without the entry's setting (D-043).
 // The entry imports Zod statically, so src has no import() of it at all.
 const ZOD_IMPORT = importExpressions(ZOD_ENTRIES.regex, ZOD_ENTRIES.message);
+const BEACON_IMPORT = importExpressions(BEACON_SOURCE, BEACON_MESSAGE);
 
 // What every config that sets no-restricted-syntax for src refuses, beside its own selectors
 const SRC_SYNTAX = [
@@ -189,6 +199,7 @@ const SRC_SYNTAX = [
   ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
   ...NEXT_ENDINGS_IMPORT,
   ...ZOD_IMPORT,
+  ...BEACON_IMPORT,
   INLINE_ACTION,
 ];
 
@@ -252,7 +263,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -265,7 +276,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -277,7 +288,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, CACHE_UPDATES],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -289,7 +300,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, HAS_LOCALE, CACHE_UPDATES],
-          patterns: [GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -301,7 +312,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
-          patterns: [DEV_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -313,7 +324,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_FORMATTER, HAS_LOCALE, CACHE_UPDATES],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -326,7 +337,7 @@ export default defineConfig([
         "error",
         {
           paths: [...RESTRICTED_IMPORTS, ...NEXT_INTL_LOCALE, ...NEXT_INTL_FORMATTER, HAS_LOCALE],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -347,7 +358,7 @@ export default defineConfig([
             CACHE_UPDATES,
             NAVIGATION_ENDINGS,
           ],
-          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS],
+          patterns: [DEV_IMPORTS, GSAP_IMPORTS, PHOSPHOR_ENTRIES, ZOD_ENTRIES, NEXT_INTERNALS, BEACON_IMPORTS],
         },
       ],
     },
@@ -381,7 +392,20 @@ export default defineConfig([
         ...importExpressions(NEXT_INTL_SOURCE, NEXT_INTL_IMPORT_MESSAGE),
         ...NEXT_ENDINGS_IMPORT,
         ...ZOD_IMPORT,
+        ...BEACON_IMPORT,
         INLINE_ACTION,
+        ...FORMATTING_SELECTORS,
+      ],
+    },
+  },
+  {
+    // track() loads the beacon's chunk, once it has something to send
+    files: [BEACON_LOADER],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...BARREL_SELECTORS,
+        ...SRC_SYNTAX.filter((selector) => !BEACON_IMPORT.includes(selector)),
         ...FORMATTING_SELECTORS,
       ],
     },

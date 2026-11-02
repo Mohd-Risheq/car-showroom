@@ -117,7 +117,48 @@
       "author": "المؤلف",
       "licence": "الرخصة",
       "link": "الرابط",
-      "recording": "التسجيل"
+      "recording": "التسجيل",
+      "changes": "التعديلات"
+    },
+    "within": "جزء من {name}",
+    "site": {
+      "commons": "Wikimedia Commons",
+      "unsplash": "Unsplash",
+      "pexels": "Pexels",
+      "freesound": "Freesound",
+      "ai": "توليد بالذكاء الاصطناعي",
+      "owner": "أُنتج لهذا الموقع"
+    },
+    "licence": {
+      "cc0": "CC0 1.0",
+      "ccBy20": "CC BY 2.0",
+      "ccBy25": "CC BY 2.5",
+      "ccBy30": "CC BY 3.0",
+      "ccBy40": "CC BY 4.0",
+      "ccBySa20": "CC BY-SA 2.0",
+      "ccBySa25": "CC BY-SA 2.5",
+      "ccBySa30": "CC BY-SA 3.0",
+      "ccBySa40": "CC BY-SA 4.0",
+      "unsplash": "رخصة Unsplash",
+      "ai": "شروط أداة الذكاء الاصطناعي",
+      "owner": "جميع الحقوق محفوظة",
+      "publicDomain": "ملكية عامة",
+      "odbl": "ODbL 1.0",
+      "ofl": "SIL OFL 1.1",
+      "mit": "MIT",
+      "isc": "ISC",
+      "apache": "Apache 2.0",
+      "mpl": "MPL 2.0",
+      "gsap": "رخصة GSAP القياسية"
+    },
+    "change": {
+      "resized": "تغيير الحجم",
+      "platesPixelated": "تمويه أرقام اللوحات",
+      "exposureNormalized": "ضبط الإضاءة",
+      "trimmed": "قصّ المقطع",
+      "mixedToMono": "دمج القنوات في قناة واحدة",
+      "resampled": "تغيير معدل العينات",
+      "normalized": "تسوية مستوى الصوت"
     }
   },
   "demo": {

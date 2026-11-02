@@ -2,6 +2,7 @@
 
 import { LazyMotion, MotionConfig } from "motion/react";
 import type { ReactNode } from "react";
+import { reportClientError } from "@/lib/analytics/track";
 
 // SRS §11.8: a component that animates through Motion's React API uses `m` inside this boundary,
 // never the full `motion` component (ESLint holds that, and the boundary is strict, so a `motion`
@@ -11,13 +12,15 @@ import type { ReactNode } from "react";
 // properties jump to their end while opacity and colour still animate (DESIGN §4.5); Motion's own
 // default ignores the preference.
 
-// Where the chunk fails to load, `m` elements keep the state they rendered in, and a promise that
-// never settles leaves LazyMotion no rejection to drop unhandled. T-20 reports the failure once, as
-// a client_error event (NFR-OBS-02).
-const loadFeatures = () =>
+// Where the chunk fails to load, `m` elements keep the state they rendered in, and the failure
+// counts (NFR-OBS-02). A promise that never settles leaves LazyMotion no rejection to drop unhandled.
+export const loadFeatures = () =>
   import("./dom-animation").then(
     (module) => module.features,
-    () => new Promise<never>(() => {}),
+    () => {
+      reportClientError("CHUNK_MOTION");
+      return new Promise<never>(() => {});
+    },
   );
 
 export function MotionFeatures({ children }: { children: ReactNode }) {

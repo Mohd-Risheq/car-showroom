@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { decodeIndex, encodeIndex, INDEX_WIRE_VERSION, type IndexWire } from "@/features/inventory/server/index-codec";
+import {
+  carIdsOf,
+  decodeIndex,
+  encodeIndex,
+  INDEX_WIRE_VERSION,
+  type IndexWire,
+} from "@/features/inventory/server/index-codec";
 import { FEATURE_GROUPS, FEATURE_KEYS } from "@/lib/db/feature-keys";
 import type { PublicCardDTO, PublicInventoryIndex } from "@/lib/db/public-dto";
 import { card, STORE_ORIGIN, storedPhoto } from "../../support/cards";
@@ -231,6 +237,17 @@ describe("encodeIndex and decodeIndex", () => {
     const fuel = [...row.slice(0, 9), 99, ...row.slice(10)] as unknown as IndexWire["rows"][number];
     expect(() => decodeIndex({ ...wire, rows: [fuel] })).toThrow(/fuelType/);
     expect(() => decodeIndex({ ...wire, models: {} })).toThrow(/toyota-land-cruiser/);
+  });
+});
+
+describe("carIdsOf", () => {
+  it("reads each car's id from its row, in the entry's order", () => {
+    expect(carIdsOf(encodeIndex(index([card({ id: ids[1] }), card({ id: ids[0] })])))).toStrictEqual([ids[1], ids[0]]);
+    expect(carIdsOf(encodeIndex(index([])))).toStrictEqual([]);
+  });
+
+  it("refuses an entry of another version", () => {
+    expect(() => carIdsOf({ ...encodeIndex(index([card()])), v: 2 } as unknown as IndexWire)).toThrow(/version/);
   });
 });
 

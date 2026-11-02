@@ -1,3 +1,4 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { BOTID_PATH, blobStoreHost, publicPolicy, securityHeaders } from "./src/lib/csp/policy";
@@ -52,4 +53,8 @@ const nextConfig: NextConfig = {
 // next-intl's request config, with the catalogs and the formatting locale (D-040)
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 
-export default withNextIntl(nextConfig);
+// The MDX pages' words (SCR-14): a route imports its MDX file, so no page is one and
+// pageExtensions stays as it is. The elements come from src/mdx-components.tsx.
+const withMDX = createMDX();
+
+export default withNextIntl(withMDX(nextConfig));

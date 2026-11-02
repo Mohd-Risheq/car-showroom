@@ -1,0 +1,56 @@
+{
+  "files": [],
+  "data": [
+    {
+      "name": "NHTSA vPIC",
+      "author": "National Highway Traffic Safety Administration",
+      "url": "https://vpic.nhtsa.dot.gov/api/",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.usa.gov/government-copyright"
+    },
+    {
+      "name": "fueleconomy.gov",
+      "author": "U.S. Department of Energy, U.S. Environmental Protection Agency",
+      "url": "https://www.fueleconomy.gov/feg/ws/index.shtml",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.usa.gov/government-copyright"
+    },
+    {
+      "name": "OpenStreetMap",
+      "author": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "licence": "odbl-1.0",
+      "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/"
+    },
+    {
+      "name": "world-atlas",
+      "author": "Michael Bostock",
+      "url": "https://github.com/topojson/world-atlas",
+      "licence": "isc",
+      "licenceUrl": "https://github.com/topojson/world-atlas/blob/master/LICENSE"
+    },
+    {
+      "name": "Natural Earth",
+      "author": "Natural Earth",
+      "url": "https://www.naturalearthdata.com/",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.naturalearthdata.com/about/terms-of-use/"
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Readex Pro",
+      "author": "Thomas Jockin, Nadine Chahine, Bonnie Shaver-Troup, Santiago Orozco, Héctor Gómez",
+      "url": "https://github.com/ThomasJockin/readexpro",
+      "licence": "ofl-1.1",
+      "licenceUrl": "https://openfontlicense.org/open-font-license-official-text/"
+    },
+    {
+      "name": "Martian Mono",
+      "author": "Roman Shamin, Evil Martians",
+      "url": "https://github.com/evilmartians/mono",
+      "licence": "ofl-1.1",
+      "licenceUrl": "https://openfontlicense.org/open-font-license-official-text/"
+    }
+  ]
+}

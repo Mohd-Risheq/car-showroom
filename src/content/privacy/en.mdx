@@ -1,0 +1,107 @@
+This site counts visits without cookies and without personal data. This page lists everything it keeps: what, why, for how long and where.
+
+## What the site counts
+
+When you open a page or use something on it, your browser can send the site a short message: what happened, the car it was about, if any, and the page's language. The site adds the message to that day's total, by the date in Amman, and keeps only the total. Nothing about you is kept with it: no address, no browser details, no cookie and no text.
+
+A message names one of these, and the site drops any other:
+
+- opening the home page, the list of cars or a car's page
+- using a car page's features: the body scan, the engine sound, the 360° view, the journey and the cost to run
+- running the drag race on the compare page, counted for the whole site rather than for a car
+- tapping WhatsApp, Call or Request a viewing
+- sharing a car, saving a car to My Garage or adding one to compare
+- the dealer side: publishing a car, and making a share kit or a reel, each counted for the whole site rather than for a car
+- an error in your browser: the day's count goes to the database, and the kind of page and a short code go to the server's log, never the page's address
+
+A feature counts once in each page you open, however often you use it, and a contact, a share, a save or a comparison counts each time. A car's messages count only while the site shows that car. Messages from search engines, link previews and other programs that say they're automated aren't counted, and neither is anything past 60 messages a minute from one network.
+
+If your browser sends Global Privacy Control, the site's pages send no messages, and the site ignores any message that carries the signal.
+
+## What the site keeps
+
+<DataTable
+  label="What the site keeps"
+  head={["Data", "What it holds", "Why", "How long", "Where"]}
+  rows={[
+    [
+      "Visit counts",
+      "A total for each kind of message, car, language and day",
+      "To see which cars and features interest visitors",
+      "Indefinitely, as they hold nothing about any one person",
+      "The site's database, in Frankfurt",
+    ],
+    [
+      "Limit counters",
+      "For each network that sent messages, a coded key, how many it sent in the current minute and when that minute began",
+      "To stop floods of requests",
+      "Until an hour after the network's last message, then deleted at the site's next checks",
+      "The site's database, in Frankfurt",
+    ],
+    [
+      "Log lines",
+      "The route, a code for what happened and details such as how long it took, never personal data",
+      "To find and fix faults",
+      "As long as the hosting plan keeps logs",
+      "Vercel, the site's host",
+    ],
+    [
+      "The owner's account",
+      "Name, email, role, a coded form of the password, its sign-in settings, and when it was made and changed",
+      "So the owner can sign in to run the showroom",
+      "Until the account is removed",
+      "The site's database, in Frankfurt",
+    ],
+    [
+      "The owner's sign-ins",
+      "For each sign-in, a random token, the browser's name, version and system as it reports them, and when it began, was last extended and ends",
+      "To keep the owner signed in",
+      "Until the owner signs out in that browser or the account is removed, even after the sign-in has ended",
+      "The site's database, in Frankfurt",
+    ],
+    [
+      "The owner's sign-in cookie",
+      "On the dealer side only: the cookie __Secure-better-auth.session_token, holding the sign-in's token",
+      "To keep the owner signed in",
+      "Up to 7 days after the owner last used the dealer side, or until the browser closes for a sign-in made not to be remembered",
+      "The owner's browser",
+    ],
+    [
+      "Your language",
+      "The cookie NEXT_LOCALE, holding the language you chose",
+      "To open the site in that language next time",
+      "A year from your last choice",
+      "Your browser",
+    ],
+    [
+      "Your place on each page",
+      "How far down you scrolled each page in this tab",
+      "To return you to the same place when you go back or reload",
+      "Until you close the tab",
+      "Your browser",
+    ],
+    [
+      "The demo notice",
+      "On the demo only: that you hid the notice",
+      "To keep it hidden",
+      "Until you close the tab",
+      "Your browser",
+    ],
+  ]}
+/>
+
+The coded key is made from the network's address with a secret key that changes every month, and the address itself is never kept.
+
+## Cookies
+
+For a visitor, the only cookie the site sets is NEXT_LOCALE, and only when you choose a language. On the dealer side, signing in sets \_\_Secure-better-auth.session_token, and a sign-in made not to be remembered also sets \_\_Secure-better-auth.dont_remember, which says so, until the browser closes. Each is needed for what it does, so there's no cookie banner. Counting visits uses no cookies.
+
+## Where it's kept
+
+The site runs on Vercel, whose servers in Frankfurt run its code. Pages reach you through Vercel's network from a server near you, and like any web host, Vercel receives your network address to send them. The database is Neon's, on Amazon's servers in Frankfurt. Frankfurt is in Germany, outside Jordan.
+
+The pages load no trackers and no scripts from other sites.
+
+## What you can do
+
+The site keeps no name, contact details or network address of any visitor. What your browser keeps is yours to delete at any time, in its settings, and with Global Privacy Control on, your visits aren't counted.

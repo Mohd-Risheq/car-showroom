@@ -172,6 +172,15 @@ test("toasts take the page's direction", async ({ page }) => {
 test("under reduced motion a toast fades over 200 ms rather than sliding", async ({ page }) => {
   await page.goto("/en/dev/tokens");
   await page.getByRole("button", { name: "Show a toast", exact: true }).click();
+  // Sonner holds a toast open while the pointer moves over its list, so the page sends the list a
+  // move until the toast shows it held, or a slow run could read its style after its four seconds,
+  // once it has left the page; a hover first waits for the toast to settle, which can outlast them
+  await page.waitForFunction(() => {
+    const node = document.querySelector<HTMLElement>("[data-sonner-toast]");
+    if (node?.dataset.expanded === "true") return true;
+    node?.closest("[data-sonner-toaster]")?.dispatchEvent(new MouseEvent("mousemove", { bubbles: true }));
+    return false;
+  });
   const toast = page.locator("[data-sonner-toast]").first();
   await expect(toast).toBeVisible();
   const transition = () =>
@@ -287,9 +296,12 @@ test("a disabled button stays in the tab order and says it is disabled", async (
   await expect(sold).toHaveAttribute("aria-disabled", "true");
 });
 
+/** A press's transition as the browser computes it: over --dur-press, with no delay */
+const PRESS_TIMING = [`${DURATIONS.press / 1000}s`, "0s"];
+
 /**
- * Holds a button down with the space bar or the pointer: whether it is :active, and its scale once
- * the press has had time to land
+ * Holds a button down with the space bar or the pointer: whether it is :active, its scale once the
+ * press has had time to land, and the duration and delay of its transform's transition
  */
 async function hold(page: Page, button: Locator, press: "keyboard" | "pointer") {
   if (press === "keyboard") {
@@ -299,10 +311,25 @@ async function hold(page: Page, button: Locator, press: "keyboard" | "pointer") 
     await page.mouse.down();
   }
   await page.waitForTimeout(DURATIONS.press + 100);
-  const held = await button.evaluate((node) => ({
-    active: node.matches(":active"),
-    scale: new DOMMatrix(getComputedStyle(node).transform).a,
-  }));
+  // A slow run may not have played the press's transition by then: the press lands where it ends,
+  // and the transition's timing, which no run's pace changes, holds it to --dur-press
+  const held = await button.evaluate(async (node) => {
+    await Promise.all(node.getAnimations().map((animation) => animation.finished));
+    const style = getComputedStyle(node);
+    const properties = style.transitionProperty.split(", ");
+    // As CSS Transitions has it, the last item that names transform or all sets its timing, and a list
+    // shorter than the properties repeats; with neither, none
+    const index = properties.findLastIndex((property) => property === "transform" || property === "all");
+    const entry = (list: string) => {
+      const values = list.split(", ");
+      return index < 0 ? undefined : values[index % values.length];
+    };
+    return {
+      active: node.matches(":active"),
+      scale: new DOMMatrix(style.transform).a,
+      timing: [entry(style.transitionDuration), entry(style.transitionDelay)],
+    };
+  });
   if (press === "keyboard") await page.keyboard.up("Space");
   else await page.mouse.up();
   return held;
@@ -311,9 +338,14 @@ async function hold(page: Page, button: Locator, press: "keyboard" | "pointer") 
 test("a pointer press scales a button, in the workspace too", async ({ page }) => {
   for (const path of ["/en/dealer/dev/tokens", "/en/dev/tokens"]) {
     await openSpecimen(page, path);
-    const { active, scale } = await hold(page, page.getByRole("button", { name: "Compare", exact: true }), "pointer");
+    const { active, scale, timing } = await hold(
+      page,
+      page.getByRole("button", { name: "Compare", exact: true }),
+      "pointer",
+    );
     expect(active, path).toBe(true);
     expect(scale, path).toBeCloseTo(PRESS_SCALE, 2);
+    expect(timing, path).toStrictEqual(PRESS_TIMING);
   }
 });
 
@@ -334,9 +366,10 @@ test("a press with the space bar scales a button, apart from in the workspace", 
     await page.getByRole("button", { name: "Book a viewing", exact: true }).focus();
     await page.keyboard.press(tab);
     await expect(compare).toBeFocused();
-    const { active, scale } = await hold(page, compare, "keyboard");
+    const { active, scale, timing } = await hold(page, compare, "keyboard");
     expect(active, path).toBe(true);
     expect(scale, path).toBeCloseTo(keyboardScale, 2);
+    expect(timing, path).toStrictEqual(PRESS_TIMING);
   }
 });
 

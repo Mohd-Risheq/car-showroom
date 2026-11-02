@@ -115,7 +115,13 @@ export function analyzerGroups(jsonl: string): Map<string, AnalyzerGroup[]> {
     }
   }
   const byRoute = new Map<string, AnalyzerGroup[]>();
+  const listed = new Set<string>();
   for (const { route, trigger_module_ident, outputs } of groups) {
+    // Each of the route's chunk groups that holds an import() lists it: one import, as emittedImports
+    // counts it
+    const key = [route, trigger_module_ident, ...outputs].join(" ");
+    if (listed.has(key)) continue;
+    listed.add(key);
     let rawBytes = 0;
     for (const output of outputs.filter(isScript)) {
       const size = fileBytes.get(`${route} ${output}`);

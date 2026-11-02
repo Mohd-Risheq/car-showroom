@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { reportClientError } from "@/lib/analytics/track";
 import { arrive, type TitleAnnouncer, titleAnnouncer } from "./arrive";
 import { takeReturn } from "./return-control";
 
@@ -21,8 +22,8 @@ import { takeReturn } from "./return-control";
 // a new query, as a filter, keeps the focus on its control, and the first page load leaves both to
 // the browser. The focus moves without scrolling: ScrollMemory places the page (FR-02.5). The
 // focus, the wait for the title and which title counts are arrive.ts's. The arrival is an
-// enhancement: should it fail, the error is reported and the page stays, with the focus where the
-// browser leaves it.
+// enhancement: should it fail, the error counts under its own code (NFR-OBS-02) and is reported, and
+// the page stays, with the focus where the browser leaves it.
 
 export function RouteArrival() {
   return (
@@ -52,6 +53,7 @@ function ArrivalOnPathChange() {
       };
       return arrive(announceTitle, takeReturn(pathname));
     } catch (error) {
+      reportClientError("ARRIVAL", error);
       reportError(error);
     }
   }, [pathname]);

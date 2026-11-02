@@ -105,6 +105,54 @@ describe("analyzerGroups", () => {
     expect(analyzerGroups(jsonl)).toStrictEqual(new Map([["/[locale]/dev/spin", [{ module: spin, rawBytes: 13841 }]]]));
   });
 
+  // As the build's imports are counted (emittedImports): one module that two of a route's first-load
+  // chunks import, such as the analytics client in its layout and its error page (T-20)
+  it("keeps one group for an import that two of the route's chunk groups list, with the same files", () => {
+    const beacon = client("src/lib/analytics/beacon.ts");
+    const jsonl = [
+      part("/[locale]", "[output]/b.js", 800),
+      part("/[locale]", "[output]/c.js", 300),
+      group("/[locale]", "async", beacon, ["[output]/b.js"]),
+      group("/[locale]", "async", beacon, ["[output]/b.js"]),
+      group("/[locale]", "async", beacon, ["[output]/b.js", "[output]/c.js"]),
+    ].join("\n");
+    expect(analyzerGroups(jsonl)).toStrictEqual(
+      new Map([
+        [
+          "/[locale]",
+          [
+            { module: { path: "src/lib/analytics/beacon.ts" }, rawBytes: 800 },
+            { module: { path: "src/lib/analytics/beacon.ts" }, rawBytes: 1100 },
+          ],
+        ],
+      ]),
+    );
+  });
+
+  it("keeps a group for each route and each module, though their files are the same", () => {
+    const beacon = client("src/lib/analytics/beacon.ts");
+    const other = client("src/lib/motion/gsap.ts");
+    const jsonl = [
+      part("/[locale]", "[output]/b.js", 800),
+      part("/[locale]/cars", "[output]/b.js", 800),
+      group("/[locale]", "async", beacon, ["[output]/b.js"]),
+      group("/[locale]", "async", other, ["[output]/b.js"]),
+      group("/[locale]/cars", "async", beacon, ["[output]/b.js"]),
+    ].join("\n");
+    expect(analyzerGroups(jsonl)).toStrictEqual(
+      new Map([
+        [
+          "/[locale]",
+          [
+            { module: { path: "src/lib/analytics/beacon.ts" }, rawBytes: 800 },
+            { module: { path: "src/lib/motion/gsap.ts" }, rawBytes: 800 },
+          ],
+        ],
+        ["/[locale]/cars", [{ module: { path: "src/lib/analytics/beacon.ts" }, rawBytes: 800 }]],
+      ]),
+    );
+  });
+
   it("stops when a group's file has no bytes", () => {
     const jsonl = group("/[locale]", "async", client("src/a.ts"), ["[output]/gone.js"]);
     expect(() => analyzerGroups(jsonl)).toThrow("the analyzer lists no bytes for [output]/gone.js on /[locale]");

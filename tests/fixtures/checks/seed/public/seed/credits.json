@@ -1,0 +1,505 @@
+{
+  "files": [
+    {
+      "file": "seed/cars/s01/front-three-quarter",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_01.jpg",
+      "title": "Example Land Cruiser 01",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/side-profile",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_02.jpg",
+      "title": "Example Land Cruiser 02",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/rear-three-quarter",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_03.jpg",
+      "title": "Example Land Cruiser 03",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/front",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_04.jpg",
+      "title": "Example Land Cruiser 04",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/rear",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_05.jpg",
+      "title": "Example Land Cruiser 05",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/other-side",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_06.jpg",
+      "title": "Example Land Cruiser 06",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/wheel",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_07.jpg",
+      "title": "Example Land Cruiser 07",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/dashboard",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_08.jpg",
+      "title": "Example Land Cruiser 08",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized",
+        "exposure normalized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/odometer",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_09.jpg",
+      "title": "Example Land Cruiser 09",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/front-seats",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_10.jpg",
+      "title": "Example Land Cruiser 10",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/rear-seats",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_11.jpg",
+      "title": "Example Land Cruiser 11",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/engine-bay",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_12.jpg",
+      "title": "Example Land Cruiser 12",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/closeup-rear-bumper",
+      "car": "s01",
+      "kind": "photo",
+      "source": "commons",
+      "author": "Example Photographer",
+      "authorUrl": "https://commons.wikimedia.org/wiki/User:Example_Photographer",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Example_Land_Cruiser_13.jpg",
+      "title": "Example Land Cruiser 13",
+      "licence": "cc-by-sa-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s01/engine",
+      "car": "s01",
+      "kind": "sound",
+      "source": "freesound",
+      "author": "Example Recordist",
+      "authorUrl": "https://freesound.org/people/ExampleRecordist/",
+      "originalUrl": "https://freesound.org/people/ExampleRecordist/sounds/100001/",
+      "title": "V8 cold start, idle",
+      "licence": "cc-by-4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": [
+        "trimmed",
+        "mixed to mono",
+        "resampled",
+        "normalized"
+      ],
+      "audioSource": "same_engine",
+      "recordedAt": null
+    },
+    {
+      "file": "seed/cars/s02/front-three-quarter",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-front-three-quarter",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/side-profile",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-side-profile",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/rear-three-quarter",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-rear-three-quarter",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/front",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-front",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/rear",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-rear",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized",
+        "plates pixelated"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/other-side",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-other-side",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/wheel",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-wheel",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/front-trunk",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-front-trunk",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/roof",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-roof",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/headlight",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-headlight",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/tail-light",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-tail-light",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s02/charge-port",
+      "car": "s02",
+      "kind": "photo",
+      "source": "unsplash",
+      "author": "Example Photographer",
+      "authorUrl": "https://unsplash.com/@example",
+      "originalUrl": "https://unsplash.com/photos/example-model-3-charge-port",
+      "title": null,
+      "licence": "unsplash",
+      "licenceUrl": "https://unsplash.com/license",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s03/front-three-quarter",
+      "car": "s03",
+      "kind": "photo",
+      "source": "pexels",
+      "author": "Example Photographer",
+      "authorUrl": "https://www.pexels.com/@example/",
+      "originalUrl": "https://www.pexels.com/photo/example-camry-1/",
+      "title": null,
+      "licence": "pexels-cc0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s03/side-profile",
+      "car": "s03",
+      "kind": "photo",
+      "source": "pexels",
+      "author": "Example Photographer",
+      "authorUrl": "https://www.pexels.com/@example/",
+      "originalUrl": "https://www.pexels.com/photo/example-camry-2/",
+      "title": null,
+      "licence": "pexels-cc0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": [
+        "resized"
+      ]
+    },
+    {
+      "file": "seed/cars/s03/rear-three-quarter",
+      "car": "s03",
+      "kind": "photo",
+      "source": "pexels",
+      "author": "Example Photographer",
+      "authorUrl": "https://www.pexels.com/@example/",
+      "originalUrl": "https://www.pexels.com/photo/example-camry-3/",
+      "title": null,
+      "licence": "pexels-cc0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": [
+        "resized"
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "NHTSA vPIC",
+      "author": "National Highway Traffic Safety Administration",
+      "url": "https://vpic.nhtsa.dot.gov/api/",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.usa.gov/government-copyright"
+    },
+    {
+      "name": "fueleconomy.gov",
+      "author": "U.S. Department of Energy, U.S. Environmental Protection Agency",
+      "url": "https://www.fueleconomy.gov/feg/ws/index.shtml",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.usa.gov/government-copyright"
+    },
+    {
+      "name": "OpenStreetMap",
+      "author": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "licence": "odbl-1.0",
+      "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/"
+    },
+    {
+      "name": "world-atlas",
+      "author": "Michael Bostock",
+      "url": "https://github.com/topojson/world-atlas",
+      "licence": "isc",
+      "licenceUrl": "https://github.com/topojson/world-atlas/blob/master/LICENSE"
+    },
+    {
+      "name": "Natural Earth",
+      "author": "Natural Earth",
+      "url": "https://www.naturalearthdata.com/",
+      "licence": "public-domain",
+      "licenceUrl": "https://www.naturalearthdata.com/about/terms-of-use/"
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Readex Pro",
+      "author": "Thomas Jockin, Nadine Chahine, Bonnie Shaver-Troup, Santiago Orozco, Héctor Gómez",
+      "url": "https://github.com/ThomasJockin/readexpro",
+      "licence": "ofl-1.1",
+      "licenceUrl": "https://openfontlicense.org/open-font-license-official-text/"
+    },
+    {
+      "name": "Martian Mono",
+      "author": "Roman Shamin, Evil Martians",
+      "url": "https://github.com/evilmartians/mono",
+      "licence": "ofl-1.1",
+      "licenceUrl": "https://openfontlicense.org/open-font-license-official-text/"
+    }
+  ]
+}

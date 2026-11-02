@@ -2,8 +2,10 @@
 
 import "@/styles/globals.css";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react/ssr";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { GLOBAL_ERROR_COPY } from "@/features/shell/domain/global-error-copy";
+import { reportClientError } from "@/lib/analytics/track";
 import { DEFAULT_LOCALE, directionOf, LOCALES } from "@/lib/i18n/locales";
 import { fontVariables } from "@/styles/fonts";
 
@@ -11,9 +13,10 @@ import { fontVariables } from "@/styles/fonts";
 // document's place, so it brings the styles and fonts itself and no catalog: a minimal page in each
 // language, the site's default first, whose line heads the page, with the other's as its twin a
 // level down (DESIGN §8.1). Its buttons reload the page, as DESIGN §7.2.11 asks: a fresh document
-// and fresh scripts, after a root layout broke.
+// and fresh scripts, after a root layout broke. The failure counts (NFR-OBS-02).
 
-export default function GlobalError() {
+export default function GlobalError({ error }: { error: unknown }) {
+  useEffect(() => reportClientError("ROOT", error), [error]);
   return (
     <html lang={DEFAULT_LOCALE} dir={directionOf(DEFAULT_LOCALE)} className={fontVariables}>
       <body>

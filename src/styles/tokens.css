@@ -331,6 +331,10 @@
   --container-*: initial;
   --container-content: 110rem;
   --container-measure: 65ch;
+  /* A data table at the small step (data-table.tsx): the narrowest it gets, so a phone scrolls it
+     rather than squeeze its columns, and the column of its rows' headings, which holds as it scrolls */
+  --container-table: 50em;
+  --container-table-head: 8em;
   /* Tailwind's older max-w-prose, outside the container namespace */
   --max-width-prose: initial;
   /* DESIGN §3.4's breakpoints: the base styles from 320 px, then sm at 360 px, the reference phone,

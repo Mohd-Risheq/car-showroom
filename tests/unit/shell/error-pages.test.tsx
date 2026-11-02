@@ -43,7 +43,7 @@ describe("the segment error", () => {
 });
 
 describe("the global error page", () => {
-  const markup = renderToStaticMarkup(<GlobalError />);
+  const markup = renderToStaticMarkup(<GlobalError error={new Error("failed")} />);
 
   it("is an Arabic page, as the site's default, titled with its Arabic line", () => {
     expect(markup).toMatch(/^<html lang="ar" dir="rtl"[ >]/);

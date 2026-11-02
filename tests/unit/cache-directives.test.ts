@@ -28,6 +28,8 @@ function directives(source: string): { directive: string; next: string }[] {
 }
 
 const cached = sources("src").filter((file) => readFileSync(file, "utf8").includes('"use cache'));
+// cacheLife throws when it runs outside a cached function, so each call needs a directive of its own
+const CACHE_LIFE = /\bcacheLife\(/g;
 
 describe("cached functions (SRS §11.4)", () => {
   it("are found, the public reads among them", () => {
@@ -41,12 +43,18 @@ describe("cached functions (SRS §11.4)", () => {
     );
   });
 
+  it("are the only files that set a cache's life", () => {
+    const setting = sources("src").filter((file) => readFileSync(file, "utf8").match(CACHE_LIFE) !== null);
+    expect(setting.toSorted()).toStrictEqual(cached.toSorted());
+  });
+
   it.each(cached)("%s caches in the shared store, for the catalog's life", (file) => {
     const source = readFileSync(file, "utf8");
     const found = directives(source);
     expect(found.length).toBeGreaterThan(0);
     // Every directive at a line's start is read, as one with a comment after it would otherwise not be
     expect(found).toHaveLength(source.match(/^\s*"use cache/gm)?.length ?? 0);
+    expect(source.match(CACHE_LIFE)?.length ?? 0).toBe(found.length);
     for (const { directive, next } of found) {
       expect(directive, NOT_DATA.get(file) ?? "public data").toBe(
         NOT_DATA.has(file) ? "use cache" : "use cache: remote",

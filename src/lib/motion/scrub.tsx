@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { reportClientError } from "@/lib/analytics/track";
 import { SCRUB_MEDIA } from "@/lib/motion-tokens";
 import type { GsapScrub, GsapScrubProps } from "./gsap";
 
@@ -30,10 +31,8 @@ export function Scrub({ target, build }: GsapScrubProps) {
         (chunk) => {
           if (!cancelled) setLoaded(() => chunk.GsapScrub);
         },
-        () => {
-          // Without its chunk the section keeps its end state. T-20 reports the failure once, as a
-          // client_error event (NFR-OBS-02).
-        },
+        // Without its chunk the section keeps its end state, and the failure counts (NFR-OBS-02)
+        () => reportClientError("CHUNK_GSAP"),
       );
     };
     // Within one viewport above or below the screen

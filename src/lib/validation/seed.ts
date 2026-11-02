@@ -1,4 +1,5 @@
 import {
+  AUDIO_SOURCES,
   BODY_TYPES,
   type CarStatus,
   MECH_STATES,
@@ -22,6 +23,10 @@ import { z } from "./zod.ts";
 
 /** A seed car's key, its record number in lower case: s01 (05-SEED-DATA §5.2) */
 export const seedKeySchema = z.string().regex(/^s\d{2}$/);
+
+/** A seed media file's name: seed/cars/{seed key}/{stem}, the stem naming the shot (§3.7) */
+export const MEDIA_FILE = /^seed\/cars\/s\d{2}\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const mediaFile = z.string().regex(MEDIA_FILE);
 
 /** The statuses a seed car takes (§4.1): none is archived */
 export const SEED_STATUSES = ["published", "reserved", "sold", "draft"] as const satisfies readonly CarStatus[];
@@ -149,6 +154,107 @@ export const seedSettingsSchema = z.object({
   advanced,
 });
 
+// The seed media's credits (§3.7): the licences a seed photo or clip may carry, the sites they come
+// from, and the pages a credit links to.
+
+/** The licences a seed photo or clip may carry, as the credits manifest names them (D-046) */
+export const SEED_LICENCES = [
+  "cc0-1.0",
+  "cc-by-2.0",
+  "cc-by-2.5",
+  "cc-by-3.0",
+  "cc-by-4.0",
+  "cc-by-sa-2.0",
+  "cc-by-sa-2.5",
+  "cc-by-sa-3.0",
+  "cc-by-sa-4.0",
+  "unsplash",
+  "pexels-cc0",
+  "ai",
+  "owner",
+] as const;
+
+export type SeedLicence = (typeof SEED_LICENCES)[number];
+
+/** The sites a photo set comes from (§3.2), and those a clip comes from (§3.5) */
+export const PHOTO_SITES = ["commons", "unsplash", "pexels", "ai", "owner"] as const;
+export const SOUND_SITES = ["freesound", "owner"] as const;
+
+/** Whether the text is an https address as a browser writes it, so percent-encoded, with no name or password */
+export function isAddress(text: string): boolean {
+  try {
+    const url = new URL(text);
+    return url.protocol === "https:" && url.href === text && url.username === "" && url.password === "";
+  } catch {
+    return false;
+  }
+}
+
+/** A page a credit or a Software row links to (D-046, D-048) */
+export const httpsAddress = z
+  .string()
+  .max(2048)
+  .refine(isAddress, { error: "isn't an https address written as a browser writes it, percent-encoded" });
+// The author as the source shows it: for a Commons file, its attribution, or else its author (D-046)
+const author = text({ max: 300 });
+// A file's title at its source, which a CC BY or CC BY-SA credit names (D-046)
+const title = orNull(text({ max: 300 }));
+
+// The credits manifest (§3.7): an entry for each photo and clip, which T-18's media pipeline writes
+// from seed/assets.json, and the data and fonts the app uses, written by hand. The entries hold
+// codes, which the Credits page renders in each language.
+
+/** What the pipeline did to a photo, and to a clip, in §3.7's words and order */
+export const PHOTO_CHANGES = ["resized", "plates pixelated", "exposure normalized"] as const;
+export const SOUND_CHANGES = ["trimmed", "mixed to mono", "resampled", "normalized"] as const;
+
+/** The licences of the data and fonts the app uses: public domain is a data source's, never a seed file's (D-046) */
+export const DATA_AND_FONT_LICENCES = ["public-domain", "odbl-1.0", "isc", "ofl-1.1"] as const;
+
+// What a photo's entry and a clip's both hold
+const fileCredit = z.object({
+  file: mediaFile,
+  car: seedKeySchema,
+  author,
+  authorUrl: httpsAddress.nullable(),
+  originalUrl: httpsAddress.nullable(),
+  title,
+  licence: z.enum(SEED_LICENCES),
+  // The licence's page: for an AI set, its tool's terms, and none for the owner's own files
+  licenceUrl: httpsAddress.nullable(),
+});
+
+const photoCredit = fileCredit.extend({
+  kind: z.literal("photo"),
+  source: z.enum(PHOTO_SITES),
+  changes: z.array(z.enum(PHOTO_CHANGES)).min(1),
+});
+
+// A clip's also says whose engine it is, and when it was recorded, as its Media row does (§3.7, §10 check 9)
+const soundCredit = fileCredit.extend({
+  kind: z.literal("sound"),
+  source: z.enum(SOUND_SITES),
+  changes: z.array(z.enum(SOUND_CHANGES)).min(1),
+  audioSource: z.enum(AUDIO_SOURCES),
+  recordedAt: calendarDate().nullable(),
+});
+
+// A data source or a font
+const workCredit = z.object({
+  name: text({ max: 80 }),
+  author,
+  url: httpsAddress,
+  licence: z.enum(DATA_AND_FONT_LICENCES),
+  licenceUrl: httpsAddress,
+});
+
+/** public/seed/credits.json: the seed's photos and clips, and the data and the fonts the app uses (§3.7) */
+export const seedCreditsSchema = z.object({
+  files: z.array(z.discriminatedUnion("kind", [photoCredit, soundCredit])),
+  data: z.array(workCredit),
+  fonts: z.array(workCredit),
+});
+
 /**
  * seed-private/vins.json: each seed VIN and its stored decode, by seed key (§6.2). The file stays out
  * of the public repository (§6.1), so a public clone has none.
@@ -170,6 +276,8 @@ export type SeedReference = z.output<typeof seedReferenceSchema>;
 export type SeedPlace = z.output<typeof seedPlacesSchema>[number];
 export type SeedSettings = z.output<typeof seedSettingsSchema>;
 export type SeedVins = z.output<typeof seedVinsSchema>;
+export type SeedCredits = z.output<typeof seedCreditsSchema>;
+export type SeedCreditFile = SeedCredits["files"][number];
 
 /** A key path as problems name it: [2].car.trim, or (top level) for the value itself */
 export function keyPath(path: readonly PropertyKey[]): string {
@@ -180,7 +288,13 @@ export function keyPath(path: readonly PropertyKey[]): string {
   return shown || "(top level)";
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
+/** Zod's issues as problems, each after its key path */
+export function issueProblems(issues: readonly z.core.$ZodIssue[]): string[] {
+  return issues.map((issue) => `${keyPath(issue.path)}: ${issue.message}`);
+}
+
+/** Whether the value is an object with keys: neither null nor an array */
+export const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** The key paths of the input that the parse's output lacks */
@@ -206,7 +320,7 @@ export type StrictParse<Data> =
 export function parseStrict<Schema extends z.ZodType>(schema: Schema, value: unknown): StrictParse<z.output<Schema>> {
   const result = schema.safeParse(value);
   if (!result.success) {
-    return { ok: false, problems: result.error.issues.map((issue) => `${keyPath(issue.path)}: ${issue.message}`) };
+    return { ok: false, problems: issueProblems(result.error.issues) };
   }
   const dropped = droppedKeys(value, result.data, []);
   if (dropped.length > 0) return { ok: false, problems: dropped.map((path) => `${path}: not a key of this file`) };

@@ -13,7 +13,7 @@ const mergeClasses = extendTailwindMerge<"type-step" | "figures">({
       aspect: ["card", "hero"],
       blur: [],
       breakpoint: ["sm", "md", "lg", "xl"],
-      container: ["content", "measure"],
+      container: ["content", "measure", "table", "table-head"],
       "drop-shadow": [],
       ease: ["out", "in-out", "drawer"],
       font: ["sans", "lead", "head", "display", "figures", "mono"],

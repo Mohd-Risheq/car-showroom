@@ -1,0 +1,277 @@
+{
+  "$comment": "The Credits page's Software rows (DESIGN §7.2.9), without the dependencies' versions, which the page reads from package.json. Written by pnpm credits:software.",
+  "rows": [
+    {
+      "name": "@base-ui/react",
+      "licence": "mit",
+      "source": "https://github.com/mui/base-ui",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "@better-auth/drizzle-adapter",
+      "licence": "mit",
+      "source": "https://github.com/better-auth/better-auth",
+      "licenceFile": "LICENSE.md"
+    },
+    {
+      "name": "@gsap/react",
+      "licence": "gsap-standard",
+      "source": "https://github.com/greensock/react",
+      "licenceUrl": "https://gsap.com/standard-license"
+    },
+    {
+      "name": "@neondatabase/serverless",
+      "licence": "mit",
+      "source": "https://github.com/neondatabase/serverless",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "@node-rs/argon2",
+      "licence": "mit",
+      "source": "https://github.com/napi-rs/node-rs",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "@phosphor-icons/react",
+      "licence": "mit",
+      "source": "https://github.com/phosphor-icons/react",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "@vercel/blob",
+      "licence": "apache-2.0",
+      "source": "https://github.com/vercel/storage",
+      "licenceFile": "license.md"
+    },
+    {
+      "name": "@vercel/functions",
+      "licence": "apache-2.0",
+      "source": "https://github.com/vercel/vercel",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "barcode-detector",
+      "licence": "mit",
+      "source": "https://github.com/Sec-ant/barcode-detector",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "zxing-wasm",
+      "version": "3.1.3",
+      "within": "barcode-detector",
+      "licence": "mit",
+      "source": "https://github.com/Sec-ant/zxing-wasm",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "zxing-cpp",
+      "within": "zxing-wasm",
+      "licence": "apache-2.0",
+      "source": "https://github.com/zxing-cpp/zxing-cpp",
+      "licenceUrl": "/wasm/zxing_reader.LICENSE.txt"
+    },
+    {
+      "name": "better-auth",
+      "licence": "mit",
+      "source": "https://github.com/better-auth/better-auth",
+      "licenceFile": "LICENSE.md"
+    },
+    {
+      "name": "class-variance-authority",
+      "licence": "apache-2.0",
+      "source": "https://github.com/joe-bell/cva",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "clsx",
+      "licence": "mit",
+      "source": "https://github.com/lukeed/clsx",
+      "licenceFile": "license"
+    },
+    {
+      "name": "cobe",
+      "licence": "mit",
+      "source": "https://github.com/shuding/cobe",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "drizzle-orm",
+      "licence": "apache-2.0",
+      "source": "https://github.com/drizzle-team/drizzle-orm",
+      "licenceUrl": "https://github.com/drizzle-team/drizzle-orm/blob/0.45.4/LICENSE"
+    },
+    {
+      "name": "gsap",
+      "licence": "gsap-standard",
+      "source": "https://github.com/greensock/GSAP",
+      "licenceUrl": "https://gsap.com/standard-license"
+    },
+    {
+      "name": "mediabunny",
+      "licence": "mpl-2.0",
+      "source": "https://github.com/Vanilagy/mediabunny",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "motion",
+      "licence": "mit",
+      "source": "https://github.com/motiondivision/motion",
+      "licenceFile": "LICENSE.md"
+    },
+    {
+      "name": "next",
+      "licence": "mit",
+      "source": "https://github.com/vercel/next.js",
+      "licenceFile": "license.md"
+    },
+    {
+      "name": "next-intl",
+      "licence": "mit",
+      "source": "https://github.com/amannn/next-intl",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "next-themes",
+      "licence": "mit",
+      "source": "https://github.com/pacocoursey/next-themes",
+      "licenceFile": "license.md"
+    },
+    {
+      "name": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/radix-ui/primitives",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "@radix-ui/*",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/radix-ui/primitives",
+      "licenceUrl": "https://cdn.jsdelivr.net/npm/radix-ui@1.8.1/LICENSE"
+    },
+    {
+      "name": "aria-hidden",
+      "version": "1.2.6",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/aria-hidden",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "react-remove-scroll",
+      "version": "2.7.2",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/react-remove-scroll",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "react-remove-scroll-bar",
+      "version": "2.3.8",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/react-remove-scroll-bar",
+      "licenceUrl": "https://github.com/theKashey/react-remove-scroll-bar/blob/7301c160fda44cb8cf2b9fdfde61efad35736196/LICENSE"
+    },
+    {
+      "name": "react-style-singleton",
+      "version": "2.2.3",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/react-style-singleton",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "use-callback-ref",
+      "version": "1.3.3",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/use-callback-ref",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "use-sidecar",
+      "version": "1.1.3",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/use-sidecar",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "detect-node-es",
+      "version": "1.1.0",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/thekashey/detect-node",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "get-nonce",
+      "version": "1.0.1",
+      "within": "radix-ui",
+      "licence": "mit",
+      "source": "https://github.com/theKashey/get-nonce",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "react",
+      "licence": "mit",
+      "source": "https://github.com/react/react",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "react-dom",
+      "licence": "mit",
+      "source": "https://github.com/react/react",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "server-only",
+      "licence": "mit",
+      "source": "https://www.npmjs.com/package/server-only",
+      "licenceUrl": "https://opensource.org/license/mit"
+    },
+    {
+      "name": "sonner",
+      "licence": "mit",
+      "source": "https://github.com/emilkowalski/sonner",
+      "licenceFile": "LICENSE.md"
+    },
+    {
+      "name": "tailwind-merge",
+      "licence": "mit",
+      "source": "https://github.com/dcastil/tailwind-merge",
+      "licenceFile": "LICENSE.md"
+    },
+    {
+      "name": "tailwindcss",
+      "licence": "mit",
+      "source": "https://github.com/tailwindlabs/tailwindcss",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "topojson-client",
+      "licence": "isc",
+      "source": "https://github.com/topojson/topojson-client",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "uqr",
+      "licence": "mit",
+      "source": "https://github.com/unjs/uqr",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "world-atlas",
+      "licence": "isc",
+      "source": "https://github.com/topojson/world-atlas",
+      "licenceFile": "LICENSE"
+    },
+    {
+      "name": "zod",
+      "licence": "mit",
+      "source": "https://github.com/colinhacks/zod",
+      "licenceFile": "LICENSE"
+    }
+  ]
+}

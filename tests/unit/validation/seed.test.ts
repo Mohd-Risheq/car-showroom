@@ -4,6 +4,7 @@ import {
   keyPath,
   parseStrict,
   seedCarsSchema,
+  seedCreditsSchema,
   seedPlacesSchema,
   seedReferenceSchema,
   seedSettingsSchema,
@@ -35,6 +36,8 @@ const settings = (change: (file: Json) => void) => {
   return file;
 };
 
+const ADDRESS = "isn't an https address written as a browser writes it, percent-encoded";
+
 const problemsOf = (schema: z.ZodType, value: unknown) => {
   const result = parseStrict(schema, value);
   return result.ok ? [] : result.problems;
@@ -47,6 +50,7 @@ describe("the seed file schemas", () => {
     expect(problemsOf(seedPlacesSchema, fixture("seed/places.json"))).toStrictEqual([]);
     expect(problemsOf(seedSettingsSchema, fixture("seed/settings.json"))).toStrictEqual([]);
     expect(problemsOf(seedVinsSchema, fixture("seed-private/vins.json"))).toStrictEqual([]);
+    expect(problemsOf(seedCreditsSchema, fixture("public/seed/credits.json"))).toStrictEqual([]);
   });
 
   it("refuse a key no schema knows, at any depth", () => {
@@ -169,6 +173,94 @@ describe("the seed file schemas", () => {
   });
 });
 
+describe("public/seed/credits.json's schema", () => {
+  type Credits = Record<"files" | "data" | "fonts", Json[]>;
+  const changed = (change: (credits: Credits) => void) => {
+    const file = fixture("public/seed/credits.json") as Credits;
+    change(file);
+    return problemsOf(seedCreditsSchema, file);
+  };
+  /** The key paths of the problems a change makes */
+  const refused = (change: (credits: Credits) => void) =>
+    changed(change).map((problem) => problem.slice(0, problem.indexOf(": ")));
+  const entry = (list: Json[], index: number) => {
+    const found = list[index];
+    if (found === undefined) throw new Error(`No entry ${index}`);
+    return found;
+  };
+  // The fixture's files: s01's 13 photos, then its clip
+  const CLIP = 13;
+
+  it("gives a clip's entry whose engine it is and when it was recorded, and a photo's neither (§3.7)", () => {
+    expect(changed(({ files }) => delete entry(files, CLIP)["recordedAt"])).toStrictEqual([
+      "files[13].recordedAt: Invalid input: expected string, received undefined",
+    ]);
+    expect(changed(({ files }) => (entry(files, 0)["audioSource"] = "same_engine"))).toStrictEqual([
+      "files[0].audioSource: not a key of this file",
+    ]);
+  });
+
+  it("takes each kind's own sources and changes, at least one, and the car's key in lower case", () => {
+    expect(
+      refused(({ files }) => {
+        entry(files, 0)["changes"] = ["resized", "trimmed"];
+        entry(files, 1)["changes"] = [];
+        entry(files, 2)["source"] = "freesound";
+        entry(files, 3)["kind"] = "video";
+        entry(files, 4)["car"] = "S01";
+        Object.assign(entry(files, CLIP), { source: "commons", changes: ["resized"] });
+      }),
+    ).toStrictEqual([
+      "files[0].changes[1]",
+      "files[1].changes",
+      "files[2].source",
+      "files[3].kind",
+      "files[4].car",
+      "files[13].source",
+      "files[13].changes[0]",
+    ]);
+  });
+
+  it("takes no public domain for a file, only the data's and fonts' own licences for them (D-046)", () => {
+    expect(
+      refused(({ files, data, fonts }) => {
+        entry(files, 0)["licence"] = "public-domain";
+        entry(data, 0)["licence"] = "cc-by-4.0";
+        entry(fonts, 0)["licenceUrl"] = null;
+      }),
+    ).toStrictEqual(["files[0].licence", "data[0].licence", "fonts[0].licenceUrl"]);
+  });
+
+  it("names each data source's and font's author, in at most 300 characters", () => {
+    expect(
+      refused(({ data, fonts }) => {
+        entry(data, 0)["author"] = " ";
+        entry(data, 1)["author"] = "a".repeat(300);
+        entry(fonts, 0)["author"] = "a".repeat(301);
+      }),
+    ).toStrictEqual(["data[0].author", "fonts[0].author"]);
+  });
+
+  it("takes an address of at most 2048 characters", () => {
+    const address = (length: number) => `https://example.org/${"a".repeat(length - "https://example.org/".length)}`;
+    expect(
+      refused(({ data }) => {
+        entry(data, 0)["url"] = address(2048);
+        entry(data, 1)["url"] = address(2049);
+      }),
+    ).toStrictEqual(["data[1].url"]);
+  });
+
+  it("names each data source and font, and takes each address as a browser writes it", () => {
+    expect(
+      changed(({ data }) => {
+        entry(data, 1)["name"] = " ";
+        entry(data, 4)["url"] = "https://www.naturalearthdata.com";
+      }),
+    ).toStrictEqual(["data[1].name: Invalid input: expected string, received null", `data[4].url: ${ADDRESS}`]);
+  });
+});
+
 describe("parseStrict", () => {
   const schema = z.object({ name: z.string(), parts: z.array(z.object({ id: z.int() })) });
 
@@ -199,6 +291,8 @@ describe("parseStrict", () => {
     expect(problemsOf(turned, { when: "2026-10-18", list: "x" })).toStrictEqual([]);
     const listToText = z.object({ list: z.array(z.int()).transform((items) => items.join()) });
     expect(problemsOf(listToText, { list: [1, 2] })).toStrictEqual([]);
+    const pairToList = z.object({ pair: z.object({ a: z.int(), b: z.int() }).transform(({ a, b }) => [a, b]) });
+    expect(problemsOf(pairToList, { pair: { a: 1, b: 2 } })).toStrictEqual([]);
   });
 });
 

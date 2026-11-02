@@ -83,6 +83,7 @@ describe("which paths run the proxy", () => {
     "/ar/cars/toyota-rav4",
     "/api/upload",
     "/api/auth/get-session",
+    "/api/events",
     "/_next/static/chunk.js",
     "/favicon.ico",
     "/icon.svg",

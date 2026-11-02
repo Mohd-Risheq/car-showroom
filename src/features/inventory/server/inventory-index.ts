@@ -8,7 +8,7 @@ import type { PublicInventoryIndex } from "@/lib/db/public-dto";
 import { publicRepo } from "@/lib/db/scoped-repo";
 import { SOLD_VISIBLE_DAYS } from "@/lib/validation/bounds";
 import { buildIndex } from "./build-index";
-import { decodeIndex, encodeIndex, type IndexWire } from "./index-codec";
+import { carIdsOf, decodeIndex, encodeIndex, type IndexWire } from "./index-codec";
 import { loadIndexRows } from "./index-queries";
 
 /** The index in its stored form, a third of the cards' size (D-043) */
@@ -26,3 +26,19 @@ async function loadIndexWire(dealerId: string): Promise<IndexWire> {
 export const getInventoryIndex = cache(async (dealerId: string): Promise<PublicInventoryIndex> =>
   decodeIndex(await loadIndexWire(dealerId)),
 );
+
+/** The ids of the cars the public sees, an entry of their own, a fraction of the index's size */
+async function loadPublicCarIds(dealerId: string): Promise<string[]> {
+  "use cache: remote";
+  cacheLife("catalog");
+  cacheTag(carsTag(dealerId), dealerTag(dealerId));
+  return carIdsOf(await loadIndexWire(dealerId));
+}
+
+/**
+ * The cars a car event may name (API-03, the owner's answer of 2026-10-31): every car event reads
+ * them, so they come without the cards, which each would otherwise decode
+ */
+export async function getPublicCarIds(dealerId: string): Promise<ReadonlySet<string>> {
+  return new Set(await loadPublicCarIds(dealerId));
+}

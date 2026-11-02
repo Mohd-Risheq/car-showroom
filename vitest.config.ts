@@ -84,6 +84,7 @@ export default defineConfig({
         "src/lib/storage/repository.ts",
         "src/lib/storage/upload-token.ts",
         "src/lib/rate-limit/store.ts",
+        "src/lib/analytics/store.ts",
         // The Server Actions, whose guard, limiter and handlers run on the database: pnpm test:int
         "src/features/*/server/actions.ts",
         // The public reads' statements, which run on the database: pnpm test:int

@@ -1,11 +1,11 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { watchProblems } from "../support/page-problems.ts";
+import { expectProblems, watchProblems } from "../support/page-problems.ts";
 import { openSpecimen } from "../support/specimen.ts";
 
 // SRS §11.8 and T-13's Verify: GSAP and ScrollTrigger load once, as one lazy chunk, when the first
 // scrubbed section comes within one viewport of a screen that scrubs (DESIGN §4.4), and are never
-// requested at 390 px. The public token specimen's length line is a scrubbed section
-// (src/app/_dev/specimen/motion-demos.tsx).
+// requested at 390 px. A chunk that fails to load is reported once (NFR-OBS-02, D-038). The public
+// token specimen's length line is a scrubbed section (src/app/_dev/specimen/motion-demos.tsx).
 
 const SPECIMEN = "/en/dev/tokens";
 
@@ -151,6 +151,36 @@ test.describe("on a desktop", () => {
     const end = top + height / 2 - viewport / 2;
     await scrollTo(page, (start + end) / 2);
     await expect.poll(() => offsetOf(line)).toBeCloseTo(0.5, 2);
+  });
+
+  // NFR-OBS-02 and D-038: the section keeps its end state, and the failure goes to API-03 once
+  test("reports GSAP's chunk when it fails to load, once, as a client_error", async ({ page, browserName }) => {
+    const problems = await watchProblems(page);
+    const failed: string[] = [];
+    await page.route("**/_next/static/chunks/**", async (route) => {
+      const response = await route.fetch();
+      const body = await response.text();
+      if (!GSAP_MARKER.test(body)) return route.fulfill({ response, body });
+      failed.push(route.request().url());
+      return route.abort("internetdisconnected");
+    });
+    const beacons: unknown[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/events") beacons.push(request.postDataJSON());
+    });
+    const { demo, line } = demoOf(page);
+    await openSpecimen(page, SPECIMEN);
+    await demo.scrollIntoViewIfNeeded();
+    const error = { e: "client_error", l: "en", r: "/[locale]/[...rest]", x: "CHUNK_GSAP" };
+    await expect.poll(() => beacons).toStrictEqual([error]);
+    await scrollTo(page, await page.evaluate(() => document.documentElement.scrollHeight));
+    await page.waitForTimeout(QUIET);
+    expect(beacons).toStrictEqual([error]);
+    expect(await offsetOf(line)).toBe(0);
+    // Chromium reports each try at the chunk, which Turbopack's runtime makes again once after a
+    // network error; WebKit and Firefox report none
+    const reports = failed.map((url) => `Failed to load resource: net::ERR_INTERNET_DISCONNECTED (${url})`);
+    await expectProblems(page, problems, browserName === "chromium" ? reports : []);
   });
 
   test("never requests GSAP under reduced motion", async ({ page }) => {

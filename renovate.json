@@ -39,7 +39,7 @@
     },
     {
       "description": "SRS §11.2 version ranges, from here on: an update outside them needs a spec change first (D-010)",
-      "matchPackageNames": ["next", "eslint-config-next", "@next/env"],
+      "matchPackageNames": ["next", "eslint-config-next", "@next/env", "@next/mdx"],
       "allowedVersions": "16.4.x"
     },
     {

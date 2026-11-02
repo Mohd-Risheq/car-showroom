@@ -11,6 +11,7 @@ import { ShellStringsProvider } from "@/features/shell/ui/shell-strings";
 import { SiteFooter } from "@/features/shell/ui/site-footer";
 import { SiteHeader } from "@/features/shell/ui/site-header";
 import { SkipLink } from "@/features/shell/ui/skip-link";
+import { Analytics } from "@/lib/analytics/analytics";
 import { isDemoMode } from "@/lib/deployment";
 import { getAppLocale } from "@/lib/i18n/server";
 
@@ -52,6 +53,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/[locale]">)
       </div>
       <RouteArrival />
       <ScrollMemory />
+      <Analytics />
       <OfflineToast message={common("offline")} />
     </ShellStringsProvider>
   );

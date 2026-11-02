@@ -301,9 +301,13 @@ export function encodeIndex(index: PublicInventoryIndex): IndexWire {
   };
 }
 
+function assertVersion(wire: IndexWire): void {
+  if (wire.v !== INDEX_WIRE_VERSION) throw new Error(`index wire: version ${String(wire.v)} is not this build's`);
+}
+
 /** The index an entry holds */
 export function decodeIndex(wire: IndexWire): PublicInventoryIndex {
-  if (wire.v !== INDEX_WIRE_VERSION) throw new Error(`index wire: version ${String(wire.v)} is not this build's`);
+  assertVersion(wire);
   return {
     cards: wire.rows.map((row) => decodeCard(row, wire.models, wire.mediaOrigin)),
     makes: Object.fromEntries(Object.entries(wire.makes).map(([key, [ar, en]]) => [key, { ar, en }])),
@@ -311,4 +315,10 @@ export function decodeIndex(wire: IndexWire): PublicInventoryIndex {
       Object.entries(wire.models).map(([key, [makeKey, ar, en]]) => [key, { makeKey, ar, en }]),
     ),
   };
+}
+
+/** The ids of an entry's cars, each its row's first value, read without decoding the cards */
+export function carIdsOf(wire: IndexWire): string[] {
+  assertVersion(wire);
+  return wire.rows.map(([id]) => id);
 }

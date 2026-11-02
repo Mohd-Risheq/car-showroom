@@ -1,3 +1,4 @@
+import { type EventName, NO_CAR } from "../analytics/events.ts";
 import { EVENT_NAMES } from "../db/enums.ts";
 import type { AppLocale } from "../i18n/locales.ts";
 import { keyedRandom } from "../seeded-random.ts";
@@ -9,8 +10,6 @@ import type { SeedTier } from "./seed-tiers.ts";
 // (T-30). Each count has its own generator, keyed by the car, the event, the day and the locale
 // (§8.2), so the same inputs give the same rows on every server and request (TC-30-6). Pure, and it
 // imports other modules by their relative .ts paths, as the rest of lib/demo does.
-
-type EventName = (typeof EVENT_NAMES)[number];
 
 /** What a car has that decides which events follow its views (§8.4, §8.5) */
 export type SampleFeature = "inspection" | "audio" | "spin" | "journey" | "consumption" | "showroom";
@@ -51,8 +50,7 @@ type FollowingEvent = {
   readonly when?: SampleFeature;
 };
 
-// EventDaily's car for an event about no car, and the key that seeds the site's draws (§8.2, §8.5)
-const NO_CAR = "00000000-0000-0000-0000-000000000000";
+// The key that seeds the site's draws (§8.2, §8.5)
 const SITE = "site";
 // How many days, today included, the sample reaches back (§8.3)
 const WINDOW_DAYS = 90;

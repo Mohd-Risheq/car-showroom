@@ -40,6 +40,8 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 | `pnpm audit:deps`                                                                 | the version floor, `pnpm audit`, OSV-Scanner and gitleaks                                                                                                    |
 | `pnpm check:dashes`, `check:bundle`, `check:contrast`, `check:i18n`, `check:seed` | the custom checks, all five part of `verify`                                                                                                                 |
 
+`pnpm credits:software` writes the Credits page's software list from the installed packages. Run it after a dependency changes: a unit test fails while the list differs from what it would write, and the build stops while a dependency has no row. Renovate's pull requests don't run it.
+
 ## Architecture
 
 | Path                         | What it holds                                                                                                                                                                                                     |
@@ -51,6 +53,7 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 | `src/features/`              | one folder per feature, with its components and logic                                                                                                                                                             |
 | `src/lib/`                   | the database (Drizzle on Neon's serverless driver), auth, storage, the content security policies, HTTP helpers, validation, and `format/`, which writes numbers, dates, units and phone numbers in both languages |
 | `src/lib/i18n/`, `messages/` | next-intl's routing and formatting locale, the visitor's stored language, and the Arabic and English message catalogs                                                                                             |
+| `src/content/`               | the privacy page's words, in MDX, one file for each language                                                                                                                                                      |
 | `(dev)` route groups         | development pages from the technical spikes, under `/{locale}/dev` and `/{locale}/dealer/dev`                                                                                                                     |
 | `drizzle/`                   | database migrations                                                                                                                                                                                               |
 | `scripts/`                   | the scripts behind the `pnpm` commands, the seed and the owner's account; `scripts/checks/` holds the custom checks' logic, and `scripts/eslint/` the project's own lint rules                                    |

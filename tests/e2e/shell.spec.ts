@@ -37,6 +37,8 @@ const STICKY_BUDGET = 0.25;
 const DEMO_NUMBER = "+962 7X XXX XXXX";
 /** The mark in session storage that makes the lab's failing page fail (dev/shell/failing) */
 const FAIL_KEY = "muftah:fail";
+/** How long a test waits for a beacon that must not come. The page's own comes far sooner. */
+const QUIET = 1500;
 
 declare global {
   interface Window {
@@ -707,18 +709,30 @@ test.describe("a navigation", () => {
 
   test("FR-02.4: a failing arrival is reported and leaves the page in place", async ({ page }) => {
     const problems = await watchProblems(page);
+    // NFR-OBS-02: the arrival reports its failure once, as ARRIVAL, before reportError tells the page.
+    // The error is the site's own, raised in arrive.ts, so the layout's watch would count it as
+    // UNCAUGHT were reportError first.
+    const beacons: unknown[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/events") beacons.push(request.postDataJSON());
+    });
     await page.addInitScript(() => {
       const boxes = Element.prototype.getClientRects;
       Element.prototype.getClientRects = function (this: Element) {
-        if (this.localName === "h1") throw new Error("a failing arrival");
-        return boxes.call(this);
+        return this.localName === "h1" ? (null as unknown as DOMRectList) : boxes.call(this);
       };
     });
     await page.goto(`/en${LAB}`);
     await page.getByRole("link", { name: "A plain page" }).click();
     await expect(page).toHaveURL(new RegExp(`/en${LAB}/plain$`));
     await expect(page.getByRole("heading", { level: 1, name: "Plain page" })).toBeVisible();
-    await expect.poll(() => problems.some((problem) => problem.includes("a failing arrival"))).toBe(true);
+    await expect.poll(() => problems.length).toBe(1);
+    const arrival = { e: "client_error", l: "en", r: "/[locale]/[...rest]", x: "ARRIVAL" };
+    await expect.poll(() => beacons).toStrictEqual([arrival]);
+    await page.waitForTimeout(QUIET);
+    expect(beacons).toStrictEqual([arrival]);
+    // The TypeError of reading the boxes' length, which each engine words its own way
+    await expectProblems(page, problems, [/\bnull\b/]);
   });
 
   // A step back or forward gives the focus back to the control its page was left by, while it is
