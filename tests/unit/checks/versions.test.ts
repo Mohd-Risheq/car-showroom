@@ -19,7 +19,7 @@ describe("lockfilePackages", () => {
   it("reads every package version from the packages section, scoped names too, and not the snapshots", () => {
     expect(Object.fromEntries(packagesOf("clean"))).toStrictEqual({
       "@img/sharp-darwin-arm64": ["0.35.5"],
-      next: ["16.4.2"],
+      next: ["16.4.6"],
       "react-dom": ["19.3.1"],
       react: ["19.3.1"],
       sharp: ["0.35.5"],
@@ -62,7 +62,7 @@ describe("meetsFloor", () => {
 describe("floorReport", () => {
   it("holds next, react, react-dom and sharp to SEC-11's floors", () => {
     expect(FLOORS.map(({ name, min, optional }) => ({ name, min, optional }))).toStrictEqual([
-      { name: "next", min: "16.4.1", optional: undefined },
+      { name: "next", min: "16.4.5", optional: undefined },
       { name: "react", min: "19.3.1", optional: undefined },
       { name: "react-dom", min: "19.3.1", optional: undefined },
       { name: "sharp", min: "0.35.5", optional: true },
@@ -70,10 +70,10 @@ describe("floorReport", () => {
   });
 
   it("names every copy below a floor, a missing package, and leaves out sharp when it isn't installed", () => {
-    const report = floorReport(new Map([["next", ["16.4.2", "link:../next"]]]));
-    expect(report.installed).toStrictEqual(["next 16.4.2", "next link:../next"]);
+    const report = floorReport(new Map([["next", ["16.4.6", "link:../next"]]]));
+    expect(report.installed).toStrictEqual(["next 16.4.6", "next link:../next"]);
     expect(report.problems).toStrictEqual([
-      "next@link:../next is not a version this check can compare with 16.4.1",
+      "next@link:../next is not a version this check can compare with 16.4.5",
       "react is not in the lockfile, so its SEC-11 floor of 19.3.1 can't be checked",
       "react-dom is not in the lockfile, so its SEC-11 floor of 19.3.1 can't be checked",
     ]);
@@ -91,7 +91,7 @@ describe("scripts/check-versions.ts", () => {
     expect(result.status).toBe(1);
     expect(result.stderr.trim().split("\n")).toStrictEqual(
       [
-        "next 16.4.0 is below its SEC-11 floor of 16.4.1 (GHSA-673q-mjm6-r5xr, GHSA-2464-fhr4-w9xw and GHSA-p3m5-59mp-jv5r)",
+        "next 16.4.0 is below its SEC-11 floor of 16.4.5 (GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8, GHSA-673q-mjm6-r5xr, GHSA-2464-fhr4-w9xw and GHSA-p3m5-59mp-jv5r)",
         "react 18.3.1 is below its SEC-11 floor of 19.3.1 (GHSA-xqc2-xf4c-x3h3 and GHSA-h3gv-c5rc-p453)",
         "react-dom is not in the lockfile, so its SEC-11 floor of 19.3.1 can't be checked",
         "sharp 0.35.5-rc.1 is below its SEC-11 floor of 0.35.5 (CVE-2026-96889 and GHSA-2464-fhr4-w9xw)",
@@ -103,7 +103,7 @@ describe("scripts/check-versions.ts", () => {
     const result = run("clean");
     expect(result.status).toBe(0);
     expect(result.stdout).toBe(
-      "check-versions: next 16.4.2, react 19.3.1, react-dom 19.3.1, sharp 0.35.5 meet SEC-11's floors\n",
+      "check-versions: next 16.4.6, react 19.3.1, react-dom 19.3.1, sharp 0.35.5 meet SEC-11's floors\n",
     );
   });
 

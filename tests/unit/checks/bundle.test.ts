@@ -16,6 +16,7 @@ import {
   parseBudgets,
   parseRouteStats,
   routeMatches,
+  unlistedRoutes,
   workersIn,
 } from "../../../scripts/checks/bundle.ts";
 
@@ -460,5 +461,17 @@ describe("parseRouteStats", () => {
     expect(() => parseRouteStats([{ route: "/[locale]", firstLoadChunkPaths: ["static/a.js"] }], ".next")).toThrow(
       "route-bundle-stats.json: /[locale] lists static/a.js, outside .next/",
     );
+  });
+});
+
+describe("unlistedRoutes", () => {
+  it("names each route the analyzer finds lazy chunks on that route-bundle-stats.json doesn't list", () => {
+    expect(unlistedRoutes(["/[locale]", "/[locale]/new"], [{ route: "/[locale]" }])).toStrictEqual([
+      "/[locale]/new: the bundle analyzer has lazy chunks here, but route-bundle-stats.json has no such route",
+    ]);
+  });
+
+  it("leaves out Next.js's global error page, which route-bundle-stats.json never lists (D-050)", () => {
+    expect(unlistedRoutes(["/_global-error", "/_not-found"], [{ route: "/_not-found" }])).toStrictEqual([]);
   });
 });

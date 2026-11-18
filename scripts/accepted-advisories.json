@@ -25,6 +25,22 @@
       "reviewBy": "2027-01-21",
       "decision": "D-042",
       "reason": "Memory exhaustion while validating oversized constrained collections. zod 3.25.76 comes only through Lighthouse CI (@lhci/cli, lighthouse, puppeteer-core, chromium-bidi), which validates the protocol messages of the Chrome that Lighthouse starts, never site input. chromium-bidi asks for zod ^3.24.1, and only Zod 4.6.6 and later are fixed, so no patched 3.x release exists."
+    },
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "package": "picomatch",
+      "version": "4.0.7",
+      "reviewBy": "2027-02-18",
+      "decision": "D-050",
+      "reason": "Exponential backtracking when matching a crafted pattern of repeated single-branch extglobs. picomatch 4.0.7 comes only through build and development tools (vite, vitest, tinyglobby under typescript-eslint, and @parcel/watcher under next-intl), which match the project's own glob patterns, never a visitor's input; next-intl loads @parcel/watcher for its message extractor alone, outside the server bundle. No patched release exists."
+    },
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "package": "picomatch",
+      "version": "2.3.2",
+      "reviewBy": "2027-02-18",
+      "decision": "D-050",
+      "reason": "Exponential backtracking when matching a crafted pattern of repeated single-branch extglobs. picomatch 2.3.2 comes only through @next/eslint-plugin-next's fast-glob and micromatch, which match the project's own glob patterns while it lints, never a visitor's input. No patched release exists."
     }
   ]
 }

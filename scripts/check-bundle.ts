@@ -22,6 +22,7 @@ import {
   pairGroups,
   parseBudgets,
   parseRouteStats,
+  unlistedRoutes,
 } from "./checks/bundle.ts";
 import { readJson, ROOT } from "./checks/files.ts";
 import { MAX_OUTPUT_BYTES } from "./checks/processes.ts";
@@ -80,12 +81,7 @@ const gzipBytes = cachedByFile((file) => gzipSync(bytes(file), { level: 9 }).byt
 next(["analyze", "--output", "--snapshot", SNAPSHOT]);
 const analyzed = analyzerGroups(next(["analyze", "export", "--snapshot", SNAPSHOT]));
 
-const problems: string[] = [];
-for (const route of analyzed.keys()) {
-  if (!routes.some((entry) => entry.route === route)) {
-    problems.push(`${route}: the bundle analyzer has lazy chunks here, but route-bundle-stats.json has no such route`);
-  }
-}
+const problems = unlistedRoutes(analyzed.keys(), routes);
 const groups: LazyGroup[] = [];
 for (const { route, chunks } of routes) {
   const paired = pairGroups(route, analyzed.get(route) ?? [], emittedImports(chunks, read, rawBytes));

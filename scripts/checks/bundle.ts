@@ -254,6 +254,21 @@ export function lazyFiles(chunks: string[], firstLoad: string[], read: (file: st
   return [...files].filter((file) => !loaded.has(file));
 }
 
+// Next.js builds the global error page apart from the app's routes, as it does the pages router's
+// _error, so route-bundle-stats.json never lists it, though 16.4.6's analyzer does. It loads only
+// once the root layout fails, and its one lazy chunk, the analytics beacon, has no budget (D-050).
+const UNLISTED_BY_NEXT = new Set(["/_global-error"]);
+
+/** Each route the analyzer finds lazy chunks on that route-bundle-stats.json doesn't list, as a problem */
+export function unlistedRoutes(analyzed: Iterable<string>, routes: readonly { route: string }[]): string[] {
+  const listed = new Set(routes.map(({ route }) => route));
+  return [...analyzed]
+    .filter((route) => !listed.has(route) && !UNLISTED_BY_NEXT.has(route))
+    .map(
+      (route) => `${route}: the bundle analyzer has lazy chunks here, but route-bundle-stats.json has no such route`,
+    );
+}
+
 /** Whether a firstLoad pattern matches a route: the route itself, or with /** the route and every route below it */
 export function routeMatches(pattern: string, route: string): boolean {
   if (!pattern.endsWith("/**")) return pattern === route;

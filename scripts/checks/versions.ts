@@ -6,7 +6,12 @@
 export type Floor = { name: string; min: string; advisories: string; optional?: true };
 
 export const FLOORS: Floor[] = [
-  { name: "next", min: "16.4.1", advisories: "GHSA-673q-mjm6-r5xr, GHSA-2464-fhr4-w9xw and GHSA-p3m5-59mp-jv5r" },
+  {
+    name: "next",
+    min: "16.4.5",
+    advisories:
+      "GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8, GHSA-673q-mjm6-r5xr, GHSA-2464-fhr4-w9xw and GHSA-p3m5-59mp-jv5r",
+  },
   { name: "react", min: "19.3.1", advisories: "GHSA-xqc2-xf4c-x3h3 and GHSA-h3gv-c5rc-p453" },
   { name: "react-dom", min: "19.3.1", advisories: "GHSA-xqc2-xf4c-x3h3 and GHSA-h3gv-c5rc-p453" },
   { name: "sharp", min: "0.35.5", advisories: "CVE-2026-96889 and GHSA-2464-fhr4-w9xw", optional: true },
