@@ -341,7 +341,8 @@
     "share": "Share",
     "linkCopied": "Link copied",
     "facts": {
-      "title": "Key facts"
+      "title": "Key facts",
+      "electricMotor": "Electric motor"
     },
     "mileage": {
       "low": "Mileage: low for its age",
@@ -376,6 +377,8 @@
       "alt": "{title}, {group, select, exterior {exterior} interior {interior} engine {engine bay} imperfection {imperfection} other {photo}}",
       "altImperfection": "{title}, imperfection: {note}",
       "more": "Show {count, plural, one {# more photo} other {# more photos}}",
+      "fullscreen": "Full screen",
+      "position": "Photo {n} of {total}",
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out"
     },

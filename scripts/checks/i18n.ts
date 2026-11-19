@@ -8,6 +8,7 @@
 import { IntlMessageFormat } from "intl-messageformat";
 import type { LOCALES } from "../../src/lib/i18n/locales.ts";
 import { errorMessage } from "./files.ts";
+import { inWords } from "./text.ts";
 
 export type Locale = (typeof LOCALES)[number];
 type MessageElement = ReturnType<IntlMessageFormat["getAst"]>[number];
@@ -101,9 +102,6 @@ function everyBranch(elements: MessageElement[], pick: (element: MessageElement)
 const literals = (elements: MessageElement[]) =>
   everyBranch(elements, (element) => (element.type === TEXT ? [element.value] : []));
 
-const list = (words: string[]) =>
-  words.length < 2 ? words.join("") : `${words.slice(0, -1).join(", ")} and ${words.at(-1) ?? ""}`;
-
 /** The problems with one catalog's messages on their own */
 function messageProblems({ file, locale, messages }: Catalog): string[] {
   const problems: string[] = [];
@@ -114,11 +112,11 @@ function messageProblems({ file, locale, messages }: Catalog): string[] {
     } else {
       for (const { argument, missing, unused } of pluralGaps(elements, locale)) {
         if (missing.length > 0) {
-          problems.push(`${file}: ${key}: the plural of {${argument}} has no ${list(missing)} form (NFR-I18N-03)`);
+          problems.push(`${file}: ${key}: the plural of {${argument}} has no ${inWords(missing)} form (NFR-I18N-03)`);
         }
         if (unused.length > 0) {
           problems.push(
-            `${file}: ${key}: the plural of {${argument}} has a ${list(unused)} form, which ${LANGUAGE[locale]} never selects (an exact value is written =n)`,
+            `${file}: ${key}: the plural of {${argument}} has a ${inWords(unused)} form, which ${LANGUAGE[locale]} never selects (an exact value is written =n)`,
           );
         }
       }
@@ -192,7 +190,7 @@ function missingPlaceholders(from: Catalog, other: Catalog): string[] {
   return parsedPairs(from, other).flatMap(({ key, elements, counterpart }) => {
     const present = new Set(placeholders(counterpart));
     const missing = [...new Set(placeholders(elements))].filter((name) => !present.has(name));
-    return missing.length > 0 ? [`${other.file}: ${key}: lacks ${list(missing)}, which ${from.file} has`] : [];
+    return missing.length > 0 ? [`${other.file}: ${key}: lacks ${inWords(missing)}, which ${from.file} has`] : [];
   });
 }
 

@@ -42,6 +42,8 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 
 `pnpm credits:software` writes the Credits page's software list from the installed packages. Run it after a dependency changes: a unit test fails while the list differs from what it would write, and the build stops while a dependency has no row. Renovate's pull requests don't run it.
 
+`pnpm fonts:fallbacks`, run on macOS with the app running, measures the fonts' fallback faces and the catalog's model names in Chromium, and writes `src/styles/font-fallbacks.css`, `model-names.json` and `model-names.css`. Run it after a type step or the catalog's models change: a unit test fails while the measured names and `seed/reference.json` disagree. It measures on the specification's copy, which is private, so only the private repository can run it.
+
 ## Architecture
 
 | Path                         | What it holds                                                                                                                                                                                                     |
@@ -56,6 +58,7 @@ Local work never touches a real service: the database runs in Docker, and `STORA
 | `src/content/`               | the privacy page's words, in MDX, one file for each language                                                                                                                                                      |
 | `(dev)` route groups         | development pages from the technical spikes, under `/{locale}/dev` and `/{locale}/dealer/dev`                                                                                                                     |
 | `drizzle/`                   | database migrations                                                                                                                                                                                               |
+| `patches/`                   | a patch to Next.js 16.4.6 that pnpm applies on install, as its page handler sent a redirect's address twice in a page's first response (Next.js issue #82117)                                                     |
 | `scripts/`                   | the scripts behind the `pnpm` commands, the seed and the owner's account; `scripts/checks/` holds the custom checks' logic, and `scripts/eslint/` the project's own lint rules                                    |
 | `seed/`                      | the data `node scripts/seed.ts` loads: the makes, models and places every dealer shares, and the demo dealer's settings and cars                                                                                  |
 | `tests/`                     | unit, integration, end-to-end, accessibility and visual tests, with their fixtures                                                                                                                                |

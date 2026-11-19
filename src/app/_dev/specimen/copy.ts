@@ -47,6 +47,7 @@ export const SPECIMEN_COPY = {
     steps: {
       display: "لاندكروزر GXR",
       head: "كيف نوثّق كل سيارة",
+      subhead: "عن السيارة",
       lead: "شوف الفحص قبل ما تشوف السيارة",
       body: "جميع القطع المعدنية دهان وكالة، وعلى زاوية الصدام الخلفي رشة تجميلية.",
       small: "هذه المعلومات مقدّمة من المعرض، وننصح بإجراء فحص مستقل قبل الشراء.",
@@ -98,6 +99,7 @@ export const SPECIMEN_COPY = {
     steps: {
       display: "Land Cruiser GXR",
       head: "How every car is documented",
+      subhead: "About this car",
       lead: "See the inspection before you see the car.",
       body: "Every metal panel is in factory paint, and the rear bumper corner has a cosmetic touch-up.",
       small: "This information is declared by the dealer. We recommend an independent inspection before you buy.",

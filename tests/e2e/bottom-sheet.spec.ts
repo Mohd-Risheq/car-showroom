@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { FLICK_SPEED, projection, rubberBand, VELOCITY_WINDOW } from "../../src/components/ui/sheet-gesture.ts";
+import { FLICK_SPEED, projection, rubberBand, VELOCITY_WINDOW } from "../../src/lib/motion/drag-release.ts";
+import { tabKey } from "../support/e2e-page.ts";
 import { computed, emulateContrast, openSpecimen, outlineOf } from "../support/specimen.ts";
 
 // DESIGN §6.1's draggable bottom sheet (src/components/ui/bottom-sheet.tsx), on the token specimen,
@@ -139,7 +140,7 @@ test("keeps focus inside while it is open", async ({ page, browserName }) => {
   const { dialog } = sheetOf(page);
   await openSheet(page);
   // Safari moves to buttons with Option-Tab, as Full Keyboard Access does with Tab
-  const tab = browserName === "webkit" ? "Alt+Tab" : "Tab";
+  const tab = tabKey(browserName);
   for (let press = 0; press < 4; press++) {
     await page.keyboard.press(tab);
     // Base UI's focus guards hand focus back inside on the next frame

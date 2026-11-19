@@ -1,9 +1,10 @@
 "use client";
 
-import { KeyIcon } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { buttonClasses } from "@/components/ui/button-classes";
+import { Figures } from "@/components/ui/figures";
+import { KeyIcon } from "@/components/ui/icons/key";
 import type { SitePath } from "@/features/shell/domain/pages";
 import { cn } from "@/lib/class-names";
 import { GARAGE_CHANGE_EVENT, GARAGE_STORAGE_KEY, storedCount } from "../domain/stored-count";
@@ -55,9 +56,9 @@ export function GarageKey({ href, labels, label, className }: GarageKeyProps) {
       {count ? (
         <span
           aria-hidden="true"
-          className="absolute end-1 top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-on-accent type-small figures"
+          className="absolute end-1 top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-on-accent type-small"
         >
-          {count}
+          <Figures>{String(count)}</Figures>
         </span>
       ) : null}
     </Link>

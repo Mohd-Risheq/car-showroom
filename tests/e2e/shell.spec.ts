@@ -1,29 +1,20 @@
-import { readFileSync } from "node:fs";
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { IntlMessageFormat } from "intl-messageformat";
 import { GARAGE_STORAGE_KEY } from "../../src/features/garage/domain/stored-count.ts";
-import { INTL_LOCALE } from "../../src/lib/i18n/intl-locale.ts";
 import { directionOf, otherLocale } from "../../src/lib/i18n/locales.ts";
 import { seriousA11yIssues } from "../support/axe.ts";
+import { CATALOGS, formatted } from "../support/catalogs.ts";
+import { hydrated, offerShown, QUIET, tabKey } from "../support/e2e-page.ts";
+import { atEachSize, atEachWidth, iconSizes, REFLOW_WIDTHS, sideways } from "../support/layout.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 import { computed, emulateContrast } from "../support/specimen.ts";
 
 // FR-02's public shell in the browser (DESIGN §7.1.1, §8.4): the skip link (TC-02-1), the demo
 // banner (FR-02.3, TC-02-3), the phone menu (FR-02.7, TC-02-4), the header's wordmark, compaction and
 // short screens, a navigation's focus move and scroll (FR-02.4 to FR-02.6), the offline toast, a car
-// page's action bar (FR-02.2, TC-02-2), tried on the shell lab, /[locale]/dev/shell, until T-21
-// places it, the English offer with the shell's header (FR-01.2a), and the segment error of a page
-// that fails (SRS §13.3).
+// page's action bar (FR-02.2, TC-02-2), tried on the shell lab, /[locale]/dev/shell, until T-23
+// checks TC-02-2 on the car page, the English offer with the shell's header (FR-01.2a), and the
+// segment error of a page that fails (SRS §13.3).
 
-type Catalog = {
-  common: { skip: string; hide: string; notifications: string; offline: string; retry: string };
-  demo: { bannerLabel: string; tag: string };
-  errors: { notFound: { title: string }; segment: string };
-  nav: { menu: string; cars: string; compare: string; garage: string; garageLabel: string };
-  locale: { prompt: { text: string; stay: string } };
-};
-const catalog = (locale: "ar" | "en") => JSON.parse(readFileSync(`messages/${locale}.json`, "utf8")) as Catalog;
-const CATALOGS = { ar: catalog("ar"), en: catalog("en") };
 const LOCALES = ["ar", "en"] as const;
 
 const LAB = "/dev/shell";
@@ -31,14 +22,17 @@ const LAB = "/dev/shell";
 const MENU_BELOW = 768;
 /** Below this width a car page has its action bar (FR-02.2) */
 const BAR_BELOW = 1024;
+/** From this width the header's search shows its words beside its icon (DESIGN §7.1.1) */
+const SEARCH_WORDS_FROM = 1024;
 /** DESIGN §8.4: all sticky chrome together covers at most a quarter of the screen's height */
 const STICKY_BUDGET = 0.25;
 /** Q-12: the demo's number as the footer shows it (footer-contacts.ts) */
 const DEMO_NUMBER = "+962 7X XXX XXXX";
 /** The mark in session storage that makes the lab's failing page fail (dev/shell/failing) */
 const FAIL_KEY = "muftah:fail";
-/** How long a test waits for a beacon that must not come. The page's own comes far sooner. */
-const QUIET = 1500;
+
+/** The menu sheet's chunk, the one that defines MenuSheet, as gsap-loader.spec.ts finds GSAP's */
+const MENU_MARKER = /["'`]MenuSheet["'`]/;
 
 declare global {
   interface Window {
@@ -54,8 +48,6 @@ declare global {
 }
 
 const widthOf = (page: Page) => page.viewportSize()?.width ?? 0;
-// Safari moves to links and buttons with Option-Tab, as Full Keyboard Access does with Tab
-const tabKey = (browserName: string) => (browserName === "webkit" ? "Alt+Tab" : "Tab");
 const scrollTop = (page: Page) => page.evaluate(() => window.scrollY);
 const scrollPaddingTop = (page: Page) =>
   page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingTop);
@@ -67,9 +59,6 @@ const offer = (page: Page) => page.getByRole("region", { name: CATALOGS.ar.local
 /** The links of the lab's wordmarks, near the end of the page */
 const wordmarkLinks = (page: Page) =>
   page.locator("section", { has: page.getByRole("heading", { name: "Wordmarks" }) }).getByRole("link");
-/** Waits for the page to hydrate: the toaster's region comes once it has (D-047) */
-const hydrated = (page: Page, locale: "ar" | "en") =>
-  expect(page.getByRole("region", { name: CATALOGS[locale].common.notifications })).toBeAttached();
 
 /** A garage of saved cars, as the store keeps it in local storage (BR-36) */
 const savedCars = (count: number) =>
@@ -137,31 +126,6 @@ async function recordArrivals(page: Page) {
 
 /** Each focus a level 1 heading took, and whether the page was hidden then */
 const headingFocuses = (page: Page) => page.evaluate(() => window.focused.filter(({ name }) => name === "h1"));
-
-/**
- * Loads a page at each size in turn, then checks it there: a visit at the first size and a reload at
- * each after. A second visit to an address in Firefox comes from its cache while the cache revalidates
- * it, as next start's pages allow, and Playwright can wait on that request for good (D-047).
- */
-async function atEachSize(
-  page: Page,
-  url: string,
-  sizes: readonly (readonly [width: number, height: number])[],
-  check: (width: number, height: number) => Promise<void>,
-) {
-  for (const [index, [width, height]] of sizes.entries()) {
-    await page.setViewportSize({ width, height });
-    if (index === 0) await page.goto(url);
-    else await page.reload();
-    await check(width, height);
-  }
-}
-
-/** atEachSize at each width, 800 px tall */
-function atEachWidth(page: Page, url: string, widths: readonly number[], check: (width: number) => Promise<void>) {
-  const sizes = widths.map((width) => [width, 800] as const);
-  return atEachSize(page, url, sizes, check);
-}
 
 /** The bottom edge of an element, in viewport pixels */
 async function bottomOf(element: Locator): Promise<number> {
@@ -311,17 +275,54 @@ for (const locale of LOCALES) {
       });
     });
 
-    test("no page scrolls sideways, from 320 to 1440 px (WCAG 1.4.10)", async ({ page, isMobile }) => {
-      test.skip(isMobile, "the desktop projects try every width");
-      for (const path of ["", "/nothing", LAB]) {
-        await atEachWidth(page, `/${locale}${path}`, [320, 360, 1440], async (width) => {
-          const { scrollWidth, clientWidth } = await page.evaluate(() => {
-            const { scrollWidth, clientWidth } = document.documentElement;
-            return { scrollWidth, clientWidth };
-          });
-          expect(scrollWidth, `${path} at ${width} px`).toBeLessThanOrEqual(clientWidth);
-        });
+    test("a wordmark cuts a name too long for it across only, so its letters show whole (DESIGN §2)", async ({
+      page,
+    }) => {
+      await page.goto(`/${locale}${LAB}`);
+      // The header's and the lab's, each length step in both scripts: an Arabic letter's bowl reaches
+      // further under the line than the font's descent, which a box that clipped up and down cut
+      const names = page.locator("[data-wordmark] span");
+      await expect(names).toHaveCount(7);
+      for (const name of await names.all()) {
+        await expect(name).toHaveCSS("overflow-x", "clip");
+        await expect(name).toHaveCSS("text-overflow", "ellipsis");
+        await expect(name).toHaveCSS("overflow-y", "visible");
       }
+    });
+
+    // A test a page: the three pages' 21 loads took up to 30 s in WebKit and Firefox, a test's limit
+    for (const [name, path] of [
+      ["home", ""],
+      ["404", "/nothing"],
+      ["shell lab", LAB],
+    ]) {
+      test(`the ${name} never scrolls sideways, from 320 to 1440 px (WCAG 1.4.10)`, async ({ page, isMobile }) => {
+        test.skip(isMobile, "the desktop projects try every width");
+        await atEachWidth(page, `/${locale}${path}`, REFLOW_WIDTHS, async (width) => {
+          expect(await sideways(page), `${width} px`).toBe(0);
+        });
+      });
+    }
+
+    test("shows the search as its icon alone below 1024 px, under its name all the same (DESIGN §7.1.1)", async ({
+      page,
+      isMobile,
+    }) => {
+      test.skip(isMobile, "the desktop projects try every width");
+      // Beside the navigation from 768 px, the words would push the row past a tablet's screen (D-049)
+      await atEachWidth(page, `/${locale}`, [360, 768, 1023, 1024, 1440], async (width) => {
+        const search = header(page).getByRole("link", { name: t.nav.search, exact: true });
+        await expect(search, `${width} px`).toBeVisible();
+        const shown = (await search.boundingBox())?.width ?? 0;
+        if (width < SEARCH_WORDS_FROM) expect(shown, `${width} px`).toBe(44);
+        else expect(shown, `${width} px`).toBeGreaterThan(44);
+        // Nor do its words spill out of it, across the header or down the page
+        const spilt = await search.evaluate((link) => [
+          link.scrollWidth - link.clientWidth,
+          link.scrollHeight - link.clientHeight,
+        ]);
+        expect(spilt, `${width} px`).toStrictEqual([0, 0]);
+      });
     });
 
     test("marks the current page's link with an underline beside its colour, under more contrast too (DESIGN §7.1.1)", async ({
@@ -345,8 +346,7 @@ for (const locale of LOCALES) {
       page,
       context,
     }) => {
-      const named = (count: number) =>
-        String(new IntlMessageFormat(t.nav.garageLabel, INTL_LOCALE[locale]).format({ count }));
+      const named = (count: number) => formatted(locale, t.nav.garageLabel, { count });
       await page.addInitScript(({ key, cars }) => localStorage.setItem(key, cars), {
         key: GARAGE_STORAGE_KEY,
         cars: savedCars(2),
@@ -354,8 +354,16 @@ for (const locale of LOCALES) {
       await page.goto(`/${locale}`);
       const garage = header(page).locator(`a[href="/${locale}/garage"]`);
       await expect(garage).toHaveAccessibleName(named(2));
-      // The badge, which the key's name says for assistive technology
+      // The badge, which the key's name says for assistive technology, its count in figures at seven
+      // eighths of the small step around them, their capitals as tall as the words' (DESIGN §3.3)
       await expect(garage.locator("span")).toHaveText("2");
+      const count = garage.locator("span > .figures");
+      await expect(count).toHaveText("2");
+      const ratio = await count.evaluate((figures) => {
+        const size = (element: Element) => Number.parseFloat(getComputedStyle(element).fontSize);
+        return figures.parentElement === null ? 0 : size(figures) / size(figures.parentElement);
+      });
+      expect(ratio).toBeCloseTo(0.875, 2);
       const other = await context.newPage();
       await other.goto(`/${locale}/nothing`);
       await other.evaluate(({ key, cars }) => localStorage.setItem(key, cars), {
@@ -410,15 +418,7 @@ for (const locale of LOCALES) {
 
     test("every icon in the shell and on the 404 is 20 or 24 px (DESIGN §3.6)", async ({ page }) => {
       await page.goto(`/${locale}/nothing`);
-      // Phosphor's icons, drawn on a 256 unit square, each one the page shows, by the control it is in
-      const icons = await page.locator('svg[viewBox="0 0 256 256"]').evaluateAll((elements) =>
-        elements.flatMap((icon) => {
-          const { width, height } = icon.getBoundingClientRect();
-          const control = icon.closest("a, button");
-          const name = control?.getAttribute("aria-label") ?? control?.textContent ?? "";
-          return width === 0 ? [] : [{ name, width, height }];
-        }),
-      );
+      const icons = await iconSizes(page);
       expect(icons.length).toBeGreaterThan(0);
       for (const { name, width, height } of icons) {
         expect([20, 24], name).toContain(width);
@@ -456,10 +456,7 @@ for (const locale of LOCALES) {
       await expect(toasts.getByText(t.common.offline)).toHaveCount(0);
       // Offline, a browser may report each prefetch of the page's links that fails
       const failedPrefetch = /^Failed to load resource: .+ \(\S+\?_rsc=\S+\)$/;
-      await expectProblems(
-        page,
-        problems.filter((problem) => !failedPrefetch.test(problem)),
-      );
+      await expectProblems(page, problems, [], { ignoring: [failedPrefetch] });
     });
 
     test("the toaster loads once the connection is back, when it couldn't load as the page hydrated (D-047)", async ({
@@ -515,8 +512,8 @@ for (const locale of LOCALES) {
       await alert.getByRole("button", { name: t.common.retry }).click();
       await expect(page.getByRole("heading", { level: 1, name: "Failing page" })).toBeVisible();
       await expect(alert).toHaveCount(0);
-      // The error the page threw, which React reports, and Firefox prints without its message
-      await expectProblems(page, problems, [/^Error\b/]);
+      // The error the page threw, which React reports
+      await expectProblems(page, problems, [/^Error: The shell lab's failing page fails, as session storage asks\b/]);
     });
   });
 
@@ -599,6 +596,44 @@ for (const locale of LOCALES) {
       await expect(page.getByRole("dialog", { name: t.nav.menu })).toBeVisible();
       // A failed load is no error of the page's
       expect(pageErrors).toStrictEqual([]);
+    });
+
+    test("reports its sheet's chunk once when it fails to load, and opens on the next press (NFR-OBS-02)", async ({
+      page,
+      browserName,
+    }) => {
+      const failed: string[] = [];
+      const connection = { lost: true };
+      await page.route("**/_next/static/chunks/**", async (route) => {
+        const response = await route.fetch();
+        const body = await response.text();
+        if (!connection.lost || !MENU_MARKER.test(body)) return route.fulfill({ response, body });
+        failed.push(route.request().url());
+        return route.abort("internetdisconnected");
+      });
+      const errors: unknown[] = [];
+      page.on("request", (request) => {
+        if (new URL(request.url()).pathname !== "/api/events") return;
+        const body = request.postDataJSON() as { e: string };
+        if (body.e === "client_error") errors.push(body);
+      });
+      const problems = await watchProblems(page);
+      await page.goto(`/${locale}`);
+      await hydrated(page, locale);
+      const trigger = page.getByRole("button", { name: t.nav.menu });
+      await trigger.click();
+      const error = { e: "client_error", l: locale, r: "/[locale]", x: "CHUNK_MENU" };
+      await expect.poll(() => errors).toStrictEqual([error]);
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+      connection.lost = false;
+      await trigger.click();
+      await expect(page.getByRole("dialog", { name: t.nav.menu })).toBeVisible();
+      await page.waitForTimeout(QUIET);
+      expect(errors).toStrictEqual([error]);
+      // Chromium reports each try at the chunk, which Turbopack's runtime makes again once after a
+      // network error; WebKit and Firefox report none
+      const reports = failed.map((url) => `Failed to load resource: net::ERR_INTERNET_DISCONNECTED (${url})`);
+      await expectProblems(page, problems, browserName === "chromium" ? reports : []);
     });
 
     test("closes on a tap outside it", async ({ page }) => {
@@ -817,6 +852,7 @@ test.describe("a navigation", () => {
     page,
   }) => {
     await page.goto(`/en${LAB}`);
+    await hydrated(page, "en");
     await page.evaluate(() => window.scrollTo({ top: 1200, behavior: "instant" }));
     await expect.poll(() => scrollTop(page)).toBe(1200);
     // Home is shorter than the place it opens from, which cuts the browser's own saved place short
@@ -837,6 +873,7 @@ test.describe("a navigation", () => {
     page,
   }) => {
     await page.goto(`/en${LAB}`);
+    await hydrated(page, "en");
     await page.getByRole("link", { name: "A plain page" }).click();
     await expect(page).toHaveURL(new RegExp(`/en${LAB}/plain$`));
     await page.goBack();
@@ -858,6 +895,7 @@ test.describe("a navigation", () => {
     page,
   }) => {
     await page.goto(`/en${LAB}/plain`);
+    await hydrated(page, "en");
     await page.getByRole("link", { name: "The shell lab" }).click();
     await expect(page).toHaveURL(new RegExp(`/en${LAB}$`));
     // The visitor takes over the new page: the press ends the hold that keeps it at its top for its
@@ -911,6 +949,9 @@ test.describe("a navigation", () => {
 
   test("FR-02.5: a reload keeps the page's place", async ({ page }) => {
     await page.goto(`/en${LAB}`);
+    // The place keeper starts once the page has hydrated. A reload before that is the browser's to
+    // restore, and WebKit leaves the page at its top (D-047)
+    await hydrated(page, "en");
     await page.evaluate(() => window.scrollTo({ top: 900, behavior: "instant" }));
     await expect.poll(() => scrollTop(page)).toBe(900);
     await page.reload();
@@ -919,6 +960,7 @@ test.describe("a navigation", () => {
 
   test("FR-02.5: a reload keeps the page's place, after steps back and forward", async ({ page }) => {
     await page.goto(`/en${LAB}`);
+    await hydrated(page, "en");
     await page.getByRole("link", { name: "A plain page" }).click();
     await expect(page).toHaveURL(new RegExp(`/en${LAB}/plain$`));
     await page.goBack();
@@ -1144,7 +1186,8 @@ test.describe("the English offer with the shell's header, for a browser whose fi
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.setViewportSize(size);
       await page.goto(`/ar${LAB}/plain`);
-      await expect(offer(page)).toBeVisible();
+      // At 1280 by 600 px the plain page scrolls 200 px only with the room it keeps for the offer
+      await offerShown(page);
       await page.evaluate(() => window.scrollTo({ top: 200, behavior: "instant" }));
       await expect.poll(() => scrollTop(page)).toBe(200);
       expect(await chromeCover(page)).toBeLessThanOrEqual(size.height * STICKY_BUDGET);
@@ -1174,7 +1217,8 @@ test.describe("the English offer with the shell's header, for a browser whose fi
     test.skip(widthOf(page) < BAR_BELOW, "below 1024 px the offer waits for the lab's action bar");
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(`/ar${LAB}`);
-    await expect(offer(page)).toBeVisible();
+    // The focus scrolls clear of the offer by the room the page keeps for it
+    await offerShown(page);
     await wordmarkLinks(page).first().focus();
     const offerTop = (await page.locator("[data-locale-prompt]").boundingBox())?.y ?? 0;
     const link = wordmarkLinks(page).nth(1);

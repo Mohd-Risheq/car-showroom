@@ -43,6 +43,14 @@
       "allowedVersions": "16.4.x"
     },
     {
+      "description": "Next.js is patched (patches/, D-049), so it and the packages released with it come in a pull request of their own, whose install fails until the patch is dropped or carried over, holding up no other update",
+      "matchPackageNames": ["next", "eslint-config-next", "@next/env", "@next/mdx"],
+      "groupName": "Next.js",
+      "prBodyNotes": [
+        "Next.js 16.4.6 is patched for issue #82117 (`patches/`, listed under `patchedDependencies` in `pnpm-workspace.yaml`), and pnpm fails an install that leaves the patch unused. If this release has the fix, delete the patch and its entry; if not, carry the patch over with `pnpm patch`."
+      ]
+    },
+    {
       "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
       "allowedVersions": "19.3.x"
     },

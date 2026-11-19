@@ -1,5 +1,5 @@
-import { WarningCircleIcon } from "@phosphor-icons/react/ssr";
 import type { ReactElement, ReactNode } from "react";
+import { WarningCircleIcon } from "@/components/ui/icons/warning-circle";
 import { cn } from "@/lib/class-names";
 
 // DESIGN §6.4: an error shows where the data was, saying what happened and what to do, with a way

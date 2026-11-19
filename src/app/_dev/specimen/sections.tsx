@@ -82,6 +82,7 @@ export function Accents() {
 const STEPS = [
   ["display", "type-display"],
   ["head", "type-head"],
+  ["subhead", "type-subhead"],
   ["lead", "type-lead"],
   ["body", "type-body"],
   ["small", "type-small"],

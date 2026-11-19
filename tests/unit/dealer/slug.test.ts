@@ -1,12 +1,24 @@
 import { existsSync, readFileSync } from "node:fs";
+import { getTableConfig, PgDialect } from "drizzle-orm/pg-core";
 import { describe, expect, it } from "vitest";
-import { carSlug, SLUG_MAX_LENGTH, slugify } from "@/features/dealer/domain/slug";
+import { carSlug, isCarSlug, SLUG_FORMAT, SLUG_MAX_LENGTH, slugify } from "@/features/dealer/domain/slug";
+import { car } from "@/lib/db/schema";
 import { seededRandom } from "@/lib/seeded-random";
 
 // BR-16: {year}-{make}-{model}-{trim?}-{ref}, lowercase ASCII, words joined by hyphens and
 // transliterated from the English names. The database checks the same format (car_slug_format).
 
-const SLUG_FORMAT = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const CAR = getTableConfig(car);
+
+/** The pattern the car table checks a slug against (car_slug_format), as the schema writes it */
+function databaseFormat(): string {
+  const check = CAR.checks.find(({ name }) => name === "car_slug_format");
+  const sql = check === undefined ? "" : new PgDialect().sqlToQuery(check.value).sql;
+  const pattern = /~ '(.*)'$/.exec(sql)?.[1];
+  if (pattern === undefined) throw new Error("The car table checks no slug against a pattern (car_slug_format)");
+  return pattern;
+}
+
 const char = (codePoint: number) => String.fromCodePoint(codePoint);
 
 const landCruiser = {
@@ -110,6 +122,68 @@ describe("a car's slug", () => {
       expect(slug.length).toBeLessThanOrEqual(SLUG_MAX_LENGTH);
       expect(slug.endsWith("mu-3hk8")).toBe(true);
     }
+  });
+});
+
+// The car page answers an address whose slug no car could have before it reads the database, which
+// refuses a NUL in text rather than finding nothing. The guard holds the column's own rule, so it
+// turns away no slug a car can have.
+describe("a slug from an address", () => {
+  // A slug of the length, made of "a"s before the reference
+  const ofLength = (length: number) => `${"a".repeat(length - "-mu-3hk8".length)}-mu-3hk8`;
+
+  it("passes every slug a car can have, up to the column's length", () => {
+    expect(isCarSlug(carSlug(landCruiser))).toBe(true);
+    expect(
+      isCarSlug(carSlug({ modelYear: null, makeNameEn: null, modelNameEn: null, trim: null, refCode: "MU-3HK8" })),
+    ).toBe(true);
+    expect(ofLength(SLUG_MAX_LENGTH)).toHaveLength(SLUG_MAX_LENGTH);
+    expect(isCarSlug(ofLength(SLUG_MAX_LENGTH))).toBe(true);
+  });
+
+  it("refuses what the slug column can't hold", () => {
+    const refused = [
+      "",
+      "2019-Toyota-land-cruiser-mu-3hk8",
+      "-mu-3hk8",
+      "mu-3hk8-",
+      "mu--3hk8",
+      "mu_3hk8",
+      "mu 3hk8",
+      "mu-3hk8/",
+      `mu-${char(0)}3hk8`,
+      `mu-3hk8-${char(0x0627)}`,
+      `mu-${char(0x0663)}hk8`,
+      ofLength(SLUG_MAX_LENGTH + 1),
+    ];
+    for (const text of refused) expect(isCarSlug(text), JSON.stringify(text)).toBe(false);
+  });
+
+  it("is the column's own rule: car_slug_format's pattern, in the column's length", () => {
+    expect(SLUG_FORMAT.source).toBe(databaseFormat());
+    expect(CAR.columns.find(({ name }) => name === "slug")?.getSQLType()).toBe(`varchar(${SLUG_MAX_LENGTH})`);
+  });
+
+  it("agrees with the database's rule on any text", () => {
+    // The pattern means the same to Postgres and to JavaScript
+    const format = new RegExp(databaseFormat());
+    const random = seededRandom(21);
+    const below = (count: number) => Math.floor(random() * count);
+    const word = () => Array.from({ length: 1 + below(8) }, () => "ab9"[below(3)] ?? "").join("");
+    const odd = ["A", "-", "_", " ", "%", "/", char(0), char(0x0627), char(0x00e9)];
+    let passed = 0;
+    // Up to 40 words, so some texts are longer than the column
+    for (let round = 0; round < 500; round += 1) {
+      const words = Array.from({ length: 1 + below(40) }, word).join("-");
+      const at = below(words.length + 1);
+      const text = random() < 0.4 ? `${words.slice(0, at)}${odd[below(odd.length)] ?? ""}${words.slice(at)}` : words;
+      const allowed = format.test(text) && text.length <= SLUG_MAX_LENGTH;
+      expect(isCarSlug(text), JSON.stringify(text)).toBe(allowed);
+      if (allowed) passed += 1;
+    }
+    // Both answers come up often
+    expect(passed).toBeGreaterThan(50);
+    expect(passed).toBeLessThan(450);
   });
 });
 

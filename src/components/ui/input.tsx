@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/class-names";
-import { useFieldControl } from "./field";
+import { useFieldControl } from "./field-control";
 
 // DESIGN §6.4's input: --surface-2 with a --line border, 2 px round (DESIGN §3.5), the focus ring
 // (globals.css), and a --fail border when its field has an error. Its text never goes below 16 px

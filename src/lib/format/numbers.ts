@@ -37,7 +37,8 @@ export function formatNumber(value: number, locale: AppLocale, decimals = 0): st
 /**
  * A whole percentage shown on its own, such as an open rate in a table: 91 is 91% in both languages
  * (DESIGN §9.5). A message whose {pct} is followed by its own %, such as car.battery, takes
- * formatNumber instead, or the page would show 91%%.
+ * formatNumber instead, or the page would show 91%%, and beforeSign (lib/i18n/bidi), so the % stays
+ * on the number's right in Arabic.
  */
 export function formatPercent(percent: number, locale: AppLocale): string {
   return format(percent / 100, locale, { style: "percent", maximumFractionDigits: 0 });

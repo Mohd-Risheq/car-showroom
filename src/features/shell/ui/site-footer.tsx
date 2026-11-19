@@ -12,21 +12,23 @@ import { currentYear } from "../server/year";
 
 // FR-02 and DESIGN §7.1.1: the public footer, on --surface-1. Three columns from 768 px, stacked on
 // a phone: Visit, with the address (T-23 adds the hours and whether the showroom is open now);
-// Contact, with WhatsApp, the phone and the social links; and the site's own pages. The bottom row
-// has the copyright, the demo notice in demo mode, the language switch and the credit to the site's
-// author. The footer ends clear of whatever holds the bottom of the screen (globals.css's
-// --page-end). Without JavaScript it is how a phone reaches the site's pages and the other language,
-// as the header's switch is in the menu there (D-047); the menu's way to the dealer side in demo
-// mode needs JavaScript. In demo mode no contact leaves the site (BR-14, footer-contacts.ts).
+// Contact, with WhatsApp, the phone and the social links; and the site's own pages, in two columns
+// where there is room, so the list doesn't set the footer's height. The bottom row has the
+// copyright, the demo notice in demo mode, the language switch and the credit to the site's author.
+// The footer ends clear of whatever holds the bottom of the screen (globals.css's --page-end).
+// Without JavaScript it is how a phone reaches the site's pages and the other language, as the
+// header's switch is in the menu there (D-047); the menu's way to the dealer side in demo mode
+// needs JavaScript. In demo mode no contact leaves the site (BR-14, footer-contacts.ts).
 
 /** The author's site, which the credit links to */
 const AUTHOR_SITE = "https://mrisheq.com";
 
 type SiteFooterProps = { locale: AppLocale; settings: PublicSettingsDTO; demo: boolean };
 
-// Each column's heading and first line take a 44 px row, as its links do, so the columns line up
-const HEADING = "mb-2 flex min-h-11 items-center type-small text-meta";
-const LINK = "inline-flex min-h-11 items-center text-muted hover:text-ink";
+// Each column's heading and first line take a 44 px row, as its links do, so the columns line up.
+// The headings are labels, weight 500 in --muted, and the links answer a press as controls do.
+const HEADING = "mb-2 flex min-h-11 items-center type-small font-medium text-muted";
+const LINK = "pressable inline-flex min-h-11 items-center text-muted hover:text-ink";
 
 export async function SiteFooter({ locale, settings, demo }: SiteFooterProps) {
   const footer = await getTranslations("footer");
@@ -41,8 +43,8 @@ export async function SiteFooter({ locale, settings, demo }: SiteFooterProps) {
   });
 
   return (
-    <footer className="bg-surface-1 px-band pt-16 pb-[calc(var(--spacing-page)+var(--page-end))]">
-      <div className="mx-auto grid max-w-content gap-10 md:grid-cols-3 md:gap-gutter">
+    <footer className="bg-surface-1 pt-16 pb-[calc(var(--spacing-page)+var(--page-end))]">
+      <div className="mx-auto grid max-w-content gap-10 px-band md:grid-cols-3 md:gap-gutter">
         <div>
           <h2 className={HEADING}>
             <Link href={pagePath(locale, "visit")} className={LINK}>
@@ -83,7 +85,7 @@ export async function SiteFooter({ locale, settings, demo }: SiteFooterProps) {
         </div>
         <div>
           <h2 className={HEADING}>{footer("site")}</h2>
-          <ul>
+          <ul className="grid gap-x-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 lg:gap-x-gutter">
             {(
               [
                 ["cars", nav("cars")],
@@ -103,7 +105,7 @@ export async function SiteFooter({ locale, settings, demo }: SiteFooterProps) {
           </ul>
         </div>
       </div>
-      <div className="mx-auto mt-12 flex max-w-content flex-col gap-2 type-small text-muted md:flex-row md:flex-wrap md:items-center md:gap-x-8">
+      <div className="mx-auto mt-12 flex max-w-content flex-col gap-2 px-band type-small text-muted md:flex-row md:flex-wrap md:items-center md:gap-x-8">
         <p>{footer("copyright", { year, dealer: settings.brandName[locale] })}</p>
         {demo ? <p>{demoText("banner")}</p> : null}
         <p className="md:ms-auto">

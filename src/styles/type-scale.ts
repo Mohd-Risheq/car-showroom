@@ -1,15 +1,22 @@
 import { tokenBlocks } from "./token-blocks.ts";
 
-// DESIGN §3.3's five public steps as tokens.css sets them, read from its text, so the steps are
+// DESIGN §3.3's six public steps as tokens.css sets them, read from its text, so the steps are
 // written there alone: the type specimen labels each sample with its step, and the fonts generator
 // (scripts/font-fallbacks.ts) fits each step's fallback faces to its weight and HEXP. Node loads
 // this module from the scripts, so it names its one import by its .ts path.
 
-export const TYPE_STEPS = ["display", "head", "lead", "body", "small"] as const;
+export const TYPE_STEPS = ["display", "head", "subhead", "lead", "body", "small"] as const;
 export type TypeStep = (typeof TYPE_STEPS)[number];
 
 /** A token's value for Latin text and for Arabic, which is the Latin one unless Arabic sets its own */
 export type ScriptValues = { latin: string; arabic: string };
+
+/**
+ * A narrower HEXP and the block that sets it: its at-rule and the selector inside, as the root's
+ * under a media condition on phones (D-038), everything's in a car title's model name under its
+ * container's condition, or a long model name's alone in that container (model-names.css, D-049)
+ */
+export type Narrower = { at: string; selector: string; hexp: number };
 
 export type StepTokens = {
   id: TypeStep;
@@ -17,8 +24,8 @@ export type StepTokens = {
   size: string;
   weight: number;
   hexp: number;
-  /** The narrower HEXP the step takes under a media condition (D-038), in the stylesheet's order */
-  narrower: Array<{ media: string; hexp: number }>;
+  /** The narrower HEXP the step takes, in the stylesheet's order */
+  narrower: Narrower[];
   leading: ScriptValues;
   /** The letter spacing, for a step that sets one */
   tracking: ScriptValues | null;
@@ -28,8 +35,13 @@ export type StepTokens = {
 
 /** The Arabic values' block. tokens.css names the lang attribute, so Latin inside Arabic takes the Latin ones. */
 const ARABIC = '[lang|="ar"]';
-/** A block that applies to the root under a media condition, as "@media (width < 33.75rem) :root" */
-const MEDIA_ROOT = /^@media (.+) :root$/;
+/**
+ * A block that sets tokens under a condition: the root's under a media condition, as "@media (width <
+ * 33.75rem) :root", everything's in a container under its condition, as "@container model-name
+ * (width < 5.8514em) *", or a long model name's alone in its container, as "@container model-name
+ * (width < 9.3143em) [data-model="jeep-commander"]:lang(en)"
+ */
+const CONDITIONED = /^(@(?:media|container) .+) (:root|\*|\[data-model="[^"]+"\]:lang\([a-z]+\))$/;
 
 function numberIn(token: string, value: string): number {
   const number = Number(value);
@@ -61,9 +73,11 @@ export function readTypeScale(css: string): StepTokens[] {
     weight: numberIn(`--${id}-weight`, required(`--${id}-weight`)),
     hexp: numberIn(`--${id}-hexp`, required(`--${id}-hexp`)),
     narrower: [...blocks].flatMap(([block, tokens]) => {
-      const media = MEDIA_ROOT.exec(block)?.[1];
+      const [, at, selector] = CONDITIONED.exec(block) ?? [];
       const hexp = tokens.get(`--${id}-hexp`);
-      return media === undefined || hexp === undefined ? [] : [{ media, hexp: numberIn(`--${id}-hexp`, hexp) }];
+      return at === undefined || selector === undefined || hexp === undefined
+        ? []
+        : [{ at, selector, hexp: numberIn(`--${id}-hexp`, hexp) }];
     }),
     leading: both(`--${id}-leading`),
     tracking: optional(`--${id}-tracking`),

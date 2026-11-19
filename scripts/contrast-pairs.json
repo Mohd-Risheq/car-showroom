@@ -720,6 +720,90 @@
       "min": 4.5,
       "stated": "5.37",
       "design": "DESIGN §3.2 Daylight: a dealer accent preset never replaces its accent"
+    },
+    {
+      "scope": "public",
+      "fg": "--ink",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4)"
+    },
+    {
+      "scope": "public",
+      "fg": "--bg",
+      "bg": "--ink",
+      "min": 4.5,
+      "design": "DESIGN §6.4 a pressed toggle chip's words, in the page's ground on --ink"
+    },
+    {
+      "scope": "public",
+      "fg": "--muted",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4)"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the counter's place in --scan"
+    },
+    {
+      "scope": "public",
+      "fg": "--warn",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the inspection colour on its black"
+    },
+    {
+      "scope": "public",
+      "fg": "--line",
+      "bg": "--viewer",
+      "min": 3,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): outlines"
+    },
+    {
+      "scope": "public",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the focus ring, scan_cyan"
+    },
+    {
+      "scope": "accent-electric_blue",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the focus ring, electric_blue"
+    },
+    {
+      "scope": "accent-mint",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the focus ring, mint"
+    },
+    {
+      "scope": "accent-ivory",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the focus ring, ivory"
+    },
+    {
+      "scope": "accent-violet",
+      "fg": "--scan",
+      "bg": "--viewer",
+      "min": 4.5,
+      "design": "DESIGN §3.1 --viewer, the fullscreen gallery (§7.2.4): the focus ring, violet"
+    },
+    {
+      "scope": "public-more-contrast",
+      "fg": "--line",
+      "bg": "--viewer",
+      "min": 3,
+      "design": "DESIGN §4.5 prefers-contrast: more, the lighter line on --viewer"
     }
   ]
 }

@@ -7,8 +7,9 @@ import type { AppLocale } from "@/lib/i18n/locales";
 import { getAppLocale } from "@/lib/i18n/server";
 
 // SCR-14's privacy page (FR-47.5, NFR-PRIV-04, DESIGN §7.2.9): what the site counts and what it
-// keeps, in a reading column. The words are each language's MDX (src/content/privacy), headed by the
-// footer's name for the page. A later task that keeps something new adds its row to both (D-048).
+// keeps, in a reading column whose words keep to the measure and whose table stands at its own
+// width (D-049). The words are each language's MDX (src/content/privacy), headed by the footer's
+// name for the page. A later task that keeps something new adds its row to both (D-048).
 
 const CONTENT = { ar: Arabic, en: English } satisfies Record<AppLocale, MDXContent>;
 
@@ -23,7 +24,7 @@ export default async function PrivacyPage() {
   const footer = await getTranslations("footer");
   return (
     <div className="mx-auto max-w-content px-band py-12 md:py-20">
-      <article className="max-w-measure">
+      <article>
         <h1 className="type-head">{footer("privacy")}</h1>
         <Content />
       </article>

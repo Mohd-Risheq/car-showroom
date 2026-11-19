@@ -1,16 +1,22 @@
 {
   "$comment": [
-    "pnpm lhci (scripts/lhci.ts) runs Lighthouse CI on the production build: mobile, three runs a page, failing below NFR-PERF-02's budget. It gives Chrome the flags every Chromium here gets (scripts/checks/chromium.ts).",
-    "pages: NFR-PERF-02's pages. The task that builds a page adds its paths, in both locales, once it paints. Until then the page is pending, because Lighthouse can't score a page that paints nothing (D-037)."
+    "pnpm lhci (scripts/lhci.ts) runs Lighthouse CI on the production build: mobile, three runs a page, failing below NFR-PERF-02's budget. The phone is SRS §10's lab phone as Lighthouse simulates it: a 4× CPU slowdown on Chrome's \"Fast 4G\", 60 ms and 9 Mbps (9,216 Kbps, as Lighthouse counts 1,024 to a Mbps), not Lighthouse's own phone network of 150 ms and 1.6 Mbps (D-049). It gives Chrome the flags every Chromium here gets (scripts/checks/chromium.ts).",
+    "pages: NFR-PERF-02's pages. The task that builds a page adds its paths, in both locales, once it paints. Until then the page is pending, because Lighthouse can't score a page that paints nothing (D-037). The car page is seed car s01's, whose slug moves with the seed. s01 has no photos, so its largest paint is the title's text and no cover is measured; once a seed car has photos, its paths take s01's place. D-049 records the car page measured with photos."
   ],
   "pages": [
     { "name": "Home", "paths": ["/ar", "/en"] },
     { "name": "Inventory", "paths": [] },
-    { "name": "Car page", "paths": [] }
+    {
+      "name": "Car page",
+      "paths": ["/ar/cars/2019-toyota-land-cruiser-gxr-mu-3hk8", "/en/cars/2019-toyota-land-cruiser-gxr-mu-3hk8"]
+    }
   ],
   "ci": {
     "collect": {
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": {
+        "throttling": { "rttMs": 60, "throughputKbps": 9216, "cpuSlowdownMultiplier": 4 }
+      }
     },
     "assert": {
       "assertions": {

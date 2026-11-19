@@ -1,0 +1,11 @@
+/*
+ * Applied while a visual test takes a screenshot of a page with fixture photos (car-page.spec.ts):
+ * their files are hidden, leaving the frames the page holds them in, because each machine that
+ * runs the tests draws the photos' numbers in its own font (tests/support/fixture-photos.ts).
+ */
+[data-photo] img,
+[data-thumbnail] img,
+[data-more] img,
+[role="dialog"] img {
+  visibility: hidden;
+}

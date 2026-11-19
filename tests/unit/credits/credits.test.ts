@@ -15,7 +15,7 @@ import {
   shownAddress,
 } from "@/features/credits/domain/credits";
 import { SOFTWARE_LICENCES } from "@/features/credits/domain/software";
-import { isolate } from "@/lib/i18n/bidi";
+import { isolateScripts } from "@/lib/i18n/bidi";
 import {
   DATA_AND_FONT_LICENCES,
   PHOTO_CHANGES,
@@ -141,7 +141,7 @@ describe("creditsTables", () => {
   it("credits each photo in the manifest's order, naming its car by its title in the page's language", () => {
     expect(en.photos).toHaveLength(28);
     expect(en.photos[0]).toStrictEqual({
-      car: `2019 Toyota Land Cruiser ${isolate("GXR")}`,
+      car: `2019 Toyota Land Cruiser ${isolateScripts("GXR")}`,
       site: "credits.site.commons",
       author: { text: "Example Photographer", href: "https://commons.wikimedia.org/wiki/User:Example_Photographer" },
       licence: { key: "credits.licence.ccBySa40", href: "https://creativecommons.org/licenses/by-sa/4.0/" },
@@ -151,7 +151,7 @@ describe("creditsTables", () => {
       },
       changes: ["credits.change.resized", "credits.change.platesPixelated"],
     });
-    expect(ar.photos[0]?.car).toBe(`2019 تويوتا لاند كروزر ${isolate("GXR")}`);
+    expect(ar.photos[0]?.car).toBe(`2019 تويوتا لاند كروزر ${isolateScripts("GXR")}`);
   });
 
   it("shows an original without a title by its address, and Pexels' CC0 as CC0", () => {
@@ -182,7 +182,7 @@ describe("creditsTables", () => {
   it("gives a library clip's recording as another car's, and a clip of the car its date in the language", () => {
     expect(en.sounds).toHaveLength(1);
     expect(en.sounds[0]).toMatchObject({
-      car: `2019 Toyota Land Cruiser ${isolate("GXR")}`,
+      car: `2019 Toyota Land Cruiser ${isolateScripts("GXR")}`,
       site: "credits.site.freesound",
       recording: { key: "sound.sameEngine" },
       changes: [

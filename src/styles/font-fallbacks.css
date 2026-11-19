@@ -14,9 +14,9 @@
   font-family: "Readex Pro Body Fallback Geeza";
   src: local("Geeza Pro Regular"), local("GeezaPro");
   font-weight: 100 549;
-  size-adjust: 127.58%;
-  ascent-override: 78.38%;
-  descent-override: 19.6%;
+  size-adjust: 127.79%;
+  ascent-override: 78.25%;
+  descent-override: 19.56%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -25,9 +25,9 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
   font-weight: 100 549;
-  size-adjust: 107.66%;
-  ascent-override: 92.89%;
-  descent-override: 23.22%;
+  size-adjust: 107.71%;
+  ascent-override: 92.84%;
+  descent-override: 23.21%;
   line-gap-override: 0%;
 }
 
@@ -46,8 +46,8 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Roboto"), local("Roboto Regular"), local("Roboto-Regular");
   font-weight: 100 549;
-  size-adjust: 108.27%;
-  ascent-override: 92.36%;
+  size-adjust: 108.28%;
+  ascent-override: 92.35%;
   descent-override: 23.09%;
   line-gap-override: 0%;
 }
@@ -56,9 +56,9 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Noto Naskh Arabic"), local("NotoNaskhArabic-Regular"), local("Noto Naskh Arabic UI"), local("NotoNaskhArabicUI-Regular");
   font-weight: 100 549;
-  size-adjust: 122.53%;
-  ascent-override: 81.62%;
-  descent-override: 20.4%;
+  size-adjust: 122.6%;
+  ascent-override: 81.57%;
+  descent-override: 20.39%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -67,9 +67,9 @@
   font-family: "Readex Pro Body Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 550 900;
-  size-adjust: 112.45%;
-  ascent-override: 88.92%;
-  descent-override: 22.23%;
+  size-adjust: 112.64%;
+  ascent-override: 88.78%;
+  descent-override: 22.19%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -78,9 +78,9 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 550 900;
-  size-adjust: 104.34%;
-  ascent-override: 95.84%;
-  descent-override: 23.96%;
+  size-adjust: 104.3%;
+  ascent-override: 95.88%;
+  descent-override: 23.97%;
   line-gap-override: 0%;
 }
 
@@ -88,8 +88,8 @@
   font-family: "Readex Pro Body Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 550 900;
-  size-adjust: 141.06%;
-  ascent-override: 70.89%;
+  size-adjust: 141.1%;
+  ascent-override: 70.87%;
   descent-override: 17.72%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
@@ -99,9 +99,9 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 550 900;
-  size-adjust: 111.29%;
-  ascent-override: 89.85%;
-  descent-override: 22.46%;
+  size-adjust: 111.28%;
+  ascent-override: 89.86%;
+  descent-override: 22.47%;
   line-gap-override: 0%;
 }
 
@@ -109,9 +109,9 @@
   font-family: "Readex Pro Body Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 550 900;
-  size-adjust: 123.95%;
-  ascent-override: 80.68%;
-  descent-override: 20.17%;
+  size-adjust: 124.02%;
+  ascent-override: 80.63%;
+  descent-override: 20.16%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -121,9 +121,9 @@
   font-family: "Readex Pro Lead Fallback Geeza";
   src: local("Geeza Pro Regular"), local("GeezaPro");
   font-weight: 100 900;
-  size-adjust: 146.01%;
-  ascent-override: 68.49%;
-  descent-override: 17.12%;
+  size-adjust: 146.35%;
+  ascent-override: 68.33%;
+  descent-override: 17.08%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -132,9 +132,9 @@
   font-family: "Readex Pro Lead Fallback Arial";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
   font-weight: 100 900;
-  size-adjust: 122.12%;
-  ascent-override: 81.89%;
-  descent-override: 20.47%;
+  size-adjust: 122.17%;
+  ascent-override: 81.86%;
+  descent-override: 20.46%;
   line-gap-override: 0%;
 }
 
@@ -142,9 +142,9 @@
   font-family: "Readex Pro Lead Fallback Arial";
   src: local("Arial"), local("ArialMT");
   font-weight: 100 900;
-  size-adjust: 156.71%;
-  ascent-override: 63.81%;
-  descent-override: 15.95%;
+  size-adjust: 156.82%;
+  ascent-override: 63.77%;
+  descent-override: 15.94%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -163,9 +163,9 @@
   font-family: "Readex Pro Lead Fallback Android";
   src: local("Noto Naskh Arabic"), local("NotoNaskhArabic-Regular"), local("Noto Naskh Arabic UI"), local("NotoNaskhArabicUI-Regular");
   font-weight: 100 900;
-  size-adjust: 140.21%;
-  ascent-override: 71.32%;
-  descent-override: 17.83%;
+  size-adjust: 140.39%;
+  ascent-override: 71.23%;
+  descent-override: 17.81%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -175,9 +175,9 @@
   font-family: "Readex Pro Head Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 161.19%;
-  ascent-override: 62.04%;
-  descent-override: 15.51%;
+  size-adjust: 161.67%;
+  ascent-override: 61.85%;
+  descent-override: 15.46%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -186,9 +186,9 @@
   font-family: "Readex Pro Head Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 143.47%;
-  ascent-override: 69.7%;
-  descent-override: 17.42%;
+  size-adjust: 143.44%;
+  ascent-override: 69.71%;
+  descent-override: 17.43%;
   line-gap-override: 0%;
 }
 
@@ -196,9 +196,9 @@
   font-family: "Readex Pro Head Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 202.18%;
-  ascent-override: 49.46%;
-  descent-override: 12.36%;
+  size-adjust: 202.53%;
+  ascent-override: 49.38%;
+  descent-override: 12.34%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -207,9 +207,9 @@
   font-family: "Readex Pro Head Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 153.04%;
+  size-adjust: 153.05%;
   ascent-override: 65.34%;
-  descent-override: 16.34%;
+  descent-override: 16.33%;
   line-gap-override: 0%;
 }
 
@@ -217,9 +217,63 @@
   font-family: "Readex Pro Head Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 177.64%;
-  ascent-override: 56.29%;
-  descent-override: 14.07%;
+  size-adjust: 177.99%;
+  ascent-override: 56.18%;
+  descent-override: 14.05%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* subhead (--font-subhead): HEXP 20, wght 600, measured on the copy */
+@font-face {
+  font-family: "Readex Pro Subhead Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 128.99%;
+  ascent-override: 77.53%;
+  descent-override: 19.38%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Subhead Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 117.35%;
+  ascent-override: 85.22%;
+  descent-override: 21.3%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Subhead Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 161.58%;
+  ascent-override: 61.89%;
+  descent-override: 15.47%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Subhead Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 125.2%;
+  ascent-override: 79.87%;
+  descent-override: 19.97%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Subhead Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 142.01%;
+  ascent-override: 70.42%;
+  descent-override: 17.6%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -229,9 +283,9 @@
   font-family: "Readex Pro Display 100 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 186.22%;
-  ascent-override: 53.7%;
-  descent-override: 13.42%;
+  size-adjust: 189.14%;
+  ascent-override: 52.87%;
+  descent-override: 13.22%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -240,9 +294,9 @@
   font-family: "Readex Pro Display 100 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 162.6%;
-  ascent-override: 61.5%;
-  descent-override: 15.37%;
+  size-adjust: 161.88%;
+  ascent-override: 61.77%;
+  descent-override: 15.44%;
   line-gap-override: 0%;
 }
 
@@ -250,9 +304,9 @@
   font-family: "Readex Pro Display 100 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 234.75%;
-  ascent-override: 42.6%;
-  descent-override: 10.65%;
+  size-adjust: 238.94%;
+  ascent-override: 41.85%;
+  descent-override: 10.46%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -261,9 +315,9 @@
   font-family: "Readex Pro Display 100 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 172.51%;
-  ascent-override: 57.97%;
-  descent-override: 14.49%;
+  size-adjust: 172.33%;
+  ascent-override: 58.03%;
+  descent-override: 14.51%;
   line-gap-override: 0%;
 }
 
@@ -271,21 +325,21 @@
   font-family: "Readex Pro Display 100 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 207.21%;
-  ascent-override: 48.26%;
-  descent-override: 12.06%;
+  size-adjust: 210.23%;
+  ascent-override: 47.57%;
+  descent-override: 11.89%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
-/* display (--font-display) under (width < 33.75rem): HEXP 80, wght 600, measured on model names */
+/* display (--font-display): HEXP 80, wght 600, measured on model names */
 @font-face {
   font-family: "Readex Pro Display 80 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 170.75%;
-  ascent-override: 58.57%;
-  descent-override: 14.64%;
+  size-adjust: 173.2%;
+  ascent-override: 57.74%;
+  descent-override: 14.43%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -294,9 +348,9 @@
   font-family: "Readex Pro Display 80 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 150.69%;
-  ascent-override: 66.36%;
-  descent-override: 16.59%;
+  size-adjust: 150.15%;
+  ascent-override: 66.6%;
+  descent-override: 16.65%;
   line-gap-override: 0%;
 }
 
@@ -304,9 +358,9 @@
   font-family: "Readex Pro Display 80 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 215.24%;
-  ascent-override: 46.46%;
-  descent-override: 11.61%;
+  size-adjust: 218.8%;
+  ascent-override: 45.7%;
+  descent-override: 11.43%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -315,8 +369,8 @@
   font-family: "Readex Pro Display 80 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 159.87%;
-  ascent-override: 62.55%;
+  size-adjust: 159.85%;
+  ascent-override: 62.56%;
   descent-override: 15.64%;
   line-gap-override: 0%;
 }
@@ -325,21 +379,21 @@
   font-family: "Readex Pro Display 80 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 190%;
-  ascent-override: 52.63%;
-  descent-override: 13.16%;
+  size-adjust: 192.51%;
+  ascent-override: 51.94%;
+  descent-override: 12.99%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
-/* display (--font-display) under (width < 26.875rem): HEXP 60, wght 600, measured on model names */
+/* display (--font-display): HEXP 60, wght 600, measured on model names */
 @font-face {
   font-family: "Readex Pro Display 60 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 155.28%;
-  ascent-override: 64.4%;
-  descent-override: 16.1%;
+  size-adjust: 157.26%;
+  ascent-override: 63.59%;
+  descent-override: 15.9%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -348,9 +402,9 @@
   font-family: "Readex Pro Display 60 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 138.77%;
-  ascent-override: 72.06%;
-  descent-override: 18.01%;
+  size-adjust: 138.42%;
+  ascent-override: 72.24%;
+  descent-override: 18.06%;
   line-gap-override: 0%;
 }
 
@@ -358,9 +412,9 @@
   font-family: "Readex Pro Display 60 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 195.74%;
-  ascent-override: 51.09%;
-  descent-override: 12.77%;
+  size-adjust: 198.67%;
+  ascent-override: 50.34%;
+  descent-override: 12.58%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -369,9 +423,9 @@
   font-family: "Readex Pro Display 60 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 147.23%;
-  ascent-override: 67.92%;
-  descent-override: 16.98%;
+  size-adjust: 147.36%;
+  ascent-override: 67.86%;
+  descent-override: 16.97%;
   line-gap-override: 0%;
 }
 
@@ -379,21 +433,21 @@
   font-family: "Readex Pro Display 60 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 172.78%;
-  ascent-override: 57.88%;
-  descent-override: 14.47%;
+  size-adjust: 174.79%;
+  ascent-override: 57.21%;
+  descent-override: 14.3%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
-/* display (--font-display) under (width < 24.375rem): HEXP 40, wght 600, measured on model names */
+/* display (--font-display): HEXP 40, wght 600, measured on model names */
 @font-face {
   font-family: "Readex Pro Display 40 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 139.81%;
-  ascent-override: 71.52%;
-  descent-override: 17.88%;
+  size-adjust: 141.32%;
+  ascent-override: 70.76%;
+  descent-override: 17.69%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -402,9 +456,9 @@
   font-family: "Readex Pro Display 40 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 126.86%;
-  ascent-override: 78.83%;
-  descent-override: 19.71%;
+  size-adjust: 126.69%;
+  ascent-override: 78.93%;
+  descent-override: 19.73%;
   line-gap-override: 0%;
 }
 
@@ -412,9 +466,9 @@
   font-family: "Readex Pro Display 40 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 176.24%;
-  ascent-override: 56.74%;
-  descent-override: 14.18%;
+  size-adjust: 178.53%;
+  ascent-override: 56.01%;
+  descent-override: 14%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -423,9 +477,9 @@
   font-family: "Readex Pro Display 40 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 134.6%;
-  ascent-override: 74.3%;
-  descent-override: 18.57%;
+  size-adjust: 134.87%;
+  ascent-override: 74.14%;
+  descent-override: 18.54%;
   line-gap-override: 0%;
 }
 
@@ -433,21 +487,21 @@
   font-family: "Readex Pro Display 40 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 155.57%;
-  ascent-override: 64.28%;
-  descent-override: 16.07%;
+  size-adjust: 157.08%;
+  ascent-override: 63.66%;
+  descent-override: 15.92%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
 
-/* display (--font-display) under (width < 22.5rem): HEXP 20, wght 600, measured on model names */
+/* display (--font-display): HEXP 20, wght 600, measured on model names */
 @font-face {
   font-family: "Readex Pro Display 20 Fallback Geeza";
   src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
   font-weight: 100 900;
-  size-adjust: 124.34%;
-  ascent-override: 80.42%;
-  descent-override: 20.11%;
+  size-adjust: 125.38%;
+  ascent-override: 79.76%;
+  descent-override: 19.94%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -456,7 +510,7 @@
   font-family: "Readex Pro Display 20 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
   font-weight: 100 900;
-  size-adjust: 114.95%;
+  size-adjust: 114.96%;
   ascent-override: 86.99%;
   descent-override: 21.75%;
   line-gap-override: 0%;
@@ -466,9 +520,9 @@
   font-family: "Readex Pro Display 20 Fallback Arial";
   src: local("Arial Bold"), local("Arial-BoldMT");
   font-weight: 100 900;
-  size-adjust: 156.74%;
-  ascent-override: 63.8%;
-  descent-override: 15.95%;
+  size-adjust: 158.4%;
+  ascent-override: 63.13%;
+  descent-override: 15.78%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -477,9 +531,9 @@
   font-family: "Readex Pro Display 20 Fallback Android";
   src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
   font-weight: 100 900;
-  size-adjust: 121.96%;
-  ascent-override: 82%;
-  descent-override: 20.5%;
+  size-adjust: 122.39%;
+  ascent-override: 81.71%;
+  descent-override: 20.43%;
   line-gap-override: 0%;
 }
 
@@ -487,9 +541,63 @@
   font-family: "Readex Pro Display 20 Fallback Android";
   src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
   font-weight: 100 900;
-  size-adjust: 138.36%;
-  ascent-override: 72.28%;
-  descent-override: 18.07%;
+  size-adjust: 139.36%;
+  ascent-override: 71.76%;
+  descent-override: 17.94%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* display (--font-display): HEXP 0, wght 600, measured on model names */
+@font-face {
+  font-family: "Readex Pro Display 0 Fallback Geeza";
+  src: local("Geeza Pro Bold"), local("GeezaPro-Bold");
+  font-weight: 100 900;
+  size-adjust: 109.44%;
+  ascent-override: 91.38%;
+  descent-override: 22.84%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 0 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  font-weight: 100 900;
+  size-adjust: 103.23%;
+  ascent-override: 96.87%;
+  descent-override: 24.22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 0 Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 100 900;
+  size-adjust: 138.26%;
+  ascent-override: 72.33%;
+  descent-override: 18.08%;
+  line-gap-override: 0%;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 0 Fallback Android";
+  src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"), local("Roboto-Regular");
+  font-weight: 100 900;
+  size-adjust: 109.9%;
+  ascent-override: 90.99%;
+  descent-override: 22.75%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Readex Pro Display 0 Fallback Android";
+  src: local("Noto Naskh Arabic Bold"), local("NotoNaskhArabic-Bold"), local("Noto Naskh Arabic UI Bold"), local("NotoNaskhArabicUI-Bold");
+  font-weight: 100 900;
+  size-adjust: 121.64%;
+  ascent-override: 82.21%;
+  descent-override: 20.55%;
   line-gap-override: 0%;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF;
 }
@@ -511,13 +619,16 @@
   --font-sans: var(--font-readex-pro), "Readex Pro Body Fallback Geeza", "Readex Pro Body Fallback Arial", "Readex Pro Body Fallback Android";
   --font-lead: var(--font-readex-pro), "Readex Pro Lead Fallback Geeza", "Readex Pro Lead Fallback Arial", "Readex Pro Lead Fallback Android";
   --font-head: var(--font-readex-pro), "Readex Pro Head Fallback Geeza", "Readex Pro Head Fallback Arial", "Readex Pro Head Fallback Android";
+  --font-subhead: var(--font-readex-pro), "Readex Pro Subhead Fallback Geeza", "Readex Pro Subhead Fallback Arial", "Readex Pro Subhead Fallback Android";
   --font-display: var(--font-readex-pro), "Readex Pro Display 100 Fallback Geeza", "Readex Pro Display 100 Fallback Arial", "Readex Pro Display 100 Fallback Android";
   --font-figures: var(--font-martian-mono), "Martian Mono Fallback";
 }
 
-/* A step whose HEXP narrows on phones (tokens.css, D-038) takes the stack of each narrower HEXP
-   under the same media condition. The type-* utilities read the stack through var(), so they
-   switch with it; a font-* class doesn't, as @theme inline writes the first stack into it. */
+/* A step whose HEXP narrows (tokens.css) takes the stack of each narrower HEXP under the same
+   condition: on phones by the screen's width (D-038), a car title's model name by its own
+   column's, and a long one by its model too (model-names.css, D-049). The type-* utilities read
+   the stack through var(), so they switch with it; a font-* class doesn't, as @theme inline
+   writes the first stack into it. */
 @media (width < 33.75rem) {
   :root {
     --font-display: var(--font-readex-pro), "Readex Pro Display 80 Fallback Geeza", "Readex Pro Display 80 Fallback Arial", "Readex Pro Display 80 Fallback Android";
@@ -539,5 +650,341 @@
 @media (width < 22.5rem) {
   :root {
     --font-display: var(--font-readex-pro), "Readex Pro Display 20 Fallback Geeza", "Readex Pro Display 20 Fallback Arial", "Readex Pro Display 20 Fallback Android";
+  }
+}
+
+@container model-name (width < 7.8805em) {
+  * {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 80 Fallback Geeza", "Readex Pro Display 80 Fallback Arial", "Readex Pro Display 80 Fallback Android";
+  }
+}
+
+@container model-name (width < 6.879em) {
+  * {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 60 Fallback Geeza", "Readex Pro Display 60 Fallback Arial", "Readex Pro Display 60 Fallback Android";
+  }
+}
+
+@container model-name (width < 6.3866em) {
+  * {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 40 Fallback Geeza", "Readex Pro Display 40 Fallback Arial", "Readex Pro Display 40 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.8514em) {
+  * {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 20 Fallback Geeza", "Readex Pro Display 20 Fallback Arial", "Readex Pro Display 20 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.0273em) {
+  [data-model="chevrolet-silverado"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.6304em) {
+  [data-model="chevrolet-trailblazer"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 6.2994em) {
+  [data-model="chevrolet-trailblazer"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 7.6371em) {
+  [data-model="chevrolet-trailblazer"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (7.8605em <= width < 8.3061em) {
+  [data-model="chevrolet-trailblazer"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.4276em) {
+  [data-model="geely-geometry-c"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.4276em) {
+  [data-model="geely-geometry-e"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 6.0217em) {
+  [data-model="geely-geometry-c"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 6.0217em) {
+  [data-model="geely-geometry-e"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.6156em) {
+  [data-model="geely-geometry-c"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.6156em) {
+  [data-model="geely-geometry-e"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.2099em) {
+  [data-model="geely-geometry-c"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.2099em) {
+  [data-model="geely-geometry-e"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.1371em) {
+  [data-model="jeep-cherokee"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.1371em) {
+  [data-model="jeep-grand-cherokee"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 9.3147em) {
+  [data-model="jeep-commander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 4.9843em) {
+  [data-model="jeep-gladiator"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 4.9523em) {
+  [data-model="jeep-wrangler"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 4.9787em) {
+  [data-model="kia-sportage"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.0289em) {
+  [data-model="land-rover-defender"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.3774em) {
+  [data-model="land-rover-discovery"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 5.9788em) {
+  [data-model="land-rover-discovery"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.5801em) {
+  [data-model="land-rover-discovery"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.1817em) {
+  [data-model="land-rover-discovery"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.1083em <= width < 9.7318em) {
+  [data-model="land-rover-range-rover-evoque"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.7625em <= width < 9.4628em) {
+  [data-model="land-rover-range-rover-sport"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.5093em <= width < 8.9342em) {
+  [data-model="land-rover-range-rover-velar"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.41em) {
+  [data-model="mitsubishi-outlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 6.025em) {
+  [data-model="mitsubishi-outlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.6396em) {
+  [data-model="mitsubishi-outlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.2544em) {
+  [data-model="mitsubishi-outlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (7.8605em <= width < 7.8693em) {
+  [data-model="mitsubishi-outlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.722em) {
+  [data-model="nissan-pathfinder"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 7.7827em) {
+  [data-model="nissan-pathfinder"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (7.8605em <= width < 8.4695em) {
+  [data-model="nissan-pathfinder"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 8.6681em) {
+  [data-model="toyota-highlander"]:lang(en) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 4.9205em) {
+  [data-model="geely-geometry-c"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 4.9205em) {
+  [data-model="geely-geometry-e"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.4877em) {
+  [data-model="land-rover-discovery"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (5.8314em <= width < 6.1321em) {
+  [data-model="land-rover-discovery"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.7761em) {
+  [data-model="land-rover-discovery"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.4204em) {
+  [data-model="land-rover-discovery"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (7.8605em <= width < 8.0645em) {
+  [data-model="land-rover-discovery"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.0169em) {
+  [data-model="land-rover-range-rover-evoque"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.0169em) {
+  [data-model="land-rover-range-rover-sport"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (width < 5.0169em) {
+  [data-model="land-rover-range-rover-velar"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.3842em) {
+  [data-model="land-rover-range-rover-evoque"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.3842em) {
+  [data-model="land-rover-range-rover-sport"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.3666em <= width < 6.3842em) {
+  [data-model="land-rover-range-rover-velar"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.0679em) {
+  [data-model="land-rover-range-rover-evoque"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.0679em) {
+  [data-model="land-rover-range-rover-sport"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
+  }
+}
+
+@container model-name (6.859em <= width < 7.0679em) {
+  [data-model="land-rover-range-rover-velar"]:lang(ar) {
+    --font-display: var(--font-readex-pro), "Readex Pro Display 0 Fallback Geeza", "Readex Pro Display 0 Fallback Arial", "Readex Pro Display 0 Fallback Android";
   }
 }

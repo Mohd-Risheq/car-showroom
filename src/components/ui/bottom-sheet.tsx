@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog } from "@base-ui/react/dialog";
-import { XIcon } from "@phosphor-icons/react/ssr";
 import {
   type PointerEvent,
   type ReactElement,
@@ -14,14 +13,16 @@ import {
   useState,
 } from "react";
 import { cn } from "@/lib/class-names";
+import { releaseVelocity, rubberBand, type Sample, shouldDismiss } from "@/lib/motion/drag-release";
 import { Button } from "./button";
-import { releaseVelocity, rubberBand, type Sample, shouldDismiss } from "./sheet-gesture";
-import { type Input, inputOf, SheetMotion } from "./sheet-motion";
+import { type Input, inputOf } from "./dialog-input";
+import { XIcon } from "./icons/x";
+import { SheetMotion } from "./sheet-motion";
 
 // DESIGN §6.1's draggable bottom sheet. Base UI's Dialog traps focus, locks the page's scroll,
 // hides the page behind from assistive technology with aria-hidden, and closes the sheet on Escape
 // and on a tap outside it. A drag of the header moves the sheet, even mid-flight, and a flick down
-// or a drag past half its height closes it (sheet-gesture.ts); sheet-motion.ts moves it. Its
+// or a drag past half its height closes it (drag-release.ts); sheet-motion.ts moves it. Its
 // visible title takes focus on open, and its close button lets a screen reader on a touch screen
 // leave it (DESIGN §8.1 and §8.4).
 

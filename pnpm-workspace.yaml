@@ -45,3 +45,10 @@ overrides:
   # A patched release inside express's ~1.20.5, which the lockfile held below it
   # (GHSA-27r3-jxmh-p828, D-042)
   body-parser@<1.20.9: 1.20.9
+
+# Next.js 16.4.6 sends a redirect's Location twice on a page's first, uncached response, which
+# WebKit joins into one broken address (Next.js issue #82117; its fix, #95913, is unreleased). The
+# patch skips a header value the response already holds (D-049). pnpm fails an install that leaves
+# a patch unused, as an upgrade of Next.js would: drop it then if the new release has the fix.
+patchedDependencies:
+  next@16.4.6: patches/next@16.4.6.patch

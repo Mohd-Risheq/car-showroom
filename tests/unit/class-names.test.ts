@@ -65,7 +65,7 @@ describe("cn", () => {
     expect(cn("type-small", "font-medium")).toBe("type-small font-medium");
   });
 
-  it("treats figures as setting the family and weight, at the size of the step around them", () => {
+  it("treats figures as setting the family and weight, at seven eighths of the step around them", () => {
     expect(cn("font-sans", "figures")).toBe("figures");
     expect(cn("font-medium", "figures")).toBe("figures");
     expect(cn("type-body", "figures")).toBe("type-body figures");

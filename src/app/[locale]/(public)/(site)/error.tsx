@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowClockwiseIcon } from "@phosphor-icons/react/ssr";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { ArrowClockwiseIcon } from "@/components/ui/icons/arrow-clockwise";
 import { useShellStrings } from "@/features/shell/ui/shell-strings";
 import { reportClientError } from "@/lib/analytics/track";
 

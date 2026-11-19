@@ -65,6 +65,7 @@ export function SpringDemo({ label }: { label: string }) {
           data-spring-bar
           className="h-2 origin-left bg-scan rtl:origin-right"
           initial={false}
+          // eslint-disable-next-line muftah/no-raw-style-values -- the bar's resting length, which shows the spring's travel (D-038)
           animate={{ scaleX: moved ? 1 : 0.25 }}
           transition={SPRINGS.move}
         />

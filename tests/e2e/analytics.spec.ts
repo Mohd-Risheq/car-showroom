@@ -1,24 +1,28 @@
-import { expect, type Page, type Request, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+import { CarFixtures, seedCar } from "../support/car-fixture.ts";
+import { CATALOGS } from "../support/catalogs.ts";
+import { copyOnShare, hydrated, privacyLink, QUIET, watchBeacons } from "../support/e2e-page.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 
 // FR-47's client in the browser. On the shell lab's failing page, whose segment error reports itself
 // (NFR-OBS-02): with Global Privacy Control on, the page sends no beacon (FR-47.3, TC-47-3); with it
 // off, the error goes to API-03 as one beacon of text/plain JSON, which answers 204 and sets no
-// cookie (FR-47). A dev path names its page by the catch-all's template. On the analytics lab's two
-// pages, which stand in for two cars' pages: a page view's events across navigations (FR-47.6),
-// nothing at all with Global Privacy Control on, and an error nothing catches, counted once.
+// cookie (FR-47). A dev path names its page by the catch-all's template. On a car's page (FR-09): its
+// view once in each page view, again after a link away and back, its shares each time, nothing with
+// Global Privacy Control on, and no view from the 404 of a car the site showed. On the analytics
+// lab's two pages, which stand in for two cars' pages with the signature feature and the contact a
+// car's page doesn't have yet: a page view's events across navigations (FR-47.6), nothing at all with
+// Global Privacy Control on, and an error nothing catches, counted once.
 
 /** The mark in session storage that makes the lab's failing page fail (dev/shell/failing) */
 const FAIL_KEY = "muftah:fail";
 const FAILING = "/en/dev/shell/failing";
-/** How long a test waits for a beacon that must not come. The page's own comes far sooner. */
-const QUIET = 1500;
 
 /** The analytics lab's cars (dev/analytics) */
 const LAB_CARS = ["01923456-7890-7abc-8def-0000000000a1", "01923456-7890-7abc-8def-0000000000a2"] as const;
 
-/** The error the failing page throws, which React reports, and Firefox prints without its message */
-const FAILED_PAGE = [/^Error\b/];
+/** The error the failing page throws, which React reports */
+const FAILED_PAGE = [/^Error: The shell lab's failing page fails, as session storage asks\b/];
 
 const isBeacon = (url: string) => new URL(url).pathname === "/api/events";
 
@@ -42,13 +46,17 @@ function watchBeaconScripts(page: Page): string[] {
   return scripts;
 }
 
-/** The beacons the page sends to API-03 */
-function watchBeacons(page: Page): Request[] {
-  const beacons: Request[] = [];
-  page.on("request", (request) => {
-    if (isBeacon(request.url())) beacons.push(request);
-  });
-  return beacons;
+/**
+ * A check that the page's beacons have carried the bodies expected so far and the more given, in
+ * their order, and nothing else
+ */
+function watchSent(page: Page): (...more: unknown[]) => Promise<void> {
+  const beacons = watchBeacons(page);
+  const sent: unknown[] = [];
+  return async (...more) => {
+    sent.push(...more);
+    await expect.poll(beacons).toStrictEqual(sent);
+  };
 }
 
 test.describe("the failing page", () => {
@@ -64,7 +72,7 @@ test.describe("the failing page", () => {
     await page.goto(FAILING);
     await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
     await page.waitForTimeout(QUIET);
-    expect(beacons).toStrictEqual([]);
+    expect(beacons()).toStrictEqual([]);
     expect(scripts).toStrictEqual([]);
     await expectProblems(page, problems, FAILED_PAGE);
   });
@@ -88,8 +96,78 @@ test.describe("the failing page", () => {
     expect(response.status()).toBe(204);
     expect(await response.headerValue("set-cookie")).toBeNull();
     await page.waitForTimeout(QUIET);
-    expect(beacons).toHaveLength(1);
+    expect(beacons()).toHaveLength(1);
     await expectProblems(page, problems, FAILED_PAGE);
+  });
+});
+
+test.describe("a car's page", () => {
+  const fixtures = new CarFixtures();
+  test.afterEach(() => fixtures.remove());
+
+  test("sends the car's view once in each page view, again after a link away and back, and a share each time (FR-47.6)", async ({
+    page,
+  }) => {
+    await copyOnShare(page);
+    const problems = await watchProblems(page);
+    const car = await seedCar("s01");
+    const expectSent = watchSent(page);
+    const view = { e: "car_view", c: car.id, l: "ar" };
+    const share = { e: "share_native", c: car.id, l: "ar" };
+
+    await page.goto(`/ar/cars/${car.slug}`);
+    await expectSent(view);
+    await hydrated(page, "ar");
+    // A share each time, from the title block's Share and from the page end's
+    for (const at of [0, 1]) {
+      await page.getByRole("button", { name: CATALOGS.ar.car.share, exact: true }).nth(at).click();
+      await expectSent(share);
+    }
+
+    // The page a link leads on to sends no view of its own, and the way back shows the car's page as
+    // Next.js kept it, in a new page view
+    await privacyLink(page, "ar").click();
+    await expect(page).toHaveURL(/\/ar\/privacy$/);
+    await page.waitForTimeout(QUIET);
+    await expectSent();
+    await page.goBack();
+    await expectSent(view);
+
+    await page.waitForTimeout(QUIET);
+    await expectSent();
+    await expectProblems(page, problems);
+  });
+
+  test("sends nothing with Global Privacy Control on, and loads nothing to, while Share works (TC-47-3)", async ({
+    page,
+  }) => {
+    await copyOnShare(page);
+    await turnOnGpc(page);
+    const problems = await watchProblems(page);
+    const beacons = watchBeacons(page);
+    const scripts = watchBeaconScripts(page);
+    await page.goto(`/en/cars/${(await seedCar("s01")).slug}`);
+    await hydrated(page, "en");
+    await page.getByRole("button", { name: CATALOGS.en.car.share, exact: true }).first().click();
+    await expect(page.getByText(CATALOGS.en.car.linkCopied)).toBeVisible();
+    await privacyLink(page, "en").click();
+    await expect(page).toHaveURL(/\/en\/privacy$/);
+    await page.goBack();
+    await expect(page.getByRole("button", { name: CATALOGS.en.car.share, exact: true }).first()).toBeVisible();
+    await page.waitForTimeout(QUIET);
+    expect(beacons()).toStrictEqual([]);
+    expect(scripts).toStrictEqual([]);
+    await expectProblems(page, problems);
+  });
+
+  test("sends no view from the 404 of a car the site showed", async ({ page }) => {
+    const problems = await watchProblems(page);
+    const beacons = watchBeacons(page);
+    expect((await page.goto(`/en/cars/${await fixtures.copy("s01", "archived")}`))?.status()).toBe(404);
+    await hydrated(page, "en");
+    await page.waitForTimeout(QUIET);
+    expect(beacons()).toStrictEqual([]);
+    await expectProblems(page, problems);
   });
 });
 
@@ -98,13 +176,7 @@ test("sends a page view's events once each, a contact each time, and a page's vi
 }) => {
   const problems = await watchProblems(page);
   const [first, second] = LAB_CARS;
-  const beacons = watchBeacons(page);
-  const bodies = () => beacons.map((request) => request.postDataJSON() as unknown);
-  const sent: unknown[] = [];
-  const expectSent = async (...more: unknown[]) => {
-    sent.push(...more);
-    await expect.poll(bodies).toStrictEqual(sent);
-  };
+  const expectSent = watchSent(page);
   const press = async (name: string, times: number) => {
     for (let i = 0; i < times; i += 1) await page.getByRole("button", { name }).click();
   };
@@ -134,7 +206,7 @@ test("sends a page view's events once each, a contact each time, and a page's vi
   await expectSent({ e: "sig_spin", c: first, l: "en" });
 
   await page.waitForTimeout(QUIET);
-  expect(bodies()).toStrictEqual(sent);
+  await expectSent();
   await expectProblems(page, problems);
 });
 
@@ -151,7 +223,7 @@ test("sends nothing from the lab's pages with Global Privacy Control on, and loa
   await page.getByRole("link", { name: "The second car" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Analytics lab, second car" })).toBeVisible();
   await page.waitForTimeout(QUIET);
-  expect(beacons).toStrictEqual([]);
+  expect(beacons()).toStrictEqual([]);
   expect(scripts).toStrictEqual([]);
   await expectProblems(page, problems);
 });
@@ -161,10 +233,9 @@ test("sends an error nothing caught as UNCAUGHT, once for its page however often
 }) => {
   const problems = await watchProblems(page);
   const beacons = watchBeacons(page);
-  const errors = () =>
-    beacons.map((request) => request.postDataJSON() as { e: string }).filter(({ e }) => e === "client_error");
+  const errors = watchBeacons(page, "client_error");
   await page.goto("/en/dev/analytics");
-  await expect.poll(() => beacons.length).toBe(1);
+  await expect.poll(() => beacons().length).toBe(1);
   for (let i = 0; i < 2; i += 1) await page.getByRole("button", { name: "Fail" }).click();
   const uncaught = { e: "client_error", l: "en", r: "/[locale]/[...rest]", x: "UNCAUGHT" };
   await expect.poll(errors).toStrictEqual([uncaught]);

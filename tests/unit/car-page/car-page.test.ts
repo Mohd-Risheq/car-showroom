@@ -1,8 +1,9 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CarPageRows } from "@/features/car-page/server/build-car";
-import { getCarPage } from "@/features/car-page/server/car-page";
+import { carPageFor, getCarPage } from "@/features/car-page/server/car-page";
 import { loadCarPageRows } from "@/features/car-page/server/car-queries";
+import { getDealerId } from "@/features/settings/server/dealer-id";
 import { publicDb } from "@/lib/db/client";
 
 // getCarPage (SRS §11.4): the catalog profile, the read-only client, the dealer's rules applied at
@@ -11,6 +12,7 @@ import { publicDb } from "@/lib/db/client";
 vi.mock("next/cache", () => ({ cacheLife: vi.fn(), cacheTag: vi.fn() }));
 vi.mock("@/lib/db/client", () => ({ publicDb: { name: "publicDb" } }));
 vi.mock("@/features/car-page/server/car-queries", () => ({ loadCarPageRows: vi.fn() }));
+vi.mock("@/features/settings/server/dealer-id", () => ({ getDealerId: vi.fn() }));
 
 const DEALER = "01923456-7890-7abc-8def-0000000000d1";
 const CAR = "01923456-7890-7abc-8def-0000000000c1";
@@ -97,4 +99,25 @@ describe("getCarPage", () => {
       slug: "2021-toyota-land-cruiser-mu-7k3p",
     });
   });
+});
+
+describe("carPageFor", () => {
+  it("reads the slug for the dealer this deployment serves", async () => {
+    vi.mocked(getDealerId).mockResolvedValue(DEALER);
+    vi.mocked(loadCarPageRows).mockResolvedValue(NONE);
+    expect(await carPageFor("no-such-car-mu-2222")).toStrictEqual({ kind: "notFound", gone: null });
+    const [repo, slug] = vi.mocked(loadCarPageRows).mock.calls[0] ?? [];
+    expect([repo?.dealerId, slug]).toStrictEqual([DEALER, "no-such-car-mu-2222"]);
+  });
+
+  // The database refuses a NUL in text, so reading one would fail where nothing is found
+  it.each(["2019-Toyota-land-cruiser-mu-3hk8", "mu-3hk8\u0000", "mu-3hk8%00", ""])(
+    "finds nothing for %j without a read",
+    async (slug) => {
+      expect(await carPageFor(slug)).toStrictEqual({ kind: "notFound", gone: null });
+      expect(getDealerId).not.toHaveBeenCalled();
+      expect(loadCarPageRows).not.toHaveBeenCalled();
+      expect(cacheLife).not.toHaveBeenCalled();
+    },
+  );
 });

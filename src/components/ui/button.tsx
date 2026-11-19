@@ -1,10 +1,10 @@
 "use client";
 
-import { CircleNotchIcon } from "@phosphor-icons/react/ssr";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactElement, ReactNode } from "react";
 import { cn } from "@/lib/class-names";
 import { buttonClasses } from "./button-classes";
+import { CircleNotchIcon } from "./icons/circle-notch";
 
 // A button on DESIGN §6.4's states (button-classes.ts).
 

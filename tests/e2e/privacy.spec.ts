@@ -1,15 +1,13 @@
-import { readFileSync } from "node:fs";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 import { seriousA11yIssues } from "../support/axe.ts";
+import { CATALOGS } from "../support/catalogs.ts";
+import { sideways } from "../support/layout.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 
 // SCR-14's privacy page (FR-47.5, DESIGN §7.2.9) in each language: its title, description and one
 // heading, what the site keeps in one table, and no serious axe issue. On a phone the table scrolls
 // in its frame and the page doesn't, each row's heading held in view as the rest scrolls (D-041); a
 // desktop's reading column holds the whole table.
-
-type Catalog = { footer: { privacy: string }; meta: { privacy: { description: string } } };
-const catalog = (locale: "ar" | "en") => JSON.parse(readFileSync(`messages/${locale}.json`, "utf8")) as Catalog;
 
 /** The table's frame, by the name each language's MDX gives it */
 const TABLE = { ar: "ما يحفظه الموقع", en: "What the site keeps" } as const;
@@ -19,16 +17,15 @@ const ROWS = 10;
 const tableOf = (page: Page, locale: "ar" | "en") => page.getByRole("region", { name: TABLE[locale] });
 
 /** How far the frame's content reaches past its box, and how far the page's past the screen */
-const overflowOf = (frame: Locator) =>
-  frame.evaluate((element) => ({
-    frame: element.scrollWidth - element.clientWidth,
-    page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  }));
+const overflowOf = async (frame: Locator) => ({
+  frame: await frame.evaluate((element) => element.scrollWidth - element.clientWidth),
+  page: await sideways(frame.page()),
+});
 
 for (const locale of ["ar", "en"] as const) {
   test.describe(`in ${locale}`, () => {
     test("is named and described as the catalog has it, with one heading and the table", async ({ page }) => {
-      const t = catalog(locale);
+      const t = CATALOGS[locale];
       const problems = await watchProblems(page);
       await page.goto(`/${locale}/privacy`);
       await expect(page).toHaveTitle(new RegExp(`^${t.footer.privacy} · `));

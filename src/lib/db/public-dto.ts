@@ -197,6 +197,8 @@ export type PublicCarDTO = {
   readonly status: PublicStatus;
   readonly condition: CarCondition;
   readonly makeName: Names;
+  /** The catalog's model (ENT-Model), whose name model-names.css may set in narrower letters (D-049) */
+  readonly modelKey: string;
   readonly modelName: Names;
   readonly trim: string | null;
   readonly modelYear: number;

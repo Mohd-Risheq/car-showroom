@@ -28,3 +28,8 @@ export type SitePath = `/${AppLocale}${(typeof PAGES)[SitePage]}`;
 export function pagePath<L extends AppLocale, P extends SitePage>(locale: L, page: P): `/${L}${(typeof PAGES)[P]}` {
   return `/${locale}${PAGES[page]}`;
 }
+
+/** A car's page in a locale, by the car's slug: /en/cars/2019-toyota-land-cruiser-gxr-mu-3hk8 */
+export function carPath<L extends AppLocale>(locale: L, slug: string): `/${L}/cars/${string}` {
+  return `/${locale}/cars/${slug}`;
+}

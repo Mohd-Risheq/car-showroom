@@ -6,8 +6,8 @@ import {
   type CarPageRows,
   resolveCarPage,
 } from "@/features/car-page/server/build-car";
-import { PANEL_IDS } from "@/lib/db/enums";
-import type { PublicCarDTO } from "@/lib/db/public-dto";
+import { PANEL_IDS, type PanelId, type PanelState } from "@/lib/db/enums";
+import type { MicronBand, PublicCarDTO } from "@/lib/db/public-dto";
 
 // getCarPage's rows to its result (SRS §11.4, FR-09.1, FR-09.2, BR-16): the car for a public live
 // slug, its current slug for an earlier one, or nothing, with the tags that refresh the entry
@@ -107,6 +107,25 @@ function photo(id: string, sortOrder: number, overrides: Partial<CarPageMediaRow
 const file = (id: string, kind: CarPageMediaRow["kind"], overrides: Partial<CarPageMediaRow> = {}) =>
   photo(id, 0, { kind, photoGroup: null, altEn: null, variants: { src: `/f/${id}` }, ...overrides });
 
+/** A panel's reading: its state, the paint's thickness and the band the page puts that in */
+type PanelReading = { state: PanelState; microns: number | null; band: MicronBand | null };
+
+/**
+ * Each panel's reading where it isn't original at 120 µm, in the factory's band: the hood repainted
+ * at 240 µm, a refinish's, the roof plastic, which no gauge reads, and the trunk, which has no row,
+ * unknown
+ */
+const READINGS: Partial<Record<PanelId, PanelReading>> = {
+  hood: { state: "repainted", microns: 240, band: "refinish" },
+  roof: { state: "original", microns: null, band: null },
+  trunk: { state: "unknown", microns: null, band: null },
+};
+const readingOf = (panelId: PanelId): PanelReading =>
+  READINGS[panelId] ?? { state: "original", microns: 120, band: "factory" };
+
+/** The close-ups: the hood's, a photo of the gallery, and the front left door's, which isn't one */
+const CLOSEUPS: Partial<Record<PanelId, string>> = { hood: MEDIA.second, door_front_left: MEDIA.og };
+
 function panelRows(overrides: Partial<CarPageInspectionRow> = {}): CarPageInspectionRow[] {
   const inspection = {
     inspectedOn: null,
@@ -127,11 +146,11 @@ function panelRows(overrides: Partial<CarPageInspectionRow> = {}): CarPageInspec
   return PANEL_IDS.filter((panelId) => panelId !== "trunk").map((panelId) => ({
     ...inspection,
     panelId,
-    panelState: panelId === "hood" ? "repainted" : "original",
-    microns: panelId === "roof" ? null : panelId === "hood" ? 240 : 120,
+    panelState: readingOf(panelId).state,
+    microns: readingOf(panelId).microns,
     panelNoteAr: null,
     panelNoteEn: panelId === "hood" ? "Resprayed" : null,
-    closeupMediaId: panelId === "hood" ? MEDIA.second : panelId === "door_front_left" ? MEDIA.og : null,
+    closeupMediaId: CLOSEUPS[panelId] ?? null,
     ...overrides,
   }));
 }
@@ -189,6 +208,7 @@ describe("resolveCarPage: the car", () => {
       status: "published",
       condition: "used",
       makeName: { ar: "تويوتا", en: "Toyota" },
+      modelKey: "toyota-land-cruiser",
       modelName: { ar: "لاند كروزر", en: "Land Cruiser" },
       trim: "GXR",
       modelYear: 2021,
@@ -225,12 +245,19 @@ describe("resolveCarPage: the car", () => {
       colorFamily: "white",
       exteriorColorHex: "#f4f2ee",
       paintFinish: "pearl",
-      photos: [MEDIA.cover, MEDIA.first, MEDIA.second].map((id) => ({
+      // The cover first, then the rest in the dealer's order, each's English alt text its place
+      photos: (
+        [
+          [MEDIA.cover, 3],
+          [MEDIA.first, 1],
+          [MEDIA.second, 2],
+        ] as const
+      ).map(([id, sortOrder]) => ({
         id,
         group: id === MEDIA.first ? "interior" : "exterior",
         alt: {
           ar: id === MEDIA.cover ? "الغلاف" : null,
-          en: `photo ${id === MEDIA.cover ? 3 : id === MEDIA.first ? 1 : 2}`,
+          en: `photo ${sortOrder}`,
         },
         width: 2560,
         height: 1707,
@@ -246,9 +273,7 @@ describe("resolveCarPage: the car", () => {
         filled: 14,
         panels: PANEL_IDS.map((panelId) => ({
           panelId,
-          state: panelId === "trunk" ? "unknown" : panelId === "hood" ? "repainted" : "original",
-          microns: panelId === "trunk" || panelId === "roof" ? null : panelId === "hood" ? 240 : 120,
-          band: panelId === "trunk" || panelId === "roof" ? null : panelId === "hood" ? "refinish" : "factory",
+          ...readingOf(panelId),
           note: { ar: null, en: panelId === "hood" ? "Resprayed" : null },
           // A close-up only when the photo is in the gallery
           closeupPhotoId: panelId === "hood" ? MEDIA.second : null,

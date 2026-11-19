@@ -12,6 +12,14 @@ import { isRefCode } from "./ref-code.ts";
 /** The length of car.slug */
 export const SLUG_MAX_LENGTH = 160;
 
+/** car_slug_format's pattern, the car table's check, which the unit test holds to the schema */
+export const SLUG_FORMAT = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** Whether the text can be a car's slug: the format car_slug_format checks, in the column's length */
+export function isCarSlug(text: string): boolean {
+  return text.length <= SLUG_MAX_LENGTH && SLUG_FORMAT.test(text);
+}
+
 export type SlugParts = {
   readonly modelYear: number | null;
   readonly makeNameEn: string | null;

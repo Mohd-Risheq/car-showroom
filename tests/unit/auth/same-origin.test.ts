@@ -42,9 +42,11 @@ describe("isSameOriginRequest, and isSameOrigin for a Server Action's headers", 
     expect(isSameOriginRequest(request({ origin: SITE }))).toBe(true);
   });
 
-  it("accepts only Sec-Fetch-Site when the site's URL is unset", () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", undefined);
-    expect(isSameOriginRequest(request({ origin: SITE }))).toBe(false);
-    expect(isSameOriginRequest(request({ "sec-fetch-site": "same-origin" }))).toBe(true);
+  it("accepts only Sec-Fetch-Site when the site's URL is unset or empty", () => {
+    for (const setting of [undefined, ""]) {
+      vi.stubEnv("NEXT_PUBLIC_SITE_URL", setting);
+      expect(isSameOriginRequest(request({ origin: SITE })), String(setting)).toBe(false);
+      expect(isSameOriginRequest(request({ "sec-fetch-site": "same-origin" })), String(setting)).toBe(true);
+    }
   });
 });

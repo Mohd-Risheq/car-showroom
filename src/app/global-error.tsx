@@ -1,9 +1,9 @@
 "use client";
 
 import "@/styles/globals.css";
-import { ArrowClockwiseIcon } from "@phosphor-icons/react/ssr";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { ArrowClockwiseIcon } from "@/components/ui/icons/arrow-clockwise";
 import { GLOBAL_ERROR_COPY } from "@/features/shell/domain/global-error-copy";
 import { reportClientError } from "@/lib/analytics/track";
 import { DEFAULT_LOCALE, directionOf, LOCALES } from "@/lib/i18n/locales";

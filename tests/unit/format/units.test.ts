@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { formatAmount, formatQuantity, isSpoken, type Unit, type UnitNames, UNITS } from "@/lib/format/units";
 import ar from "../../../messages/ar.json";
 import en from "../../../messages/en.json";
+import { NO_BREAK_SPACE } from "../../support/marks";
 
 // Each unit's decimals follow how SRS §6 stores its values, and the units match the catalogs'
 // format.unit.* and format.spoken.* keys, which screens write after the number (DESIGN §9.5)
 
 const UNIT_NAMES = Object.keys(UNITS) as Unit[];
-const NO_BREAK_SPACE = String.fromCodePoint(0xa0);
 const AR: UnitNames = { locale: "ar", unit: ar.format.unit, spoken: ar.format.spoken };
 const EN: UnitNames = { locale: "en", unit: en.format.unit, spoken: en.format.spoken };
 

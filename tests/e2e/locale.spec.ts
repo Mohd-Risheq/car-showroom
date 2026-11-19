@@ -1,7 +1,8 @@
-import { readFileSync } from "node:fs";
 import { type BrowserContext, expect, type Locator, type Page, test } from "@playwright/test";
 import { seriousA11yIssues } from "../support/axe.ts";
+import { CATALOGS } from "../support/catalogs.ts";
 import { inkOf, sideOf } from "../support/ink.ts";
+import { NO_BREAK_SPACE } from "../support/marks.ts";
 import { watchProblems } from "../support/page-problems.ts";
 
 // FR-01 in the browser: the root redirect and the English prompt (TC-01-1, BR-01, FR-01.2a), the
@@ -9,10 +10,7 @@ import { watchProblems } from "../support/page-problems.ts";
 // server and every engine (TC-01-4, BR-02, BR-03), and direction: typed text (NFR-I18N-04), mirrored
 // arrows (FR-01.7) and long words (FR-01 edge cases), on /[locale]/dev/locale.
 
-type Catalog = { locale: { prompt: { text: string; switch: string; stay: string } }; nav: { language: string } };
-const catalog = (locale: "ar" | "en") => JSON.parse(readFileSync(`messages/${locale}.json`, "utf8")) as Catalog;
-const AR = catalog("ar");
-const EN = catalog("en");
+const { ar: AR, en: EN } = CATALOGS;
 
 const DEV_PAGE = "/dev/locale";
 const YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
@@ -22,7 +20,6 @@ const MARGIN = { min: 15, max: 33 };
 // screen's height. /dev/locale has no header, so these tests measure the card alone; shell.spec.ts
 // measures it with the shell's header.
 const STICKY_BUDGET = 0.25;
-const NO_BREAK_SPACE = String.fromCodePoint(0xa0);
 
 /** The English prompt, a region named by its text */
 const prompt = (page: Page) => page.getByRole("region", { name: AR.locale.prompt.text });

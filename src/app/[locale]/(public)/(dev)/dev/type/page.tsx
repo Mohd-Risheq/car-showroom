@@ -25,6 +25,7 @@ const TOKENS_CSS = path.join(/*turbopackIgnore: true*/ process.cwd(), "src/style
 const sampleClass = {
   display: C.display,
   head: C.head,
+  subhead: C.subhead,
   lead: C.lead,
   body: C.body,
   small: C.small,

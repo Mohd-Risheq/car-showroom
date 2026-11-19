@@ -9,6 +9,7 @@ export type SpecimenCopy = {
   wordmark: string;
   display: { name: string; trim: string };
   head: string;
+  subhead: string;
   lead: string;
   body: string;
   small: string;
@@ -20,6 +21,7 @@ export const COPY: Record<AppLocale, SpecimenCopy> = {
     wordmark: "Muftah",
     display: { name: "Land Cruiser", trim: "GXR" },
     head: "How every car is documented",
+    subhead: "About this car",
     lead: "See the inspection before you see the car.",
     body: "GCC Land Cruiser GXR with the 4.0 V6 and 84,000 km. First owner in Dubai, then one owner in Amman since 2024. Every metal panel is in factory paint, and the rear bumper corner has a cosmetic touch-up. Viewing at the showroom on Airport Road, or ask for a walkaround video on WhatsApp.",
     small: "This information is declared by the dealer. We recommend an independent inspection before you buy.",
@@ -35,6 +37,7 @@ export const COPY: Record<AppLocale, SpecimenCopy> = {
     wordmark: "مفتاح",
     display: { name: "لاندكروزر", trim: "GXR" },
     head: "كيف نوثّق كل سيارة",
+    subhead: "عن السيارة",
     lead: "شوف الفحص قبل ما تشوف السيارة",
     body: "لاندكروزر GXR مواصفات خليجية، ماتور 4.0 V6، ممشى 84,000 كم. المالك الأول في دبي، ثم مالك واحد في عمّان منذ 2024. جميع القطع المعدنية دهان وكالة، وعلى زاوية الصدام الخلفي رشة تجميلية. المعاينة في المعرض على طريق المطار، ويمكن طلب فيديو للسيارة عبر واتساب.",
     small: "هذه المعلومات مقدّمة من المعرض، وننصح بإجراء فحص مستقل قبل الشراء.",

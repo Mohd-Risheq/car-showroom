@@ -16,7 +16,7 @@ const mergeClasses = extendTailwindMerge<"type-step" | "figures">({
       container: ["content", "measure", "table", "table-head"],
       "drop-shadow": [],
       ease: ["out", "in-out", "drawer"],
-      font: ["sans", "lead", "head", "display", "figures", "mono"],
+      font: ["sans", "lead", "head", "subhead", "display", "figures", "mono"],
       "font-weight": ["normal", "medium", "semibold"],
       "inset-shadow": [],
       leading: [],
@@ -30,10 +30,13 @@ const mergeClasses = extendTailwindMerge<"type-step" | "figures">({
   },
   extend: {
     theme: { spacing: ["page", "gutter", "section", "icon", "icon-lg"] },
-    classGroups: { "type-step": [{ type: ["display", "head", "lead", "body", "small"] }], figures: ["figures"] },
+    classGroups: {
+      "type-step": [{ type: ["display", "head", "subhead", "lead", "body", "small"] }],
+      figures: ["figures"],
+    },
     conflictingClassGroups: {
       "type-step": ["font-family", "font-size", "leading", "tracking", "font-weight", "text-wrap"],
-      // Figures take the size of the step around them
+      // Figures take seven eighths of the size of the step around them, from their parent
       figures: ["font-family", "font-weight"],
     },
   },

@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 import { seriousA11yIssues } from "../support/axe.ts";
+import { CATALOGS } from "../support/catalogs.ts";
+import { sideways } from "../support/layout.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 
 // SCR-14's Credits page (DESIGN §7.2.9) in each language: its title, description and headings, a
@@ -9,13 +11,6 @@ import { expectProblems, watchProblems } from "../support/page-problems.ts";
 // table scrolls in its frame and the page doesn't (D-041); a desktop's reading column holds them whole.
 // What the page should show is read from the files it is built from, so the test holds as they change.
 
-type Locale = "ar" | "en";
-type Catalog = {
-  footer: { credits: string };
-  meta: { credits: { description: string } };
-  credits: Record<"photos" | "sounds" | "data" | "fonts" | "software", string>;
-};
-const catalog = (locale: Locale) => JSON.parse(readFileSync(`messages/${locale}.json`, "utf8")) as Catalog;
 const read = <Shape>(file: string) => JSON.parse(readFileSync(file, "utf8")) as Shape;
 
 const manifest = read<{ files: { kind: string }[]; data: unknown[]; fonts: unknown[] }>("public/seed/credits.json");
@@ -45,13 +40,14 @@ const ZXING_LICENCE = "/wasm/zxing_reader.LICENSE.txt";
 const tableOf = (page: Page, name: string) => page.getByRole("region", { name, exact: true });
 
 /** How far each frame's content reaches past its box, and how far the page's past the screen */
-const overflowOf = (page: Page) =>
-  page.evaluate(() => ({
-    frames: [...document.querySelectorAll("main [role=region][tabindex='0']")].map(
+const overflowOf = async (page: Page) => ({
+  frames: await page.evaluate(() =>
+    [...document.querySelectorAll("main [role=region][tabindex='0']")].map(
       (frame) => frame.scrollWidth - frame.clientWidth,
     ),
-    page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  }));
+  ),
+  page: await sideways(page),
+});
 
 /** The text as a pattern that matches it alone */
 const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -62,7 +58,7 @@ const rowHeadings = (table: Locator) => table.getByRole("rowheader").allTextCont
 for (const locale of ["ar", "en"] as const) {
   test.describe(`in ${locale}`, () => {
     test("is named and described as the catalog has it, with a heading and a table for each list", async ({ page }) => {
-      const t = catalog(locale);
+      const t = CATALOGS[locale];
       const problems = await watchProblems(page);
       await page.goto(`/${locale}/credits`);
       await expect(page).toHaveTitle(new RegExp(`^${t.footer.credits} · `));
@@ -85,7 +81,7 @@ for (const locale of ["ar", "en"] as const) {
     }) => {
       const problems = await watchProblems(page);
       await page.goto(`/${locale}/credits`);
-      const headings = await rowHeadings(tableOf(page, catalog(locale).credits.software));
+      const headings = await rowHeadings(tableOf(page, CATALOGS[locale].credits.software));
       expect(headings).toHaveLength(software.rows.length);
       software.rows.forEach(({ name, version, within }, index) => {
         // A bundled work's heading goes on to say what bundles it
@@ -101,7 +97,7 @@ for (const locale of ["ar", "en"] as const) {
     }) => {
       const problems = await watchProblems(page);
       await page.goto(`/${locale}/credits`);
-      const row = tableOf(page, catalog(locale).credits.software).getByRole("row").filter({ hasText: "zxing-cpp" });
+      const row = tableOf(page, CATALOGS[locale].credits.software).getByRole("row").filter({ hasText: "zxing-cpp" });
       await expect(row.getByRole("link").first()).toHaveAttribute("href", ZXING_LICENCE);
       const response = await page.request.get(ZXING_LICENCE, { maxRedirects: 0 });
       expect(response.status()).toBe(200);

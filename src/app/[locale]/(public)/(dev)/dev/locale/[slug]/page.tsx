@@ -5,10 +5,10 @@ import { notFoundOnDeployments } from "@/lib/deployment";
 import { otherLocale } from "@/lib/i18n/locales";
 import { getAppLocale } from "@/lib/i18n/server";
 
-// T-15: the language switch on a page under a param that generateStaticParams doesn't list, as a car's
-// slug will be (FR-01.4). The build prerenders a shell for it in which the path is unknown, so
-// `pnpm build` fails here if the switch reads the path where its shell can't.
-// tests/e2e/locale.spec.ts checks where the link goes.
+// T-15: the language switch on a page under a param that generateStaticParams doesn't list (FR-01.4).
+// The build prerenders a shell for it in which the path is unknown, so `pnpm build` fails here if
+// the switch reads the path where its shell can't. tests/e2e/locale.spec.ts checks where the link
+// goes. A car's page isn't such a page: the build lists its slugs, and renders a later car's whole.
 
 export const metadata: Metadata = { title: "Muftah dev: the language switch under an unknown param" };
 

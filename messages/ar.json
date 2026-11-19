@@ -341,13 +341,14 @@
     "share": "مشاركة",
     "linkCopied": "تم نسخ الرابط",
     "facts": {
-      "title": "أهم المعلومات"
+      "title": "أهم المعلومات",
+      "electricMotor": "محرك كهربائي"
     },
     "mileage": {
       "low": "الممشى: منخفض بالنسبة لعمرها",
       "typical": "الممشى: طبيعي بالنسبة لعمرها",
       "high": "الممشى: مرتفع بالنسبة لعمرها",
-      "info": "نحو {km} كم سنويًا منذ {year}. المعدل الطبيعي من {low} إلى {high} كم سنويًا."
+      "info": "نحو {km} كيلومتر سنويًا منذ {year}. المعدل الطبيعي من {low} إلى {high} كيلومتر سنويًا."
     },
     "battery": "صحة البطارية {pct}%",
     "batterySource": "المصدر: {source}",
@@ -376,6 +377,8 @@
       "alt": "{title}، {group, select, exterior {من الخارج} interior {من الداخل} engine {حجرة المحرك} imperfection {عيب ظاهر} other {صورة}}",
       "altImperfection": "{title}، عيب ظاهر: {note}",
       "more": "عرض {count, plural, zero {# صورة أخرى} one {صورة أخرى} two {صورتين أخريين} few {# صور أخرى} many {# صورة أخرى} other {# صورة أخرى}}",
+      "fullscreen": "ملء الشاشة",
+      "position": "الصورة {n} من {total}",
       "zoomIn": "تكبير",
       "zoomOut": "تصغير"
     },

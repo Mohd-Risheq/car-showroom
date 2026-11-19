@@ -29,6 +29,11 @@ tester.run("mirror-directional-icons", rule, {
     'import * as Arrows from "./arrows"; <Arrows.ArrowLeftIcon />',
     // Physical glyphs that only name a side
     'import { AlignLeftIcon, ToggleLeftIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react/ssr"; <><AlignLeftIcon /><ToggleLeftIcon /><PaperPlaneTiltIcon /></>',
+    // Another folder's own icons aren't the regular icons
+    {
+      code: 'import { ArrowLeftIcon } from "./icons/arrow-left"; <ArrowLeftIcon />',
+      filename: "/app/src/features/a/b.tsx",
+    },
   ],
   invalid: [
     { code: `${SSR} <ArrowRightIcon />`, errors: [unmirrored("ArrowRightIcon")] },
@@ -58,6 +63,17 @@ tester.run("mirror-directional-icons", rule, {
     {
       code: 'import { SignInIcon, SignOut, PaperPlaneRightIcon } from "@phosphor-icons/react/ssr"; <><SignInIcon /><SignOut /><PaperPlaneRightIcon /></>',
       errors: [unmirrored("SignInIcon"), unmirrored("SignOut"), unmirrored("PaperPlaneRightIcon")],
+    },
+    // Phosphor's drawings at the regular weight, which code in the browser draws
+    // (src/components/ui/icons/), by their alias and from a module beside them
+    {
+      code: 'import { CaretRightIcon } from "@/components/ui/icons/caret-right"; <CaretRightIcon />',
+      errors: [unmirrored("CaretRightIcon")],
+    },
+    {
+      code: 'import { CaretLeftIcon } from "./icons/caret-left"; <CaretLeftIcon />',
+      filename: "/app/src/components/ui/pager.tsx",
+      errors: [unmirrored("CaretLeftIcon")],
     },
   ],
 });

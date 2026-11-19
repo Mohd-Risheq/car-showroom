@@ -1,29 +1,14 @@
 "use client";
 
-import { CheckIcon, WarningCircleIcon } from "@phosphor-icons/react/ssr";
-import { createContext, type ReactNode, use, useId } from "react";
+import { type ReactNode, useId } from "react";
 import { cn } from "@/lib/class-names";
+import { FieldContext, type FieldControl } from "./field-control";
+import { CheckIcon } from "./icons/check";
+import { WarningCircleIcon } from "./icons/warning-circle";
 
 // A form control with its label, hint and error (DESIGN §6.4 and §8.5). The control inside reads its
-// id and ARIA links from here (useFieldControl), so the label names it and a screen reader hears the
-// error, or that the value checks out, and then the hint when it takes focus.
-
-type FieldControl = {
-  id: string;
-  "aria-describedby"?: string;
-  "aria-invalid"?: true;
-  /** The field shows a check at the end of the control, which leaves it room */
-  valid: boolean;
-  /** The direction the field fixes, which the control takes as its own */
-  dir?: "ltr" | "rtl";
-};
-
-const FieldContext = createContext<FieldControl | null>(null);
-
-/** The id and ARIA links of the field around a control, or nothing outside a field */
-export function useFieldControl(): FieldControl | null {
-  return use(FieldContext);
-}
+// id and ARIA links from here (useFieldControl, field-control.ts), so the label names it and a screen
+// reader hears the error, or that the value checks out, and then the hint when it takes focus.
 
 type FieldProps = {
   /** The control's id, for a form that links to its fields; one is made up otherwise */

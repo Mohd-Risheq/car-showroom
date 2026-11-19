@@ -4,14 +4,20 @@
 // text in Readex Pro at that step's HEXP and weight: most lines break in the same places, so little
 // moves when the font swaps in. The vertical metrics are Readex Pro's, so the baseline stays put.
 // Each step's HEXP and weight are read from src/styles/tokens.css. The display step narrows its
-// HEXP on phones (D-038), so it has faces for each HEXP, switched under the same media conditions.
+// HEXP on phones (D-038), in a car's title (D-049) and for a long model name, so it has faces for
+// each HEXP, switched under the same media and container conditions.
+//
+// First it measures the catalog's model names (seed/reference.json) as the display step sets them,
+// each one's longest word and its widest line in two, at HEXP 0 and at each HEXP the step takes, into
+// src/styles/model-names.json, and writes from that list src/styles/model-names.css, where a long
+// name takes HEXP 0 and the longest a smaller size (scripts/checks/model-names.ts, D-049).
 //
 // The widths are measured in Chromium on real copy: the deck's EN and AR cells (DESIGN §9.2 to §9.4)
 // and the seed's descriptions and notes. The display step sets model names, so its faces are
-// measured on the seed's model names in both languages (05-SEED-DATA §5.3). The specimen's copy
-// (/dev/type) is held out, so the specimen stays an independent check. Writes
-// src/styles/font-fallbacks.css, the same on every run for the same tokens, fonts and copy. Run it
-// again whenever a step's HEXP, weight or media steps change: a unit test fails until then.
+// measured on the catalog's model names in both languages (seed/reference.json). The specimen's copy
+// (/dev/type) is held out, so the specimen stays an independent check. Writes the three files, the
+// same on every run for the same tokens, fonts, catalog and copy. Run it again whenever a step's
+// HEXP, weight or narrower steps change, or the catalog's models do: a unit test fails until then.
 //
 // Local fonts, by platform:
 // - Apple: Geeza Pro for Arabic, first in each stack, and Arial for Latin;
@@ -28,6 +34,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { chromium, type Page } from "@playwright/test";
 import { COPY, JOINED_AR } from "../src/app/[locale]/(public)/(dev)/dev/type/copy.ts";
+import { seedReferenceSchema } from "../src/lib/validation/seed.ts";
 import { readTypeScale } from "../src/styles/type-scale.ts";
 import { CHROMIUM_FLAGS } from "./checks/chromium.ts";
 import {
@@ -37,6 +44,7 @@ import {
   arabicScale,
   fallbackCss,
   fallbackStacks,
+  firstOfEachFamily,
   GEEZA,
   LIBERATION,
   localWeight,
@@ -47,11 +55,23 @@ import {
   type Scales,
   type Stack,
 } from "./checks/font-fallbacks.ts";
+import {
+  type CatalogModel,
+  type Language,
+  measuredHexps,
+  type ModelNames,
+  modelNamesCss,
+  modelNamesJson,
+  parseModelNames,
+} from "./checks/model-names.ts";
 
 const ORIGIN = process.argv[2] ?? "http://localhost:3000";
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "src/styles/font-fallbacks.css");
+const NAMES_LIST = path.join(ROOT, "src/styles/model-names.json");
+const NAMES_CSS = path.join(ROOT, "src/styles/model-names.css");
 const TOKENS = path.join(ROOT, "src/styles/tokens.css");
+const CATALOG = path.join(ROOT, "seed/reference.json");
 const DESIGN_SPEC = path.join(ROOT, "docs/03-DESIGN-SPEC.md");
 const SEED_DATA = path.join(ROOT, "docs/05-SEED-DATA.md");
 
@@ -77,9 +97,9 @@ const SPECIMEN = stringsIn([COPY, JOINED_AR])
   .filter((text) => text.length >= 4)
   .map(clean);
 
-// Far fewer than the copy gives today (1,334 cells, 54 descriptions and 102 notes, making 669
-// Latin, 636 Arabic and 368 figure strings; 27 models, making 26 Latin and 22 Arabic names), so
-// only a parse that broke trips them
+// Far fewer than the copy gave on 2026-11-11 (1,950 cells, 54 descriptions and 106 notes, making
+// 954 Latin, 894 Arabic and 373 figure strings; the catalog's 158 models, making 149 Latin and 114
+// Arabic names), so only a parse that broke trips them
 const MIN_COUNTS = {
   cells: 1000,
   descriptions: 40,
@@ -87,9 +107,9 @@ const MIN_COUNTS = {
   latin: 500,
   arabic: 500,
   figures: 250,
-  models: 20,
-  modelsLatin: 20,
-  modelsArabic: 15,
+  models: 120,
+  modelsLatin: 110,
+  modelsArabic: 85,
 };
 
 type Text = { latin: string[]; arabic: string[] };
@@ -133,12 +153,11 @@ function checkCounts(counts: Record<keyof typeof MIN_COUNTS, number>): void {
     );
 }
 
-function corpus(): Corpus {
+function corpus(catalog: CatalogModel[]): Corpus {
   const heldOut = (text: string) => SPECIMEN.some((held) => text.includes(held) || held.includes(text));
   const cells = rows(section(DESIGN_SPEC, "### 9.2 Copy deck", "### 9.5 Formats")).flat();
-  // The model names, English and Arabic, of the seed's makes and models: "Land Cruiser / لاندكروزر"
-  const models = rows(section(SEED_DATA, "### 5.3 Makes, models and aliases", "### 5.4"));
-  const names = [...new Set(models.flatMap(([name = ""]) => name.split(" / ")))].filter(
+  // The catalog's model names, English and Arabic
+  const names = [...new Set(catalog.flatMap(({ nameEn, nameAr }) => [nameEn, nameAr]))].filter(
     (text) => text.length > 1 && !heldOut(text),
   );
   const records = readFileSync(SEED_DATA, "utf8").split("\n#### S").slice(1);
@@ -175,7 +194,7 @@ function corpus(): Corpus {
     latin: text.copy.latin.length,
     arabic: text.copy.arabic.length,
     figures: text.figures.length,
-    models: models.length,
+    models: catalog.length,
     modelsLatin: text.models.latin.length,
     modelsArabic: text.models.arabic.length,
   });
@@ -203,7 +222,7 @@ type Face = { source: Source; scale: number; range?: string };
 type Android = { roboto: string; naskh: string };
 type TextStyle = { hexp?: number; weight?: number; lang?: string; stretch?: string; numeric?: string };
 
-// page.evaluate sends each of the next three functions to the page as source text, so each uses
+// page.evaluate sends each of the next four functions to the page as source text, so each uses
 // nothing but its arguments and the page's own globals.
 
 /** Loads Readex Pro for the strings and Martian Mono for the figures, and sets up the box text is measured in */
@@ -239,6 +258,40 @@ function widthInPage({ family, strings, style }: { family: string; strings: stri
     }),
   );
   return [...box.children].reduce((sum, span) => sum + span.getBoundingClientRect().width, 0);
+}
+
+/**
+ * Each name's longest word, and its widest line when set in two lines as narrowly as it can be, in
+ * ems of the display step at each HEXP, set as a car title's model name is but on one line
+ */
+function nameWidthsInPage({ names, lang, hexps }: { names: string[]; lang: string; hexps: number[] }) {
+  const box = document.getElementById("calibration");
+  if (!box) throw new Error("The page isn't set up for measuring");
+  const span = document.createElement("span");
+  span.className = "type-display";
+  span.lang = lang;
+  span.dir = lang === "ar" ? "rtl" : "ltr";
+  span.style.whiteSpace = "nowrap";
+  box.replaceChildren(span);
+  const range = document.createRange();
+  const width = (text: string) => {
+    span.textContent = text;
+    range.selectNodeContents(span);
+    return range.getBoundingClientRect().width / Number.parseFloat(getComputedStyle(span).fontSize);
+  };
+  return names.map((name) => {
+    const words = name.split(" ");
+    // Each place to break the name in two, as its two lines
+    const splits = words.slice(1).map((_, at) => [words.slice(0, at + 1).join(" "), words.slice(at + 1).join(" ")]);
+    const word: number[] = [];
+    const lines: number[] = [];
+    for (const hexp of hexps) {
+      span.style.fontVariationSettings = `"HEXP" ${hexp}`;
+      word.push(Math.max(...words.map(width)));
+      lines.push(Math.min(width(name), ...splits.map((parts) => Math.max(...parts.map(width)))));
+    }
+    return { word, lines };
+  });
 }
 
 /** Adds a family of faces at their scales; false when a face's font isn't here */
@@ -347,24 +400,72 @@ async function measureFigures({ width, family }: Calibration, martian: string, f
   throw new Error("No monospace font found for the figures");
 }
 
-// Every stack's and the figures' scales, measured in Chromium against the page's own web fonts
-async function measure(stacks: Stack[], text: Corpus, android: Android): Promise<Measured> {
+/** The catalog's model names in both languages, measured at each HEXP of the list */
+async function measureNames(page: Page, catalog: CatalogModel[], hexps: number[]): Promise<ModelNames> {
+  const widthsIn = (lang: Language) =>
+    page.evaluate(nameWidthsInPage, {
+      names: catalog.map(({ nameEn, nameAr }) => (lang === "en" ? nameEn : nameAr)),
+      lang,
+      hexps,
+    });
+  const english = await widthsIn("en");
+  const arabic = await widthsIn("ar");
+  const models = catalog.map(({ key, nameEn, nameAr }, index) => {
+    const en = english[index];
+    const ar = arabic[index];
+    if (en === undefined || ar === undefined) throw new Error(`${key}'s names weren't measured`);
+    return { key, en: { name: nameEn, ...en }, ar: { name: nameAr, ...ar } };
+  });
+  return { hexps, models };
+}
+
+/** Every stack's and the figures' scales, measured against the page's own web fonts */
+async function measureStacks(
+  calibrate: Calibration,
+  stacks: Stack[],
+  { fonts, text, android }: { fonts: { readex: string; martian: string }; text: Corpus; android: Android },
+): Promise<Measured> {
+  const measured: Measured["stacks"] = [];
+  // A family that switches in under more than one condition is measured once
+  const scalesByFamily = new Map<string, Scales[]>();
+  for (const stack of stacks) {
+    let scales = scalesByFamily.get(stack.family);
+    if (scales === undefined) {
+      scales = [];
+      for (const weight of stack.weights)
+        scales.push(
+          await measureStack(calibrate, { readex: fonts.readex, text: text[stack.corpus], android }, stack, weight),
+        );
+      scalesByFamily.set(stack.family, scales);
+    }
+    measured.push({ stack, scales });
+  }
+  return { stacks: measured, figures: await measureFigures(calibrate, fonts.martian, text.figures) };
+}
+
+// The catalog's names, and then every stack's and the figures' scales, measured in Chromium. A long
+// name's narrower letters are the display step's under conditions of their own, which add stacks, so
+// the names come first.
+async function measure(
+  tokens: string,
+  catalog: CatalogModel[],
+  { text, android }: { text: Corpus; android: Android },
+): Promise<{ list: ModelNames; namesCss: string; measured: Measured }> {
+  const scale = readTypeScale(tokens);
   const browser = await chromium.launch({ args: [...CHROMIUM_FLAGS] });
   try {
     const page = await browser.newPage();
     await page.goto(`${ORIGIN}/en`, { waitUntil: "load" });
-    const weights = [...new Set(stacks.flatMap((stack) => stack.weights))];
-    const strings = [text.copy, text.models].flatMap(({ latin, arabic }) => [...latin, ...arabic]);
-    const { readex, martian } = await page.evaluate(setUpPage, { strings, figures: text.figures, weights });
-    const calibrate = calibration(page);
-    const measured: Measured["stacks"] = [];
-    for (const stack of stacks) {
-      const scales: Scales[] = [];
-      for (const weight of stack.weights)
-        scales.push(await measureStack(calibrate, { readex, text: text[stack.corpus], android }, stack, weight));
-      measured.push({ stack, scales });
-    }
-    return { stacks: measured, figures: await measureFigures(calibrate, martian, text.figures) };
+    const weights = [...new Set(fallbackStacks(scale).flatMap((stack) => stack.weights))];
+    const copy = [...text.copy.latin, ...text.copy.arabic];
+    // Every name of the catalog's, those held out of the corpus too, as the list measures each
+    const names = catalog.flatMap(({ nameEn, nameAr }) => [nameEn, nameAr]);
+    const fonts = await page.evaluate(setUpPage, { strings: [...copy, ...names], figures: text.figures, weights });
+    // As the JSON keeps it, so the CSS is the one the committed list gives
+    const list = parseModelNames(modelNamesJson(await measureNames(page, catalog, measuredHexps(scale))));
+    const namesCss = modelNamesCss(list, scale);
+    const stacks = fallbackStacks(readTypeScale(`${tokens}\n${namesCss}`));
+    return { list, namesCss, measured: await measureStacks(calibration(page), stacks, { fonts, text, android }) };
   } finally {
     await browser.close();
   }
@@ -377,20 +478,26 @@ async function main(): Promise<void> {
     );
     process.exit(1);
   }
-  const stacks = fallbackStacks(readTypeScale(readFileSync(TOKENS, "utf8")));
-  const text = corpus();
+  const catalog = seedReferenceSchema.parse(JSON.parse(readFileSync(CATALOG, "utf8"))).models;
+  const text = corpus(catalog);
   const android = {
     roboto: await pinnedFont(ANDROID_FONTS.roboto),
     naskh: await pinnedFont(ANDROID_FONTS.naskh),
   };
-  const measured = await measure(stacks, text, android);
+  const { list, namesCss, measured } = await measure(readFileSync(TOKENS, "utf8"), catalog, { text, android });
+  writeFileSync(NAMES_LIST, modelNamesJson(list));
+  writeFileSync(NAMES_CSS, namesCss);
   const { css, faces } = fallbackCss(measured, Object.values(ANDROID_FONTS));
   writeFileSync(OUT, css);
-  for (const { stack, scales } of measured.stacks)
+  // Each family once, though it switches in under more than one condition
+  for (const { stack, scales } of firstOfEachFamily(measured.stacks))
     for (const { weight, latin, arabic } of scales)
       console.log(`${stack.family} at wght ${weight}`, JSON.stringify(latin), JSON.stringify(arabic));
   console.log("figures", JSON.stringify(measured.figures));
   const { copy, models } = text;
+  console.log(
+    `Wrote ${path.relative(ROOT, NAMES_LIST)} and ${path.relative(ROOT, NAMES_CSS)}, from the ${catalog.length} models of ${path.relative(ROOT, CATALOG)}`,
+  );
   console.log(
     `Wrote ${path.relative(ROOT, OUT)}: ${faces} faces, from ${copy.latin.length} Latin and ${copy.arabic.length} Arabic strings of copy, and ${models.latin.length} Latin and ${models.arabic.length} Arabic model names`,
   );

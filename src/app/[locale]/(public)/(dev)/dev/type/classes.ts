@@ -1,5 +1,5 @@
 // The specimen's styles, as Tailwind utilities on the tokens: CSS Modules aren't scoped under D-014's
-// loader rule. The five steps are DESIGN §3.3's type-* utilities, on §3.1's public colours; Arabic
+// loader rule. The six steps are DESIGN §3.3's type-* utilities, on §3.1's public colours; Arabic
 // tracking, italics and case come from globals.css.
 
 export const C = {
@@ -21,6 +21,7 @@ export const C = {
 
   display: "type-display",
   head: "type-head",
+  subhead: "type-subhead",
   lead: "type-lead text-muted",
   body: "type-body max-w-measure",
   small: "type-small max-w-measure text-meta",

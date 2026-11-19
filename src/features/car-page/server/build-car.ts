@@ -179,7 +179,8 @@ export type CarPageRows = {
 /** The result, and the tags whose update refreshes it */
 export type ResolvedCarPage = { readonly result: CarPageResult; readonly tags: readonly string[] };
 
-const NOT_FOUND = { kind: "notFound", gone: null } as const;
+/** What a slug no public car has shows */
+export const NOT_FOUND = { kind: "notFound", gone: null } as const;
 
 /** The car's tag, which every change to the car updates, and the dealer's */
 const carTags = (dealerId: string, carId: string) => [carTag(carId), dealerTag(dealerId)];
@@ -232,6 +233,7 @@ function carOf(
     status: car.status,
     condition: car.condition,
     makeName: names.make,
+    modelKey: car.modelKey,
     modelName: names.model,
     trim: car.trim,
     modelYear: car.modelYear,

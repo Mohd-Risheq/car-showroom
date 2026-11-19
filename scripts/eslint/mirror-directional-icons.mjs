@@ -1,8 +1,10 @@
+import path from "node:path";
 import { textsOf } from "./ast.mjs";
 
 // Flags an arrow or a caret that points along the line, left or right, drawn without the class that
-// mirrors it in Arabic (FR-01.7, DESIGN §3.6). It reads the icons a file imports from Phosphor,
-// under any local name or through a namespace, and checks each element JSX draws of one for
+// mirrors it in Arabic (FR-01.7, DESIGN §3.6). It reads the icons a file imports from Phosphor, or
+// from src/components/ui/icons/, which code in the browser draws them from (D-049), under any local
+// name or through a namespace, and checks each element JSX draws of one for
 // rtl:-scale-x-100 among the strings of its className, as written or inside cn(). Media and brand
 // glyphs, and arrows that point up, down or both ways, don't mirror and pass. A glyph whose
 // direction is physical, such as the 360° spin's drag (BR-17), says so in a disable comment.
@@ -14,6 +16,17 @@ import { textsOf } from "./ast.mjs";
 
 /** Any of Phosphor's entries, though only /ssr may be imported (eslint.config.mjs) */
 const PHOSPHOR = /^@phosphor-icons\/react(?:\/|$)/;
+/** Phosphor's drawings at the regular weight, one module each, by the alias the rest of src takes */
+const REGULAR_ICONS = "@/components/ui/icons/";
+const REGULAR_ICONS_FOLDER = path.join("src", "components", "ui", "icons");
+
+/** Whether a file's import is of icons: Phosphor's, or a regular one, by alias or from beside it */
+function importsIcons(source, filename) {
+  if (PHOSPHOR.test(source) || source.startsWith(REGULAR_ICONS)) return true;
+  return (
+    source.startsWith(".") && path.dirname(path.resolve(path.dirname(filename), source)).endsWith(REGULAR_ICONS_FOLDER)
+  );
+}
 /**
  * An arrow or a caret to the left or right, with or without Phosphor's Icon suffix, but not
  * ArrowsLeftRight; and the glyphs whose arrow points along the line: sign in, sign out and send
@@ -69,7 +82,7 @@ const rule = {
 
     return {
       ImportDeclaration(node) {
-        if (!PHOSPHOR.test(node.source.value)) return;
+        if (!importsIcons(node.source.value, context.filename)) return;
         for (const specifier of node.specifiers) {
           if (specifier.type === "ImportNamespaceSpecifier") namespaces.add(specifier.local.name);
           if (specifier.type !== "ImportSpecifier") continue;

@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { type CreditsData, creditsTables, readCredits } from "@/features/credits/domain/credits";
 import { CreditsTables } from "@/features/credits/ui/credits-tables";
-import { isolate } from "@/lib/i18n/bidi";
+import { isolate, isolateScripts } from "@/lib/i18n/bidi";
 import { INTL_LOCALE } from "@/lib/i18n/intl-locale";
 import type { AppLocale } from "@/lib/i18n/locales";
 import ar from "../../../messages/ar.json";
@@ -118,7 +118,7 @@ describe("the Credits page's tables", () => {
 
   it("credit a photo's author, licence and original, each linked, and list its changes one to a line", () => {
     const [car, site, author, licence, original, changes] = section(EN, "Car photos").rows[0] ?? [];
-    expect(car).toBe(`2019 Toyota Land Cruiser ${isolate("GXR")}`);
+    expect(car).toBe(`2019 Toyota Land Cruiser ${isolateScripts("GXR")}`);
     expect(site).toBe("Wikimedia Commons");
     expect(author).toMatch(
       /^<a href="https:\/\/commons\.wikimedia\.org\/wiki\/User:Example_Photographer" class="[^"]*underline[^"]*"><bdi>Example Photographer<\/bdi><\/a>$/,
@@ -138,7 +138,7 @@ describe("the Credits page's tables", () => {
   it("say a library clip is another car's of the same engine, and give a clip of the car its date", () => {
     const [car, recording, site] = section(EN, "Engine sounds").rows[0] ?? [];
     expect([car, textOf(recording ?? ""), site]).toStrictEqual([
-      `2019 Toyota Land Cruiser ${isolate("GXR")}`,
+      `2019 Toyota Land Cruiser ${isolateScripts("GXR")}`,
       "Recording of the same engine type, not this car",
       "Freesound",
     ]);
@@ -247,7 +247,7 @@ describe("the Credits page's tables", () => {
       "الرابط",
       "التعديلات",
     ]);
-    expect(section(AR, "صور السيارات").rows[0]?.[0]).toBe(`2019 تويوتا لاند كروزر ${isolate("GXR")}`);
+    expect(section(AR, "صور السيارات").rows[0]?.[0]).toBe(`2019 تويوتا لاند كروزر ${isolateScripts("GXR")}`);
     expect(textOf(section(AR, "البرمجيات").rows[3]?.[0] ?? "")).toBe(`aria-hidden 1.2.6 جزء من ${isolate("radix-ui")}`);
     // A name that starts with a neutral sign keeps it at its start inside Arabic text (FR-01.8)
     expect(section(AR, "البرمجيات").rows[2]?.[0]).toMatch(/^<bdi>@radix-ui\/\*<\/bdi> /);

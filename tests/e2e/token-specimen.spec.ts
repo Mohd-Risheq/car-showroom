@@ -4,6 +4,7 @@ import { SPECIMEN_COPY } from "../../src/app/_dev/specimen/copy.ts";
 import { CSS_MOTION_VARIABLES, DURATIONS, PRESS_SCALE, SPRINGS } from "../../src/lib/motion-tokens.ts";
 import { tokenBlocks } from "../../src/styles/token-blocks.ts";
 import { seriousA11yIssues } from "../support/axe.ts";
+import { tabKey } from "../support/e2e-page.ts";
 import { watchProblems } from "../support/page-problems.ts";
 import { computed, emulateContrast, openSpecimen, outlineOf } from "../support/specimen.ts";
 
@@ -261,7 +262,7 @@ test("the specimen's readouts follow a contrast preference changed after load", 
 
 test("the front toast shows the list's focus ring, then its own when Tab reaches it", async ({ page, browserName }) => {
   // Safari moves to list items and buttons with Option-Tab, as Full Keyboard Access does with Tab
-  const tab = browserName === "webkit" ? "Alt+Tab" : "Tab";
+  const tab = tabKey(browserName);
   await openSpecimen(page);
   // A keyboard user shows the toast with Enter. Where a script moves focus, as Sonner's hotkey does,
   // browsers draw the ring only if the focus it left had one, and Alt+T alone doesn't count as
@@ -286,7 +287,7 @@ test("the front toast shows the list's focus ring, then its own when Tab reaches
 });
 
 test("a disabled button stays in the tab order and says it is disabled", async ({ page, browserName }) => {
-  const tab = browserName === "webkit" ? "Alt+Tab" : "Tab";
+  const tab = tabKey(browserName);
   await openSpecimen(page);
   // The icon-only Share button comes just before it
   await page.getByRole("button", { name: "Share", exact: true }).last().focus();
@@ -354,7 +355,7 @@ test("a press with the space bar scales a button, apart from in the workspace", 
     browserName === "firefox",
     "Firefox as Playwright drives it doesn't make a button held with the space bar :active",
   );
-  const tab = browserName === "webkit" ? "Alt+Tab" : "Tab";
+  const tab = tabKey(browserName);
   // DESIGN §4.1: no motion on keyboard-triggered actions in the workspace; §6.4's press scale elsewhere
   for (const [path, keyboardScale] of [
     ["/en/dealer/dev/tokens", 1],

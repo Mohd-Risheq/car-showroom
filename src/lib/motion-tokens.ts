@@ -39,6 +39,12 @@ export const STAGGERS = {
 export const PRESS_SCALE = 0.97;
 
 /**
+ * The scale an entrance that grows starts at, as the fullscreen viewer's photos do, the top of
+ * DESIGN §4.2's 0.95 to 0.97: --entry-scale
+ */
+export const ENTRY_SCALE = 0.97;
+
+/**
  * DESIGN §4.2's signature tokens, each used only by the DESIGN §5 moment it names. Each is the CSS
  * variable --dur-<name> (scanAuto is --dur-scan-auto).
  */
@@ -102,6 +108,7 @@ export const CSS_MOTION_VARIABLES: ReadonlyArray<readonly [variable: string, val
   ["--stagger-tight", `${STAGGERS.tight}ms`],
   ["--delay-shift-in", `${SHIFT_IN_DELAY}ms`],
   ["--press-scale", String(PRESS_SCALE)],
+  ["--entry-scale", String(ENTRY_SCALE)],
   ["--pulse-cycles", String(PULSE_CYCLES)],
   ...Object.entries(CURVES).map(([name, curve]) => [`--ease-${kebab(name)}`, cssEasing(curve)] as const),
 ];

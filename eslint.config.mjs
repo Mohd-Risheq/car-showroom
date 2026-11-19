@@ -22,7 +22,7 @@ const muftah = {
 };
 
 const PHOSPHOR_MESSAGE =
-  "Import icons from @phosphor-icons/react/ssr, which renders in Server and Client Components alike.";
+  "Import an icon from @/components/ui/icons/ in code that runs in the browser, which holds the regular weight alone, or from @phosphor-icons/react/ssr in a server component (D-049).";
 // Imports no file in src makes. A config that sets no-restricted-imports replaces an earlier one's
 // options, so every config that sets the rule lists these.
 const RESTRICTED_IMPORTS = [
@@ -34,8 +34,10 @@ const RESTRICTED_IMPORTS = [
   { name: "framer-motion", message: "Motion is imported as motion/react (SRS §11.2)." },
   { name: "@phosphor-icons/react", message: PHOSPHOR_MESSAGE },
 ];
-// Phosphor's other entries, such as /dist/ssr or one icon's module, so every icon comes from /ssr.
-// muftah/mirror-directional-icons reads them all, so this ban isn't what keeps an arrow mirrored.
+// Phosphor's other entries, such as /dist/ssr or one icon's module, so an icon comes from /ssr or
+// from src/components/ui/icons/, built on /ssr's SSRBase, which tests/unit/ui/icons.test.tsx holds
+// the browser's code to. muftah/mirror-directional-icons reads them all, so this ban isn't what
+// keeps an arrow mirrored.
 const PHOSPHOR_ENTRIES = { regex: "^@phosphor-icons/react/(?!ssr$)", message: PHOSPHOR_MESSAGE };
 
 // Unless told not to, Zod checks whether it may compile a parser with new Function, which a Content

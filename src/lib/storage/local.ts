@@ -3,6 +3,7 @@ import { createHash, randomInt } from "node:crypto";
 import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { readCapped } from "@/lib/http/body";
+import { siteOrigin } from "@/lib/site-url";
 import type { StorageDriver } from "./driver";
 import { extensionOf, MEDIA_TYPES, RANDOM_SUFFIX_LENGTH, splitExtension } from "./rules";
 import { verifyLocalClientToken } from "./token";
@@ -15,12 +16,6 @@ const FILES_PATH = "/api/storage-local/files/";
 const LOCAL_TOKEN_PREFIX = "vercel_blob_rw_local_";
 const SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]{0,199}$/;
 const SUFFIX_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-function siteOrigin(): string {
-  const site = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!site) throw new Error("NEXT_PUBLIC_SITE_URL is not set (SRS §15.1)");
-  return new URL(site).origin;
-}
 
 // STORAGE_LOCAL_ROOT moves the store, so the integration tests keep theirs in a temporary folder. An
 // empty value counts as unset: path.resolve("") is the working folder, which would put the project's

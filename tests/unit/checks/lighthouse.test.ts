@@ -1,8 +1,52 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
+import { ROOT } from "../../../scripts/checks/files.ts";
 import { lastLines, lighthousePlan, lighthouseResults } from "../../../scripts/checks/lighthouse.ts";
+import { seedRows } from "../../../scripts/checks/seed-rows.ts";
+import { seedFilesIn } from "../../support/seed-loading.ts";
 
-// The pages pnpm lhci measures (NFR-PERF-02): the listed paths on the build's origin, with the pages
-// not built yet named as pending, never measured
+// The phone NFR-PERF-02 is measured on: SRS §10's lab phone, a 4× CPU slowdown on Chrome's "Fast
+// 4G", 60 ms and 9 Mbps (9,216 Kbps, as Lighthouse counts 1,024 to a Mbps). The owner chose it over
+// Lighthouse's own phone network, 150 ms and 1.6 Mbps (D-049). And the car page measured at the
+// seed car the config names, whose slug moves with the seed: a slug left behind would answer 404,
+// and Lighthouse CI would stop on it in a job far from the seed change.
+
+/** What these tests read of lighthouserc.json: its pages, and Lighthouse CI's collect settings */
+const rcSchema = z.object({
+  pages: z.array(z.object({ name: z.string(), paths: z.array(z.string()) })),
+  ci: z.object({ collect: z.object({ settings: z.unknown() }) }),
+});
+
+/** The seed car whose page lighthouserc.json measures */
+const MEASURED_CAR = "s01";
+
+// SRS §16.1's test clock: a slug doesn't change with the day the seed is read on
+const NOW = new Date("2026-10-18T12:00:00+03:00");
+
+describe("lighthouserc.json", () => {
+  const raw: unknown = JSON.parse(readFileSync("lighthouserc.json", "utf8"));
+  const rc = rcSchema.parse(raw);
+
+  it("measures phones as SRS §10's lab phone: Fast 4G with a 4× CPU slowdown", () => {
+    expect(rc.ci.collect.settings).toStrictEqual({
+      throttling: { rttMs: 60, throughputKbps: 9 * 1024, cpuSlowdownMultiplier: 4 },
+    });
+  });
+
+  it("measures the car page at the seed car's slug as the committed seed gives it, in both languages", () => {
+    const measured = seedRows(seedFilesIn(ROOT, NOW), NOW).cars.find(({ car }) => car.seedKey === MEASURED_CAR);
+    if (measured === undefined) throw new Error(`The seed has no ${MEASURED_CAR}`);
+    const { slug } = measured.car;
+    expect(rc.pages.find(({ name }) => name === "Car page")?.paths).toStrictEqual([
+      `/ar/cars/${slug}`,
+      `/en/cars/${slug}`,
+    ]);
+  });
+});
+
+// The pages pnpm lhci measures (NFR-PERF-02): the listed paths on the build's origin, with the
+// pages not built yet named as pending, never measured
 
 const ORIGIN = "http://localhost:3000";
 
@@ -45,8 +89,8 @@ describe("lighthousePlan", () => {
   });
 });
 
-// What pnpm lhci prints after the runs, and on GitHub Actions shows as annotations: each page's runs
-// as Lighthouse CI's filesystem upload left them, or why there are none
+// What pnpm lhci prints after the runs, and on GitHub Actions shows as annotations: each page's
+// runs as Lighthouse CI's filesystem upload left them, or why there are none
 
 const MANIFEST = ".lighthouseci/reports/manifest.json";
 
@@ -160,7 +204,8 @@ describe("lighthouseResults", () => {
 });
 
 describe("lastLines", () => {
-  // As LHCI prints an assertion that failed: coloured, with blank lines and a Windows line end among them
+  // As LHCI prints an assertion that failed: coloured, with blank lines and a Windows line end
+  // among them
   const ESC = String.fromCharCode(27);
   const output = [
     "Checking assertions against 2 URL(s), 6 total run(s)",

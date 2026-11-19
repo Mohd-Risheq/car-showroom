@@ -12,22 +12,45 @@ type QuantityProps = {
   unit: Unit;
   /** The page's locale and unit names, from getUnitNames */
   names: UnitNames;
+  /** The number alone in figures (DESIGN §3.3), as Martian Mono has no Arabic letters for a unit */
+  figures?: boolean;
   className?: string;
+  /** The number's own classes, as a sold price's strike (DESIGN §6.3) */
+  amountClassName?: string;
+  /** The unit's own classes, as a price's muted unit (DESIGN §7.2.3) */
+  unitClassName?: string;
 };
 
-export function Quantity({ value, unit, names, className }: QuantityProps) {
+export function Quantity({
+  value,
+  unit,
+  names,
+  figures = false,
+  className,
+  amountClassName,
+  unitClassName,
+}: QuantityProps) {
   return (
     <span className={cn("whitespace-nowrap", className)}>
-      <bdi dir="ltr">{formatAmount(value, unit, names.locale)}</bdi>
+      <bdi dir="ltr" className={cn(figures && "figures", amountClassName) || undefined}>
+        {formatAmount(value, unit, names.locale)}
+      </bdi>
       {NO_BREAK_SPACE}
       {isSpoken(unit) ? (
         <>
-          <span aria-hidden="true">{names.unit[unit]}</span>
+          <span aria-hidden="true" className={unitClassName}>
+            {names.unit[unit]}
+          </span>
           <span className="sr-only">{names.spoken[unit]}</span>
         </>
       ) : (
-        names.unit[unit]
+        <UnitName className={unitClassName}>{names.unit[unit]}</UnitName>
       )}
     </span>
   );
+}
+
+/** A unit's name as text, or in a span where it has classes of its own */
+function UnitName({ className, children }: { className: string | undefined; children: string }) {
+  return className === undefined ? children : <span className={className}>{children}</span>;
 }

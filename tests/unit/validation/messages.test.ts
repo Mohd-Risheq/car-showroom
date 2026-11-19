@@ -7,11 +7,11 @@ import { ANY_FIELD_MESSAGES, RULE_MESSAGES } from "@/lib/validation/messages";
 import ar from "../../../messages/ar.json";
 import en from "../../../messages/en.json";
 import { type Locale, readCatalog } from "../../../scripts/checks/i18n.ts";
+import { NO_BREAK_SPACE } from "../../support/marks";
 
 // The message keys of each validation rule (SRS §7.1), against the catalogs and the specification
 
 const SRS = new URL("../../../docs/02-SRS.md", import.meta.url);
-const NBSP = String.fromCodePoint(0xa0);
 
 /** A catalog's keys */
 function keys(locale: Locale): Set<string> {
@@ -35,8 +35,8 @@ describe("the validation messages", () => {
     const t = (locale: Locale) => createTranslator({ locale: INTL_LOCALE[locale], messages: { en, ar }[locale] });
     expect(t("en")("validation.range", { min: 1000, max: 10000 })).toBe("Enter a value between 1,000 and 10,000");
     expect(t("ar")("validation.range", { min: 1000, max: 10000 })).toBe("يُرجى إدخال قيمة بين 1,000 و10,000");
-    expect(t("en")("validation.fileSize", { max: 1000 })).toBe(`This file is larger than 1,000${NBSP}MB`);
-    expect(t("ar")("validation.fileSize", { max: 1000 })).toBe(`حجم هذا الملف أكبر من 1,000${NBSP}ميغابايت`);
+    expect(t("en")("validation.fileSize", { max: 1000 })).toBe(`This file is larger than 1,000${NO_BREAK_SPACE}MB`);
+    expect(t("ar")("validation.fileSize", { max: 1000 })).toBe(`حجم هذا الملف أكبر من 1,000${NO_BREAK_SPACE}ميغابايت`);
   });
 
   it("use every message of the catalogs' validation group", () => {

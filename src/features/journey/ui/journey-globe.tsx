@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { NEAR_SCREEN_MARGIN } from "@/lib/near-screen";
 import type { LatLng } from "../domain/geo";
 import type { GlobeHandle, JourneyGlobeOptions } from "./globe";
 
@@ -92,7 +93,7 @@ export function JourneyGlobe({ places, active, children, onFrame, onSettle, onSh
         near = entries.some((entry) => entry.isIntersecting);
         mount();
       },
-      { rootMargin: "100% 0px" },
+      { rootMargin: NEAR_SCREEN_MARGIN },
     );
     observer.observe(element);
     const onMotion = () => (motion.matches ? unmount() : mount());

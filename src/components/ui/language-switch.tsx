@@ -12,10 +12,12 @@ import { type AppLocale, directionOf } from "@/lib/i18n/locales";
 // "العربية" (DESIGN §7.1.1), and the link says so.
 //
 // What a prerendered page knows when it is built decides what its HTML links to. A page under a
-// param that generateStaticParams doesn't list, such as a car's slug, doesn't know its path, so it
-// links to the other language's home. Any other page knows its path but not its query. The link
-// gains what was missing once the page runs in the browser. Each boundary's fallback reads no more
-// of the URL than its page knows, or the page couldn't be prerendered.
+// param that generateStaticParams doesn't list gets a shell from the build that doesn't know its
+// path, so it links to the other language's home. A car's page isn't one: the build lists every
+// public car's slug, and a car published later waits for its whole page on its first request
+// (ensureStatic). Any other page knows its path but not its query. The link gains what was missing
+// once the page runs in the browser. Each boundary's fallback reads no more of the URL than its
+// page knows, or the page couldn't be prerendered.
 
 type LanguageSwitchProps = {
   /** The language the link opens */

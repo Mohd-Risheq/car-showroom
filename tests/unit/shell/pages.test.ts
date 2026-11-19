@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pagePath } from "@/features/shell/domain/pages";
+import { carPath, pagePath } from "@/features/shell/domain/pages";
 
 // SRS §9.2's public pages, each under its locale, which the header and footer link to from T-19 on
 
@@ -22,5 +22,12 @@ describe("pagePath", () => {
       "/en/demo",
     ]);
     expect(pagePath("ar", "howBuilt")).toBe("/ar/how-its-built");
+  });
+});
+
+describe("carPath", () => {
+  it("puts a car's page under its locale's cars, at its slug", () => {
+    expect(carPath("en", "2019-toyota-land-cruiser-gxr-mu-3hk8")).toBe("/en/cars/2019-toyota-land-cruiser-gxr-mu-3hk8");
+    expect(carPath("ar", "mu-3hk8")).toBe("/ar/cars/mu-3hk8");
   });
 });

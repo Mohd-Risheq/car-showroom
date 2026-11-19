@@ -6,7 +6,7 @@ import { getAppLocale } from "@/lib/i18n/server";
 
 // SCR-14's Credits page (DESIGN §7.2.9): where the site's photos, sounds, data, fonts and software
 // come from, with their authors and licences, in tables built when the app is built, under the
-// footer's name for the page.
+// footer's name for the page. Each table stands at its own width, wider than the measure (D-049).
 
 export async function generateMetadata(): Promise<Metadata> {
   const footer = await getTranslations("footer");
@@ -19,7 +19,7 @@ export default async function CreditsPage() {
   const t = await getTranslations();
   return (
     <div className="mx-auto max-w-content px-band py-12 md:py-20">
-      <article className="max-w-measure">
+      <article>
         <h1 className="type-head">{t("footer.credits")}</h1>
         <CreditsTables tables={creditsTablesIn(locale)} t={t} />
       </article>

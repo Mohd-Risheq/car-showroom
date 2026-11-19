@@ -1,4 +1,5 @@
-import type { StepTokens, TypeStep } from "../../src/styles/type-scale.ts";
+import type { Narrower, StepTokens, TypeStep } from "../../src/styles/type-scale.ts";
+import { cssComment, inWords } from "./text.ts";
 
 // The reasoning half of pnpm fonts:fallbacks (scripts/font-fallbacks.ts), kept apart from the
 // browser and the file system so tests can feed it: the font stacks the type scale in tokens.css
@@ -61,8 +62,8 @@ export type Stack = {
   hexp: number;
   /** One weight that stands for all of them, or a regular weight and a bold one */
   weights: number[];
-  /** The media condition under which it replaces the variable's first stack; null for the first */
-  media: string | null;
+  /** Where it replaces the variable's first stack: an at-rule and a selector; null for the first */
+  under: Omit<Narrower, "hexp"> | null;
   corpus: CorpusName;
 };
 
@@ -80,6 +81,7 @@ const STACKS: ReadonlyArray<{
   { variable: "--font-sans", name: "Body", steps: ["body", "small"], bold: true, corpus: "copy" },
   { variable: "--font-lead", name: "Lead", steps: ["lead"], bold: false, corpus: "copy" },
   { variable: "--font-head", name: "Head", steps: ["head"], bold: false, corpus: "copy" },
+  { variable: "--font-subhead", name: "Subhead", steps: ["subhead"], bold: false, corpus: "copy" },
   { variable: "--font-display", name: "Display", steps: ["display"], bold: false, corpus: "models" },
 ];
 
@@ -88,12 +90,12 @@ const BOLD = 600;
 
 /** A step's HEXP at every width, as tokens.css sets it */
 const hexpByWidth = ({ hexp, narrower }: StepTokens) =>
-  [`HEXP ${hexp}`, ...narrower.map((step) => `${step.hexp} under ${step.media}`)].join(", ");
+  [`HEXP ${hexp}`, ...narrower.map((step) => `${step.hexp} under ${step.at}`)].join(", ");
 
 /**
  * The stacks the type scale needs, each at the HEXP and weights tokens.css gives its steps. A step
- * whose HEXP narrows under a media condition gets a stack for each HEXP, and names each stack's
- * families by its HEXP.
+ * whose HEXP narrows under a condition gets a stack for each condition, and names each stack's
+ * families by its HEXP, so the stacks of one HEXP share their families.
  */
 export function fallbackStacks(scale: StepTokens[]): Stack[] {
   return STACKS.flatMap(({ variable, name, steps, bold, corpus }) => {
@@ -115,34 +117,30 @@ export function fallbackStacks(scale: StepTokens[]): Stack[] {
       weights.filter((weight) => weight >= BOLD_FROM).length > 1
     )
       throw new Error(`${variable} would need two faces for one weight band: wght ${weights.join(", ")}`);
-    const variants: Array<{ hexp: number; media: string | null }> = [
-      { hexp: first.hexp, media: null },
-      ...first.narrower,
+    const variants: Array<Pick<Stack, "hexp" | "under">> = [
+      { hexp: first.hexp, under: null },
+      ...first.narrower.map(({ at, selector, hexp }) => ({ hexp, under: { at, selector } })),
     ];
-    return variants.map(({ hexp, media }) => ({
+    return variants.map(({ hexp, under }) => ({
       variable,
       steps,
       family: first.narrower.length > 0 ? `Readex Pro ${name} ${hexp}` : `Readex Pro ${name}`,
       hexp,
       weights,
-      media,
+      under,
       corpus,
     }));
   });
 }
 
-/** Words in a list, as "body and small" or "400 and 600" */
-const inWords = (items: Array<string | number>) =>
-  items.length > 1 ? `${items.slice(0, -1).join(", ")} and ${String(items.at(-1))}` : items.join("");
-
 /**
- * What a stack's faces were measured at, as the CSS notes it above them. The notes are how
- * tests/unit/checks/font-fallbacks.test.ts tells that the CSS was generated for tokens.css as it is.
+ * What a stack's faces were measured at, as the CSS notes it above them: the same for every stack of
+ * one family, wherever it switches in. The notes are how tests/unit/checks/font-fallbacks.test.ts
+ * tells that the CSS was generated for tokens.css as it is.
  */
-export function stackNote({ variable, steps, hexp, weights, media, corpus }: Stack): string {
-  const under = media === null ? "" : ` under ${media}`;
+export function stackNote({ variable, steps, hexp, weights, corpus }: Stack): string {
   const text = corpus === "models" ? "model names" : "the copy";
-  return `${inWords(steps)} (${variable})${under}: HEXP ${hexp}, wght ${inWords(weights)}, measured on ${text}`;
+  return `${inWords(steps)} (${variable}): HEXP ${hexp}, wght ${inWords(weights)}, measured on ${text}`;
 }
 
 /** A stack's value: Readex Pro, then its families for Apple, for Windows and for Android */
@@ -272,25 +270,39 @@ export function cssHeader(fonts: PinnedFont[]): string {
     "then Roboto and Noto Naskh Arabic for Android, measured on these files from Google Fonts:",
     ...fonts.flatMap(({ family, subset, url, sha256 }) => [`- ${family} (${subset}), SHA-256 ${sha256}:`, `  ${url}`]),
   ];
-  return `/* ${lines.join("\n   ")} */`;
+  return cssComment(lines);
+}
+
+/** Each family's first stack: a family that switches in under two conditions has its faces once */
+export function firstOfEachFamily(stacks: Measured["stacks"]): Measured["stacks"] {
+  const named = new Set<string>();
+  return stacks.filter(({ stack }) => {
+    if (named.has(stack.family)) return false;
+    named.add(stack.family);
+    return true;
+  });
 }
 
 /** The generated CSS, and how many faces it declares */
 export function fallbackCss(measured: Measured, fonts: PinnedFont[]): { css: string; faces: number } {
-  const sections = measured.stacks.map(({ stack, scales }) => ({
+  const sections = firstOfEachFamily(measured.stacks).map(({ stack, scales }) => ({
     note: stackNote(stack),
     faces: scales.flatMap((scale) => facesAt(stack, scale)),
   }));
   const first = measured.stacks
-    .filter(({ stack }) => stack.media === null)
+    .filter(({ stack }) => stack.under === null)
     .map(({ stack }) => `  ${stack.variable}: ${stackValue(stack)};`);
   const narrower = measured.stacks.flatMap(({ stack }) =>
-    stack.media === null
+    stack.under === null
       ? []
       : [
-          [`@media ${stack.media} {`, "  :root {", `    ${stack.variable}: ${stackValue(stack)};`, "  }", "}"].join(
-            "\n",
-          ),
+          [
+            `${stack.under.at} {`,
+            `  ${stack.under.selector} {`,
+            `    ${stack.variable}: ${stackValue(stack)};`,
+            "  }",
+            "}",
+          ].join("\n"),
         ],
   );
   const css = [
@@ -310,9 +322,11 @@ export function fallbackCss(measured: Measured, fonts: PinnedFont[]): { css: str
       ? []
       : [
           "",
-          "/* A step whose HEXP narrows on phones (tokens.css, D-038) takes the stack of each narrower HEXP",
-          "   under the same media condition. The type-* utilities read the stack through var(), so they",
-          "   switch with it; a font-* class doesn't, as @theme inline writes the first stack into it. */",
+          "/* A step whose HEXP narrows (tokens.css) takes the stack of each narrower HEXP under the same",
+          "   condition: on phones by the screen's width (D-038), a car title's model name by its own",
+          "   column's, and a long one by its model too (model-names.css, D-049). The type-* utilities read",
+          "   the stack through var(), so they switch with it; a font-* class doesn't, as @theme inline",
+          "   writes the first stack into it. */",
           narrower.join("\n\n"),
         ]),
     "",

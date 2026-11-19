@@ -4,13 +4,10 @@ import { LOCALES } from "@/lib/i18n/locales";
 import { deckRows } from "../../../scripts/checks/deck.ts";
 import type { Locale } from "../../../scripts/checks/i18n.ts";
 import { buildCatalogs, catalogJson, enumLabels, messageText, nest } from "../../../scripts/checks/messages.ts";
+import { LEFT_TO_RIGHT_ISOLATE, NO_BREAK_SPACE, POP_DIRECTIONAL_ISOLATE } from "../../support/marks";
 
 // How pnpm i18n:messages turns the copy deck (DESIGN §9.2 and §9.3) and the enum labels of SRS §6.3
 // into the catalogs, and that the committed catalogs are its output
-
-const NBSP = String.fromCodePoint(0xa0);
-const LRI = String.fromCodePoint(0x2066);
-const PDI = String.fromCodePoint(0x2069);
 
 const DESIGN_SPEC = new URL("../../../docs/03-DESIGN-SPEC.md", import.meta.url);
 const SRS = new URL("../../../docs/02-SRS.md", import.meta.url);
@@ -29,22 +26,22 @@ describe("messageText", () => {
 
   it("joins a number, a placeholder or a plural's # to the unit after it with a no-break space", () => {
     expect(messageText("Typical is 12,000 to 25,000 km a year", "en")).toBe(
-      `Typical is 12,000 to 25,000${NBSP}km a year`,
+      `Typical is 12,000 to 25,000${NO_BREAK_SPACE}km a year`,
     );
-    expect(messageText("larger than {max} MB", "en")).toBe(`larger than {max}${NBSP}MB`);
+    expect(messageText("larger than {max} MB", "en")).toBe(`larger than {max}${NO_BREAK_SPACE}MB`);
     expect(messageText("{n, plural, one {# day} other {# days}}", "en")).toBe(
-      `{n, plural, one {#${NBSP}day} other {#${NBSP}days}}`,
+      `{n, plural, one {#${NO_BREAK_SPACE}day} other {#${NO_BREAK_SPACE}days}}`,
     );
-    expect(messageText("بين 0 و2,000 ميكرون", "ar")).toBe(`بين 0 و2,000${NBSP}ميكرون`);
+    expect(messageText("بين 0 و2,000 ميكرون", "ar")).toBe(`بين 0 و2,000${NO_BREAK_SPACE}ميكرون`);
     expect(messageText("{a, plural, few {# دنانير} other {# دينار}}", "ar")).toBe(
-      `{a, plural, few {#${NBSP}دنانير} other {#${NBSP}دينار}}`,
+      `{a, plural, few {#${NO_BREAK_SPACE}دنانير} other {#${NO_BREAK_SPACE}دينار}}`,
     );
-    expect(messageText("14,500 د.أ", "ar")).toBe(`14,500${NBSP}د.أ`);
-    expect(messageText("×1000 rpm", "en")).toBe(`×1000${NBSP}rpm`);
-    expect(messageText("×1000 دورة/دقيقة", "ar")).toBe(`×1000${NBSP}دورة/دقيقة`);
+    expect(messageText("14,500 د.أ", "ar")).toBe(`14,500${NO_BREAK_SPACE}د.أ`);
+    expect(messageText("×1000 rpm", "en")).toBe(`×1000${NO_BREAK_SPACE}rpm`);
+    expect(messageText("×1000 دورة/دقيقة", "ar")).toBe(`×1000${NO_BREAK_SPACE}دورة/دقيقة`);
     // Every form a plural gives the unit
     expect(messageText("{n, plural, few {# درجات} many {# مترًا} other {# درجة}}", "ar")).toBe(
-      `{n, plural, few {#${NBSP}درجات} many {#${NBSP}مترًا} other {#${NBSP}درجة}}`,
+      `{n, plural, few {#${NO_BREAK_SPACE}درجات} many {#${NO_BREAK_SPACE}مترًا} other {#${NO_BREAK_SPACE}درجة}}`,
     );
   });
 
@@ -56,7 +53,9 @@ describe("messageText", () => {
   });
 
   it("keeps a phone number's order in Arabic with a left-to-right isolate, and leaves English alone", () => {
-    expect(messageText("مثل +962 7X XXX XXXX", "ar")).toBe(`مثل ${LRI}+962 7X XXX XXXX${PDI}`);
+    expect(messageText("مثل +962 7X XXX XXXX", "ar")).toBe(
+      `مثل ${LEFT_TO_RIGHT_ISOLATE}+962 7X XXX XXXX${POP_DIRECTIONAL_ISOLATE}`,
+    );
     expect(messageText("like +962 7X XXX XXXX", "en")).toBe("like +962 7X XXX XXXX");
   });
 

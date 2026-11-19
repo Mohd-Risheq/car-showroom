@@ -3,9 +3,10 @@ import { describe, expect, it } from "vitest";
 import rule from "../../../scripts/eslint/no-raw-style-values.mjs";
 
 // T-13's Done when, held by the tokens-only check: a colour, a length, a time or a curve written
-// into a class, a style or a colour attribute fails, and so does a line height that bypasses the type
-// steps, or spacing off the 4 px base; tokens, var(), layout values and values computed at run time
-// pass.
+// into a class, a style or a colour attribute fails, as one written into what Motion or the Web
+// Animations API animates does, and so does a line height that bypasses the type steps, spacing off
+// the 4 px base, or a scale off the motion tokens; tokens, var(), layout values and values computed
+// at run time pass.
 
 RuleTester.describe = describe;
 RuleTester.it = it;
@@ -15,6 +16,7 @@ const raw = (kind: string, value: string) => ({ messageId: "raw", data: { kind, 
 const number = (value: number) => ({ messageId: "number", data: { value: String(value) } });
 const leading = (value: string) => ({ messageId: "leading", data: { value } });
 const offBase = (value: string) => ({ messageId: "offBase", data: { value } });
+const scale = (value: string) => ({ messageId: "scale", data: { value } });
 
 tester.run("no-raw-style-values", rule, {
   valid: [
@@ -43,6 +45,24 @@ tester.run("no-raw-style-values", rule, {
     "<div className='p-1 -mt-1 gap-x-2 md:py-2 inset-x-0 translate-y-1/2 h-0.5 w-px size-3.5 min-h-0.5' />",
     "<div className='px-4 pbs-2 mbe-4 inset-s-0 inset-be-1 translate-x-full translate-z-2 scroll-pbs-2 h-px max-w-px' />",
     "<table className='border-spacing-2 border-spacing-y-1 -indent-4' />",
+    // A scale from a motion token, no scale, and a mirror, as an icon's in Arabic
+    "<div className='data-pressed:scale-(--press-scale) motion-safe:in-data-starting-style:scale-(--entry-scale)' />",
+    "<svg className='scale-100 rtl:-scale-x-100 scale-y-100 transform-3d' />",
+    // What Motion and the Web Animations API animate, from tokens or computed
+    "sheet.animate({ translate: [from, to], opacity: [0, 1] }, { duration: easing.duration, easing: easing.css });",
+    "el.animate([{ opacity: 0, offset: 0.4 }, { opacity: 1 }], { duration: DURATIONS.pop, fill: 'both', iterations: 2 });",
+    "el.animate({ transform: ['none', `translateX(${x}px)`] }, { easing: 'linear', duration: 0 });",
+    "<m.div initial={false} animate={{ x: offset, scale: PRESS_SCALE, opacity: 1 }} transition={SPRINGS.move} />",
+    "<motion.div animate='shown' variants={VARIANTS} transition={{ ...SPRINGS.flick, type: 'spring', repeat: Infinity, times: [0, 0.5, 1] }} />",
+    "<MotionConfig transition={{ duration: seconds(DURATIONS.pop), ease: CURVES.out }} />",
+    // Timing that counts or bounds: a stagger's direction, an iteration's start, an inertia's reach
+    "<m.ul transition={{ staggerDirection: 1, staggerChildren: seconds(DURATIONS.stagger) }} />",
+    "<m.div transition={{ type: 'inertia', power: 0.8, min: 0, max: 100 }} />",
+    "el.animate(frames, { iterationStart: 0.5, iterations: 2, duration: DURATIONS.pop });",
+    // A keyframe's offset places it, in a list of keyframes or indexed by property
+    "el.animate({ opacity: [0, 1], offset: [0, 0.4] }, timing);",
+    // Props of the same names on anything else are its own
+    "<Other animate={{ x: 48 }} transition={{ duration: 0.3 }} />",
   ],
   invalid: [
     {
@@ -111,6 +131,19 @@ tester.run("no-raw-style-values", rule, {
     {
       code: "<div className='mt-[1lh] gap-[0.5cap] w-[3ic] h-[2rlh]' />",
       errors: [raw("length", "1lh"), raw("length", "0.5cap"), raw("length", "3ic"), raw("length", "2rlh")],
+    },
+    // A scale off the motion tokens, with any variant, axis, sign or importance
+    {
+      code: "<div className='scale-97 hover:scale-105 motion-safe:in-data-starting-style:scale-95 -scale-y-50 scale-x-0 !scale-110 scale-125!' />",
+      errors: [
+        scale("scale-97"),
+        scale("hover:scale-105"),
+        scale("motion-safe:in-data-starting-style:scale-95"),
+        scale("-scale-y-50"),
+        scale("scale-x-0"),
+        scale("!scale-110"),
+        scale("scale-125!"),
+      ],
     },
     // A line height on the spacing scale, which ignores the type steps and Arabic's own
     { code: "<p className='leading-6 md:leading-7' />", errors: [leading("leading-6"), leading("md:leading-7")] },
@@ -202,6 +235,55 @@ tester.run("no-raw-style-values", rule, {
         offBase("indent-0.5"),
         offBase("-indent-px"),
       ],
+    },
+    {
+      code: "el.animate({ opacity: [0, 0.5], translate: ['0 12px', '0 0'] }, 300);",
+      errors: [number(0.5), raw("length", "12px"), raw("time", "300")],
+    },
+    {
+      code: "el.animate([{ color: '#fff' }, { color: 'var(--ink)' }], { duration: 250, easing: 'ease-out', delay: 40 });",
+      errors: [raw("colour", "#fff"), raw("time", "250"), raw("curve", "ease-out"), raw("time", "40")],
+    },
+    {
+      code: "el.animate(frames, { easing: 'cubic-bezier(0.2, 0, 0, 1)', endDelay: fast ? 0 : '0.5s' });",
+      errors: [raw("curve", "cubic-bezier(0.2, 0, 0, 1)"), raw("time", "0.5s")],
+    },
+    {
+      code: "<m.div initial={{ x: 0 }} animate={{ x: 48 }} exit={{ y: -8 }} transition={{ duration: 0.3 }} />",
+      errors: [number(48), number(-8), raw("time", "0.3")],
+    },
+    {
+      code: "<motion.div animate={{ scaleX: on ? 1 : 0.25, transition: { type: 'spring', bounce: 0.2, stiffness: 300 } }} />",
+      errors: [number(0.25), number(0.2), number(300)],
+    },
+    {
+      code: "<m.div transition={{ ease: [0.2, 0, 0, 1], x: { duration: 0.2 } }} variants={{ shown: { opacity: 0.8 } }} />",
+      errors: [raw("curve", "[0.2, 0, 0, 1]"), raw("time", "0.2"), number(0.8)],
+    },
+    {
+      code: "<MotionConfig transition={{ ease: 'easeOut', delay: 0.1 }} />",
+      errors: [raw("curve", "easeOut"), raw("time", "0.1")],
+    },
+    // A colour attribute on a Motion component, in braces or as a choice
+    {
+      code: "<m.path fill={'#fff'} animate={{ pathLength: 1 }} />",
+      errors: [raw("colour", "#fff")],
+    },
+    {
+      code: "<motion.circle stroke={on ? '#5cc8db' : '#66778e'} />",
+      errors: [raw("colour", "#5cc8db"), raw("colour", "#66778e")],
+    },
+    // An SVG's fill in a target, a variant or keyframes is its paint, not a fill mode, and so is
+    // one a target sets as it ends
+    {
+      code: "<m.path animate={{ fill: '#e2a447', transitionEnd: { stroke: '#fff' } }} variants={{ on: { fill: '#000' } }} />",
+      errors: [raw("colour", "#e2a447"), raw("colour", "#fff"), raw("colour", "#000")],
+    },
+    { code: "el.animate({ fill: ['#0b0d10', 'var(--ink)'] }, timing);", errors: [raw("colour", "#0b0d10")] },
+    // A drag's transition: a bounce's physics at the bounds, and an inertia's time
+    {
+      code: "<m.div drag dragTransition={{ bounceStiffness: 600, bounceDamping: 20, timeConstant: 300 }} />",
+      errors: [number(600), number(20), raw("time", "300")],
     },
     // 1 px, the px keyword, is off the base too
     {

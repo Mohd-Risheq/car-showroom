@@ -1,0 +1,68 @@
+diff --git a/dist/build/templates/app-page-runtime.js b/dist/build/templates/app-page-runtime.js
+index 393c9ef1e93e87628f25ba89c765804283a88214..d83f7cb07e70183ddd2ca14f4c055c5ea49da78c 100644
+--- a/dist/build/templates/app-page-runtime.js
++++ b/dist/build/templates/app-page-runtime.js
+@@ -1391,17 +1391,26 @@ function createAppPageEntrypoint({ tree, page, pathname, require: __next_app_req
+                     if (!isMinimalMode || !isSSG) {
+                         delete headers[_constants1.NEXT_CACHE_TAGS_HEADER];
+                     }
++                    // Patched (Next.js issue #82117, as its PR #95913 does): a render in this
++                    // request has set its headers on the response already, so a value the
++                    // response holds isn't appended again, which sent a redirect's Location twice
++                    const sent = (key, value)=>{
++                        const current = res.getHeader(key);
++                        return current !== undefined && (Array.isArray(current) ? current : [
++                            current
++                        ]).some((item)=>String(item) === value);
++                    };
+                     for (let [key, value] of Object.entries(headers)){
+                         if (typeof value === 'undefined') continue;
+                         if (Array.isArray(value)) {
+                             for (const v of value){
+-                                res.appendHeader(key, v);
++                                if (!sent(key, v)) res.appendHeader(key, v);
+                             }
+                         } else if (typeof value === 'number') {
+                             value = value.toString();
+-                            res.appendHeader(key, value);
++                            if (!sent(key, value)) res.appendHeader(key, value);
+                         } else {
+-                            res.appendHeader(key, value);
++                            if (!sent(key, value)) res.appendHeader(key, value);
+                         }
+                     }
+                 }
+diff --git a/dist/esm/build/templates/app-page-runtime.js b/dist/esm/build/templates/app-page-runtime.js
+index b28d926ad23b76fcf34963f3862ad9b76e42235f..b7437eb945e67d4745a1c0d763f5bfa6134cc76f 100644
+--- a/dist/esm/build/templates/app-page-runtime.js
++++ b/dist/esm/build/templates/app-page-runtime.js
+@@ -1414,17 +1414,26 @@ export function createAppPageEntrypoint({ tree, page, pathname, require: __next_
+                     if (!isMinimalMode || !isSSG) {
+                         delete headers[NEXT_CACHE_TAGS_HEADER];
+                     }
++                    // Patched (Next.js issue #82117, as its PR #95913 does): a render in this
++                    // request has set its headers on the response already, so a value the
++                    // response holds isn't appended again, which sent a redirect's Location twice
++                    const sent = (key, value)=>{
++                        const current = res.getHeader(key);
++                        return current !== undefined && (Array.isArray(current) ? current : [
++                            current
++                        ]).some((item)=>String(item) === value);
++                    };
+                     for (let [key, value] of Object.entries(headers)){
+                         if (typeof value === 'undefined') continue;
+                         if (Array.isArray(value)) {
+                             for (const v of value){
+-                                res.appendHeader(key, v);
++                                if (!sent(key, v)) res.appendHeader(key, v);
+                             }
+                         } else if (typeof value === 'number') {
+                             value = value.toString();
+-                            res.appendHeader(key, value);
++                            if (!sent(key, value)) res.appendHeader(key, value);
+                         } else {
+-                            res.appendHeader(key, value);
++                            if (!sent(key, value)) res.appendHeader(key, value);
+                         }
+                     }
+                 }

@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { QUIET } from "../support/e2e-page.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 import { openSpecimen } from "../support/specimen.ts";
 
@@ -11,9 +12,6 @@ const SPECIMEN = "/en/dev/tokens";
 
 /** What only GSAP's chunk holds: ScrollTrigger registering itself by name */
 const GSAP_MARKER = /["'`]ScrollTrigger["'`]/;
-
-/** How long a test waits for a request that must not come. The desktop tests see it come far sooner. */
-const QUIET = 1500;
 
 /** Records the page's scripts; returns the URLs of those that are GSAP's chunk so far */
 function watchGsap(page: Page): () => Promise<string[]> {

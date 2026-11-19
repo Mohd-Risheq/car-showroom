@@ -4,6 +4,9 @@
 @import "tailwindcss" source("..");
 /* The design tokens and the Tailwind theme built on them (DESIGN §3 and §4) */
 @import "./tokens.css";
+/* The catalog's long model names, each in narrower letters where its usual ones would break it, and
+   the longest smaller too (D-049), written by pnpm fonts:fallbacks */
+@import "./model-names.css";
 /* Readex Pro sets all text (DESIGN §3.3). next/font declares --font-readex-pro and
    --font-martian-mono on <html> (src/styles/fonts.ts), and font-fallbacks.css builds each type
    step's font stack from them: font-sans (body and small), font-lead, font-head, font-display and
@@ -106,7 +109,8 @@
    never both: the prompt waits while a bar shows (D-047). The compare tray joins them (FR-19). Each
    counts the safe area under it, and --page-end is at least the home indicator's safe area. A bar
    or the prompt hidden while the keyboard is open holds nothing, and the prompt waits for the bar
-   even then. */
+   even then. A bar on a page a client navigation has left, which stays in the document out of sight
+   for the way back, is marked away and holds nothing (action-bar.tsx). */
 :root {
   --bar-block: 0px;
   --prompt-block: 0px;
@@ -115,11 +119,11 @@
 }
 
 @media (width < 64rem) {
-  :root:has([data-action-bar]:not([hidden])) {
+  :root:has([data-action-bar]:not([hidden], [data-away])) {
     --bar-block: calc(var(--bar-height) + env(safe-area-inset-bottom));
   }
 
-  :root:has([data-action-bar]) [data-locale-prompt] {
+  :root:has([data-action-bar]:not([data-away])) [data-locale-prompt] {
     display: none;
   }
 }
@@ -170,7 +174,7 @@
      waits while a car page's action bar shows, and the header holds then, as it does while the offer
      steps aside for the keyboard. */
   @media (width < 48rem) and (height < 37.5rem), (48rem <= width < 64rem) and (height < 40rem) {
-    &:has([data-locale-prompt]:not([data-dismissed], [hidden])):not(:has([data-action-bar])) {
+    &:has([data-locale-prompt]:not([data-dismissed], [hidden])):not(:has([data-action-bar]:not([data-away]))) {
       scroll-padding-top: 0;
 
       & [data-site-header] {
@@ -187,6 +191,14 @@
         position: static;
       }
     }
+  }
+
+  /* DESIGN §7.2.3: from 1024 px a car page's gallery column holds still under the header, so the
+     focus could rest on its lowest controls under the English offer, with no scroll to bring them
+     clear. While the offer shows, the column scrolls with the page, as the header does on a short
+     screen, and it holds again once the offer is dismissed (WCAG 2.4.11, D-049). */
+  &:has([data-locale-prompt]:not([data-dismissed], [hidden])) [data-gallery-column] {
+    position: static;
   }
 }
 
@@ -250,14 +262,77 @@ html[data-demo-banner="hidden"] [data-demo-banner] {
 }
 
 /* DESIGN §3.5 and §4.5: surfaces are told apart by tone alone, and under increased contrast they
-   also get an edge in --line. An outline drawn inside the box, so nothing moves; a surface with
-   keyboard focus keeps the focus ring instead. */
+   also get an edge in --line, as under forced colours, which drop the tones and draw the edge in
+   the system's colour. An outline drawn inside the box, so nothing moves; a surface with keyboard
+   focus keeps the focus ring instead. */
 @utility surface-edge {
-  @media (prefers-contrast: more) {
+  @media (prefers-contrast: more), (forced-colors: active) {
     &:not(:focus-visible) {
       outline: 1px solid var(--line);
       outline-offset: -1px;
     }
+  }
+}
+
+/* DESIGN §5.2 and §7.2.3: the 45° hatch that marks a caution, as a reserved car's band does: thin
+   lines of --warn across the box, or of the colour a place sets in --hatch-color. Forced colours
+   drop gradients, so there the box keeps its own colours, with lines in the system's text colour
+   whatever a place sets, and what sits on it takes the system's colours again (DESIGN §3.5). */
+@utility hatch {
+  --hatch-paint: var(--hatch-color, var(--warn));
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--hatch-paint) 0 var(--hatch-line),
+    transparent 0 var(--hatch-step)
+  );
+
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    --hatch-paint: CanvasText;
+
+    & > * {
+      forced-color-adjust: auto;
+    }
+  }
+}
+
+/* DESIGN §3.5: the focus ring of a control that fills a scroller, which clips the control's own
+   ring, drawn round the scroller's frame instead, as for a car's photo on the stage
+   (photo-gallery.tsx) */
+@utility focus-frame {
+  &:has(:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--accent);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+/* DESIGN §3.5 and §8.4: the same ring drawn inside the frame, for a frame that meets the screen's
+   edges and the header, where a ring round it would fall off the screen or under the header. A
+   keyline of the page's ground inside it keeps it clear of any photo's colours. The frame is
+   positioned, and the ring paints over the photos in it. */
+@utility focus-frame-inside {
+  &:has(:focus-visible) {
+    outline: none;
+  }
+
+  &:has(:focus-visible)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border: var(--focus-ring-width) solid var(--accent);
+    box-shadow: inset 0 0 0 var(--focus-ring-width) var(--bg);
+  }
+}
+
+/* A track the finger, the keys and the rail move through, whose scrollbar would only cover its
+   photos (photo-gallery.tsx). Safari before 18.2 knows only its own pseudo-element. */
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -267,4 +342,11 @@ html[data-demo-banner="hidden"] [data-demo-banner] {
 @utility px-band {
   padding-left: max(var(--spacing-page), env(safe-area-inset-left));
   padding-right: max(var(--spacing-page), env(safe-area-inset-right));
+}
+
+/* DESIGN §3.4: large media inside a band runs out to the screen's edges, as a car's photo does on a
+   phone: out through the band's margin, as far as the safe area, never into it */
+@utility bleed-band {
+  margin-left: calc(env(safe-area-inset-left) - max(var(--spacing-page), env(safe-area-inset-left)));
+  margin-right: calc(env(safe-area-inset-right) - max(var(--spacing-page), env(safe-area-inset-right)));
 }

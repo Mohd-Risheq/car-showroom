@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { reportClientError } from "@/lib/analytics/track";
 import { SCRUB_MEDIA } from "@/lib/motion-tokens";
+import { NEAR_SCREEN_MARGIN } from "@/lib/near-screen";
 import type { GsapScrub, GsapScrubProps } from "./gsap";
 
 // A section's desktop scroll scrub (SRS §11.8, DESIGN §4.4). GSAP and ScrollTrigger load once, as one
@@ -35,13 +36,12 @@ export function Scrub({ target, build }: GsapScrubProps) {
         () => reportClientError("CHUNK_GSAP"),
       );
     };
-    // Within one viewport above or below the screen
     const observer = new IntersectionObserver(
       (entries) => {
         near = entries.some((entry) => entry.isIntersecting);
         load();
       },
-      { rootMargin: "100% 0px" },
+      { rootMargin: NEAR_SCREEN_MARGIN },
     );
     observer.observe(element);
     media.addEventListener("change", load);

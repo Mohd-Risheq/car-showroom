@@ -26,8 +26,14 @@ export function mileageCheck(car: Car, today: string, bands: MileageBands): Mile
   if (car.condition === "new") return null;
   const ageYears = Math.max(MIN_AGE_YEARS, (todayMs - Date.UTC(car.modelYear, 0, 1)) / DAY_MS / DAYS_A_YEAR);
   const kmPerYear = car.mileageKm / ageYears;
-  const band = kmPerYear < bands.low ? "low" : kmPerYear <= bands.high ? "typical" : "high";
+  const band = bandOf(kmPerYear, bands);
   return { band, kmPerYear: shownFigure(kmPerYear, band, bands) };
+}
+
+/** The dealer's band for the kilometres a year: under the low edge, up to the high one, or past it */
+function bandOf(kmPerYear: number, bands: MileageBands): MileageBand {
+  if (kmPerYear < bands.low) return "low";
+  return kmPerYear <= bands.high ? "typical" : "high";
 }
 
 // car.mileage.info shows the figure beside the bands, so one that rounds onto an edge, which is

@@ -18,8 +18,8 @@ describe("readTypeScale", () => {
       sheet(`[lang|="ar"] { --body-leading: 1.8; --body-scale: 1.06 }
 :root, [lang|="en"] { --body-scale: 1; --display-tracking: -0.02em }`),
     );
-    expect(scale.map((step) => step.id)).toStrictEqual([...TYPE_STEPS]);
-    const [display, , , body] = scale;
+    expect(scale.map((step) => step.id)).toStrictEqual(["display", "head", "subhead", "lead", "body", "small"]);
+    const [display, , , , body] = scale;
     expect(body).toStrictEqual({
       id: "body",
       size: "1rem",
@@ -33,15 +33,31 @@ describe("readTypeScale", () => {
     expect(display?.tracking).toStrictEqual({ latin: "-0.02em", arabic: "-0.02em" });
   });
 
-  it("lists the narrower HEXP each media condition sets, in the stylesheet's order", () => {
+  it("lists the narrower HEXP each media or container condition sets, in the stylesheet's order", () => {
     const scale = readTypeScale(
       sheet(`@media (width < 33.75rem) { :root { --display-hexp: 80 } }
 @media (prefers-contrast: more) { :root { --line: #8a9ab0 } }
-@media (width < 26.875rem) { :root { --display-hexp: 60 } }`),
+@media (width < 26.875rem) { :root { --display-hexp: 60 } }
+@container car-title (width >= 0px) { * { --display-room: calc(var(--display-room-share) * 1cqi) } }
+@container model-name (width < 5.8514em) { * { --display-hexp: 20 } }
+@container model-name (5.8446em <= width < 5.9787em) {
+  [data-model="geely-geometry-c"]:lang(en), [data-model='geely-geometry-e']:lang(en) { --display-hexp: 0 }
+}
+@media (width < 20rem) { .other { --display-hexp: 0 } }
+@media (width < 20rem) { [data-other="x"]:lang(en) { --display-hexp: 0 } }`),
     );
+    // A long model name's, in its own container, as model-names.css sets it (D-049)
+    const longName = (key: string) => ({
+      at: "@container model-name (5.8446em <= width < 5.9787em)",
+      selector: `[data-model="${key}"]:lang(en)`,
+      hexp: 0,
+    });
     expect(scale[0]?.narrower).toStrictEqual([
-      { media: "(width < 33.75rem)", hexp: 80 },
-      { media: "(width < 26.875rem)", hexp: 60 },
+      { at: "@media (width < 33.75rem)", selector: ":root", hexp: 80 },
+      { at: "@media (width < 26.875rem)", selector: ":root", hexp: 60 },
+      { at: "@container model-name (width < 5.8514em)", selector: "*", hexp: 20 },
+      longName("geely-geometry-c"),
+      longName("geely-geometry-e"),
     ]);
     expect(scale[1]?.narrower).toStrictEqual([]);
   });
@@ -59,7 +75,9 @@ describe("readTypeScale", () => {
   it("reads tokens.css itself", () => {
     const scale = readTypeScale(readFileSync("src/styles/tokens.css", "utf8"));
     expect(scale).toHaveLength(TYPE_STEPS.length);
-    // D-038: the display step narrows its letters on phones
-    expect(scale[0]?.narrower.length).toBeGreaterThan(0);
+    // The display step narrows its letters on phones by the screen (D-038), and in a car's title by
+    // its model name's column (D-049)
+    const places = new Set(scale[0]?.narrower.map(({ at }) => at.split(" (")[0]));
+    expect(places).toStrictEqual(new Set(["@media", "@container model-name"]));
   });
 });

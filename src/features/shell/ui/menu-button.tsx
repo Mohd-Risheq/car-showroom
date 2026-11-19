@@ -1,8 +1,9 @@
 "use client";
 
-import { ListIcon } from "@phosphor-icons/react/ssr";
 import { type ComponentType, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ListIcon } from "@/components/ui/icons/list";
+import { onDemand } from "@/lib/on-demand";
 import type { MenuSheetProps } from "./menu-sheet";
 
 // FR-02.7: below 768 px the header's navigation folds into this button, which opens the menu sheet.
@@ -16,7 +17,8 @@ type MenuButtonProps = Omit<MenuSheetProps, "open" | "onOpenChange" | "trigger">
   className?: string;
 };
 
-const loadSheet = () => import("./menu-sheet").then(({ MenuSheet }) => MenuSheet);
+/** The menu sheet. Offline the menu stays closed, and the next press loads it again (D-047). */
+const loadSheet = onDemand(() => import("./menu-sheet").then(({ MenuSheet }) => MenuSheet), "CHUNK_MENU");
 
 export function MenuButton({ label, className, ...sheet }: MenuButtonProps) {
   const trigger = useRef<HTMLButtonElement>(null);
@@ -24,22 +26,14 @@ export function MenuButton({ label, className, ...sheet }: MenuButtonProps) {
   const [open, setOpen] = useState(false);
 
   function prepare() {
-    loadSheet()
-      .then((component) => setSheet(() => component))
-      .catch(() => {
-        // Offline: the press loads it again
-      });
+    loadSheet((component) => setSheet(() => component));
   }
 
   function show() {
-    loadSheet()
-      .then((component) => {
-        setSheet(() => component);
-        setOpen(true);
-      })
-      .catch(() => {
-        // Offline: the menu stays closed, and the next press loads the sheet again (D-047)
-      });
+    loadSheet((component) => {
+      setSheet(() => component);
+      setOpen(true);
+    });
   }
 
   return (

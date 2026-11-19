@@ -15,6 +15,8 @@
   --surface-1: #12161b;
   --surface-2: #1a1f26;
   --surface-3: #232a33;
+  /* The fullscreen gallery's ground, the one pure black, around photos only */
+  --viewer: #000000;
   --line: #66778e;
   --ink: #eef2f6;
   --muted: #a9b4c2;
@@ -96,7 +98,7 @@
   }
 }
 
-/* DESIGN §3.3: the public type scale, five steps, each set by one type-* utility below */
+/* DESIGN §3.3: the public type scale, six steps, each set by one type-* utility below */
 :root {
   --display-size: clamp(3.5rem, 2rem + 6vw, 6rem);
   --display-weight: 600;
@@ -104,9 +106,15 @@
   --head-size: clamp(2rem, 1.3rem + 3.2vw, 4rem);
   --head-weight: 600;
   --head-hexp: 60;
+  /* A section's heading under a page's title, as a car page's h2s: quieter and narrower than head */
+  --subhead-size: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
+  --subhead-weight: 600;
+  --subhead-hexp: 20;
   --lead-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
   --lead-weight: 400;
   --lead-hexp: 20;
+  /* A car page's lead, a step up, 22 px on phones to 26 px from 1200 px (D-049) */
+  --car-lead-size: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
   --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --body-weight: 400;
   --body-hexp: 0;
@@ -116,34 +124,63 @@
   --small-hexp: 0;
 }
 
-/* Each script's line heights, tracking and body size. The blocks name the lang attribute rather
-   than :lang(), so only an element that changes language sets them again, and a Latin phrase inside
-   Arabic text takes the Latin values. */
+/* Each script's line heights, tracking, body and small sizes, share of a car title's column (D-049)
+   and the space between a car title's model name and its trim. The blocks name the lang attribute
+   rather than :lang(), so only an element that changes language sets them again, and a Latin phrase
+   inside Arabic text takes the Latin values. */
 :root,
 [lang|="en"] {
   --display-leading: 1;
   --display-tracking: -0.02em;
+  --display-room-share: 19;
   --head-leading: 1.1;
+  --subhead-leading: 1.1;
+  --subhead-tracking: -0.01em;
   --lead-leading: 1.35;
   --body-scale: 1;
   --body-leading: 1.5;
+  --small-scale: 1;
   --small-leading: 1.4;
+  --title-trim-gap: 0;
 }
 
-/* Arabic sets its own line heights, drops the tracking and sets body text 6 % larger
-   (DESIGN §3.3, NFR-I18N-06) */
+/* Arabic sets its own line heights, drops the tracking and sets body and small text 6 % larger
+   (DESIGN §3.3, NFR-I18N-06), so its model names take a larger share of a car title's column. A
+   Latin trim under an Arabic model name keeps clear of the name's descenders. */
 [lang|="ar"] {
   --display-leading: 1.25;
   --display-tracking: 0;
+  --display-room-share: 20;
   --head-leading: 1.35;
+  --subhead-leading: 1.35;
+  --subhead-tracking: 0;
   --lead-leading: 1.6;
   --body-scale: 1.06;
   --body-leading: 1.8;
+  --small-scale: 1.06;
   --small-leading: 1.6;
+  --title-trim-gap: 0.4em;
 }
 
-/* D-038: on phones the display step narrows its letters rather than its size, so every seed model
-   name fits its column */
+/* DESIGN §3.3: under forced colours the browser paints a backplate behind each line's text, as tall
+   as the font's ascent and descent, so a line set tighter than that has its backplate cover the
+   line above. There the display step, in both scripts, and the Latin head and subhead steps take
+   the font's own line height. */
+@media (forced-colors: active) {
+  :root,
+  [lang] {
+    --display-leading: normal;
+  }
+
+  :root:not([lang|="ar"]),
+  [lang|="en"] {
+    --head-leading: normal;
+    --subhead-leading: normal;
+  }
+}
+
+/* D-038: on phones the display step narrows its letters rather than its size. A car title's model
+   name narrows them by its own column, at the same ratios (D-049, below). */
 @media (width < 33.75rem) {
   :root {
     --display-hexp: 80;
@@ -168,6 +205,48 @@
   }
 }
 
+/* D-049: from 1024 px a car's title has a column of its own, 5 of 12 (DESIGN §7.2.3), and is a
+   container (title-block.tsx). Where the column is under about 500 px its model name is set
+   smaller: at most --display-room-share percent of the column, which keeps it four times the
+   body's size. cqi resolves against the container of the element that uses it, and against the
+   screen where there is none, so the room is set inside the title alone. */
+@container car-title (width >= 0px) {
+  * {
+    --display-room: calc(var(--display-room-share) * 1cqi);
+  }
+}
+
+/* D-049: a car title's model name narrows its letters by its own column, at every width. It is a
+   container at the step's size (model-name below), so these conditions, in ems, are ratios of
+   column to size: those at which a phone's screen narrows the step, its column the screen less the
+   page margin each side, less a browser's rounding of the size, to four places down. A phone keeps
+   its letters, and a classic scroll bar, which the screen's width counts and the column doesn't,
+   can't make them too wide (the owner, 2026-11-11). They only narrow: where none applies, the
+   screen's conditions above give the step's HEXP. */
+@container model-name (width < 7.8805em) {
+  * {
+    --display-hexp: 80;
+  }
+}
+
+@container model-name (width < 6.879em) {
+  * {
+    --display-hexp: 60;
+  }
+}
+
+@container model-name (width < 6.3866em) {
+  * {
+    --display-hexp: 40;
+  }
+}
+
+@container model-name (width < 5.8514em) {
+  * {
+    --display-hexp: 20;
+  }
+}
+
 /* DESIGN §3.7: the blueprint lines, which data regions draw: data lines 1 px in --line, and the
    scan line 1.5 px in --scan */
 :root {
@@ -184,13 +263,19 @@
 /* DESIGN §7.1.1 and §8.4: the public shell's bands. The header is 56 px on phones and 64 px from
    768 px, where it compacts to 52 px after a scroll by moving up 12 px. The demo banner is 40 px,
    and a car page's action bar 64 px, 48 px on a screen under 480 px tall. globals.css pads the page
-   and its scrolling by them, so the sticky chrome never covers the focus. */
+   and its scrolling by them, so the sticky chrome never covers the focus. From 1024 px a car page's
+   stage starts 32 px under the header and holds there (DESIGN §7.2.3). It is 4:3, the photo whole,
+   where the screen holds it with the rail and the chips under it, which take up to 10rem; else as
+   tall as the screen lets it, and 3:2 at the least (D-049). cqw is the width of the gallery's
+   column, a container (car-page-view.tsx), as the stage that uses it is that wide. */
 :root {
   --header-height: 3.5rem;
   --header-compact-shift: 0.75rem;
   --header-compact-row: calc(var(--header-compact-shift) / 2);
   --banner-height: 2.5rem;
   --bar-height: 4rem;
+  --stage-top: calc(var(--header-height) + 2rem);
+  --stage-height: clamp(100cqw * 2 / 3, 100svh - var(--stage-top) - 10rem, 100cqw * 3 / 4);
 }
 
 @media (width >= 48rem) {
@@ -203,6 +288,12 @@
   :root {
     --bar-height: 3rem;
   }
+}
+
+/* DESIGN §5.2 and §7.2.3: the hatch's lines, 2 px wide and 8 px apart (the hatch utility) */
+:root {
+  --hatch-line: 2px;
+  --hatch-step: 8px;
 }
 
 /* DESIGN §2 and §10.3: the header's wordmark, the dealer's name, steps down in size as the name
@@ -242,6 +333,8 @@
   --dur-instant: 0ms;
   --dur-press: 120ms;
   --press-scale: 0.97;
+  /* An entrance that grows starts at the top of DESIGN §4.2's 0.95 to 0.97, as the viewer's photos */
+  --entry-scale: 0.97;
   --dur-tip: 125ms;
   --dur-hover: 150ms;
   --dur-pop: 200ms;
@@ -286,6 +379,7 @@
   --color-surface-1: var(--surface-1);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
+  --color-viewer: var(--viewer);
   --color-line: var(--line);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
@@ -310,27 +404,28 @@
   --text-2xl: 1.75rem;
   --tracking-*: initial;
   --leading-*: initial;
-  /* The weights the steps use: body 400, small up to 500, head and display 600. Figures take 450
-     through the figures utility. */
+  /* The weights the steps use: body 400, small 400 or 500, a control's label 500, head, subhead and
+     display 600. Figures take 450 through the figures utility. */
   --font-serif: initial;
   --font-weight-*: initial;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
 
-  /* DESIGN §3.4: the 4 px spacing base, and the page's own measures. Section gaps run from 64 px on
-     a 390 px phone to 120 px at 1024 px, and on to 220 px. */
+  /* DESIGN §3.4: the 4 px spacing base, and the page's own measures. Section gaps are 80 px on
+     phones, up to about 570 px wide, then grow to 120 px at 1024 px, and on to 220 px. */
   --spacing: 0.25rem;
   --spacing-page: clamp(1rem, 2.2vw, 2rem);
   --spacing-gutter: clamp(1rem, 2vw, 2rem);
-  --spacing-section: clamp(4rem, 1.85rem + 8.83vw, 13.75rem);
+  --spacing-section: clamp(5rem, 1.85rem + 8.83vw, 13.75rem);
   /* DESIGN §3.6: icons at 20 or 24 px */
   --spacing-icon: 1.25rem;
   --spacing-icon-lg: 1.5rem;
-  /* Content stops at 1760 px, with no 1200 px container, and body text at its measure */
+  /* Content stops at 1760 px, with no 1200 px container, and body text at its measure: 34 em, about
+     68 Latin characters a line and 70 Arabic ones. Readex Pro's zero is wide, so 65ch held 78. */
   --container-*: initial;
   --container-content: 110rem;
-  --container-measure: 65ch;
+  --container-measure: 34em;
   /* A data table at the small step (data-table.tsx): the narrowest it gets, so a phone scrolls it
      rather than squeeze its columns, and the column of its rows' headings, which holds as it scrolls */
   --container-table: 50em;
@@ -389,16 +484,29 @@
   }
 }
 
-/* DESIGN §3.3's five public steps. Each sets the family, size, line height, weight and HEXP
+/* DESIGN §3.3's six public steps. Each sets the family, size, line height, weight and HEXP
    together, so a step can't be half applied. */
 @utility type-display {
   font-family: var(--font-display);
-  font-size: var(--display-size);
+  /* No larger than the room a car's title leaves it, nor than a long model name's cap (D-049) */
+  font-size: min(
+    var(--display-size),
+    var(--display-room, var(--display-size)),
+    var(--display-cap, var(--display-size))
+  );
   line-height: var(--display-leading);
   letter-spacing: var(--display-tracking);
   font-weight: var(--display-weight);
   font-variation-settings: "HEXP" var(--display-hexp);
   text-wrap: balance;
+}
+
+/* D-049: a car title's model name is a container at the display step's usual size, before a long
+   name's cap, so the conditions of model-names.css, in ems, are ratios of the column to that size */
+@utility model-name {
+  display: block;
+  container: model-name / inline-size;
+  font-size: min(var(--display-size), var(--display-room, var(--display-size)));
 }
 
 @utility type-head {
@@ -407,6 +515,16 @@
   line-height: var(--head-leading);
   font-weight: var(--head-weight);
   font-variation-settings: "HEXP" var(--head-hexp);
+  text-wrap: balance;
+}
+
+@utility type-subhead {
+  font-family: var(--font-subhead);
+  font-size: var(--subhead-size);
+  line-height: var(--subhead-leading);
+  letter-spacing: var(--subhead-tracking);
+  font-weight: var(--subhead-weight);
+  font-variation-settings: "HEXP" var(--subhead-hexp);
   text-wrap: balance;
 }
 
@@ -430,7 +548,7 @@
 
 @utility type-small {
   font-family: var(--font-sans);
-  font-size: var(--small-size);
+  font-size: calc(var(--small-size) * var(--small-scale));
   line-height: var(--small-leading);
   font-weight: var(--small-weight);
   font-variation-settings: "HEXP" var(--small-hexp);
@@ -457,9 +575,12 @@
   }
 }
 
-/* DESIGN §3.3: figures in Martian Mono at wdth 87.5, wght 450, tabular, at the size around them */
+/* DESIGN §3.3: figures in Martian Mono at wdth 87.5, wght 450, tabular, at seven eighths of the size
+   around them: its capitals stand 0.8 of its size and Readex Pro's 0.7, so theirs stand as tall as
+   the words' (D-049). The size is the parent's, so figures go on their own element in a step's. */
 @utility figures {
   font-family: var(--font-figures);
+  font-size: 0.875em;
   font-stretch: 87.5%;
   font-weight: 450;
   font-variant-numeric: tabular-nums;

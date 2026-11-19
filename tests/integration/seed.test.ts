@@ -24,11 +24,12 @@ import {
 } from "@/lib/db/schema";
 import { SEED_LOCK_KEY } from "@/lib/demo/seed-lock";
 import { ROOT } from "../../scripts/checks/files.ts";
-import { readSeedFiles, type SeedFiles } from "../../scripts/checks/seed-files.ts";
+import type { SeedFiles } from "../../scripts/checks/seed-files.ts";
 import { seedIds } from "../../scripts/checks/seed-ids.ts";
 import { seedRows } from "../../scripts/checks/seed-rows.ts";
 import type { ScriptDatabase } from "../../scripts/database.ts";
 import { loadSeed, type SeedOptions, type SeedReport, type TableCounts } from "../../scripts/seed-loader.ts";
+import { DEMO, loaded, seedFilesIn } from "../support/seed-loading.ts";
 import { createThrowawayDatabase, type ThrowawayDatabase } from "../support/throwaway-database";
 
 // scripts/seed.ts's loader (BUILD-PLAN T-17), loading the three-car fixture into a database made
@@ -41,7 +42,6 @@ const FIXTURE = path.join(ROOT, "tests/fixtures/checks/seed");
 // SRS §16's test clock, a Sunday in Amman
 const NOW = new Date("2026-10-18T12:00:00+03:00");
 const DAY_MS = 86_400_000;
-const DEMO: SeedOptions = { demo: true, partial: false, resetSettings: false };
 // FR-35.6's marks on a hero photo
 const MARKS = { front: 0.1, rear: 0.9, wheelFront: 0.25, wheelRear: 0.75, ground: 0.8 };
 
@@ -66,18 +66,10 @@ beforeEach(async () => {
 });
 
 /** A fresh copy of the fixture, read as of the day */
-function fixture(now = NOW): SeedFiles {
-  const read = readSeedFiles(FIXTURE, now);
-  if ("problems" in read) throw new Error(read.problems.join("\n"));
-  return read.files;
-}
+const fixture = (now = NOW): SeedFiles => seedFilesIn(FIXTURE, now);
 
 /** The committed seed files, read as of the day */
-function committed(now = NOW): SeedFiles {
-  const read = readSeedFiles(ROOT, now);
-  if ("problems" in read) throw new Error(read.problems.join("\n"));
-  return read.files;
-}
+const committed = (now = NOW): SeedFiles => seedFilesIn(ROOT, now);
 
 function carIn(files: SeedFiles, seedKey: string) {
   const record = files.cars.find((candidate) => candidate.seedKey === seedKey);
@@ -87,11 +79,6 @@ function carIn(files: SeedFiles, seedKey: string) {
 
 const load = (files: SeedFiles, now = NOW, options: Partial<SeedOptions> = {}) =>
   loadSeed(database, files, now, { ...DEMO, ...options });
-
-function loaded(report: SeedReport) {
-  if ("refused" in report) throw new Error(`Refused:\n${report.refused.join("\n")}`);
-  return report;
-}
 
 const countsOf = (report: SeedReport): Readonly<Record<string, TableCounts>> => loaded(report).counts;
 

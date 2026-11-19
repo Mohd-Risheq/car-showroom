@@ -1,19 +1,13 @@
-import { readFileSync } from "node:fs";
-import { expect, type Page, type Response, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+import { openBeforeItRuns } from "../support/before-it-runs.ts";
+import { CATALOGS } from "../support/catalogs.ts";
+import { hydrated } from "../support/e2e-page.ts";
 import { expectProblems, watchProblems } from "../support/page-problems.ts";
 
 // SCR-11's 404 (DESIGN §7.2.11, D-047): every unknown path under a locale, and every path the proxy
 // sends on to one, answers 404 with the localized view in the site's shell, kept out of search
 // engines. The view is in the server's HTML, so it works without JavaScript, and its search takes the
 // visitor to the cars page. Neither the page nor its swap after hydration reports a problem.
-
-type Catalog = {
-  common: { notifications: string };
-  errors: { notFound: { title: string } };
-  nav: { search: string; cars: string };
-};
-const catalog = (locale: "ar" | "en") => JSON.parse(readFileSync(`messages/${locale}.json`, "utf8")) as Catalog;
-const CATALOGS = { ar: catalog("ar"), en: catalog("en") };
 
 /**
  * A path and the locale whose 404 it gets: an unprefixed one goes to Arabic, the default, and so does
@@ -31,10 +25,6 @@ const CASES: readonly Case[] = [
   { path: "/x.y", locale: "ar" },
   { path: "/fr/x.y", locale: "ar", rewritten: true },
 ];
-
-/** Waits for the page to hydrate, its view swapped for not-found.tsx's: the toaster's region comes once it has */
-const hydrated = (page: Page, locale: "ar" | "en") =>
-  expect(page.getByRole("region", { name: CATALOGS[locale].common.notifications })).toBeAttached();
 
 async function expectNotFoundView(page: Page, locale: "ar" | "en") {
   const title = CATALOGS[locale].errors.notFound.title;
@@ -95,23 +85,9 @@ test("the search sends its words to the cars page", async ({ page }) => {
   await expectProblems(page, problems);
 });
 
-/** Opens a 404, holding its scripts back until run is called, as on a slow phone */
-async function openBeforeItRuns(
-  page: Page,
-  path = "/en/nothing",
-): Promise<{ response: Response | null; run: () => void }> {
-  const scripts = Promise.withResolvers<void>();
-  await page.route("**/_next/static/chunks/**", async (route) => {
-    if (route.request().resourceType() === "script") await scripts.promise;
-    await route.continue();
-  });
-  const response = await page.goto(path, { waitUntil: "commit" });
-  return { response, run: scripts.resolve };
-}
-
 test("words typed before the page runs stay in the search, with its focus and caret", async ({ page }) => {
   const problems = await watchProblems(page);
-  const { run } = await openBeforeItRuns(page);
+  const { run } = await openBeforeItRuns(page, "/en/nothing");
   const search = page.getByRole("searchbox", { name: CATALOGS.en.nav.search });
   await search.fill("rav4");
   // The caret within the words, where the new field's own would not be
@@ -132,7 +108,7 @@ test("words typed before the page runs stay in the search, with its focus and ca
 
 test("a control the keyboard reached before the page runs keeps the focus", async ({ page }) => {
   const problems = await watchProblems(page);
-  const { run } = await openBeforeItRuns(page);
+  const { run } = await openBeforeItRuns(page, "/en/nothing");
   const cars = page.getByRole("main").getByRole("link", { name: CATALOGS.en.nav.cars });
   await cars.focus();
   const reached = await cars.elementHandle();
@@ -161,7 +137,7 @@ test.describe("the stage's crossing, with motion", () => {
 
   test("goes on across the swap after hydration, from where the server's page began it", async ({ page }) => {
     const problems = await watchProblems(page);
-    const { run } = await openBeforeItRuns(page);
+    const { run } = await openBeforeItRuns(page, "/en/nothing");
     await expect.poll(async () => (await shownCrossing(page))?.startTime ?? null).not.toBeNull();
     const served = await shownCrossing(page);
     const servedLine = await page.locator("#content line").elementHandle();

@@ -15,9 +15,12 @@ import { NavLink } from "./nav-link";
 import { Wordmark } from "./wordmark";
 
 // FR-02 and DESIGN §7.1.1: the public header. From 768 px: the wordmark, the navigation to Cars,
-// Compare and Visit, then the search, the Garage key and the language switch at the end. On a phone:
-// the wordmark, then the search, the Garage key and the menu button, whose sheet holds the rest. The
-// search opens the cars page until the command palette (T-58) has its shortcut.
+// Compare and Visit, then the search, the Garage key and the language switch at the end. The search
+// shows its words beside its icon from 1024 px: below, the words would push the row past a tablet's
+// screen (D-049). On a phone: the wordmark, then the search, the Garage key and the menu button,
+// whose sheet holds the rest. The search opens the cars page until the command palette (T-58) has
+// its shortcut. The nav's links are controls, weight 500 (DESIGN §3.3), and the header's content
+// keeps to the page's width, so on a wide screen it starts where the page does.
 
 type SiteHeaderProps = { locale: AppLocale; brandName: Names; logo: PublicFile | null; demo: boolean };
 
@@ -36,7 +39,7 @@ export async function SiteHeader({ locale, brandName, logo, demo }: SiteHeaderPr
 
   return (
     <HeaderBand>
-      <div className="flex h-(--header-height) items-center gap-3 px-band transition-transform duration-(--dur-pop) ease-out md:motion-safe:in-data-compact:translate-y-(--header-compact-row)">
+      <div className="mx-auto flex h-(--header-height) max-w-content items-center gap-3 px-band transition-transform duration-(--dur-pop) ease-out md:motion-safe:in-data-compact:translate-y-(--header-compact-row)">
         <Wordmark href={pagePath(locale, "home")} name={brandName[locale]} logo={logo} />
         <nav aria-label={nav("label")} className="ms-auto flex items-center gap-1 md:ms-4 md:flex-1">
           <ul className="hidden md:flex md:items-center">
@@ -44,7 +47,7 @@ export async function SiteHeader({ locale, brandName, logo, demo }: SiteHeaderPr
               <li key={href}>
                 <NavLink
                   href={href}
-                  className="inline-flex h-11 items-center px-3 text-muted hover:text-ink aria-[current=page]:text-ink"
+                  className="pressable inline-flex h-11 items-center px-3 font-medium text-muted hover:text-ink aria-[current=page]:text-ink"
                 >
                   {label}
                 </NavLink>
@@ -56,11 +59,11 @@ export async function SiteHeader({ locale, brandName, logo, demo }: SiteHeaderPr
               href={pagePath(locale, "cars")}
               className={cn(
                 buttonClasses({ variant: "quiet", size: "icon" }),
-                "md:w-auto md:border md:border-line md:px-4",
+                "lg:w-auto lg:border lg:border-line lg:px-4",
               )}
             >
               <MagnifyingGlassIcon aria-hidden="true" className="size-icon" />
-              <span className="sr-only md:not-sr-only">{nav("search")}</span>
+              <span className="sr-only lg:not-sr-only">{nav("search")}</span>
             </Link>
             <GarageKey href={pagePath(locale, "garage")} labels={garageLabels} label={nav("garage")} />
             <LanguageSwitch

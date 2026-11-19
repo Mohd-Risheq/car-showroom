@@ -70,41 +70,85 @@ jobs:
       - run: pnpm build
       - run: pnpm check:bundle
 
+  # Steps 5 and 6 in parts on runners at once, as many as the matrix lists, so the suite ends within
+  # the limit as it grows (D-049). The matrix alone sets the count, which each part's name and shard
+  # read. Each part runs to its end, so one run reports every failure.
   e2e:
-    name: E2E, axe, visual and Lighthouse (SRS §16.2 steps 5 to 7)
+    name: E2E, axe and visual, part ${{ matrix.part }} of ${{ strategy.job-total }} (SRS §16.2 steps 5 and 6)
     needs: gates
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup
       - uses: ./.github/actions/local-services
-      - id: build
-        run: pnpm build
+      - run: pnpm build
 
-      # Steps 5 and 6: journeys, axe and the visual comparison, with the browsers in Playwright's
-      # image pinned by digest, where the approved baselines come from (D-037)
-      - run: pnpm e2e:linux
+      # Journeys, axe and the visual comparison, with the browsers in Playwright's image pinned by
+      # digest, where the approved baselines come from (D-037)
+      - run: pnpm e2e:linux --shard=${{ matrix.part }}/${{ strategy.job-total }}
 
-      # Step 7: Lighthouse drives Playwright's own Chromium on the runner, and each page's runs show
-      # on the run as annotations (scripts/lhci.ts). It runs after a failed step 5 or 6 too, once
-      # the build has passed, so one run reports every gate; the job fails all the same.
-      - id: chromium
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: pnpm exec playwright install --with-deps chromium
-      - if: ${{ !cancelled() && steps.chromium.outcome == 'success' }}
-        run: pnpm lhci
+      # The part's results, with their traces and screenshots, for the report job
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-part-${{ matrix.part }}
+          path: blob-report/
+          retention-days: 1
+
+  # The parts' results as one HTML report, whichever of them failed
+  e2e-report:
+    name: E2E report
+    needs: e2e
+    if: ${{ !cancelled() && needs.e2e.result != 'skipped' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: e2e-part-*
+          path: blob-report
+          merge-multiple: true
+      - run: pnpm exec playwright merge-reports --reporter html blob-report
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-report
+          path: playwright-report/
+          retention-days: 14
+
+  # Step 7 on a runner of its own, beside the end-to-end parts, so a run reports every gate.
+  # Lighthouse drives Playwright's own Chromium on the runner, and each page's runs show on the run
+  # as annotations (scripts/lhci.ts).
+  lighthouse:
+    name: Lighthouse (SRS §16.2 step 7)
+    needs: gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/local-services
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm lhci
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:
-          name: e2e-and-lighthouse-reports
-          path: |
-            playwright-report/
-            test-results/
-            .lighthouseci/reports/
+          name: lighthouse-reports
+          path: .lighthouseci/reports/
           # .lighthouseci is a hidden folder, which the action leaves out unless told otherwise
           include-hidden-files: true
           retention-days: 14

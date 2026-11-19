@@ -1,8 +1,9 @@
 // The custom properties a stylesheet sets, block by block, read from its text. tokens.css is where
 // the tokens are written, apart from the motion values motion-tokens.ts holds, the font families
-// pnpm fonts:fallbacks writes into font-fallbacks.css and the two theme colours theme-color.ts
-// repeats, and whatever reads them outside the browser reads them through this: pnpm
-// check:contrast, the token tests, and type-scale.ts for the type specimen and the fonts generator.
+// pnpm fonts:fallbacks writes into font-fallbacks.css, the long model names' HEXP and cap it writes
+// into model-names.css, and the two theme colours theme-color.ts repeats, and whatever reads them
+// outside the browser reads them through this: pnpm check:contrast, the token tests, and
+// type-scale.ts for the type specimen and the fonts generator.
 // Node loads this module from the scripts, so it has no imports. Tested in
 // tests/unit/token-blocks.test.ts.
 

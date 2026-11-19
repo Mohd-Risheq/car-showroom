@@ -21,7 +21,7 @@ import { tokenBlocks } from "@/styles/token-blocks";
 // and GSAP's chunk mirror it without forking. Every motion variable in the stylesheet must be one the
 // module names, with the module's value, and every value the module names must be in the stylesheet.
 
-const MOTION_VARIABLE = /^--(?:dur|ease|stagger|delay)(?:-|$)|^--press-scale$|^--pulse-cycles$/;
+const MOTION_VARIABLE = /^--(?:dur|ease|stagger|delay)(?:-|$)|^--(?:press|entry)-scale$|^--pulse-cycles$/;
 
 /** A time written as a number, as 1s or 250ms, rather than a token's variable */
 const LITERAL_TIME = /(?<![\w.-])\d*\.?\d+m?s\b/;

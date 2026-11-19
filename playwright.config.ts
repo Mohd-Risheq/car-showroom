@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 import { CHROMIUM_FLAGS } from "./scripts/checks/chromium.ts";
 import { e2eStore } from "./tests/support/e2e-store.ts";
+import { answerLocalhost } from "./tests/support/localhost.ts";
+import { loadServerEnv } from "./tests/support/server-env.ts";
 
 // Playwright (SRS §16.1, BUILD-PLAN §6.1): journeys, axe and visual tests on the production build
 // (pnpm build, then pnpm e2e), with the local storage adapter in a fresh temporary folder each run.
@@ -8,20 +10,26 @@ import { e2eStore } from "./tests/support/e2e-store.ts";
 // tests/support/https-proxy.ts, because it upgrades http://localhost to HTTPS (D-028). Chromium is
 // the full build (channel "chromium"), which sends CSP reports and draws on the GPU (D-028, D-031).
 // Chromium and Firefox run muted with a fake camera, so no test plays sound on the machine or opens
-// its camera. WebKit can't be muted, so a test that plays sound runs in the other two.
-//
-// Visual baselines come from Playwright's pinned Linux image only, so the visual tests run only with
-// pnpm e2e:linux, which connects to browsers in that image, here and in CI (D-037). Firefox doesn't
+// its camera. WebKit can't be muted, so a test that plays sound runs in the other two.  Visual
+// baselines come from Playwright's pinned Linux image only, so the visual tests run only with pnpm
+// e2e:linux, which connects to browsers in that image, here and in CI (D-037). Firefox doesn't
 // start on macOS 27 (D-026), so on a Mac it runs only there too.
 
 const PORT = 3000;
 const HTTPS_PORT = 3443;
 const STORE = e2eStore();
-// Set by pnpm e2e:linux to the image it runs the browsers in. Another remote browser has no baselines
-// here, so connecting to one doesn't turn the visual tests on.
+// With pnpm e2e:linux the browsers reach this machine through Playwright's tunnel, which looks
+// localhost up in each worker for every connection they open: the workers answer it themselves, as
+// a Mac's resolver now and then takes 5 s over it (tests/support/localhost.ts, D-049)
+answerLocalhost();
+// The server's settings, which the e2e support reads too (server-env.ts)
+loadServerEnv();
+// Set by pnpm e2e:linux to the image it runs the browsers in. Another remote browser has no
+// baselines here, so connecting to one doesn't turn the visual tests on.
 const pinnedImage = Boolean(process.env.MUFTAH_E2E_IMAGE);
 const firefoxStarts = pinnedImage || process.platform !== "darwin";
-// Said once, by the runner rather than each worker, so a green run here isn't read as the full suite
+// Said once, by the runner rather than each worker, so a green run here isn't read as the full
+// suite
 if (!pinnedImage && !process.env.TEST_WORKER_INDEX) {
   const leftOut = firefoxStarts ? "the visual tests" : "Firefox and the visual tests";
   console.log(`e2e: ${leftOut} run only with pnpm e2e:linux, in Playwright's pinned Linux image`);
@@ -42,8 +50,11 @@ const firefox = {
 };
 const overHttps = { baseURL: `https://localhost:${HTTPS_PORT}`, ignoreHTTPSErrors: true };
 const desktop = { viewport: { width: 1440, height: 900 } };
-// The narrowest width every public screen is checked at (SRS §16.1, DESIGN §10.2)
-const phone = { viewport: { width: 360, height: 780 } };
+// The narrowest width every public screen is checked at (SRS §16.1, DESIGN §10.2), on a phone whose
+// screen is as wide, as a phone's is. Chromium's preload scanner reads device-width from the
+// screen, so the devices' wider screens had it fetch a larger cover than the page then asked for
+// (D-049).
+const phone = { viewport: { width: 360, height: 780 }, screen: { width: 360, height: 800 } };
 
 export default defineConfig({
   testDir: "tests",
@@ -56,15 +67,17 @@ export default defineConfig({
   reporter: [
     ["list"],
     ["json", { outputFile: "reports/playwright.json" }],
-    ["html", { open: "never", outputFolder: "playwright-report" }],
+    // CI runs the suite in parts at once, as many as ci.yml's matrix lists, each writing its
+    // results to blob-report/, and its report job merges them into one HTML report (D-049)
+    process.env.CI ? (["blob"] as const) : (["html", { open: "never", outputFolder: "playwright-report" }] as const),
     // On GitHub Actions each failed or flaky test, and the run's summary, also show as annotations
     // on the run, which anyone can read, while its log needs admin rights
     ...(process.env.GITHUB_ACTIONS === "true" ? [["github"] as const] : []),
   ],
   use: {
     baseURL: `http://localhost:${PORT}`,
-    // Browsers whose first language is Arabic, so Arabic pages don't offer English (FR-01.2a); a test of
-    // that offer sets its own
+    // Browsers whose first language is Arabic, so Arabic pages don't offer English (FR-01.2a); a
+    // test of that offer sets its own
     locale: "ar-JO",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
@@ -73,10 +86,10 @@ export default defineConfig({
   // writes a missing one but fails, so it is looked at before it is committed.
   snapshotPathTemplate: "{testDir}/visual/__screenshots__/{projectName}/{testFileName}/{arg}{ext}",
   updateSnapshots: process.env.CI ? "none" : "default",
-  // Animations off, the caret hidden and CSS pixels are Playwright's defaults, set here so a new version
-  // can't change them. A screen may differ from its baseline in at most 0.2% of its pixels, which
-  // absorbs antialiasing, and a pixel differs only past the default colour threshold, so a small tint
-  // change doesn't count.
+  // Animations off, the caret hidden and CSS pixels are Playwright's defaults, set here so a new
+  // version can't change them. A screen may differ from its baseline in at most 0.2% of its pixels,
+  // which absorbs antialiasing, and a pixel differs only past the default colour threshold, so a
+  // small tint change doesn't count.
   expect: { toHaveScreenshot: { animations: "disabled", caret: "hide", scale: "css", maxDiffPixelRatio: 0.002 } },
   webServer: [
     {

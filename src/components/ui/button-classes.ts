@@ -3,12 +3,13 @@ import { cva } from "class-variance-authority";
 // DESIGN §6.4's button states on the tokens: hover on a fine pointer only (--surface-3, or 6%
 // brighter for the filled button), the press scale (pressable), the focus ring (globals.css),
 // disabled at 40% and loading. Buttons are fully round (DESIGN §3.5) and 44 px high, the primary
-// target size (DESIGN §8.4). Kept apart from button.tsx, a client module, so a server component can
-// style a link with them.
+// target size (DESIGN §8.4), and on public pages a control's label is weight 500, so controls don't
+// speak in the content's voice (DESIGN §3.3). Kept apart from button.tsx, a client module, so a
+// server component can style a link with them.
 
 /** A button's classes, also for a link that looks like a button */
 export const buttonClasses = cva(
-  "pressable inline-flex shrink-0 items-center justify-center gap-2 rounded-full whitespace-nowrap select-none data-disabled:opacity-40",
+  "pressable inline-flex shrink-0 items-center justify-center gap-2 rounded-full whitespace-nowrap select-none public:font-medium data-disabled:opacity-40",
   {
     variants: {
       variant: {

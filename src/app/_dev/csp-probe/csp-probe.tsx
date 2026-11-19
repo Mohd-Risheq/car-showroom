@@ -214,7 +214,9 @@ export function CspProbe({ side, nonce }: { side: Side; nonce?: string | undefin
             ref={moved}
             className="size-4 bg-ink"
             initial={{ x: 0 }}
+            // eslint-disable-next-line muftah/no-raw-style-values -- a move the check waits to end, not a design value (D-038)
             animate={{ x: 48 }}
+            // eslint-disable-next-line muftah/no-raw-style-values -- the check needs Motion to animate, over any time (D-038)
             transition={{ duration: 0.3 }}
             onAnimationComplete={motionDone.resolve}
           />

@@ -4,9 +4,10 @@ import { ScrollFrame } from "./scroll-frame";
 
 // A table on a reading page, as the privacy page's (DESIGN §7.2.9): a row of column headings, then
 // rows that each start with a heading of their own. The text is the small step, each cell starts at
-// its top, and rules in --line part the rows (DESIGN §3.5). Wider than a phone's screen, it scrolls
-// in a frame of its own (D-041), and the rows' headings hold at its start, so each row keeps its
-// name in view as the rest scrolls under it.
+// its top, and rules in --line part the rows (DESIGN §3.5). The table stands at its own width, wider
+// than the measure the page's words keep to (D-049): wider than a phone's screen, it scrolls in a
+// frame of its own (D-041), and the rows' headings hold at its start, so each row keeps its name in
+// view as the rest scrolls under it; a wider screen shows it whole.
 
 type DataTableProps = {
   /** Names the frame for screen readers */
@@ -28,8 +29,9 @@ export function DataTable({ label, head, rows }: DataTableProps) {
     }
   }
   return (
-    <ScrollFrame label={label} className="mt-6">
-      <table className="w-full min-w-table border-separate border-spacing-0 type-small">
+    // The frame sets the small step, so the table's width is in its letters' ems
+    <ScrollFrame label={label} className="mt-6 max-w-table type-small">
+      <table className="w-full min-w-table border-separate border-spacing-0">
         <thead>
           <tr>
             {head.map((heading, column) => (
