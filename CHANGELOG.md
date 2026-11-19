@@ -43,5 +43,5 @@ Notable changes to Muftah, in the [Keep a Changelog](https://keepachangelog.com/
 
 ### Security
 
-- Next.js 16.4.6, past two advisories that could share a cached `"use cache"` entry across root parameter values (GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8), and SEC-11's floor at 16.4.5. picomatch's ReDoS advisory (GHSA-fc5q-39xc-vjpf), which no release fixes, is accepted for the two versions build and development tools install, until 2027-02-18 (D-050).
+- Next.js 16.4.6, past two advisories that could share a cached `"use cache"` entry across root parameter values (GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8), and SEC-11's floor at 16.4.5.
 - Vercel Blob's copy of Zod runs the patched 4.6.7, and Lighthouse CI's body-parser the patched 1.20.9 (GHSA-mrhx-c7xc-m3w5, GHSA-27r3-jxmh-p828). Lighthouse CI's Zod 3, which no release fixes, is accepted for that one advisory until 2027-01-21, and an accepted advisory can now name the one installed version it covers.

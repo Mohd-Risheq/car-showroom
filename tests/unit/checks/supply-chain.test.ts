@@ -240,7 +240,7 @@ describe("staleAcceptances", () => {
 });
 
 describe("parseAccepted", () => {
-  it("holds exactly the owner's acceptances that an advisory still matches, each until its review date (D-037, D-042, D-050)", () => {
+  it("holds exactly the owner's acceptances that an advisory still matches, each until its review date (D-037, D-042)", () => {
     expect(
       acceptances(ACCEPTED).map(({ id, package: name, version, reviewBy, decision }) =>
         [id, name, version, reviewBy, decision].filter(Boolean).join(" "),
@@ -249,8 +249,6 @@ describe("parseAccepted", () => {
       "GHSA-jmr9-qjv8-65gv extract-zip 2027-01-21 D-037",
       "GHSA-7pqw-9j4j-h8q3 extract-zip 2027-01-21 D-037",
       "GHSA-mrhx-c7xc-m3w5 zod 3.25.76 2027-01-21 D-042",
-      "GHSA-fc5q-39xc-vjpf picomatch 4.0.7 2027-02-18 D-050",
-      "GHSA-fc5q-39xc-vjpf picomatch 2.3.2 2027-02-18 D-050",
     ]);
   });
 
